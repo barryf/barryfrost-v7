@@ -1,8 +1,8 @@
 {
     "$schema": "node_modules/wrangler/config-schema.json",
-    "name": "my-astro-app",
+    "name": "barryfrost-v7",
     // Update to today's date
-    "compatibility_date": "2025-03-25",
+    "compatibility_date": "2025-07-04",
     "assets": {
       "directory": "./dist"
     }
