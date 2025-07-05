@@ -9,7 +9,26 @@ import '../styles/global.css'
 		<meta name="generator" content={Astro.generator} />
 		<title>Astro</title>
 	</head>
-	<body>
-		<h1>Astro</h1>
+	<body class="bg-white dark:bg-gray-900 transition-colors duration-300">
+		<div class="container mx-auto px-4 py-8">
+			<h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">Astro with Dark Mode</h1>
+			<p class="text-gray-700 dark:text-gray-300 mb-4">
+				This page automatically switches between light and dark mode based on your device preferences.
+			</p>
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+				<div class="p-6 rounded-lg shadow-md bg-gray-100 dark:bg-gray-800">
+					<h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-3">Light/Dark Mode</h2>
+					<p class="text-gray-600 dark:text-gray-400">
+						This card changes appearance based on your system's color scheme preference.
+					</p>
+				</div>
+				<div class="p-6 rounded-lg shadow-md bg-blue-50 dark:bg-blue-900">
+					<h2 class="text-xl font-semibold text-blue-800 dark:text-blue-200 mb-3">Automatic Switching</h2>
+					<p class="text-blue-700 dark:text-blue-300">
+						Tailwind's dark mode is configured to use the 'media' strategy, which follows your system preferences.
+					</p>
+				</div>
+			</div>
+		</div>
 	</body>
 </html>
