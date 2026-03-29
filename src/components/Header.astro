@@ -1,0 +1,20 @@
+---
+const navLinks = [
+  { href: '/', label: 'Home' },
+  { href: '/weeknotes/', label: 'Weeknotes' },
+  { href: '/app.bsky.feed.post/', label: 'Posts' },
+  { href: '/app.beaconbits.beacon/', label: 'Checkins' },
+  { href: '/social.popfeed.feed.review/', label: 'Reviews' },
+  { href: '/about', label: 'About' },
+];
+---
+<header class="max-w-2xl mx-auto px-4 py-6">
+  <nav class="flex flex-wrap items-center gap-x-6 gap-y-2">
+    <a href="/" class="text-lg font-bold">Barry Frost</a>
+    {navLinks.slice(1).map(link => (
+      <a href={link.href} class="text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100">
+        {link.label}
+      </a>
+    ))}
+  </nav>
+</header>
