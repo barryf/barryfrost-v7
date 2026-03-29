@@ -1,0 +1,27 @@
+---
+import type { FeedItem } from '../lib/feed';
+import ArticleCard from './posts/ArticleCard.astro';
+import WeeknoteCard from './posts/WeeknoteCard.astro';
+import BlueskyCard from './posts/BlueskyCard.astro';
+import CheckinCard from './posts/CheckinCard.astro';
+import ReviewCard from './posts/ReviewCard.astro';
+
+interface Props {
+  item: FeedItem;
+}
+
+const { item } = Astro.props;
+
+const components = {
+  article: ArticleCard,
+  weeknote: WeeknoteCard,
+  bluesky: BlueskyCard,
+  checkin: CheckinCard,
+  review: ReviewCard,
+};
+
+const Component = components[item.type];
+---
+<div class="py-4 border-b border-neutral-100 dark:border-neutral-800 last:border-0">
+  <Component item={item} />
+</div>

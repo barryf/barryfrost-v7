@@ -1,0 +1,20 @@
+---
+import { formatDate, toISODate } from '../../lib/dates';
+import type { FeedItem } from '../../lib/feed';
+
+interface Props {
+  item: FeedItem;
+}
+
+const { item } = Astro.props;
+---
+<article class="h-entry">
+  <h2 class="text-lg font-semibold">
+    <a class="p-name u-url" href={item.url}>{item.title}</a>
+  </h2>
+  <time class="dt-published text-sm text-neutral-500 dark:text-neutral-400" datetime={toISODate(item.date)}>
+    {formatDate(item.date)}
+  </time>
+  {item.summary && <p class="p-summary mt-1 text-neutral-700 dark:text-neutral-300">{item.summary}</p>}
+  <data class="p-category hidden" value="weeknotes" />
+</article>

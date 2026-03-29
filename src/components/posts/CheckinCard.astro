@@ -1,0 +1,24 @@
+---
+import { formatDate, toISODate } from '../../lib/dates';
+import type { FeedItem } from '../../lib/feed';
+
+interface Props {
+  item: FeedItem;
+}
+
+const { item } = Astro.props;
+const data = item.data as { venueName: string; venueCategory?: string; venueAddress?: string; rating?: number };
+---
+<article class="h-entry">
+  <div>
+    <a class="u-url" href={item.url}>
+      <span class="p-name font-semibold">{data.venueName}</span>
+    </a>
+    {data.venueCategory && <span class="text-sm text-neutral-500 dark:text-neutral-400"> · {data.venueCategory}</span>}
+  </div>
+  {data.venueAddress && <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-0.5">{data.venueAddress}</p>}
+  <div class="mt-1 flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400">
+    <time class="dt-published" datetime={toISODate(item.date)}>{formatDate(item.date)}</time>
+    {data.rating && <span>{'★'.repeat(data.rating)}</span>}
+  </div>
+</article>
