@@ -1,0 +1,9 @@
+---
+import Feed from '../../layouts/Feed.astro';
+import { getUnifiedFeed, paginateItems } from '../../lib/feed';
+
+const allItems = (await getUnifiedFeed()).filter(i => i.type === 'weeknote');
+const pages = paginateItems(allItems);
+const { items, totalPages } = pages[0] ?? { items: [], totalPages: 1 };
+---
+<Feed title="Weeknotes" items={items} currentPage={1} totalPages={totalPages} basePath="/weeknotes" />

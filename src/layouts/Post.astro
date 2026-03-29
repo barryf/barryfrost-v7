@@ -1,0 +1,38 @@
+---
+import { getCollection } from 'astro:content';
+import Base from './Base.astro';
+import { formatDate, toISODate } from '../lib/dates';
+
+interface Props {
+  title: string;
+  date: Date;
+  description?: string;
+  category?: string;
+}
+
+const { title, date, description, category } = Astro.props;
+
+// Find matching document in PDS for syndication link
+const currentPath = Astro.url.pathname.replace(/\/$/, '');
+const documents = await getCollection('documents');
+const matchingDoc = documents.find(doc => doc.data.path === currentPath);
+---
+<Base title={title} description={description}>
+  <article class="h-entry">
+    <header class="mb-8">
+      <h1 class="p-name text-2xl font-bold">{title}</h1>
+      <time class="dt-published text-sm text-neutral-500 dark:text-neutral-400" datetime={toISODate(date)}>
+        {formatDate(date)}
+      </time>
+      {category && <data class="p-category hidden" value={category} />}
+    </header>
+    <div class="e-content prose dark:prose-invert max-w-none">
+      <slot />
+    </div>
+    {matchingDoc && (
+      <footer class="mt-8 text-sm text-neutral-500 dark:text-neutral-400">
+        <a class="u-syndication" href={matchingDoc.data.uri} rel="syndication">View on AT Protocol</a>
+      </footer>
+    )}
+  </article>
+</Base>
