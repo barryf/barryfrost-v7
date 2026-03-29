@@ -1,5 +1,9 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
+import { blueskyLoader } from './lib/loaders/bluesky';
+import { checkinsLoader } from './lib/loaders/checkins';
+import { reviewsLoader } from './lib/loaders/reviews';
+import { documentsLoader } from './lib/loaders/documents';
 
 const articles = defineCollection({
   loader: glob({ pattern: '**/*.md', base: 'src/content/articles' }),
@@ -28,4 +32,72 @@ const pages = defineCollection({
   }),
 });
 
-export const collections = { articles, weeknotes, pages };
+const blueskyPosts = defineCollection({
+  loader: blueskyLoader(),
+  schema: z.object({
+    text: z.string(),
+    createdAt: z.string(),
+    facets: z.array(z.unknown()),
+    embed: z.unknown().nullable(),
+    uri: z.string(),
+  }),
+});
+
+const checkins = defineCollection({
+  loader: checkinsLoader(),
+  schema: z.object({
+    venueName: z.string(),
+    venueCategory: z.string().optional(),
+    venueAddress: z.string().optional(),
+    venueUri: z.string().optional(),
+    latitude: z.string().optional(),
+    longitude: z.string().optional(),
+    rating: z.number().optional(),
+    createdAt: z.string(),
+    uri: z.string(),
+  }),
+});
+
+const reviews = defineCollection({
+  loader: reviewsLoader(),
+  schema: z.object({
+    title: z.string(),
+    creativeWorkType: z.string(),
+    rating: z.number().optional(),
+    genres: z.array(z.string()),
+    posterUrl: z.string().optional(),
+    backdropUrl: z.string().optional(),
+    mainCredit: z.string().optional(),
+    mainCreditRole: z.string().optional(),
+    releaseDate: z.string().optional(),
+    text: z.string(),
+    facets: z.array(z.unknown()),
+    imdbId: z.string().optional(),
+    tmdbId: z.string().optional(),
+    createdAt: z.string(),
+    uri: z.string(),
+  }),
+});
+
+const documents = defineCollection({
+  loader: documentsLoader(),
+  schema: z.object({
+    title: z.string().optional(),
+    path: z.string().optional(),
+    publishedAt: z.string().optional(),
+    description: z.string().optional(),
+    tags: z.array(z.string()),
+    uri: z.string(),
+    createdAt: z.string().optional(),
+  }),
+});
+
+export const collections = {
+  articles,
+  weeknotes,
+  pages,
+  blueskyPosts,
+  checkins,
+  reviews,
+  documents,
+};
