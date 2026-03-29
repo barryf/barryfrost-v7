@@ -1,0 +1,22 @@
+---
+import Feed from '../../../layouts/Feed.astro';
+import { getUnifiedFeed, filterByMonth, paginateItems, getMonths } from '../../../lib/feed';
+import { formatMonthYear } from '../../../lib/dates';
+
+export async function getStaticPaths() {
+  const allItems = await getUnifiedFeed();
+  const months = getMonths(allItems);
+
+  return months.map(({ year, month }) => {
+    const items = filterByMonth(allItems, year, month);
+    return {
+      params: { year, month },
+      props: { items, year, month },
+    };
+  });
+}
+
+const { items, year, month } = Astro.props;
+const displayDate = formatMonthYear(new Date(Number(year), Number(month) - 1));
+---
+<Feed title={displayDate} items={items} currentPage={1} totalPages={1} />
