@@ -1,0 +1,51 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ExternalEmbed from '../../components/embeds/ExternalEmbed.astro';
+import ImageEmbed from '../../components/embeds/ImageEmbed.astro';
+import { renderRichText } from '../../lib/richtext';
+import { formatDate, toISODate } from '../../lib/dates';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blueskyPosts');
+  return posts.map((entry) => ({
+    params: { rkey: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { text, facets, embed, createdAt, uri } = entry.data;
+const date = new Date(createdAt);
+const html = renderRichText(text, facets as any);
+
+const bskyUrl = `https://bsky.app/profile/barryfrost.com/post/${entry.id}`;
+
+// Parse embed type
+const embedType = (embed as any)?.$type as string | undefined;
+const embedExternal = embedType === 'app.bsky.embed.external' ? (embed as any).external : null;
+const embedImages = embedType === 'app.bsky.embed.images' ? (embed as any).images : null;
+---
+<Base title={text.slice(0, 60)} description={text.slice(0, 160)}>
+  <article class="h-entry">
+    <div class="p-content text-lg" set:html={html} />
+
+    {embedExternal && (
+      <ExternalEmbed
+        uri={embedExternal.uri}
+        title={embedExternal.title}
+        description={embedExternal.description}
+        thumb={embedExternal.thumb}
+      />
+    )}
+
+    {embedImages && (
+      <ImageEmbed images={embedImages} />
+    )}
+
+    <div class="mt-4 flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400">
+      <time class="dt-published" datetime={toISODate(date)}>{formatDate(date)}</time>
+      <a class="u-syndication" href={bskyUrl} rel="syndication">View on Bluesky</a>
+    </div>
+  </article>
+</Base>

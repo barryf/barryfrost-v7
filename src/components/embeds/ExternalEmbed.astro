@@ -1,0 +1,20 @@
+---
+interface Props {
+  uri: string;
+  title: string;
+  description?: string;
+  thumb?: string;
+}
+
+const { uri, title, description, thumb } = Astro.props;
+---
+<a href={uri} class="block mt-3 rounded-lg border border-neutral-200 dark:border-neutral-700 overflow-hidden hover:bg-neutral-50 dark:hover:bg-neutral-800" rel="nofollow noopener" target="_blank">
+  {thumb && (
+    <img src={thumb} alt="" class="w-full h-40 object-cover" loading="lazy" />
+  )}
+  <div class="p-3">
+    <p class="font-medium text-sm">{title}</p>
+    {description && <p class="text-sm text-neutral-500 dark:text-neutral-400 mt-1 line-clamp-2">{description}</p>}
+    <p class="text-xs text-neutral-400 dark:text-neutral-500 mt-1">{new URL(uri).hostname}</p>
+  </div>
+</a>

@@ -1,0 +1,47 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { formatDate, toISODate } from '../../lib/dates';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('checkins');
+  return entries.map((entry) => ({
+    params: { rkey: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { venueName, venueCategory, venueAddress, latitude, longitude, rating, createdAt } = entry.data;
+const date = new Date(createdAt);
+const hasLocation = latitude && longitude;
+---
+<Base title={venueName} description={`Checked in at ${venueName}`}>
+  <article class="h-entry">
+    <header class="mb-6">
+      <h1 class="p-name text-2xl font-bold">{venueName}</h1>
+      {venueCategory && <p class="text-neutral-600 dark:text-neutral-400 mt-1">{venueCategory}</p>}
+    </header>
+
+    {venueAddress && <p class="text-neutral-700 dark:text-neutral-300 mb-4">{venueAddress}</p>}
+
+    {hasLocation && (
+      <p class="mb-4">
+        <a
+          href={`https://www.openstreetmap.org/?mlat=${latitude}&mlon=${longitude}#map=16/${latitude}/${longitude}`}
+          class="text-blue-600 dark:text-blue-400 underline"
+          target="_blank"
+          rel="noopener"
+        >
+          View on map
+        </a>
+      </p>
+    )}
+
+    {rating !== undefined && <p class="mb-4 text-lg">{'★'.repeat(rating)}{'☆'.repeat(5 - rating)}</p>}
+
+    <div class="text-sm text-neutral-500 dark:text-neutral-400">
+      <time class="dt-published" datetime={toISODate(date)}>{formatDate(date)}</time>
+    </div>
+  </article>
+</Base>

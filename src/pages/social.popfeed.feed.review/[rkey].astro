@@ -1,0 +1,55 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { renderRichText } from '../../lib/richtext';
+import { formatDate, toISODate } from '../../lib/dates';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('reviews');
+  return entries.map((entry) => ({
+    params: { rkey: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { title, creativeWorkType, rating, genres, posterUrl, mainCredit, mainCreditRole, releaseDate, text, facets, createdAt } = entry.data;
+const date = new Date(createdAt);
+const reviewHtml = text ? renderRichText(text, facets as any) : '';
+---
+<Base title={title} description={`Review of ${title}`}>
+  <article class="h-entry">
+    <div class="flex gap-6 mb-6">
+      {posterUrl && (
+        <img
+          src={posterUrl}
+          alt={`Poster for ${title}`}
+          class="w-32 rounded-lg shadow"
+          loading="lazy"
+        />
+      )}
+      <div>
+        <h1 class="p-name text-2xl font-bold">{title}</h1>
+        <p class="text-neutral-600 dark:text-neutral-400 mt-1">
+          {creativeWorkType}
+          {mainCredit && ` · ${mainCredit}`}
+          {mainCreditRole && ` (${mainCreditRole})`}
+        </p>
+        {genres.length > 0 && (
+          <p class="text-sm text-neutral-500 dark:text-neutral-400 mt-1">{genres.join(', ')}</p>
+        )}
+        {rating !== undefined && (
+          <p class="mt-2 text-lg font-semibold">
+            <span class="p-rating">{rating}</span>/10
+          </p>
+        )}
+      </div>
+    </div>
+
+    {reviewHtml && <div class="e-content prose dark:prose-invert max-w-none" set:html={reviewHtml} />}
+
+    <div class="mt-6 text-sm text-neutral-500 dark:text-neutral-400">
+      <time class="dt-published" datetime={toISODate(date)}>Reviewed {formatDate(date)}</time>
+    </div>
+  </article>
+</Base>
