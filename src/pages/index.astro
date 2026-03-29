@@ -1,6 +1,13 @@
 ---
-import Base from '../layouts/Base.astro';
+import Feed from '../layouts/Feed.astro';
+import { getUnifiedFeed, paginateItems } from '../lib/feed';
+
+const allItems = await getUnifiedFeed();
+const pages = paginateItems(allItems);
+const { items, totalPages } = pages[0] ?? { items: [], totalPages: 1 };
 ---
-<Base title="Barry Frost">
-  <p class="text-lg mb-8">Software engineer based in Hertfordshire, UK. Building web things.</p>
-</Base>
+<Feed title="Barry Frost" items={items} currentPage={1} totalPages={totalPages}>
+  <div slot="header" class="mb-8">
+    <p class="text-lg">Software engineer based in Hertfordshire, UK. Building web things.</p>
+  </div>
+</Feed>

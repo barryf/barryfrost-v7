@@ -1,0 +1,25 @@
+---
+import Base from './Base.astro';
+import FeedEntry from '../components/FeedEntry.astro';
+import Pagination from '../components/Pagination.astro';
+import type { FeedItem } from '../lib/feed';
+
+interface Props {
+  title: string;
+  description?: string;
+  items: FeedItem[];
+  currentPage: number;
+  totalPages: number;
+  basePath?: string;
+}
+
+const { title, description, items, currentPage, totalPages, basePath } = Astro.props;
+---
+<Base title={title} description={description}>
+  <slot name="header" />
+  <div class="h-feed">
+    <span class="p-name hidden">{title}</span>
+    {items.map(item => <FeedEntry item={item} />)}
+  </div>
+  <Pagination currentPage={currentPage} totalPages={totalPages} basePath={basePath} />
+</Base>

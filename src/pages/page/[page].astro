@@ -1,0 +1,17 @@
+---
+import Feed from '../../layouts/Feed.astro';
+import { getUnifiedFeed, paginateItems } from '../../lib/feed';
+
+export async function getStaticPaths() {
+  const allItems = await getUnifiedFeed();
+  const pages = paginateItems(allItems);
+  // Skip page 1 (that's the homepage)
+  return pages.slice(1).map(({ page, items, totalPages }) => ({
+    params: { page: String(page) },
+    props: { items, currentPage: page, totalPages },
+  }));
+}
+
+const { items, currentPage, totalPages } = Astro.props;
+---
+<Feed title={`Barry Frost — Page ${currentPage}`} items={items} currentPage={currentPage} totalPages={totalPages} />
