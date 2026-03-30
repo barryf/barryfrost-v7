@@ -1,114 +1,185 @@
 /**
- * Backfill script: fetches posts from the current barryfrost.com RSS feed
+ * Backfill script: reads posts from local JSON files (MF2 h-entry format)
  * and writes them as Markdown files in the appropriate content directories.
  *
  * Usage: npx tsx scripts/backfill.ts
  *
- * This script fetches the RSS feed, downloads each post's HTML content,
- * and converts it to Markdown. Posts matching the week-NNN pattern go to
- * src/content/weeknotes/, all others go to src/content/articles/.
+ * Source: ../content/posts/YYYY/MM/slug.json
+ * Output: src/content/articles/slug.md or src/content/weeknotes/NNN-title.md
  *
- * It also generates redirect rules for old weeknote URLs.
+ * Only processes post-type "article". Weeknotes are identified by
+ * "weeknotes" in the category array.
  */
 
-import { writeFileSync, readFileSync, mkdirSync, existsSync } from 'fs';
+import { writeFileSync, readFileSync, mkdirSync, existsSync, readdirSync } from 'fs';
 import { join } from 'path';
 
-const FEED_URL = 'https://barryfrost.com/feed';
+const POSTS_DIR = join(process.cwd(), '../content/posts');
 const ARTICLES_DIR = join(process.cwd(), 'src/content/articles');
 const WEEKNOTES_DIR = join(process.cwd(), 'src/content/weeknotes');
 const REDIRECTS_FILE = join(process.cwd(), 'public/_redirects');
 
-interface Post {
-  title: string;
-  date: string;
-  slug: string;
-  url: string;
-  content: string;
+const WEEKNOTE_SLUG_PATTERN = /^week-(\d+)-(.+)$/;
+const WEEKNOTE_OLD_SLUG_PATTERN = /^weeknotes-(\d+)$/;
+
+interface MF2Post {
+  type: string[];
+  'post-type': string[];
+  properties: {
+    name?: string[];
+    published?: string[];
+    content?: string[];
+    category?: string[];
+    syndication?: string[];
+    updated?: string[];
+  };
 }
 
-const WEEKNOTE_PATTERN = /^week-(\d+)-(.+)$/;
-
-function isWeeknote(slug: string): { week: number; slug: string } | null {
-  const match = slug.match(WEEKNOTE_PATTERN);
-  if (!match) return null;
-  return { week: Number(match[1]), slug: `${match[1]}-${match[2]}` };
-}
-
-function generateFrontmatter(post: Post, weeknote: { week: number; slug: string } | null): string {
-  const lines = ['---'];
-  lines.push(`title: "${post.title.replace(/"/g, '\\"')}"`);
-  lines.push(`date: ${post.date}`);
-  if (weeknote) {
-    lines.push(`week: ${weeknote.week}`);
+function escapeYaml(str: string): string {
+  if (/[:"#\[\]{}&*!|>%@`]/.test(str) || str.startsWith("'") || str.startsWith('"')) {
+    return `"${str.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`;
   }
-  lines.push('---');
-  return lines.join('\n');
+  return `"${str}"`;
 }
 
-async function main() {
-  // Ensure directories exist
+function processPost(filePath: string, year: string, month: string, slug: string) {
+  const raw = readFileSync(filePath, 'utf-8');
+  const post: MF2Post = JSON.parse(raw);
+
+  // Only process articles
+  const postType = post['post-type']?.[0];
+  if (postType !== 'article') return null;
+
+  const props = post.properties;
+  const title = props.name?.[0] ?? 'Untitled';
+  const published = props.published?.[0] ?? '';
+  const rawContent = props.content?.[0] ?? '';
+  const content = typeof rawContent === 'string'
+    ? rawContent
+    : (rawContent as { value?: string; html?: string }).value
+      ?? (rawContent as { html?: string }).html
+      ?? '';
+  const categories = props.category ?? [];
+  const syndication = props.syndication ?? [];
+  const date = published ? new Date(published).toISOString().split('T')[0] : `${year}-${month}-01`;
+
+  const isWeeknote = categories.includes('weeknotes');
+  const weekMatch = slug.match(WEEKNOTE_SLUG_PATTERN);
+  const oldWeekMatch = slug.match(WEEKNOTE_OLD_SLUG_PATTERN);
+
+  // Derive weeknote slug from old weeknotes-NNN format using the title
+  // e.g. "Week 1: Starting" -> "1-starting"
+  let oldWeekSlug: string | null = null;
+  if (oldWeekMatch) {
+    const weekNum = Number(oldWeekMatch[1]);
+    const titleSlug = title
+      .replace(/^Week \d+:\s*/i, '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '');
+    oldWeekSlug = `${weekNum}-${titleSlug}`;
+  }
+
+  // Build frontmatter
+  const lines = ['---'];
+  lines.push(`title: ${escapeYaml(title)}`);
+  lines.push(`date: ${date}`);
+
+  if (isWeeknote && (weekMatch || oldWeekSlug)) {
+    const weekNum = weekMatch ? Number(weekMatch[1]) : Number(oldWeekMatch![1]);
+    lines.push(`week: ${weekNum}`);
+  }
+
+  if (syndication.length > 0) {
+    lines.push('syndication:');
+    for (const url of syndication) {
+      lines.push(`  - ${url}`);
+    }
+  }
+
+  lines.push('---');
+
+  const frontmatter = lines.join('\n');
+
+  if (isWeeknote && (weekMatch || oldWeekSlug)) {
+    // Weeknote: write to weeknotes dir with NNN-title slug
+    const weeknoteSlug = weekMatch ? `${weekMatch[1]}-${weekMatch[2]}` : oldWeekSlug!;
+    const filename = `${weeknoteSlug}.md`;
+    const outPath = join(WEEKNOTES_DIR, filename);
+    writeFileSync(outPath, `${frontmatter}\n\n${content.trim()}\n`);
+
+    // Return redirect info: old URL -> new URL
+    return {
+      type: 'weeknote' as const,
+      filename,
+      redirect: { from: `/${year}/${month}/${slug}`, to: `/weeknotes/${weeknoteSlug}` },
+    };
+  } else if (!isWeeknote) {
+    // Article: write to articles dir
+    const filename = `${slug}.md`;
+    const outPath = join(ARTICLES_DIR, filename);
+    writeFileSync(outPath, `${frontmatter}\n\n${content.trim()}\n`);
+
+    return { type: 'article' as const, filename, redirect: null };
+  }
+
+  return null;
+}
+
+function main() {
+  // Ensure output directories exist
   for (const dir of [ARTICLES_DIR, WEEKNOTES_DIR]) {
     if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
   }
 
-  console.log('Fetching feed from', FEED_URL);
-  const res = await fetch(FEED_URL);
-  const xml = await res.text();
-
-  // Parse feed items — extract title, pubDate, link, description
-  // This is a basic XML parse; for production use, consider a proper XML parser
-  const items = [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)].map(match => {
-    const itemXml = match[1];
-    const title = itemXml.match(/<title><!\[CDATA\[(.*?)\]\]><\/title>/)?.[1]
-      ?? itemXml.match(/<title>(.*?)<\/title>/)?.[1] ?? 'Untitled';
-    const link = itemXml.match(/<link>(.*?)<\/link>/)?.[1] ?? '';
-    const pubDate = itemXml.match(/<pubDate>(.*?)<\/pubDate>/)?.[1] ?? '';
-    const description = itemXml.match(/<description><!\[CDATA\[([\s\S]*?)\]\]><\/description>/)?.[1] ?? '';
-
-    // Extract slug from URL: /YYYY/MM/slug
-    const urlParts = new URL(link).pathname.split('/').filter(Boolean);
-    const slug = urlParts[urlParts.length - 1];
-    const date = new Date(pubDate).toISOString().split('T')[0];
-
-    return { title, date, slug, url: link, content: description };
-  });
-
-  console.log(`Found ${items.length} items`);
-
+  let articleCount = 0;
+  let weeknoteCount = 0;
   const redirectLines: string[] = ['# Weeknote redirects (old URL → new URL)'];
 
-  for (const post of items) {
-    const weeknote = isWeeknote(post.slug);
+  // Walk year/month/slug.json
+  const years = readdirSync(POSTS_DIR).filter((d: string) => /^\d{4}$/.test(d)).sort();
 
-    if (weeknote) {
-      // Write to weeknotes directory
-      const filename = `${weeknote.slug}.md`;
-      const frontmatter = generateFrontmatter(post, weeknote);
-      const filePath = join(WEEKNOTES_DIR, filename);
-      writeFileSync(filePath, `${frontmatter}\n\n${post.content}\n`);
-      console.log(`Weeknote: ${filename}`);
+  for (const year of years) {
+    const yearDir = join(POSTS_DIR, year);
+    const months = readdirSync(yearDir).filter((d: string) => /^\d{2}$/.test(d)).sort();
 
-      // Generate redirect from old URL
-      const urlPath = new URL(post.url).pathname;
-      redirectLines.push(`${urlPath} /weeknotes/${weeknote.slug} 301`);
-    } else {
-      // Write to articles directory
-      const filename = `${post.slug}.md`;
-      const frontmatter = generateFrontmatter(post, null);
-      const filePath = join(ARTICLES_DIR, filename);
-      writeFileSync(filePath, `${frontmatter}\n\n${post.content}\n`);
-      console.log(`Article: ${filename}`);
+    for (const month of months) {
+      const monthDir = join(yearDir, month);
+      const files = readdirSync(monthDir).filter((f: string) => f.endsWith('.json'));
+
+      for (const file of files) {
+        const slug = file.replace(/\.json$/, '');
+        const filePath = join(monthDir, file);
+
+        try {
+          const result = processPost(filePath, year, month, slug);
+          if (!result) continue;
+
+          if (result.type === 'weeknote') {
+            weeknoteCount++;
+            console.log(`Weeknote: ${result.filename}`);
+            if (result.redirect) {
+              redirectLines.push(`${result.redirect.from} ${result.redirect.to} 301`);
+            }
+          } else {
+            articleCount++;
+            console.log(`Article: ${result.filename}`);
+          }
+        } catch (err) {
+          console.error(`Error processing ${filePath}:`, err);
+        }
+      }
     }
   }
 
-  // Append redirects
+  // Write redirects
   const existingRedirects = existsSync(REDIRECTS_FILE)
     ? readFileSync(REDIRECTS_FILE, 'utf-8')
     : '';
   writeFileSync(REDIRECTS_FILE, existingRedirects + '\n' + redirectLines.join('\n') + '\n');
-  console.log(`\nWrote ${redirectLines.length - 1} redirect rules to ${REDIRECTS_FILE}`);
-  console.log('Done!');
+
+  console.log(`\nDone! ${articleCount} articles, ${weeknoteCount} weeknotes`);
+  console.log(`${redirectLines.length - 1} redirect rules written to ${REDIRECTS_FILE}`);
 }
 
-main().catch(console.error);
+main();

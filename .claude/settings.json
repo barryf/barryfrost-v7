@@ -8,7 +8,13 @@
       "WebFetch(domain:standard.site)",
       "Read(//Users/barryf/.claude/plugins/cache/claude-plugins-official/superpowers/5.0.6/skills/subagent-driven-development/**)",
       "Bash(node -e \"console.log\\(require\\(''/Users/barryf/Code/barryfrost-v7/node_modules/vite/package.json''\\).version\\)\")",
-      "Bash(node -e \"const v = require\\(''/Users/barryf/Code/barryfrost-v7/node_modules/@cloudflare/vite-plugin/package.json''\\); console.log\\(''peerDeps:'', JSON.stringify\\(v.peerDependencies\\)\\); console.log\\(''deps:'', JSON.stringify\\(v.dependencies\\)\\)\")"
+      "Bash(node -e \"const v = require\\(''/Users/barryf/Code/barryfrost-v7/node_modules/@cloudflare/vite-plugin/package.json''\\); console.log\\(''peerDeps:'', JSON.stringify\\(v.peerDependencies\\)\\); console.log\\(''deps:'', JSON.stringify\\(v.dependencies\\)\\)\")",
+      "Bash(npm run:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(npm list:*)",
+      "Read(//Users/barryf/Code/content/posts/**)",
+      "Bash(python3 -m json.tool)"
     ],
     "additionalDirectories": [
       "/Users/barryf/Code/barryfrost-v7/docs/superpowers"
