@@ -1,0 +1,13 @@
+---
+title: "Week 104 - Lionesses"
+date: 2023-08-21
+week: 104
+syndication:
+  - https://mastodon.social/@barryf/110926903745942656
+  - https://staging.bsky.app/profile/barryfrost.com/post/3k5hi5palul26
+---
+
+- It's been a quiet week. Half of my team are currently on holiday so the office was relatively empty and Slack much less noisy. The lull meant I could focus on some planning for hiring in September with fewer interruptions. More on the new vacancies soon.
+- I've also been spending scheduled 1:1 time with those not on holiday. In my first couple of months I've spoken to most people, but proper "skip-levels" with those who don't directly report to me go deeper and I've found them really helpful in understanding how people are feeling.
+- We visited my parents at the weekend. My sister and her children also came over. The sun was shining and H brought his football for a kick-about with his older cousin and me. 2 v 1 was a little unfair, even if I was much bigger than them. As is appropriate, I held back from proper tackles although I did manage to graze my knee at one stage.
+- The boys were excited for the Women's World Cup Final on Sunday morning. They sat for about ten minutes with me watching on TV before disappearing off to play on the Switch or draw. They returned for the final whistle to express disappointment England had lost, then carried on. I was rather more engrossed with the match: they just ran out of steam and luck. Well done, England.

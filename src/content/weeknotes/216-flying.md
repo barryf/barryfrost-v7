@@ -1,0 +1,13 @@
+---
+title: "Week 216 - Flying"
+date: 2025-10-12
+week: 216
+syndication:
+  - https://mastodon.social/@barryf/115363058509789504
+  - https://bsky.app/profile/barryfrost.com/post/3m2zjpjupf622
+---
+
+- I spent the last week in sunny San Diego for work. I met up with the rest of our Professional Services leadership team for _meetings_ and an All-Hands presented by our parent company's CEO.
+- The journey was just as I remembered it from my last three visits: 15 hours from home to hotel and very dull. I tried and failed to sleep using my new [Trtl](https://uk.trtltravel.com), so instead watched [films](https://letterboxd.com/barryf/films/diary/for/2025/10/) on the little screen and exhausted my podcast backlog.
+- Each morning I was in the office in La Jolla before 8am, partly because our office is next door to the hotel, but mainly because of the eight-hour time difference. After long days working I dropped off my backpack in my hotel room and headed back out for dinner and drinks together. As a result this weekend back home I've slept and done very little.
+- Food in La Jolla was pretty good. Sushi at [Blue Ocean](https://barryfrost.com/2025/10/yqjxp0jab58), large quantities of Mexican at [Red O](https://barryfrost.com/2025/10/rxsx76u3dj8) and many moreish dim sums after a worthwhile wait at [Din Tai Fung](https://barryfrost.com/2025/10/wt3eke660am). The Rubi club sandwich from nearby [Rubicon Deli](https://rubicondeli.com) was as good as always.

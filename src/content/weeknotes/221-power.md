@@ -1,0 +1,14 @@
+---
+title: "Week 221 - Power"
+date: 2025-11-17
+week: 221
+syndication:
+  - https://mastodon.social/@barryf/115565886474032774
+  - https://bsky.app/profile/barryfrost.com/post/3m5tm33meb32d
+---
+
+- It may be the changing of seasons and gloomier days, but I've found myself a little down this week. Getting outside for lunchtime walks and playing with the boys usually helps clear away the cobwebs. I'll keep an eye on my general mood so that I don't let things slip.
+- I bought a UPS (uninterruptible power supply) mainly to protect my NAS (network attached storage). It's a basic [APC 650VA](https://www.se.com/uk/en/product/BE650G2-UK/apc-backups-650va-400w-floor-wall-mount-230v-8x-british-bs1363a-outlets-usb-type-a-port-user-replaceable-battery/) device with eight sockets. We have occasional power cuts in the village and when the power returns my NAS stays powered off. I forget to turn it back on and my backups subsequently fail. The UPS is effectively saving me from having to press a button - peak laziness.
+- H's under-10s football team lost their third match in a row to local Hertford rivals. They fought back from 3-0 down to draw level, only to then concede a last-minute winner. It's a cruel game.
+- My parents and my aunt and uncle stopped by on Sunday. L was out for the day so I hosted. I made a lemon drizzle cake - that's two excellent cakes in successive weekends. The boys were very well-behaved, bringing out their board games to entertain their relatives.
+- It rained heavily this week. No flooding, luckily. Temperatures are forecast to drop next week with maybe even some snow. Brrr.

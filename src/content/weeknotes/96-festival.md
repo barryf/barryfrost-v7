@@ -1,0 +1,12 @@
+---
+title: "Week 96 - Festival"
+date: 2023-06-27
+week: 96
+syndication:
+  - https://mastodon.social/@barryf/110617789761618455
+---
+
+- Little by little I'm settling in to my new job. I'm getting to know my new team. I'm adjusting to the hour-long commute on the days I'm in the office. I'm identifying the areas I want to address and improvements that I can make. It's slowly taking shape.
+- But it's also absorbing most of my weekday energy, as these sparse weeknotes illustrate.
+- The weekend was warm. The boys had their cricket session at the local sports ground, followed by a sweaty kick-around with me. We took them both to the opticians and then, by popular request, to McDonalds as a reward.
+- I enjoyed several hours of the Glastonbury Festival on TV. I've camped and day-tripped to several festivals - V, T in the Park, Isle of Wight and Reading - but never Glastonbury. The UHD coverage on the BBC is so good I'm very happy watching on my sofa. Highlights for me were the Manics (especially Faster), Royal Blood (amazing sound from one guitarist), and bits of Guns N' Roses. But none could touch Elton John's relentless run of bangers on Sunday. Masterful.

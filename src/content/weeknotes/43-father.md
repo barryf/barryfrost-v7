@@ -1,0 +1,13 @@
+---
+title: "Week 43: Father"
+date: 2022-06-19
+week: 43
+syndication:
+  - https://twitter.com/barryf/status/1538602383290294273
+---
+
+- I started the week with a drive over to Essex for [lunch](https://barryfrost.com/2022/06/9m3fypelgrf) with my parents and sister. It was my Mum's 70th birthday and, after a wider family get-together a couple of weeks ago, this time it was just her immediate family. Without grandchildren and our partners for a change, it was just like the old days. It was a very nice day.
+- I'm hiring again for a new direct report at work: why not be our new [Engineering Manager](https://jobs.lever.co/privitar/287934e4-0daf-4a76-aea5-00b530fc463e)? 
+- It was H's school assembly. Parents were seated on tiny chairs at the back of the school hall, the other classes were in the middle and Year 1 faced us at the front. H coped well with the pressure of having all eyes on him, despite glaring at us for smiling at him(!), and delivered his line clearly.
+- H had his first football tournament on Saturday at nearby [Benington](https://barryfrost.com/2022/06/ht84y7nlk4r) and even scored the winner in a tight 1-0. Cue lots of posing and group celebrations: I think his little team enjoy that part as much as scoring the goal! Our village brought two teams, but there was only one other in the age group, so there were plenty of mixed-up teams and game time.
+- And finally, Father's Day. My brain was wide awake so I skipped a lie-in. The boys gave me cards, some craft beers and a nice mug. Even better, they were well behaved at [lunch](https://barryfrost.com/2022/06/v1lgr8oy5ob). No tablets, no grizzling and only one of them needed a poo. Celebrate the small wins!

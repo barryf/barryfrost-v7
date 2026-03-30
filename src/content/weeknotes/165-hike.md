@@ -1,0 +1,13 @@
+---
+title: "Week 165 - Hike"
+date: 2024-10-20
+week: 165
+syndication:
+  - https://mastodon.social/@barryf/113341509811121720
+---
+
+- This week I flew to Munich for just 24 hours to visit a customer for a workshop. It was a pretty short and expensive but worthwhile trip. I think our hosts appreciated the effort of us flying in people from Poland, the US and the UK (me) to spend time together.
+- Sitting in a meeting room of mostly Germans, I could observe their enthusiasm for [lüften](https://www.politico.eu/article/germanys-energy-efficiency-open-windows-ventilation/), the art of ventilating rooms by opening all the windows, despite the crisp outside temperatures. It helped with the stuffiness and kept everyone alert. They might be onto something.
+- Most of the attendees were PC users and I noted that almost everyone brought along a wireless mouse connected with a USB dongle. I'm so used to software engineers with MacBooks; are PC laptop trackpads terrible or are Mac users just more willing to adapt?
+- Back home I was volunteered to join C on his Beavers hike through the muddy countryside. It took our team (six Beavers and a leader) over three hours to walk the 12km to our finishing point, following challenges and eating our snacks. All of us made it to the end, despite one boy's blister and lots of zigzagging.
+- For the rest of the weekend we were firmly in parent taxi mode. I took C to his rugby taggers and his brother to his football match, while their mother took H to two tiring birthday parties. Time for a quiet Sunday evening on the sofa.

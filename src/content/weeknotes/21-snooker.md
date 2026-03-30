@@ -1,0 +1,14 @@
+---
+title: "Week 21: Snooker"
+date: 2022-01-16
+week: 21
+syndication:
+  - https://twitter.com/barryf/status/1482824207780171777
+---
+
+- I've got a new job! I'm joining [Privitar](https://www.privitar.com/) as Director of Engineering this coming Wednesday. The opportunity to manage multiple teams again in a Series C fintech was very attractive. I'm sad to leave my team at The Room, but excited for what's next.
+- This will be my first non-CTO role for a long while, but I'm happy with the title downshift. I'll have a technical boss to learn from and there's plenty of scope for me to grow and develop myself.
+- With a new job comes new kit and I've been enjoying the onboarding experience on my company iPhone and Mac. I've decided to try keeping personal and work lives wholly separate. That includes trying to use stock software, rather than longtime favourites like [Things](https://culturedcode.com/things/) and [Craft](https://www.craft.do). I'll see how long I last.
+- H began Beavers this week, along with several of his school friends. Big thumbs-up. He's following in Daddy's footsteps: I progressed through Beavers to Cubs to Scouts. 
+- The vets have agreed our cat can try dropping her twice-daily insulin injections. She was diagnosed as diabetic in November 2020 and was prescribed weight-loss food and insulin in response. Fingers crossed that's it. And thank god we've had insurance for her!
+- Andy and I spent Saturday afternoon at the first semi-final of the [Masters snooker](https://en.wikipedia.org/wiki/2022_Masters_(snooker)) at [Ally Pally](https://barryfrost.com/2022/01/lb2wyt56nw). We're fair-weather fans and pop along each year, Covid-allowing. We were treated to an epic match between Mark Williams and Neil Robertson that reached a deciding frame, Robertson winning despite requiring two snookers. Flukes, escapes and stunning shots. The atmosphere, as they say, was electric. Such a great spectator sport.

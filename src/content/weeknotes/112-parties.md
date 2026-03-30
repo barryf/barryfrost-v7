@@ -1,0 +1,14 @@
+---
+title: "Week 112 - Parties"
+date: 2023-10-15
+week: 112
+syndication:
+  - https://mastodon.social/@barryf/111240848139411531
+---
+
+- It was our friend Emma's 40th birthday party in Brighton this weekend. L's parents stayed at our house to babysit the children, allowing L and I a precious night away.
+- We drove down Friday lunchtime, parked up at the (surprisingly decent) Travelodge, strolled through Preston Park and found the [Argyle Arms](https://barryfrost.com/2023/10/zg0suwf2t8c) for a couple of pre-drinks. The main event was at the nearby [Crown and Anchor](https://barryfrost.com/2023/10/5ojhnuj5732): we joined our old (in both senses of the word) friends for dinner, enjoyed a few more drinks and had a very pleasant time.
+- Walking back to the hotel we missed the kebab shop and so relied on the poor Shell garage man to fetch us food from his shelves. I refused to believe he had no Cornish pasties. He was glad we settled for a sandwich and chicken-and-mushroom slice and left him alone.
+- Back home H had his own birthday parties with his little friends. Less boozing, more blue slushies and bowling with the gutter bumpers on.
+- While his big brother was at a party, we took C scooting around [Fairlands Valley Park](https://barryfrost.com/2023/10/8lflsg5n27s) lake. I think he enjoyed having his parents all to himself. The only blip was falling off his scooter on to his face. His helmet unfortunately didn't stop him grazing his forehead and upper lip. A flapjack in the cafe cheered him up a bit.
+- We're watching the Beckham documentary on Netflix. It's very well-edited and faithful to that period. Well worth watching, even for this Arsenal fan.

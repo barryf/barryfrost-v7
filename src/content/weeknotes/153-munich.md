@@ -1,0 +1,13 @@
+---
+title: "Week 153 - Munich"
+date: 2024-07-29
+week: 153
+syndication:
+  - https://mastodon.social/@barryf/112871486467066739
+---
+
+- I was in Munich for a few days this week, joining our European sales teams at their annual conference. It was the first time I'd met several German colleagues plus some Americans who had also flown over. As always, the real value was in the lunchtime chats, corridor hellos and dinner discussions over sausages and beer with those I'd only ever seen on Zoom.
+- I do like Germans and their country. There's a lot of shared culture, climate and lifestyle that makes it feel familiar in contrast to the warmer European countries. I need to brush up on my language skills though which were sadly lacking 28 years after my GCSE German exams!
+- Before jumping in the taxi to Heathrow I saw both boys compete in their school Sports Day, held in the new school field behind our house for the first time. There were mixed activities, egg-and-spoon, skipping and running races. Both did well in front of my watching parents, H winning his running race.
+- A smart engineer came to install a smart meter. We now have the dubious pleasure of watching the pounds and pence tick by in real time on the little display.
+- Finishing the week very strongly we picked up our new Tesla - a Model 3 Long Range in Ultra Red. It's effectively a computer on wheels: so much technology and thrillingly fast. I keep grinning while driving it. 11 years after buying my Audi S3 I'm now an EV convert.

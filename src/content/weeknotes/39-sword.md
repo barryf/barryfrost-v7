@@ -1,0 +1,12 @@
+---
+title: "Week 39: Sword"
+date: 2022-05-22
+week: 39
+syndication:
+  - https://twitter.com/barryf/status/1528479492083269632
+---
+
+- Our engineering leadership team sat down for three strategy days this week, aiming to define a vision to take us to 2025. I enjoy these opportunities to step back and think about where the gaps are, what our focus should be and what needs to be done. Plenty of [Miro](http://miro.com) boards full of Post-It notes to review.
+- I dusted off my Nintendo Wii during the first Covid lockdown. H has been enjoying some of my easier, more accessible games, like [New Super Mario Bros. Wii](https://www.nintendo.co.uk/Games/Wii/New-Super-Mario-Bros-Wii-282376.html) and [Mario Kart Wii](https://www.nintendo.co.uk/Games/Wii/Mario-Kart-Wii-281848.html#Overview). I had held back the Legend of Zelda games I had because I felt they would be too difficult and scary in places, but this week I spun up [Skyward Sword](https://www.nintendo.co.uk/Games/Wii/The-Legend-of-Zelda-Skyward-Sword-283531.html) for him. He's learning to be patient and persevere with the puzzles. It won't be long before he overtakes my saved game, I'm sure.
+- After his initial [bike-riding enthusiasm](https://barryfrost.com/2022/05/week-37-bike), H wanted to practise, but we found a slow puncture in his front tyre. I did the inner-tube-in-a-bucket-of-water trick to find the hole, glued on a patch and reassembled the tyre. Kind of surprisingly it worked. H was back on two wheels and managed to cycle all the way across the park. 
+- Arsenal's race for fourth place ended in a whimper, but the signs are encouraging for the future: we've got a talented, young squad who will only get better. Now for a few months of transfer rumours to endure before it all starts again.

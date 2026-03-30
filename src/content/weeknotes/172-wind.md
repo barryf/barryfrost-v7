@@ -1,0 +1,15 @@
+---
+title: "Week 172 - Wind"
+date: 2024-12-08
+week: 172
+syndication:
+  - https://mastodon.social/@barryf/113618975532180504
+  - https://bsky.app/profile/barryfrost.com/post/3lcsysevkhs2w
+---
+
+- H has been accepted into the advanced group of his Players Academy football training sessions on Monday nights. We're very proud but we're trying not to put any pressure on him about where it might lead. Just remember to buy a big house and a massive yacht for Daddy, please.
+- I had a couple of trips to the dentist this week for a check-up and hygienist session. They continue to be happy with my teeth although I was again nagged to use interdental brushes. I never hear about them accept when I visit. Are they some sort of dental scam?
+- Work is simultaneously winding down for Christmas and gearing up for a big start to 2025.
+- It's been a stormy week. L had arranged a night out at [Adam Kay](https://www.adamkay.co.uk)'s [show at Alexandra Palace](https://www.alexandrapalace.com/whats-on/adam-kay-the-nightshift-before-christmas/) on Saturday. We made it to the theatre just in time despite cancelled trains and strong winds blowing us around as we climbed to the top of the hill. It was worth it for Adam's clever songs and filthy diary entries from his days as a doctor, all with a Christmas theme.
+- I've had more time to play with GenAI tools for coding and I'm a true believer. I've now subscribed to [Windsurf](http://windsurf.ai) which I find truly magical. I sit with a silly grin on my face while prompting it to write code and refactor whole codebases in a fraction of the time it would take me. It soon corrects its few mistakes when I point them out and doesn't get irritated.
+- We're not even halfway through the Premier League season and yet every dropped point by Arsenal feels painful. 1-1 with Fulham. At least I'm still top of all of my Fantasy leagues.

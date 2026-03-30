@@ -1,0 +1,16 @@
+---
+title: "Week 219 - Paint"
+date: 2025-11-03
+week: 219
+syndication:
+  - https://mastodon.social/@barryf/115485631493421378
+  - https://bsky.app/profile/barryfrost.com/post/3m4pxlcx34g2l
+---
+
+- It's November already. It's school half-term. The leaves are changing colour. Hallowe'en is over. Christmas awaits.
+- While I stayed behind at home, L and the boys visited her parents again for a few school holiday days. This meant I ate microwave curry and watched films she probably wouldn't like (A House of Dynamite, [new] Superman and The Banshees of Inisherin).
+- In home renovation news, we're having our window frames, doors, soffits and fascias repainted. Scaffolders arrived on Wednesday to build platforms over the side extension ready for the exterior painters who started on Thursday. Despite the inconvenience - moving cars off the drive before 8am every morning, sitting in a freezing house with windows and doors open, making all the teas - it's been fine. The workmen have been reliable and efficient. One coat to go.
+- Our boys' Hallowe'en trick-or-treating hauls seem bigger than last year. The village has new houses with families which might explain it. Neither boy is too obsessed with sweets, thankfully, and will gradually eat their way through. It's also tempting to hide some and use for sharing next year!
+- C's piano/keyboard playing is really coming on. His fingering is much better and he's happily using both hands.
+- My parents visited on Sunday to give H their birthday presents. He asked for board games and received three to enjoy - it's a welcome alternative to football-football-football. We also played a little with his [micro:bit](https://microbit.org/).
+- I made my excellent [banana bread](https://barryfrost.com/2025/08/week-208-banana) which I'm confident is the best of all cakes.

@@ -1,0 +1,14 @@
+---
+title: "Week 20: Comedy"
+date: 2022-01-09
+week: 20
+syndication:
+  - https://twitter.com/barryf/status/1480279630498213894
+---
+
+- I returned to work (at home) after my Christmas holidays, and then the boys went happily back to their local primary school. After last year's Covid-enforced longer school break, this was a relief for all.
+- Friends continue to contract Covid. One is quite poorly with it, but is thankfully over the worst of the symptoms. Another had to cancel his 40th birthday party. Covid is very much not over.
+- On Friday I masked up and travelled in to London to see [Stewart Lee at The Leicester Square Theatre](https://www.leicestersquaretheatre.com/stewart-lee-snowflaketornado/). It was a rearranged gig consisting of the best of his Snowflake and Tornado shows. I've been to see Stew at the LST for many, many years. In fact, I've seen both these routines before. But each time feels fresh and a much needed way to escape for a few hours. 
+- I took down the outside Christmas lights this weekend, several days after the Twelfth Night and therefore bringing bad luck upon myself. If you believe in that nonsense. L had packed away the indoor decorations long before of course.
+- The boys are getting bigger so can manage longer walks now. We've discovered a muddy route along footpaths outside the village, through some woods with a rope swing, dens and makeshift BMX circuit. The boys love it, although were sad they couldn't run up-and-down the ramps this time because teenage boys on their bikes were (rightfully) using them. 
+- I have some exciting personal news to announce. I'll save it for next week 🤐

@@ -1,0 +1,15 @@
+---
+title: "Week 230 - Snooker"
+date: 2026-01-19
+week: 230
+syndication:
+  - https://mastodon.social/@barryf/115923007940002483
+  - https://bsky.app/profile/barryfrost.com/post/3mcs732bq5d2u
+---
+
+- This week, I went back up to Ally Pally for the Masters snooker. I think this is the seventh year in a row (ignoring Covid) we've gone. It was probably the closest match I've seen: [John Higgins beat Judd Trump](https://www.bbc.co.uk/sport/snooker/articles/cedw5w49xjqo) in an 11th frame decider. The Wizard was visibly delighted with his win and it was comforting to see a professional sportsman older than me win!
+- I paused Dry January so I could have a couple of pints at the snooker. Unlike previous years, I wisely avoided filling my bladder after the mid-session interval, so I was able to comfortably sit through seven uninterrupted frames.
+- But I've not been missing alcohol. I've been enjoying [Athletic's Run Wild IPA](https://uk.athleticbrewing.com/collections/all-beer/products/run-wild-ipa-alcohol-free-6-pack) which is very close to the real thing. I might continue to limit booze to special occasions and see how I get on. It can only be a good thing for my health.
+- I've signed up for a trial of [Fastmail](https://www.fastmail.com/). I'm considering switching my primary email/calendar away from a legacy Google Workspace account so that I can de-Google my services and give my money to a company that values privacy. Fastmail looks very good, I just need to bite the bullet and push the migrate button.
+- C has begun indoor cricket sessions in Welwyn. I took him on Sunday. It's good exercise and he's loving it. His batting is solid, but he's still learning not to run wherever the ball goes when fielding.
+- These dark drizzly days aren't doing much for my cheery disposition. Roll on spring and sunshine please.

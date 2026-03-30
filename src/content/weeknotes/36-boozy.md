@@ -1,0 +1,15 @@
+---
+title: "Week 36: Boozy"
+date: 2022-05-01
+week: 36
+syndication:
+  - https://twitter.com/barryf/status/1520849911113306113
+---
+
+- This week I was covering engineering manager duties for one of my teams, meaning I was at the sharp end of the team's backlog refinement and sprint planning. It's been a while! But it's useful practice brushing up on my Jira skills.
+- We're also hiring for an [engineering manager](https://jobs.lever.co/privitar/287934e4-0daf-4a76-aea5-00b530fc463e). The role reports in to our other engineering director but you can [contact me](https://barryfrost.com/contact) if you've any questions.
+- On Friday I was back on the train into London. This time for lunch with two old friends/colleagues, Darren and Paul. We meet every six months or so for a boozy lunch (not, as my youngest calls it, a "busy" lunch) at somewhere reliable. My body always regrets the wine and unnecessary couple of pints after, but the lunch is a nice ritual to maintain.
+- It was then L's turn for a social event: a hen do for a friend from our Windsor days. I'm a bit jealous; not of the screeching hens, but that she was back in Windsor. I've not been back after living and working there for 13 years and still have a soft spot for the funny little town where the Queen lives.
+- The week ended with everyone a bit run down. Stomach upset (me), L tired and youngest C with a hacking cough. He even had to miss the birthday party he'd been looking forward to all week, poor boy.
+- Thankfully I've had the snooker world championships to enjoy on TV. Each session of the semis and final (so far) have been gripping and I'm enjoying seeing if Ronnie can win his seventh title.
+- Heroku's GitHub pipeline is [still down](https://status.heroku.com/incidents/2413) and so I'm looking at moving my personal Ruby projects off Heroku. I'd rather not, but the platform is clearly, sadly in decline. I'm checking out [Railway](http://railway.app) and [Render](http://render.com).

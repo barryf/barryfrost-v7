@@ -1,0 +1,15 @@
+---
+title: "Week 97 - Duck"
+date: 2023-07-02
+week: 97
+syndication:
+  - https://mastodon.social/@barryf/110646259417372688
+  - https://staging.bsky.app/profile/barryfrost.com/post/3jzku6qih4h2s
+---
+
+- I was in the office three days this week. I like spending time in person with my new team, including presenting my first all-hands on Wednesday, but it was a relief to spend a couple of quiet days working from home. Running a remote session using Miro over Zoom is perfectly fine, especially when in-office days are loaded with 1:1s.
+- Our company headquarters are in San Diego and I have my first visit ("corporate huddle") coming up mid-July. My last US trip was in 2019 when I was at eBay, so I'm trying to remember what I need to prepare. I have my ESTA arranged, I've booked airport transfers, but I still need some folding money for tips. I've really not missed tipping culture.
+- My children shared how much they value me this week. My youngest noted that I have just two skills: opening jars and swatting flies.
+- We have a new cleaner after our previous one moved away. Annoyingly they've left bleach marks on a side table and on a towel. It was a bad start. L will have a word.
+- In other home news, we arranged a plumber to visit to fix a leaking pipe that no longer leaks. Rather embarrassing.
+- We walked down the road to the [Welwyn Festival](https://www.welwynfestival.org.uk/events/family-fun-day) on Saturday. Standard fair fare: stalls, raffle, rides, ice creams and mercifully a beer tent. But the highlight for C was the duck race which he had been excited for all week. We sponsored a few of the 1,500 plastic yellow ducks that were dropped into the nearby river and then watched as they floated downstream to the finish line.

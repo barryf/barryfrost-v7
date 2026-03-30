@@ -1,0 +1,13 @@
+---
+title: "Week 31: Golf"
+date: 2022-03-27
+week: 31
+syndication:
+  - https://twitter.com/barryf/status/1508184460965130246
+---
+
+- I was in the office for four days this week. Colleagues from the US and Israel were visiting London, plus my Swedish boss, Victoria, who I met for the first time in person. It was surprising how much more fluid it was being able to be together for some *collaboration*.
+- With our engineering leadership team all in London, we spent Tuesday evening at [Swingers](https://swingers.club/). Jokes were made about the name, of course. It's a nine-hole crazy golf course with burgers and bars, tucked behind Oxford Street. Recommended.
+- Four days in the office, early starts, trains and lots of social interaction was tiring for this introvert. The last time I commuted in for more than two days in a row was mid-2018 at Gumtree. Fine for a one-off, but I can't imagine going back to a similar pattern.
+- L had a contrasting weekend in the west country: first at a funeral and then on a hen-do. This meant I was looking after the boys solo for the weekend. When they were younger that was daunting, but these days it's a pleasure. They're good boys.
+- On the Saturday, I took them to my parents' in Essex to join my sister's two children. There was trampolining, football, cricket, Nintendo Switch games and lots of fun together for the cousins. Meanwhile the adults enjoyed the March sunshine in the garden.

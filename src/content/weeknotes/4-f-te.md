@@ -1,0 +1,16 @@
+---
+title: "Week 4: Fête"
+date: 2021-09-19
+week: 4
+syndication:
+  - https://twitter.com/barryf/status/1439671056382533634
+---
+
+- The heavy rain that started the week meant I had to skip a couple of lunchtime walks. I look forward to my 40-minute loops around the village and sense my afternoon productivity drops without them. I leave the house, get some decent exercise and listen to most of a podcast. I find I can’t listen to spoken word unless I’m walking. Current podcast favourites are [Metamuse](https://podcasts.apple.com/gb/podcast/metamuse/id1504506097), [Primarily Context Based](https://podcasts.apple.com/gb/podcast/primarily-context-based/id1564737735), [The Art of Product](https://podcasts.apple.com/gb/podcast/the-art-of-product/id1243627144) and catching up with [The Manager's Handbook](https://podcasts.apple.com/gb/podcast/the-managers-handbook-podcast/id1500083086).
+- On Tuesday I watched the Apple Event stream to see the launch of the new iPhone and iPad models. I’ve had my iPhone 11 Pro for a couple of years and assumed I’d want to upgrade to a 13 or 13 Pro. But is the 13 a big enough improvement? My 11 Pro is fast enough. I’m usually connected to wifi so can live without 5G. The new cameras are impressive, but I’m no photographer. Where’s my gadget lust gone? I guess I’m waiting for another X leap forward.
+- At work we’ve been using FigJam over Google Meet calls in place of Post-Its and sketches on a whiteboard. It's helpful, but I'd love to draw on my iPad rather than use a pointing device. Then I saw a [recommendation](https://mobile.twitter.com/geekGirl1984/status/1438825576421330947) on Twitter for using the Google Jamboard app on an iPad with a Pencil and share the board in your Meet call. Bingo. I'm going to try that.
+- At work two of my team pass their probations with flying colours. I’m really pleased with the team we’ve put together while working remotely. Not only are they technically strong and contribute, the team all rate each other highly.
+- I joined Facebook London’s online Engineering Leaders Summit on Thursday. Online events like these are still valuable, but I prefer being in an auditorium or event space to help me focus. I also prefer how I force myself to network before and after when physically present. 
+- On Friday I woke to an alert from Checkly to say our platform was down. It was the first such outage in a long, long time. I soon discovered it was a [Heroku incident](https://status.heroku.com/incidents/2359) and, although unpleasant, it thankfully occurred outside our customers' core hours.
+- I let Friday’s iPhone pre-order time (1pm BST) pass without buying one. Despite what I wrote above, I almost U-turned. Proud of myself.
+- The weekend brought Codicote Village Day: our local village fête. All the boxes were ticked: a maypole, bake-off, tombola, coconut shy, tin-can alley, tractor rides and fairground. The boys loved the wrestling competition (although then started practising with their friends) and the BMX stunts. Daddy enjoyed the beer tent.

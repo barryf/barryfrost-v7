@@ -1,0 +1,16 @@
+---
+title: "Week 175 - Christmas"
+date: 2024-12-30
+week: 175
+syndication:
+  - https://bsky.app/profile/barryfrost.com/post/3leklcykl562c
+  - https://mastodon.social/@barryf/113744127847229873
+---
+
+- As is now traditional, I marked the start of Christmas festivities by picking up the meat order from our [village butchers](https://thefarmbutcheryonline.co.uk). H walked down with me to struggle home with the food: turkey, gammon, pigs-in-blankets, bacon, chipolatas, sausage-meat, and a big box of vegetables.
+- I voluntarily and happily did the cooking. I made a sticky, glazed ham for Christmas Eve (with lots of leftovers), the turkey-and-trimmings on the day itself and then a turkey, bacon and leek pie on Boxing Day. It's tiring but rewarding when it all turns out pretty well.
+- The boys loved their presents. Their mother did an excellent job in choosing, as always. I assembled H's [Rebounder](https://www.quickplaysport.com/collections/rebounders) and won our hit-the-target game (just), while C built his model Titanic - with lots of help. I've also been reading C my present contribution of [Nelson, Hero of the Seas](https://www.penguin.co.uk/books/446841/adventures-in-time-nelson-hero-of-the-seas-by-sandbrook-dominic/9780241552216): we're both excited to learn about Nelson's naval victories at bedtime. I'm employing my best dramatic [Dominic Sandbrook](https://dominicsandbrook.com) voice to keep him hooked.
+- Wallace and Gromit were back to their best, I thought, in [Vengeance Most Fowl](https://www.wallaceandgromit.com/films/vengeance-most-fowl/).
+- L gave me a bread maker - I'd heavily hinted I wanted one. I also received a starter box of flours, oils, seeds and yeast. So I guess I'm now one of those bread wankers. It's fun experimenting with the recipes and waking up to nice bread. The machine can add seeds and nuts from a little tray so I'm trying pumpkin and sunflower seeds.
+- L's parents stayed with us this year, kept the boys entertained throughout and said positive things about my cooking. And then we visited my parents in Essex on Saturday and saw my sister and her children. A busy week so it's been nice to slow down for a few days after.
+- Right, time to do my bread prep.

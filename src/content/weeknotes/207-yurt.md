@@ -1,0 +1,15 @@
+---
+title: "Week 207 - Yurt"
+date: 2025-08-10
+week: 207
+syndication:
+  - https://mastodon.social/@barryf/115006605692405596
+  - https://bsky.app/profile/barryfrost.com/post/3lw3a7opeen2o
+---
+
+- I had a busy few days of work at home while the rest of my family joined L's parents glamping in Northamptonshire. They stayed in fancy yurts with beds and a hut with a kitchen. I was jealous of their campfires and days out, but I did get to enjoy some peace and quiet and my choice of evening TV.
+- I rewatched [Rogue One](https://barryfrost.com/2025/08/rogue-one-a-star-wars-story) in a new light after finishing the excellent Andor series which is its prequel. The storylines and the characters had more context and colour knowing their backstories.
+- All four of us went down to the Emirates to see [Arsenal's preseason friendly against Athletic Club](https://www.arsenal.com/fixture/arsenal/2025-Aug-09/arsenal-3-0-athletic-club-match-report). We can say we were there to see Gyökeres score his first goal as Arsenal won 3-0. The sun was shining, everyone was in a good mood, I had a couple of pints and the boys enjoyed their hot dog and burger. Not bad. Even L conceded she's starting to enjoy watching football.
+- The Frost boys were proudly wearing [our home shirts](https://barryfrost.com/2025/08/arsenal-shirts) (including my new Gyökeres shirt, my first club shirt in 21 years); Mummy was stylish in her matching red trousers and white t-shirt.
+- Before the match we stopped off at the Armoury, Arsenal's club shop, but it was dangerously(?) full and after queueing to get in we could barely move inside to browse, let alone buy anything. It was always going to be busy given the number of families with cash to burn, but it was a shame the boys didn't get to spend their pocket money.
+- On the Sunday we drove over to my parents' as did my sister and her family. We enjoyed my dad's quiche, played table tennis in the garden, played Scrabble and Switch indoors and sat in my sister's new Kia Niro EV. I set up CarPlay and her dashcam, even though she said I wouldn't be able to work it out. Incorrect.

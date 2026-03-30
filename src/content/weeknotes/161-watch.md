@@ -1,0 +1,14 @@
+---
+title: "Week 161 - Watch"
+date: 2024-09-23
+week: 161
+syndication:
+  - https://mastodon.social/@barryf/113188088421984758
+---
+
+- I was in the office for a couple of days this week and felt very tired as a result. How ever did we all survive doing this five days a week?! As always, a bit of face-to-face time is time well spent.
+- I took the day off on Friday for another semi-regular lunch with six ex-colleagues, all of whom enjoy a drink. We returned to the same restaurant by the canal in Paddington and then sat outside the pub next door enjoying plenty of rose in the late summer sunshine. Saturday was necessarily quiet.
+- I had travelled into London earlier on Friday with L so that we could a) have a nice coffee together and wander around the shops near Regent Street, but also b) so that we could pick up my new Apple Watch 10 and she could safely transport it back home without me losing it at the pub.
+- It was my first time collecting from an [Apple Store](https://barryfrost.com/2024/09/apple-store-regent-street-london-on) on a release day and, despite thinking the days of queueing up were over with pre-orders, we had a wait of about 20 minutes along the street before making it inside.
+- I chose the 46mm size in Jet Black with the new Ultramarine (blue) Sport Loop. It's a welcome step up from my Series 4, especially the battery which had been dying before the end of each day, whereas I can wear this one for 23.5 hours straight for sleep tracking. The always-on screen is my other favourite feature.
+- We spent Sunday at my parents' in Essex joining several cousins, aunts, uncles and - guests of honour - my mother's Australian cousins who had just arrived in the country for an extended holiday. Our boys weren't intimidated by all their unfamiliar relatives and despite being the only children they got stuck in, including games of football and table tennis in the garden.

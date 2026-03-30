@@ -1,0 +1,11 @@
+---
+title: "Week 75 - Café"
+date: 2023-01-29
+week: 75
+---
+
+- More calls and a couple of interviews this week. I'm narrowing down to a few roles that I like, although all are at early stages. The initial panic of unemployment has subsided as I realise I'm lucky to have enough time to be picky.
+- I also remembered that I don't need to spend all my time job-hunting. L and I [went out for a long lunch](https://barryfrost.com/2023/01/drinking-a-extra-squirrelly-bitter-by) and, with a free afternoon, I decided to have a couple of beers. 
+- I may not be this laidback if I'm still jobless in April, but for now, there can be an upside! 
+- While our older son had a friend's birthday party on Sunday, L and I took our youngest for a walk across the fields to [Spoke](https://www.spokecycles.cc), a well-loved cyclists' café. The coffee is strong and very good. We sat outside, drank our drinks and admired the goats that graze nearby. 
+- And that's about it.

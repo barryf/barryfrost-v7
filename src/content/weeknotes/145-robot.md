@@ -1,0 +1,12 @@
+---
+title: "Week 145 - Robot"
+date: 2024-06-03
+week: 145
+---
+
+- I was happy to be back home after my US trip, with a bank holiday to catch up on sleep. I think I'm just about readjusted now.
+- It's been half-term holidays for the boys. My in-laws stayed with us for a couple of nights to spend time with their grandchildren, which meant L and I could head to the village pub and Indian restaurant for a rare evening out together.
+- The boys have been asking about pocket money. They're definitely old enough now, but we didn't want the hassle of dealing with cash each week. So we've signed them up for [Rooster Money](https://roostermoney.com). They each get a debit card and an app for their iPads, which tracks their balances, goals, and the chores they need to do. It's very well done. The novelty will wear off, I'm sure, but for now, they're excited to tick off their little chores like making their beds.
+- On Sunday, I drove the boys to my parents' to give L an afternoon away from us all. The sun was shining, giving them a good excuse for trampolining and cricket in the garden. C may have found his sport: he ably blocked all of his granddad's bowling on a bumpy lawn.
+- My parents also showed off Robbie the Robot: their new son/[robot lawn mower](https://navimow.segway.com/uk/). They can track his progress on a mobile app and both enjoy watching him trundle up and down the garden before returning home to charge. I now have serious gadget envy.
+- Excuse me, I need to wrap this up and go approve more chores.

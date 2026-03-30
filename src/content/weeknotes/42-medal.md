@@ -1,0 +1,13 @@
+---
+title: "Week 42: Medal"
+date: 2022-06-12
+week: 42
+syndication:
+  - https://twitter.com/barryf/status/1536085630505066496
+---
+
+- I love Apple's annual WWDC keynote. While shiny new hardware is interesting, seeing previews of the software that I'll be using on all my devices later this year in a relentless, two-hour, feature-packed presentation is another level up. Unlike a few years ago, I'm no longer brave/foolish enough to install the betas on my main devices, but there's not long to wait.
+- After work on Wednesday I took a short tube down to join [Andy at the Oval](https://barryfrost.com/2022/06/andy-and-i-at-the-sunny) for the Surrey v Sussex T20. Having lived in Surrey and South-West London for several years I still follow Surrey; Brighton-based Andy supports Sussex. Surrey won, but we were the real winners, enjoying early evening sunshine, beers and the it's-not-really-cricket-but-it's-still-fun sport.
+- I was back in town on Friday evening for a gig: [Helen Love](https://www.last.fm/event/4638797+Helen+Love+at+The+Lexington+on+10+June+2022) at [The Lexington](https://barryfrost.com/2022/06/helen-love). I wasn't too familiar with Helen's Bubblegum Punk Pop, but enjoyed her/their catchy songs like Debbie Loves Joey. The Ramones feature prominently.
+- The morning after the gig I had the rare lie-in because L had taken the boys to her parents' for the weekend. I love them all dearly, but the peace and quiet was blissful! 
+- They all returned in time for H's football awards on Sunday. [Codicote Youth FC](http://codicoteyouthfc.co.uk) is a wonderful local club, run by volunteers for about 10 teams of boys and girls. H was given his first football medal for his under-6s team, of which he was very proud. And of course his little brother was immediately jealous.

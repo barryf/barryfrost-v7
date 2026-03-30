@@ -1,0 +1,8 @@
+---
+title: "Week 25: Hibernation"
+date: 2022-02-14
+week: 25
+---
+
+- Weeknotes are on hiatus. Spending the whole time cooped up inside isolating, I have nothing to write about! We followed the rules, stayed at home and just about kept sane. We did watch some excellent TV – This Is Going To Hurt, Reacher and Chloë – but otherwise did very little else other than drink Lemsip and rest.
+- Normal service will resume next week now that isolation is over 🙏

@@ -1,0 +1,15 @@
+---
+title: "Week 137 - Cycling"
+date: 2024-04-08
+week: 137
+syndication:
+  - https://mastodon.social/@barryf/112236790318596381
+---
+
+- This week we revisited Center Parcs in Belgium for an Easter holiday. [De Haan](https://www.centerparcs.eu/in-en/belgium/fp_HA_holiday-park-park-de-haan) ticks the boxes for our family: lots of walkable facilities for two energetic boys in a stress-free package that's easy to reach from the UK.
+- We enjoyed bowling, mini-golf, lots of swimming/sliding, the onsite farm and the climbing wall. But one of the highlights (for me) is the huge soft play area in which there is a bar to buy and drink strong Belgian beers while remaining responsible for your children. We made full use of this. I also enjoyed the sauna in our lodge, escaping for relaxing half-hours yet still within ear-shot of the TV.
+- I paid for a month's [NordVPN](https://nordvpn.com) access, mainly for us to watch football through our Apple TV box. We watched Arsenal's wins against Luton and Brighton on Sky and TNT Sports without any issues on the lodge's wifi. Also, we're top of the league!
+- The park is a short walk from a big sandy beach on the Belgian coast. It was pretty empty and we could enjoy a kick-about, notable for Daddy's supremacy and a reverse nutmeg of H.
+- We drove to nearby [Blankenberge](https://barryfrost.com/2024/04/17yc08csedk) where the boys spent a half-hour on the go-karts before we walked along the promenade eating churros.
+- Belgium loves cycling and has the infrastructure to prove it. We hired four bikes and cycled out of the park along the safely-enclosed bike lanes. I hadn't been on a bike for years and told myself I needed to do it more. As a family we were much more successful when we'd swapped C to a cargo bike so he could be carried by his mother without tears.
+- We're now home via smooth Belgian and French roads and bumpy English tarmac. While the rest of the family have their second week of holidays, I'm back to work.

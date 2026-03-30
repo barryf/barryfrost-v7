@@ -1,0 +1,16 @@
+---
+title: "Week 167 - Magic"
+date: 2024-11-04
+week: 167
+syndication:
+  - https://mastodon.social/@barryf/113426759939823132
+  - https://bsky.app/profile/barryfrost.com/post/3la5nbhnwrh2u
+---
+
+- I had a couple more nights by myself this week while the rest were still away. I cooked myself an amazing ribeye steak (and filled downstairs with smoke), cooked (too much) curry and watched AI/sci-fi films. Nice to recharge my introvert batteries for a bit, but I was happy when the family hurricane returned.
+- The boys (and L) were home in time to trick-or-treat our way around the village for Halloween. I'm not sure if our children are any more road-safe when running between homes, but at least our village neighbours were still happy to fill up their buckets with sweets.
+- Five years this week since moving up to Hertfordshire from Surrey.
+- I took C to Lego club on Saturday at the library. This week's theme was Bonfire Night. Although he understood about Guy Fawkes and fireworks, he had firmly decided he wanted to build a fire-breathing dragon. His creation, technically on-theme, was therefore a big red dragon that spat out piles of fire to set Lego men on fire 🔥
+- My parents then drove over to take the boys to the [Harry Potter Studio Tour](https://www.wbstudiotour.co.uk) in Watford. The boys have both enjoyed the books and seen the age-appropriate parts of the films, but it was C that dressed up in his Potter shirt and hooded wizard's cape and was bouncing off the walls with excitement. A big hit.
+- We blitzed through season two of the excellent [Diplomat](https://www.theguardian.com/tv-and-radio/2024/oct/31/the-diplomat-season-two-review-keri-russell). Even better than the first.
+- During the quieter moments this week I've resurrected my ActivityPub server project and have been happily hacking away. I'm focusing on the server-to-server parts first, but I plan to implement a [Mastodon-compatible API](https://docs.joinmastodon.org/api/). There's a lot of Bluesky buzz about right now, but building for ActivityPub seems a lot more accessible.

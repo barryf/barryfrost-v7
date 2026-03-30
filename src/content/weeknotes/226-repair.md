@@ -1,0 +1,14 @@
+---
+title: "Week 226 - Repair"
+date: 2025-12-22
+week: 226
+syndication:
+  - https://mastodon.social/@barryf/115764459800721818
+  - https://bsky.app/profile/barryfrost.com/post/3malrxo6nkx2k
+---
+
+- It's been my last week of work for the year. Apart from planning a few new customer engagements for January, it's been uneventful and mercifully quiet. I'm back working in two weeks when the boys go back to school.
+- I spent lunchtimes on a few chores: getting a haircut, a dentist/hygienist visit and buying a few last Christmas shopping bits. All done. My presents are wrapped, I've finalised the Ocado grocery order and now I'm fully Christmas-ready.
+- On Saturday we met up with Tim and Debbie and their son in Wendover near where they live in Buckinghamshire. We ate a big lunch in the [Bel and the Dragon](https://barryfrost.com/2025/12/q320fghca4) and then let the fuelled-up boys run around together in a nearby playground before it got too dark.
+- While having lunch the side of my car was scraped by a van in the car park. The scraper fortunately left a note with his details and sounded quite shook-up on the phone. I now have to go through the pain of getting it repaired through my insurance company during the Christmas period, and then claiming back my excess. It's going to be a faff.
+- However, it's one of those things. It won't spoil Christmas. I'm looking forward to relaxing into a routine of lazy days at home with my family, eating and drinking a little too much, and switching off. Merry Christmas to you! 🎄🎅

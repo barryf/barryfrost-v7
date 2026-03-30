@@ -1,0 +1,14 @@
+---
+title: "Week 209 - Firsts"
+date: 2025-08-25
+week: 209
+syndication:
+  - https://mastodon.social/@barryf/115089981067452419
+  - https://bsky.app/profile/barryfrost.com/post/3lxab2ah25y2d
+---
+
+- The rest of the family came back from their stay at L's parents' and normality resumed. I'd missed their happy chaos.
+- At work we had our annual company day off on Friday. I spent a quiet day at home after a few busy work days this week with late finishes. L spent the day getting pampered while the rest of us caught up on blog posts and gaming.
+- I was at the Emirates again for Arsenal's first home game of the season against Leeds United. This time it was just H and me. It was a day of firsts: Premier League home debuts for Gyökeres, Madueke, Mosquera and Zubimendi, not to mention 15-year-old wunderkind Max Dowman (who I later found out comes from my hometown, Chelmsford), it was H's first PL match and his first competitive win.
+- The Emirates was very noisy, and the huge reaction to the visibly delighted new signing Eberechi Eze who was presented just before kick-off with fireworks and flames further ramped up the noise levels. H heard a few words he knew he shouldn't hear: he now knows what we think of Tottenham. A thumping [5-0 win](https://www.bbc.co.uk/sport/football/live/c890kl77j0kt) left everyone very happy on their way home.
+- Less boisterous was Sunday's cricket fun day at nearby Knebworth Cricket Club. Our boys needed some encouragement at first, but then joined in with older boys playing on a practice pitch. L enjoyed the chocolate cake and tea; I chose a pint and peanuts.

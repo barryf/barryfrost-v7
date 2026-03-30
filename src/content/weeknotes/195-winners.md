@@ -1,0 +1,15 @@
+---
+title: "Week 195 - Winners"
+date: 2025-05-19
+week: 195
+syndication:
+  - https://mastodon.social/@barryf/114534277033772740
+  - https://bsky.app/profile/barryfrost.com/post/3lpjhzclb6v2z
+---
+
+- The last time I saw [Rialto](https://rialtomusic.com/) was in the nineties with Andy while we were students. We saw them again this week at [Scala](https://scala.co.uk/). Big tunes, still tight, although played with just the one drum kit these days. It was a bit quiet - the whir of the AC fans was audible - nevertheless it's nice to hear old favourites again.
+- I'm trying to eat more protein for breakfast, starting with two scrambled eggs and half an avocado. I've felt more full and my energy levels seem higher mid-morning. The extra preparation and clearing up time is worth it so far.
+- I've been coding/vibing again, this time on a live calendar feed to remind us to put the bins out. It would be better if the council exposed this themselves so I didn't need to scrape my data. It would also be better if they didn't keep changing their CMS each year. They're now on their third (or maybe fourth) iteration of a waste collection "portal" that now, for some reason, loads the data for each page via Ajax/XHR (or whatever we call it these days). Once I'd worked out how to source my data, I poked at [Windsurf](https://windsurf.com/)'s AI agent to write the code to scrape it, make sense of the data and create an ICS.
+- As I continue to noodle around with my website I've been experimenting with [Datasette](https://datasette.io/) to create a queryable archive from my data stored around the internet. For example, I've imported my check-ins from Swarm and bookmarks on Pinboard. I currently host this data as posts on my main website itself, but I'm not sure it really belongs there.
+- It was a busy weekend of activities. While mother and oldest son participated in a local [Pretty Muddy 5K](https://raceforlife.cancerresearchuk.org/find-an-event/stanborough-park-pretty-muddy-5k-2025-05-17-1100) race, I took youngest son for cake and juice and then to Lego club in the library where the theme was monuments (C built a Colosseum).
+- Then, on Sunday, H played for Codicote Lions U9s for the last time before he moves clubs next season. It was a local youth football tournament with a dozen teams - and his won! After an unbeaten group stage the Lions won both their semi-final and final on penalties. Shootouts are a brutal experience for children (and watching parents) but the euphoria of winning helped. He was so pleased to end his time with the Lions on a high. Well done, H!

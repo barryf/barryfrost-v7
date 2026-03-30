@@ -1,0 +1,13 @@
+---
+title: "Week 44: Spain"
+date: 2022-06-26
+week: 44
+---
+
+- This last week and a bit we were on holiday in [Majorca](https://barryfrost.com/2022/07/24aawlxnjum), staying at the [Protur Bonaire](https://barryfrost.com/2022/06/dlgto54bhfq) in Cala Bona. Because of Covid restrictions, it was to be the boys' first time outside the UK, their first flights and also their first time staying in a hotel.
+- And it worked out well: it was an all-inclusive, family-focused package affair for minimum stress. The journey was super-smooth, the boys had a great time at kids' club and we got some quality sun-lounger time.
+- H loved the buffet: his daily breakfast was pancakes with chocolate spread and squirty cream, followed by a lunch of burger /and/ hot dog, chips and all the ice creams. 
+- Our days settled into kids' club sessions for the boys, sunbathing, the swimming pools, eating and drinking. 
+- Evening entertainment was two enthusiastic Dutch girls who alternated between dressing up in a dog costume as "Captain T", setting tasks for the kids and doing dances. Their catchy songs remain firmly lodged in my head.
+- I didn't post weeknotes while away, in part because it would be clear our home would be empty to a burglar reading my website. Has this ever actually happened? Is it even remotely possible opportunistic thieves subscribe to my weeknotes? 
+- Anyway, better safe than sorry!

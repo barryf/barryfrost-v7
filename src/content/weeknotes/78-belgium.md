@@ -1,0 +1,13 @@
+---
+title: "Week 78 - Belgium"
+date: 2023-02-19
+week: 78
+---
+
+- Our holiday continued at Center Parcs in De Haan, Belgium.
+- We all enjoyed Aqua Mundo, the swimming pool/slides/rapids dome. And the boys loved the soft play which had an accompanying bar for us. Adults could sit alongside and order table service drinks via a clever QR-code ordering system. 
+- I was annoyingly waylaid for 24 hours by a painful stomach bug. I blamed a suspicious burger from the previous night. Buscopan to the rescue.
+- During the week the boys/we tried climbing walls, bowling, pool, mini golf and more. All very accessible on-site. We also had a big game of beach football between parents and children on one of the nearby sandy beaches. 
+- There were birthdays for both C and L and so we had a day trip to Bruges. We ate fancy waffles at [OTTO Waffle Atelier](https://barryfrost.com/2023/02/9wbpi3k24js) and dragged the boys around the streets to look at buildings in the rain before an early dinner for them at [Ellis Gourmet Burger](https://barryfrost.com/2023/02/fh55wuvnozl). 
+- Evenings were a bit quiet with the children in bed upstairs, but we managed one night out for drinks, with Andy's teenage nieces babysitting. It coincided with Arsenal's [loss](https://www.bbc.co.uk/sport/football/63224218) to Man City which I mercifully missed.
+- The Center Parcs in De Haan is clearly not a luxury resort, but it was perfect for our families and much cheaper than the equivalents in the UK. Recommended.

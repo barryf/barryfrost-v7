@@ -1,0 +1,13 @@
+---
+title: "Week 140 - Chairs"
+date: 2024-04-28
+week: 140
+syndication:
+  - https://mastodon.social/@barryf/112350820835715556
+---
+
+- We now have six new colourful kitchen chairs: in yellow, green, light green, grey, black and white.
+- My wife, queen of Facebook Marketplace, quickly disposed of our old unwanted chairs, picked up by a couple who arrived in a taxi. She remembered to first upend the boys' chairs to shake out the grated cheese and bits of spaghetti caught in the gaps. Yuck.
+- We ordered a Chinese on Saturday - far, far too much food as always - and the phone call reminded me of the "and then?" scene from "Dude, Where's My Car?". I made the mistake of playing the clip to the boys who loved it and now respond to any question with "...and then?" 🤦
+- The Arsenal are back on form, thumping Chelsea 5-0 on Tuesday and then holding on for a 3-2 away to Spurs in the derby today. H couldn't handle the tension, lying on the floor behind the sofa, groaning. Both boys were wearing their Arsenal kits "for luck".
+- L and I have our 10th wedding anniversary coming up this summer so we've just booked a little trip to Nice. It'll just be the two of us: the boys will be staying with their grandparents. Nice.

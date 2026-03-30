@@ -1,0 +1,15 @@
+---
+title: "Week 215 - Bongo"
+date: 2025-10-10
+week: 215
+syndication:
+  - https://bsky.app/profile/barryfrost.com/post/3m2u6nu2alf2i
+  - https://mastodon.social/@barryf/115351022879043936
+---
+
+- I had two London gigs this week in one weekend. Crazy.
+- First up was [The Beta Band at the Roundhouse](https://www.last.fm/event/4907230+The+Beta+Band+at+Roundhouse+on+03+October+2025) with Andy. They played pretty much all of their classic [The Three EPs](https://en.wikipedia.org/wiki/The_Three_E.P.%27s) which worked surprisingly well played live, Dry the Rain being my highlight. Plenty of bongo-playing. And great acoustics in the round, er, Roundhouse.
+- It was Steve Mason and friends' first tour together since December 2004. Neatly, the next night was Gene's first London gig since December 2004 with their own Steve Mason on guitar.
+- L and I joined similarly-aged friends at a packed [Distillers](https://barryfrost.com/2025/10/onbgq0nyo6k) pub for pre-gig drinks before moving on to the Apollo for the much-anticipated [return of Gene](https://www.last.fm/event/4911227+Gene+at+Hammersmith+Apollo+on+04+October+2025). When Gene split we were all in our mid-twenties, childless, fresh-faced and with full heads of hair. Much time has passed. The old songs were still tight and were lustily sung back to the band. They finished on "Who Said This Was the End" and hinted at a tour next year. I'll be there.
+- I did the sensible thing when buying the tickets last year and also booked a hotel to save on the back-and-forth. Clever me chose the perfectly reasonable and fairly new Premier Inn in Hammersmith. We were able to smugly skip from venue to bed in minutes - via the pub, of course.
+- Earlier in the week we visited another potential secondary school for H. It seemed fine. It's hard to assess schools for him while remembering my own school days. The lessons, the homework, the exams, the anxiety... Even though I had a relatively good experience, I wouldn't want to go back and start again. He's got it all to come 😬

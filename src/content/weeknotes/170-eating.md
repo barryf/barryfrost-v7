@@ -1,0 +1,15 @@
+---
+title: "Week 170 - Eating"
+date: 2024-11-24
+week: 170
+syndication:
+  - https://bsky.app/profile/barryfrost.com/post/3lbpurvkx3v2b
+  - https://mastodon.social/@barryf/113539880957306122
+---
+
+- It was my birthday this week. I don't always take time off work to celebrate, but with a few holiday days left in the bank I decided to make the most of it with a longer weekend.
+- After dropping the boys at school, L and I first took the train into King's Cross for some shopping and lunch. I bought new trainers (very "6 music dad") and a blazer from Uniqlo, then I had a Negroni and some tasty gnocchi at [Vermuteria](https://barryfrost.com/2024/11/d3ieagt5eml) in Coal Drops Yard.
+- Back home we'd booked a babysitter so we could visit the [Cowshed](https://barryfrost.com/2024/11/15c3qphpy54h) for dinner at nearby [Tewinbury](http://tewinbury.co.uk). After another Negroni, goat's cheese and lamb, I was very happily full.
+- The next day I met up with ex-colleagues and friends for lunch at [Smith's](https://barryfrost.com/2024/11/cffs7la4e9f) in Paddington to eat steak and drink a bit too much wine as usual. I may be risking gout this week but getting old(er) isn't so bad.
+- [Storm Bert](https://www.gov.uk/government/news/the-latest-updates-on-storm-bert) has been battering the country and was a good excuse to spend a quiet weekend sheltering indoors, watching football and relaxing.
+- X/Twitter is over for me after [18 years](https://barryfrost.com/2006/08/tweet-19952). I've been busy following people on Bluesky and unfollowing them on X, ending any reason to go back and check my X feed. It's noticeable how over the last couple of weeks so many people have created accounts and quit X. Although I prefer Mastodon (and the Fediverse in principle) I'm spending my time on Bluesky because that's where the people I follow are posting.

@@ -1,0 +1,14 @@
+---
+title: "Week 168 - Night"
+date: 2024-11-10
+week: 168
+syndication:
+  - https://mastodon.social/@barryf/113460902918585304
+  - https://bsky.app/profile/barryfrost.com/post/3lamshe3zvb2z
+---
+
+- Two actual nights out with my wife this week!
+- The first was to see [The Bluetones](https://bluetones.band) in Hitchin on Thursday. It was our fourth time seeing them together. Our first was a very early date years ago at The Forum in London, the [most recent](https://barryfrost.com/2023/04/week-88-blue) was a lovely acoustic set in the same venue. Thursday's gig was to play the new EP and plenty of old stuff. They were excellent. Mark Morriss still sparkles in between songs.
+- Saturday was at the local tennis club's annual quiz night. Our team of nine improved one place on last year's [fifth finish](https://barryfrost.com/2023/11/week-116-quiz), most probably because there were no anagrams. I answered a few tricky questions and even participated in the physical activity round. A few too many impossible tennis questions though.
+- We needed a babysitter. Our previous one had gone off to university so we asked our neighbours' teenage son. He seemed happy enough to earn a few quid while watching Netflix for a few hours.
+- I'm making progress with my ActivityPub server. I've cracked using [HTTP Message Signatures](https://oauth.net/http-signatures/) to accept a follow request. I was stuck on mismatched digests for a fair while, but after five minutes with ChatGPT it spotted and fixed my mistake. AI is unsurprisingly better at writing code than me.

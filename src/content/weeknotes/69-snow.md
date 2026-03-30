@@ -1,0 +1,17 @@
+---
+title: "Week 69 - Snow"
+date: 2022-12-18
+week: 69
+syndication:
+  - https://mastodon.social/@barryf/109536630869568514
+  - https://twitter.com/barryf/status/1604580239677456384
+---
+
+- 🎶 Let it snow, let it snow, let it snow 🎶 We had a decent dumping of snow to wake up to on Monday and all of us were out in the garden by 8am. I made a snowman while the boys pelted me with snowballs and fell over. 
+- The temperature has stayed below zero ever since Monday and so the snow is yet to melt. This week I've ventured no farther than the school and the local shop. The novelty has fully worn off.
+- At least I've had time to complete my Christmas shopping (online). All hail the brave delivery people for risking the cold to bring presents to me.
+- To combat the weather we've now started on the mulled wine and I'm demolishing bowlfuls of addictive walnuts.
+- Youngest son, C, had his school nativity play attended by all his grandparents and parents. He was Story Star, the narrator, a role he loved and carried out superbly. While some of his classmates mumbled or missed their cues, C didn't miss a beat, belting out his lines and the songs beautifully. Maybe a future on stage awaits?
+- I received my invitation this week to [Tana](https://tana.inc), an exciting new notes app that's getting some buzz right now. A couple of years ago I switched from [Bear](https://bear.app) to [Craft](https://www.craft.do), and Tana is shaping up nicely as my next choice. I'm liking the everything-is-a-node concept, supertags and inline querying. Import/export is currently lacking in that I can't easily move my data in or out, so I'm not quite all-in yet.
+- The World Cup is over. It was slightly grating how the media singled out Messi throughout, but the narrative of the last chance for one of the best ever players was compelling. Great player and great team. Back to the Premier League and Arsenal who are, let's not forget, top of the league.
+- 69 weeknotes? Nice.

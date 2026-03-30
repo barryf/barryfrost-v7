@@ -1,0 +1,13 @@
+---
+title: "Week 58 - Colder"
+date: 2022-10-02
+week: 58
+syndication:
+  - https://twitter.com/barryf/status/1576663753332035584
+---
+
+- Winter's on its way: the nights are drawing in, it's noticeably colder in the mornings and the heating even automatically kicked in one morning. 
+- With the economy in chaos and energy prices increasing again, our annual chat with our financial advisor was theoretically well-timed. However, he was just as bemused as us with it all. We're fortunate to be in a decent financial position, but there are tougher times to come for everyone. 
+- Looking ahead, I'm still on course to retire at 60. Still a few years left then.
+- This week I missed a delivery, even though I was working from home. I decided it was time to invest in a video doorbell. So with Amazon discounting Ring doorbells, I ordered one. It arrives next week: I'm prepared for the irony of missing the delivery of the device that I need to help me from missing deliveries.
+- We ended the week with a successful [Sunday lunch in Tring](https://barryfrost.com/2022/10/ccxra8j9qvo) with my in-laws. Decent roast beef and well-behaved boys. They both needed taking for poos during the meal, of course. Then a long walk around nearby [Wendover Woods](https://barryfrost.com/2022/10/fgmpfi3gxy9).

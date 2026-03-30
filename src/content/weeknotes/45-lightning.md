@@ -1,0 +1,14 @@
+---
+title: "Week 45: Lightning"
+date: 2022-07-04
+week: 45
+syndication:
+  - https://twitter.com/barryf/status/1544069197126373379
+---
+
+- We're back from [holiday](https://barryfrost.com/2022/07/week-44-spain) after ten lovely sunny days.
+- While we were away there was a lightning storm in the area which struck the telegraph pole opposite our house. Our street's WhatsApp group lit up with reports of dead phone lines, broken broadband and lifeless network equipment.
+- We feared the worst. We got back and, yes, our connection was also down. We're now at the mercy of Openreach to repair/replace the cables at some unspecified point in the future. Meanwhile no proper internet other than choppy mobile tethering 😠
+- On more positive news, we reached a significant milestone with our new platform at work. I can be less vague about it soon! 
+- I caught up with my red bubbles from work. It's a good indicator of our communication culture: I had at least twice as many unread Slacks as emails to catch up on. And, better still, each message could wait until I was home 😎
+- Evening entertainment in the absence of an internet connection is now a deep dive into a thick DVD folder and firing up my PS3. Currently rewatching Anchorman and the peerless [Nathan Barley](https://en.wikipedia.org/wiki/Nathan_Barley).

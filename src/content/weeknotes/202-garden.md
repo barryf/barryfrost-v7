@@ -1,0 +1,15 @@
+---
+title: "Week 202 - Garden"
+date: 2025-07-07
+week: 202
+syndication:
+  - https://bsky.app/profile/barryfrost.com/post/3ltexdog27i2e
+  - https://mastodon.social/@barryf/114812326750110875
+---
+
+- I've been tracking my blood pressure twice a day for the last couple of weeks. It was prompted by a routine check-up where my BP was measured at 167/94. Worryingly high. I bought a home monitor (it connects to my phone, obvs) and averaged a reassuringly normal 135/70. Back at the doctors surgery, however, I recorded another 160+ systolic and learned a new term: [white coat syndrome/hypertension](https://en.wikipedia.org/wiki/White_coat_hypertension). Carry on.
+- The boys decided to spend their pocket money: C bought a Minecraft Lego set while H chose Swingball. I made the mistake of thinking we could hammer the traditional version with a spike into our lawn, however the house builders clearly thought dumping their rubble 10cm under the turf would be fine, making it impossible to put it up. Thankfully we could exchange it for one with a weighted base (as L suggested to start with...) and H was finally able to smash his tennis ball around.
+- We spent a couple of evenings reading and talking about local secondary schools. It feels like a hugely important decision to get right. A long way to go.
+- I watched Gladiator 2 on Friday. It was just fine. And we started series four of The Bear. It continues to be stressful, wonderful and very watchable.
+- Last week we waved goodbye to the boys' playhouse; this week my parents visited to help deconstruct the double-decker pirate ship my dad had built them. What took us two weekends to screw together (plus my dad's many days cutting and painting the wood) was gone in an hour. We'll turf over the bare ground to make a bigger space to kick a football.
+- With the garden increasingly more grown-up, L's attention turned to new garden furniture. This could get expensive and complex. Just where are you supposed to store all the cushions?

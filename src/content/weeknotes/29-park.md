@@ -1,0 +1,14 @@
+---
+title: "Week 29: Park"
+date: 2022-03-13
+week: 29
+syndication:
+  - https://twitter.com/barryf/status/1503116170513334284
+---
+
+- Hybrid working has begun at work. Three days at home; two days in the office. In our engineering team we're coordinating on Wednesdays and Thursdays as our office days, helped by a company lunch and drinks to lure in staff. It's nice to see people in the flesh, although I haven't missed hunting for an empty meeting room.
+- I haven't missed commuting either. Delays, cancellations and rain. I'd almost forgotten!
+- This time, after the latest Apple event, I avoided ordering anything. Even though the [Studio Display](https://www.apple.com/uk/studio-display/) is perfect: 5K screen and built-in webcam, mic and speakers. My 4K Dell display, Logitech webcam and laptop mic/speakers are all *fine* I guess. 
+- On Saturday we met old friends for lunch at [The Wellington](https://barryfrost.com/2022/03/lfqbn3yf64o) and then playtime back at ours for the children. It's not been easy to host people for the last two years (for obvious reasons), so it was nice.
+- I pushed a new release of Micropublish with a [contribution](https://github.com/barryf/micropublish/pull/91) from [Henrique](https://hacdias.com) to support photo uploads. I've struggled to find time to review PRs lately, but it's genuinely exciting having others work on a project I started because they find it useful.
+- We popped over the road this afternoon with the boys to play park football with other children from their school. I joined dads and mums to help the year 1s against the year 3s. I was really impressed with H's defending and running against bigger boys. However, Daddy managed to make one boy cry with a clearance that hit his hand. Oops.

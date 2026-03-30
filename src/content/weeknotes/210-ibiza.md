@@ -1,0 +1,15 @@
+---
+title: "Week 210 - Ibiza"
+date: 2025-09-07
+week: 210
+syndication:
+  - https://mastodon.social/@barryf/115162038357808016
+  - https://bsky.app/profile/barryfrost.com/post/3lyab247qpm2h
+---
+
+- I've been on holiday with my family. We spent the week in the sun on Ibiza, near [Cala Pada](https://en.wikipedia.org/wiki/Cala_Pada) beach.
+- We stayed in a [resort](https://www.magiclife.com/en/en/resort-holiday/spain/cala-pada/resort-details/) on the quieter side of the island, away from the clubs and mayhem, although we were a little concerned on our flight over that we shared the plane with hen dos and groups of lads on the lash. Our hotel was thankfully just for families.
+- Our days settled into a reassuring routine of eating at the buffet, lying by the pool and of kids' club activities for the boys. I'm not much of a sun-worshipper, and it took me a few days to detach myself from normal life, but I came to enjoy the pressure-free days of reading and daydreaming while lying in the sun.
+- Facilities were very good. The boys enjoyed archery, football, crafts, table-tennis and lots of swimming. H and I visited the sports bar to watch Arsenal lose 1-0 away to Liverpool, along with some cocky southern scousers. - you can't pick your hotel neighbours.
+- It was all fine. The resort was very safe, very easy and convenient for families with children, but a week with watery beer and organised entertainment was long enough for me.
+- We did make it out for a couple of day trips. We visited the old town: L insisted we climb a hill at midday in 30C heat to see [Baluarte de Sant Jordi](https://barryfrost.com/2025/08/7zg5376josh), the town's bastion and fortified walls. And we took the little ferry to [Santa Eulària des Riu](https://maps.google.com/maps?q=38.98436419070728,1.5350464089007299) to buy knick-knacks at the market.

@@ -1,0 +1,16 @@
+---
+title: "Week 91 - Poo"
+date: 2023-05-22
+week: 91
+syndication:
+  - https://staging.bsky.app/profile/barryfrost.com/post/3jwcr7bgfmu2x
+  - https://mastodon.social/@barryf/110411881400389964
+---
+
+- We were joint winners of the village treasure hunt (see [week 90](https://barryfrost.com/2023/05/week-90-gymnastics)) out of 40 entrants. Woo! However, rather than a bottle of something nice to drink for me, our prizes were two coronation-themed children's books for the boys. I will withhold my general knowledge and anagram skills in future as protest.
+- My sister and family were at Disneyland Paris this week. Talking to my parents I was struggling to remember whether I went to the LA version back in 2001 while backpacking. Thanks to my [travelblog](https://barryfrost.com/categories/travelblog) I could confirm that [yes, I did](https://barryfrost.com/2001/10/not-enough-time-to-do-las-vegas-so-ill)! I hope to use these weeknotes to jog my memory in another 22 years' time.
+- We're now up-to-date with Succession. What a series! It's a mark of a good TV programme if I don't even reach for my phone while watching.
+- I've been having a few restless nights over the last few months caused by stomach pains, so I booked a doctors appointment to investigate. First stage is to arrange some blood tests and, a first for me, I need a faecal test. The "collection" part is one of the least pleasant things I've had to do, but not quite as unpleasant as it must be for poo lab technicians. Respect.
+- Talking of which, it was my turn to collect Poppy's poos from down the sides of the house. She likes to use the loose stones as her litter tray and eventually it becomes noticeable enough that we're forced to act. Wearing blue surgical gloves and a face mask I carefully bagged up her (mostly) dry turds. Horrific. Next time it's definitely L's turn.
+- I can now post from this website to [Bluesky](https://bsky.app) using the API. Bluesky's still a closed beta but when it opens up it'll be another syndication target I can use.
+- We ended the week with H's youth football end of season awards. He was delighted with his first little trophy to start his collection; I sense it's the first of many.

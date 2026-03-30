@@ -1,0 +1,18 @@
+---
+title: "Week 71 - Coat"
+date: 2023-01-01
+week: 71
+syndication:
+  - https://twitter.com/barryf/status/1609674830999060482
+  - https://mastodon.social/@barryf/109616260184631726
+---
+
+- Christmas is done for another year. We've started to get used to the lie-ins, guilt-free booze and cheese, but it's back to reality next week.
+- The cold I picked up has stubbornly lingered. Mixing with people and unwinding seems to lower my defences. 
+- I did manage to leave the house to buy a nice warm Gant coat from John Lewis. The checkout man told me three times I'd got a bargain in their Sales, making the purchase even sweeter.
+- The Premier League resumed after the World Cup break with Arsenal winning both their festive matches. Arsène Wenger was at The Emirates for the first time since 2018, a beaming Thierry Henry was a pundit and Eddie scored. Top of the league by 7 points. Loving it right now!
+- Having cancelled Sky I decided to subscribe to [Now](https://www.nowtv.com/) to be able to watch Sky Sports. The app irritatingly doesn't run at 50Hz on my LG TV so football is very jerky. Thankfully the Apple TV app uses the higher refresh rate.
+- Happy 2023! We were asleep before midnight, obvs.
+- On New Year's Day we drove to Essex to spend the day with my parents and my sister's family. I managed to drag the older boys away from the Switch to play Junior Scrabble. 
+- I have new novels to read as Christmas presents. I don't do resolutions, but I'm going to try to read more fiction this year. 
+- We've started watching [The Traitors](https://www.bbc.co.uk/programmes/p0db9b2t). Although the participants are irritating they're starting to plot against each other and it's warming up nicely.

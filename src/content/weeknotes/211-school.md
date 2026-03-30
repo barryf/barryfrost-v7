@@ -1,0 +1,16 @@
+---
+title: "Week 211 - School"
+date: 2025-09-07
+week: 211
+syndication:
+  - https://mastodon.social/@barryf/115162047799110818
+  - https://bsky.app/profile/barryfrost.com/post/3lyab6gbxie2l
+---
+
+- We travelled back from last week's holiday on Ibiza.
+- It wasn't exactly a warm welcome home at Stansted airport: we had an hour queueing for our passports to be checked and then a 45-minute wait for a surge-priced Uber.
+- Next day it was straight back to school for the boys. In previous years there have been a few nerves and night-before anxiety, but they were both excited to go back and see their friends.
+- Maybe a little too excited: C broke his wrist on Friday after falling while climbing in the playground. An x-ray confirmed the break. He now has a splint and sling to wear. It's not bothering him too much: he can still hold a Switch Joy-Con in his hand.
+- The boys are now in years five and three, moving ever closer to secondary school age. We've started the search and have a couple of open days booked in this term. Boundaries and rules seem to have changed and there may be additional schools available. It's confusing and uncertain.
+- With access to my laptop again I've been hacking. I've set up my own [PDS](https://atproto.com/guides/self-hosting) (Personal Data Host). I firmly believe in the IndieWeb principle of [owning my own data](https://indieweb.org/own_your_data) and this lets me self-host my Bluesky posts and other content. Whether I want to pay for and maintain a VPS for this is a different question! Using the PDS's API I can also build a website that serves my content without needing Bluesky's [AppView](https://atproto.wiki/en/wiki/reference/core-architecture/appview). A fun new project, and perhaps the basis of my next personal website.
+- Football is back for H's new under-10s team. He had his first pre-season friendly on Saturday. They were pretty rusty and lost 4-3 to a local Hertford team.

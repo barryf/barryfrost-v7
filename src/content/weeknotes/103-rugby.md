@@ -1,0 +1,13 @@
+---
+title: "Week 103 - Rugby"
+date: 2023-08-13
+week: 103
+syndication:
+  - https://mastodon.social/@barryf/110884055633566835
+---
+
+- I've semi-reluctantly entered a Fantasy Premier League team into a league of ex-colleagues for the new season. I did [pretty well](https://barryfrost.com/2018/05/i-finished-the-fantasy-premier-league) last time I entered, but it became an obsession, mainly caused by the jeopardy of finishing bottom at the end of each month and having to buy the other players a Nando's. Happily, [Ludicrous Display](https://fantasy.premierleague.com/entry/7428852/event/1) is off to a decent start.
+- Ditto Arsenal: a 2-1 home win v Nottingham Forest to start the season.
+- I've signed up again as an Arsenal [Red member](https://www.arsenal.com/membership/red) for the season and paid for "Team JG" memberships for the boys so they'll also have access to tickets. After our trial run at Stevenage, H is ready for his first big match. I'm keeping an eye on fixtures and availability.
+- Covid is back as a concern at work and home. We had two of my team test positive and then several people went home with sore throats. Testing kits, gels and masks were swiftly distributed. I'm thankfully negative (so far).
+- Clear of Covid, I could safely enjoy a trip to Twickenham for England's World Cup warm-up against Wales. I sadly no longer live 20 minutes away in Surrey; from Hertfordshire my journey to HQ took an irritating 2½ hours. I recovered with a few Guinnesses with Ian in the sunshine outside, before watching England toil on the pitch, accompanied by deafening music piped over the PA.

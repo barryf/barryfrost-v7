@@ -1,0 +1,13 @@
+---
+title: "Week 90 - Gymnastics"
+date: 2023-05-15
+week: 90
+syndication:
+  - https://twitter.com/barryf/status/1658035864226652161
+  - https://mastodon.social/@barryf/110371899641874696
+---
+
+- Another Bank Holiday Monday. This one followed the Coronation weekend. The village had organised a themed treasure hunt which we persevered with in the rain. I solved the anagram, L held her clipboard and the boys (mostly) found the clues.
+- I spent some daddy-son time with youngest son, C, this week. First, taking him to the doctors for an ear check-up, then on to the bakery for a treat. But as he's intolerant of dairy and wheat the best they could do was crisps and an apple juice. He was happy nonetheless. Next we went to gymnastics: he can now do a proper forward pike roll and dance enthusiastically to Shake It Off.
+- Eurovision isn't my jam. It makes many people very happy, but I'd rather watch the first couple of episodes of [The Last Of Us](https://www.hbo.com/the-last-of-us). After [cancelling Sky last year](https://barryfrost.com/2022/11/week-66-sky) we decided to add the Entertainment package to [Now](https://www.nowtv.com) for a month and binge the things we've missed. We're also up to episode three of [Succession](https://www.hbo.com/succession) which was just staggeringly good.
+- The Sunday sunshine couldn't take the edge off Arsenal's loss to Brighton. That's the title gone for sure 😔. But the narrative pedalled by rivals that we choked is nonsense. Is anyone capable of overcoming Manchester City?

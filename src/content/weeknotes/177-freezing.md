@@ -1,0 +1,15 @@
+---
+title: "Week 177 - Freezing"
+date: 2025-01-13
+week: 177
+syndication:
+  - https://mastodon.social/@barryf/113822940824433474
+  - https://bsky.app/profile/barryfrost.com/post/3lfnld4moop2x
+---
+
+- Back to work. I'd had almost three weeks off for Christmas, and felt a few night-before nerves similar to the ends of school holidays years ago. And after lots of lovely lie-ins my first day back started with an 8am global kick-off call, mercifully a cameras-off broadcast.
+- As one of the inevitable tasks after being acquired we're being moved across to our new owner's IT systems. From the warm embrace of Google Workspace with Zoom to the icy slap of Microsoft 365 😭. I'd forgotten how utterly terrible the Microsoft ecosystem is.
+- It's been freezing cold. Everyone has the sniffles it seems, including [Stewart Lee](https://www.stewartlee.co.uk) who cancelled his comedy gig at Leicester Square Theatre on Friday night. Andy and I had tickets which were refunded rather than rearranged. The whole run is sold out so no Stew for us.
+- Before Christmas my car windscreen was chipped. I did the sensible thing and got Autoglass to fill the chip with resin but it then developed into a full crack and so the whole windscreen needed to be replaced. So this Saturday I spent five tedious hours sitting in Autoglass Luton's waiting room while they installed and calibrated the many sensors and the camera. Cars are far too complex these days.
+- At least I had the Arsenal v Man United FA Cup tie to save the week, right? Nope. H joined me at The Emirates to watch Arsenal lose in the third round for the [second year running](https://barryfrost.com/2024/01/week-124-gluten). It was 5-3 on penalties to United after extra time. At least there were no tears from H this time, just disappointment at losing after sitting in the cold for two hours. And he learned a few new words from frustrated Gooners leaving the stadium which I hastily encouraged him to ignore.
+- 2025, please do better.

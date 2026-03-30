@@ -1,0 +1,14 @@
+---
+title: "Week 205 - Ticket"
+date: 2025-07-27
+week: 205
+syndication:
+  - https://mastodon.social/@barryf/114927186778505837
+  - https://bsky.app/profile/barryfrost.com/post/3luxxlyquhi2c
+---
+
+- I was one of the lucky few to see [Oasis on the first night of their reunion tour at Wembley](https://barryfrost.com/2025/07/oasis). Andy and I met up with Matt who put in all the effort last year to get the golden tickets. Oasis were very good as expected, the setlist was spot on... I just couldn't tap into the communal joy of the 90K around me dressed head to toe in Oasis gear having the best night of their lives. 15-year-old me would have loved it. Maybe it was too popular. Maybe I'm just a music snob.
+- Our cat Poppy has started to wee in her bed. We've tried a few different things to stop her: new beds, new blankets, even a night light in case she's unable to find the cat flap to go outside. So now we've disposed of the bed altogether and put a blanket in a different corner for her. Let's hope that's done it.
+- I had my first physio session for my elbow injury, and now have daily arm exercises to do. I go back next week.
+- We spent Sunday doing hard labour. My parents visited and my dad brought a pneumatic drill, his electric saw, a pick-axe and a sledgehammer to help us remove some concreted-in posts, a fence and gates. We now have more space at the end of the garden, although my arms are scratched and my muscles are sore. Good exercise for this desk jockey.
+- And an amazing end to the week with the [England women retaining the Euros](https://www.bbc.co.uk/sport/football/live/c78n2p6yz3lt) in Switzerland. My boys were jumping around the living room during the penalty shootout. And nice to see both goal-scorers and the penalty kick winner were from the Arsenal.

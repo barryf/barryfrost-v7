@@ -1,0 +1,14 @@
+---
+title: "Week 135 - Science"
+date: 2024-03-25
+week: 135
+syndication:
+  - https://mastodon.social/@barryf/112158334275484805
+---
+
+- I got out of the house a bit this week. 
+- First I saw [Frankie Boyle's Lap of Shame](https://www.leicestersquaretheatre.com/show/frankie-boyle-lap-of-shame/) at the Leicester Square Theatre with Andy. I enjoyed Frankie's excellent dark humour about the state of society, the country and the world, but especially his unique descriptions of our terrible politicians. He's not short of material right now.
+- I then had food and drinks in Welwyn with the "Other Halves": the husbands of my wife's village friends. A nice bunch of middle-aged men all with children at the same school, and yet we somehow managed to avoid talk of our wives and children.
+- At the weekend I drove our family down to Bracknell Forest to meet up with Andy's family from Brighton and Tim and son from Oxfordshire. It was reasonably equidistant. We had tickets to the [Look Out Centre](https://www.bracknell-forest.gov.uk/leisure-services/look-out-discovery-centre), a science-based discovery centre to stretch our inquisitive children's minds, plus a big playground to tire out their legs.
+- We watched [Poor Things](https://barryfrost.com/2024/03/poor-things) which I loved and L didn't. The new TV made it even better.
+- We had a call with our financial advisor to talk money and old age. Retirement somehow seems both a long way off and also quite soon.

@@ -1,0 +1,12 @@
+---
+title: "Week 159 - Cricket"
+date: 2024-09-10
+week: 159
+syndication:
+  - https://mastodon.social/@barryf/113113437562821873
+---
+
+- The boys went back to school this week to start a new year. They're growing bigger (and cheekier) than ever. Both bounced happily through the gates without a care. We're lucky they love school - for now.
+- We finished watching The Boys and have started on From - it's a mix of Lost with some mild horror. It's cheesy but easy to follow and so it's perfect for half-watching on a midweek evening.
+- I've been following the development of [Fedify](https://fedify.dev/), a toolkit for building ActivityPub software, for a little while. I'm slowly getting to grips with the concepts and I've been thinking about using it for my next side project. I want to build my own single-user Mastodon-compatible server, probably with Deno.
+- I ended the week watching live test cricket. I joined Andy and two friends from university for England v Sri Lanka at a damp [Oval](https://barryfrost.com/2024/09/f8ju8ehyokm). We'd been watching the weather forecast all week, hoping for the rain symbols to turn into sunshine and, miraculously, the sun burned away the clouds and we had almost a full day's play. England managed to throw away the match of course, but after several beers on a sunny Sunday no one really minded.

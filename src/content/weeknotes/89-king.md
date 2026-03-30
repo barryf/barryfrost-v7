@@ -1,0 +1,14 @@
+---
+title: "Week 89 - King"
+date: 2023-05-08
+week: 89
+syndication:
+  - https://mastodon.social/@barryf/110333129461640065
+  - https://twitter.com/barryf/status/1655554633593397251
+---
+
+- The week started with a Bank Holiday, the first of three this month. It was pretty grey outside so I stayed inside to watch the World Snooker Championship final on the sofa. C joined me for a few frames to count the points as balls were potted. I was delighted to see a slightly overawed Luca Brecel [hold on to win](https://www.bbc.co.uk/sport/snooker/65450133).
+- Answering a call for parents to supervise, I accompanied C and his Reception class as they walked to the village Post Office with their special coronation card for the King. C was amazed to see me in his classroom as they assembled to walk in pairs along the road. He kept telling his partner, "that's my daddy!" ❤️
+- I managed to avoid most of the coronation build-up. On the spectrum of monarchist-to-republican I'm about 80% towards kicking them out, but intrigued enough to watch the spectacle we're paying for. While the coronation was on TV I played FIFA with H in another room, occasionally popping back in to roll my eyes at it all.
+- We visited local friends along with some other families for post-coronation food and drinks. Despite the rain, Simon stoically barbecued and made many summery cocktails while all the children entertained each other without any tears for once. A success.
+- The sun came out on Sunday and so I broke out the shorts to enjoy the 20°C temperatures. Alas the sunshine didn't last, but I'm now ready for summer.

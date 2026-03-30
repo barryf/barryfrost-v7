@@ -1,0 +1,15 @@
+---
+title: "Week 213 - Grown-up"
+date: 2025-09-22
+week: 213
+syndication:
+  - https://mastodon.social/@barryf/115248597205112788
+  - https://bsky.app/profile/barryfrost.com/post/3lzgp4nn4el2v
+---
+
+- We visited a local secondary school with H this week. He has two years to go at his primary school but we wanted to get an early idea of the options. We visited twice: first for its open evening and then a separate guided tour by two sixth-formers.
+- H was initially nervous but loved it: the scale of the buildings, all the different lessons he could do and especially seeing all the sporting options. A good start. Next month we have the nearest, default option.
+- I worked out it's been 28 years since I’ve stepped foot in any secondary school. I'm unsurprisingly the same age or older than the staff. While my son was a little anxious around the older children and teachers, I was comfortable wandering around and asking questions. I guess I really am a grown-up.
+- Mice <s>are</s>were back scrabbling around in my garden office wall. The traps went back down underneath the building and quickly "silenced" them. I need to go check for the gruesome results.
+- H is now being issued with homework at school. This week was a year 5 maths question that I struggled with when he asked me for help. I did A-level maths and then maths courses at university... I may need to return my certificates.
+- One of my team at work, who I spent a half-hour with in a face-to-face 1:1, has tested positive for Covid. This weekend I've suddenly felt congested, had a sore throat and headaches. Uh oh. I think I need to find a lateral flow test that's not expired.

@@ -1,0 +1,15 @@
+---
+title: "Week 76 - Interview"
+date: 2023-02-05
+week: 76
+syndication:
+  - https://twitter.com/barryf/status/1622334991718809600
+  - https://mastodon.social/@barryf/109814074474506956
+---
+
+- I had a bad interview this week. The hiring manager asked two probing questions for which my answers didn't match their expectations. They then disengaged, looked bored and asked if I had any questions, with still over half an hour left. It would have been far better to just end the interview.
+- I then received just the email I needed from an ex-colleague: "I wanted to reach out and send some well wishes and positive vibes your way. You were so kind and inspiring for me when I left and I really do think your positive energy helped me to keep my head up during the job hunting process." 🥲
+- In further job-hunting news, I'm now in the later stages for a role I'm quite keen on. I like the company and the people, so fingers crossed for the next stages.
+- I joined a CTO Craft event on [The World of the Fractional CTO](https://www.eventbrite.co.uk/e/cto-craft-bytes-the-world-of-the-fractional-cto-tickets-503364596057). I'm focusing on full-time roles for now, but my thoughts are turning to the next phase of my career and fractional (combining multiple part-time roles) feels worth considering. 
+- We've binged [White Gold](https://www.imdb.com/title/tt6010920/), set in eighties Essex with lots of nostalgia from my youth, and have just started Joe Cornish's excellent [Lockwood & Co.](https://www.imdb.com/title/tt13802576/)
+- These weeknotes will be the last that I syndicate to Twitter because of the [disappointing decision](https://barryfrost.com/2023/02/twitter) to charge for API access. There are of course plenty of other ways to [follow](https://barryfrost.com/follow) me!

@@ -1,0 +1,15 @@
+---
+title: "Week 10: Clocks"
+date: 2021-10-31
+week: 10
+syndication:
+  - https://twitter.com/barryf/status/1454905185197826051
+---
+
+- This week was half-term for the boys. Both were snotty and tired and ready for their break from school. Like little batteries, they've recharged over the week and are now champing at the bit to return. 
+- The new series of Curb began and it's back to its best. I also saw that Seinfeld is now on Netflix. I knew of the Larry David connection, but had never watched it. A few episodes in and it's starting to grow on me.
+- My new 14in MacBook Pro [arrived this week](https://barryfrost.com/2021/10/new-personal-14in-macbook-pro-arrived). It's probably more powerful than I need, but it's such a joy to use. A huge leap forward from my Intel MacBook Air. This should last me for a long, long time.
+- I rewatched Scott Pilgrim Vs. The World. Great cast and still lots of fun.
+- The clocks went back an hour, nights are really drawing in now, etc. The boys are brilliant sleepers and faithfully obey their [Gro Clocks](https://gro.co.uk/product/gro-clock/), so to ease them in gently to GMT we woke them up half an hour later this morning, rather than the full hour. 
+- I've been noodling around with an idea for a side project. It's most suited to being a SPA (Single Page Application) so I've been experimenting more with React and [Supabase](http://supabase.io/) for its backend. Early days.
+- This Sunday was Halloween. What I thought was exclusively American is now inarguably a Big Thing in this country. The boys were excited, no doubt fuelled by their diet of US TV, and we took them Trick-or-Treating. Dressed up as Mario and Zog, we joined some local families and the children all collected an impressive haul of sweets.

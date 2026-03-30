@@ -1,0 +1,16 @@
+---
+title: "Week 105 - Holt"
+date: 2023-09-03
+week: 105
+syndication:
+  - https://mastodon.social/@barryf/111000260708574849
+  - https://bsky.app/profile/barryfrost.com/post/3k6i6iecxg623
+---
+
+- We've been on holiday this past week-and-a-bit, so these weeknotes are a little late to be published.
+- We stayed in a [cottage](https://www.norfolkhideaways.co.uk/blakeney-holt-surrounding-villages/holt-holiday-cottages/8-town-close) in the Norfolk town of [Holt](https://www.visitnorthnorfolk.com/explore/visit/holt), a little further east than previous visits to the county. We liked it. There are decent beaches nearby, as well as playgrounds, cosy pubs and excellent [fish and chips](https://barryfrost.com/2023/08/fgcmii8uzyt).
+- Our boys were able to manage a long Sunday lunch at [The Feathers](https://www.thefeathersholt.com) without too much griping, or talk of farts and poos. Burgers, chips and ice cream all help. Plus, we employed the mind-focusing reward of a pack of [football cards](https://www.panini.co.uk/shp_gbr_en/premier-league/premier-league-adrenalyn-xltm-2024.html) if they behave.
+- While there is the risk of tears and squabbling if one child finds a Golden Baller in a pack, football cards kept them both occupied throughout the holiday. Each morning they re-arranged their albums and discussed their best players. I like to think I know football, but their questions about Burnley reserves were starting to stump me.
+- I don't find it particularly relaxing driving down narrow, single-track lanes with grass down the middle and SUVs coming the other way trying to squeeze past you... like in Cornwall. North Norfolk has proper A-roads so my stress levels can remain normal.
+- While away we had a cat-sitter for Poppy for the first time. Her normal cattery was fully-booked, so we used a local person to visit, refill her bowls and give her some strokes. It was reassuring to see Poppy being well looked after on her camera.
+- Netflix series recommendation: [Fisk](https://www.netflix.com/gb/title/81675379). Lovely gentle, indie comedy from Australia.

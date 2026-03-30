@@ -1,0 +1,14 @@
+---
+title: "Week 107 - Scorching"
+date: 2023-09-10
+week: 107
+syndication:
+  - https://mastodon.social/@barryf/111042672273635565
+---
+
+- Big week back at work after my holiday. Since I joined I've been preparing our team for a move from a single, flat, project-based structure to multiple long-lived, cross-functional delivery teams. We begin next week.
+- School has restarted. I'd forgotten how quiet it was when working from home. No issues from either boy: both were very happy to be back.
+- It's been four consecutive 30+C days. It's just far too hot for September and everyone's lethargic. We've definitely broken the climate.
+- I'm enjoying the Rugby World Cup. In contrast to England's stodgy warm-up I [saw at Twickenham](https://barryfrost.com/2023/08/week-103-rugby), they were excellent in their opener against Argentina. A long way to go.
+- While the boys are still obsessed with football cards they've also rediscovered their Pokémon cards. I have no idea what they're talking about. I can offer opinions on midfielders but my Pokémon knowledge starts and ends with Pikachu.
+- I'm currently top of our fantasy football league and now H is entering his school's league. He's very excited and has been tinkering with his first squad all week. I may have some serious competition.

@@ -1,0 +1,14 @@
+---
+title: "Week 212 - Together"
+date: 2025-09-14
+week: 212
+syndication:
+  - https://mastodon.social/@barryf/115204324198929071
+  - https://bsky.app/profile/barryfrost.com/post/3lyszxlk7f72q
+---
+
+- I organised a two-day in-person workshop for my team this week. Although I'm contractually linked to our Cambridge office, we work remotely at different ends of the country, so some travelled down and stayed overnight in the nearby Novotel.
+- It was the first time meeting Dan and Steven in the flesh, so I cranked out some tried-and-tested ice-breakers for everyone. Initial reluctance turned into competitiveness, and it helpfully got uncaffeinated people on their feet. The rest of our time was spent in a retrospective, a team purpose discussion and a mutually-beneficial group session with the API team.
+- Our team dinner was at Dishoom's [Permit Room](https://www.permitroom.co.uk/locations/cambridge/) in the centre of the city for excellent posh Indian food.
+- I've been enjoying weekly episodes of Alien Earth. I assumed I'd seen all the films but had missed 2024's [Alien Romulus](https://barryfrost.com/2025/09/alien-romulus). It was far better than I expected, despite the terrible [Ian Holm CGI](https://www.ign.com/articles/alien-romulus-fixed-terrible-ian-holm-cgi-for-home-release-but-fans-still-think-its-pretty-bad).
+- C now has a cast covering his broken wrist. I'm a bit jealous because I didn't get anything to show for my broken elbow. With his permission I decorated the cast with "Daddy" and "[AFC](https://www.arsenal.com)", of course.

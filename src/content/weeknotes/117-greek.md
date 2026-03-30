@@ -1,0 +1,12 @@
+---
+title: "Week 117 - Greek"
+date: 2023-11-19
+week: 117
+syndication:
+  - https://mastodon.social/@barryf/111439382230937204
+---
+
+- It's dark out. Most of the roads on my journey home from the office are unlit so my one-hour commute is suddenly less relaxing. The backroads are fine, but I don't enjoy the gloomy stretch of the A1(M), especially if it's raining.
+- I've been carving out time in my week to work on a career progression framework for my team. It's long overdue, and something that's come up in feedback since I started, so I've blocked out focus time in my calendar. More to do. I'm aiming to share it in public when it's ready.
+- We took advantage of local club Stevenage's family ticket offer for their [match against Lincoln](https://barryfrost.com/2023/11/stevenage-v-lincoln). £25 for two adults and two children was excellent value in an almost full ground, seemingly full of families from our children's school. The boys managed to drop their scarves in puddles. Both were otherwise mostly engaged, although I missed 15 minutes of the second half queueing for chips because they were starving.
+- After the match we went for dinner together at nearby [Rodi](https://barryfrost.com/2023/11/uwg92b8y2y), a Greek restaurant. The boys pretty much live on hummus and love burgers so scoffed everything on their kids' menu meals. It's nice that they can now sit and behave for a full dinner.

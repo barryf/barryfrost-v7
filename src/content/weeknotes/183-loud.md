@@ -1,0 +1,15 @@
+---
+title: "Week 183 - Loud"
+date: 2025-02-23
+week: 183
+syndication:
+  - https://mastodon.social/@barryf/114055255723788227
+  - https://bsky.app/profile/barryfrost.com/post/3liuqpolecp22
+---
+
+- It's been half-term holidays for the boys. It's been nice having them around while I've been working from <s>home</s> the end of the garden.
+- I went into London on Thursday to see Mogwai at [Brixton Academy](https://barryfrost.com/2025/02/zmqq1hp7v) with Andy. I'd seen them twice before so came well-prepared with earplugs. It was loud. My Apple Watch was furious throughout the gig at their 95dB wall of sound that it told me was causing permanent hearing loss. My ears were protected but the music was sadly a bit too muffled.
+- They finished later than expected after a three-song encore so I had to hotfoot it across town to catch the last train home. Swapping lines from a delayed Victoria train to the Piccadilly line at Green Park was smart and I made it with minutes to spare. Sometimes I miss living a bit closer.
+- Two bits of AI-assisted coding this week using [Windsurf](https://windsurf.ai) and Claude 3.5 Sonnet. First I wanted to export my [Last.fm gigs](https://www.last.fm/user/barryf/events) into a Yaml file. After the agent incorrectly used a deprecated API method it switched to scraping the data. A bit of coaxing was needed to separate headliners from support bands, but I was happy with the results after about 10 minutes of prompting. Next I asked it to help me [add dark mode to Micropublish](https://github.com/barryf/micropublish/pull/121). This took a bit longer. Once I had pointed out the areas it had missed (dialogs, panels and the tokenfield), I had a passable dark theme in a fraction of the time it would have taken me.
+- My parents visited for lunch on Sunday. They came with presents for the birthday two (see last week), we ate chicken pie and talked about new laptops (them) and washing machines (us).
+- Dad helped me attach a mud flap to the driver's side of my car. The original one had detached itself reasonably cleanly after a misjudged turn over a kerb, but the replacement still required expert Dad Skills to apply the right level of force to pop in its securing pins. Success.

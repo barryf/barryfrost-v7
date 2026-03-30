@@ -1,0 +1,12 @@
+---
+title: "Week 101 - Glasses"
+date: 2023-07-31
+week: 101
+syndication:
+  - https://mastodon.social/@barryf/110810437685032784
+---
+
+- The boys went to their first wedding with us this Monday. It was a relaxed, children-friendly affair for Vikki and Andy at [Sheene Mill](https://barryfrost.com/2023/07/6jt8jhkt24r). The gardens had plenty of games to entertain them after the ceremony, although H enjoyed himself a bit too much, twisting his ankle and spending the rest of the evening with his foot wrapped in ice. He couldn't even blame booze!
+- It was good to be back in our Cambridge office after a week in the US to debrief and follow up on everything I'd missed while away. Then a couple of days at home were also very welcome. Feeling back to normal.
+- I continue to age: as I anticipated, the optometrist at Boots said I would benefit from glasses when reading. It's been 13 years since LASIK eye surgery to correct my short-sightedness, but it's now time to dig out my old frames for new lenses.
+- It's been the final test of the Ashes. I joined Andy, Ben and Darren at [The Oval](https://barryfrost.com/2023/07/ashes-fifth-test-day-four) for the fourth day with the match firmly in the balance. After witnessing Stuart Broad's last innings with the bat (scoring a six, no less), Australia replied, scoring comfortably until just after lunch. Then it rained and rained. We gave up and went for beers round the corner under cover. The glorious British summer at its worst!

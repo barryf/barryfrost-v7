@@ -1,0 +1,13 @@
+---
+title: "Week 147 - Socks"
+date: 2024-06-17
+week: 147
+syndication:
+  - https://mastodon.social/@barryf/112633702898323476
+---
+
+- The Euros have started in Germany. The boys have their wall chart to fill in and we've been watching most of the matches. England won their opener but it was all pretty disjointed. It's far too early to say if they're going to go far.
+- I've had a cold for most of this past week and decided not to spread germs in the office by staying at home. I didn't miss the driving but it did feel strange not to connect face-to-face with humans other than my family. On balance I'm pro-remote but I think it's also good for me to visit the office from time to time.
+- Monday's [WWDC](https://developer.apple.com/wwdc24/) keynote was a miss for me. I'm no AI naysayer, but the AI features Apple demonstrated were a bit predictable and me-too, even if their privacy-first angle remains an important differentiator. Apple's platforms and ecosystem are still the best but are they now just a bit dull?
+- I took H to his third annual football festival at Watton. It rained heavily although this bothered the watching parents more than the children. In a group of four teams H's came second and then played the top team again in the final. They lost but a hot bacon roll (us) and sweets (him) made up for it.
+- For Father's Day the boys (their mother) got me a personalised pack of Brewdog beers, a thermos flask and socks printed with their cheeky gurning faces. Their present-giving job done, they returned to their iPads while I made my own breakfast and cleared up after them. Hmm. We then dragged them out to a nearby lake to walk around and ate ice cream in the unexpected sunshine.

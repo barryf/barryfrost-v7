@@ -1,0 +1,14 @@
+---
+title: "Week 9: Play"
+date: 2021-10-24
+week: 9
+syndication:
+  - https://twitter.com/barryf/status/1452358698479783938
+---
+
+- Monday’s Apple Event brought the much-anticipated MacBook Pro. The new M1 Pro/Max chips deliver even more performance jumps, while the new displays are stunning. My knackered old MacBook Air with its sticking and repeating keys looks geriatric in comparison.
+- We started the new series of Succession. It was as tense, awkward and brilliant as ever. It’s going to be tough waiting a week between each episode. We’ve been spoilt by the Netflix box-set binge model.
+- It was parent-teacher week for the boys. The sessions were over video, and although I enjoyed visiting their classrooms for a nose around in the before-times, video is much more convenient. Both boys had glowing reports. I’m a proud dad.
+- I spent Saturday afternoon cleaning my home office, hanging prints on the walls, and most significantly, installing cable management trays under my desk. It needs a little more work, but having an organised space is good for the soul.
+- It was H’s sixth birthday. Right now he’s into Pokémon, Lego Ninjago and Transformers, and spent the last few weeks poring through the toy catalogue. This made buying presents straightforward, although sadly it was mostly plastic. I love how excited he gets opening his presents.
+- We took the boys to a local soft play centre, then a family pub lunch, followed by FaceTiming with both sets of grandparents and trying out the new toys. Happy but tired boy.

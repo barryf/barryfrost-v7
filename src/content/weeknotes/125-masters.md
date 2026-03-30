@@ -1,0 +1,13 @@
+---
+title: "Week 125 - Masters"
+date: 2024-01-14
+week: 125
+syndication:
+  - https://mastodon.social/@barryf/111755929214449650
+---
+
+- We're back to normal now: the boys returned to school after their Christmas break.
+- It was another hospital visit this week and another first for me. I had a CT scan to look for abdominal issues. The radiographer gave me IV contrast dye via a cannula which, as he warned me, made me feel like I was about to wet myself. Fortunately I didn't. The little radiation warning light turning on and off was a bit sobering, but I'm not planning regular scans.
+- I started the rollout of our career progression framework for my team, running a session for my managers on how to use it for things like reviews, hiring and objectives. Feedback was all positive. I'm planning to share the documentation externally after we formally adopt it next month.
+- As is now traditional, I joined Andy at [Ally Pally](https://www.alexandrapalace.com) for the [Masters snooker](https://www.wst.tv/themasters/) semi-final. Another weekend of railway engineering works meant either a 90-minute rail replacement bus or a reasonable drive into London. I never enjoy London driving, but it wasn't too central and my journey and parking were easy. We saw a Ronnie O'Sullivan masterclass as he [beat Shaun Murphy 6-2](https://www.bbc.co.uk/sport/snooker/67969759). It was my first visit without drinking and it was actually more enjoyable watching long frames without the pressure of a bladder full of beer!
+- We're now up-to-date with the second series of the addictive but irritating [Traitors](https://www.bbc.com/mediacentre/articles/2023/the-traitors-series-2).

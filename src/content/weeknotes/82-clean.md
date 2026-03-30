@@ -1,0 +1,13 @@
+---
+title: "Week 82 - Clean"
+date: 2023-03-19
+week: 82
+syndication:
+  - https://mastodon.social/@barryf/110052092895156978
+---
+
+- After three weeks without a washing machine we were mightily relieved to have ours fixed and operational once more. The pump and motor had to be replaced. The engineer lectured me on always using it properly to avoid knackering it again, presumably by not washing any clothes.
+- And we had new cleaners this week. Three women blitzed through the house in just over an hour. It's another relief to have everything clean, shiny and tidy. Standards had slipped when our previous cleaners permanently returned to Poland. 
+- H's under-7s football team are finding it tougher now, having been moved up a division. They were thumped 9-3 in Saturday's match. Individually they're good little players, but they're still learning how to be a team together.
+- We've watched a few too many gritty detective dramas lately. So we gambled on a film we hadn't heard of, [The Unbearable Weight of Massive Talent](https://barryfrost.com/2023/03/the-unbearable-weight-of-massive-talent), starring Nicolas Cage playing a fictional version of himself. It's well worth a watch on Amazon Prime.
+- For Mother's Day, L had a nice lie-in, followed by a walk in the sunshine and dinner at the [pub](https://barryfrost.com/2023/03/gblbwdnlw0c). With the boys and me of course.

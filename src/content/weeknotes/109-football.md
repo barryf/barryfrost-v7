@@ -1,0 +1,13 @@
+---
+title: "Week 109 - Football"
+date: 2023-09-24
+week: 109
+syndication:
+  - https://mastodon.social/@barryf/111121649829817729
+---
+
+- A football-heavy week, ending in Arsenal's disappointing 2-2 home fixture of the North London Derby. A missed opportunity to put Spurs back in their box.
+- C had his under-6s football taster session, proudly wearing his junior Arsenal shirt, new Adidas boots and little shin pads. He showed early promise in the dribbling drill, but the hour ended with a few tears and a sulk because he wanted to score a goal in the end-of-session match. Perseverance needed.
+- Both boys now have [Fantasy Premier League](https://fantasy.premierleague.com) teams and I've set up a little league for the three of us. At the end of the first gameweek they're both thrashing me, C's team scoring a stunning 87 points to my 51. Their time spent poring over their football cards to learn players has clearly been well spent.
+- C has also been playing with standard playing cards, learning the suits, laying them out and sorting them. I enjoyed how he refers to the face cards (Jack, Queen and King) as "rares" like with his special, rare football cards.
+- The week's TV highlights: we binged Wilderness on Amazon Prime and I watched the excellent, but brutal, [Bull](https://barryfrost.com/2023/09/bull). And after enjoying the ["Withnail and I" episode](https://shows.acast.com/comfort-blanket/episodes/withnail-i-with-jim-howick) of Comfort Blanket I needed to rewatch the film. Happily, I can still quote most of it.

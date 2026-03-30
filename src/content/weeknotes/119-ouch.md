@@ -1,0 +1,12 @@
+---
+title: "Week 119 - Ouch"
+date: 2023-12-03
+week: 119
+syndication:
+  - https://mastodon.social/@barryf/111518484424874898
+---
+
+- I've injured myself. I slipped on some ice walking down steps in my garden, landing on my arse and back and sliding to the floor. I knew I'd done some damage and feared the worst, but thankfully I was able to gingerly get to my feet. A few days later I now have a very large purple bruise across my lower back and some coccyx pain.
+- I've watched back the fall on my Ring camera. I won't link it here. It would be very funny if it didn't hurt! I've spread salt on the slippery steps, but it's a bit late now. I've got a few weeks of healing to do.
+- The boys had a visit to Santa's Grotto at [Alexandra Palace](https://barryfrost.com/2023/12/0flcunxe1a77) planned so L drove us all down to North London. We had expected to catch the train, but there was a strike on, so she braved the Saturday afternoon traffic. It could be the last time both boys still believe in the magic together. We answered their awkward questions about why Santa was in a shed in Ally Pally and took plenty of cute photos and videos.
+- Our Christmas tree is up. For the first time in years I've got my way and managed to put tinsel on it, despite L's snobbish opposition. I broke through her defences with mulled wine and Christmas tunes.

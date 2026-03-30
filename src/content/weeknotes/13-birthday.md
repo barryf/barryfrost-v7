@@ -1,0 +1,15 @@
+---
+title: "Week 13: Birthday"
+date: 2021-11-22
+week: 13
+syndication:
+  - https://twitter.com/barryf/status/1462799342717345793
+---
+
+- We had a mini re-org at work this week as we push for the release of our new platform. Organisational changes are not to be taken lightly, but the team have responded well. Relevant: we're now [hiring for three new contract roles](https://theroom.recruitee.com/).
+- This week I heard from a couple of people in my network who I've chatted to about job hunting. Both accepted exciting offers and start new jobs in the new year. As [Gergely says](https://blog.pragmaticengineer.com/advice-for-tech-workers-to-navigate-a-heated-job-market/), the tech job market is white hot right now.
+- Our cat, Poppy, started limping so needed a trip to the vets and anti-inflammatory medicine. She's a good cat: no grumbling and back to her old self a couple of days later.
+- I was lucky in the Oval ballot for England cricket tickets next year and can buy tickets for July's ODI v India and September's Test v South Africa next Tuesday. 🏏❤️
+- I was at the Forum in Kentish Town for Martin Rossiter's twice-postponed "farewell show". Hearing the lead singer from my favourite band, Gene, belt out the hits 17 years after Gene split was bound to be a bit emotional. It was. I admit I was misty-eyed hearing We Could Be Kings and Olympian for what Martin says will be the last time. I hope it's not. 
+- From saluting Rozzer on Saturday to celebrating my birthday on Sunday. With fortunately only a hint of a fuzzy head, we went for lunch at the [Lytton Arms](https://www.thelyttonarms.co.uk) where the boys' behaviour was acceptable and the roast pork excellent. 
+- These weeknotes are a day later than usual because to finish off my birthday L and I sat down to watch [No Time To Die](https://letterboxd.com/film/no-time-to-die-2021/). No spoilers, but a fitting way to round off Daniel Craig's Bond.

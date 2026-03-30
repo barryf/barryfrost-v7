@@ -1,0 +1,14 @@
+---
+title: "Week 59 - Pigeon"
+date: 2022-10-10
+week: 59
+syndication:
+  - https://twitter.com/barryf/status/1579576462486556673
+---
+
+- We're close to the end of our Sky broadband and TV contract and it's time to switch. I've been researching. We rarely watch live TV so I'm leaning towards gigabit fibre with a new provider and halving our monthly bills. It's the right decision, but I'm dreading arranging it all.
+- Slack discovery of the week: posting a link to [Rick Astley's Never Gonna Give You Up](https://en.wikipedia.org/wiki/Never_Gonna_Give_You_Up) on YouTube won’t show a video preview, presumably to aid with [Rickrolling](https://en.wikipedia.org/wiki/Rickrolling). However, for an eighties-themed topic in our music Slack channel, we actually wanted to include it.
+- On Thursday we had a company social at [Clays](https://clays.bar) in Moorgate. We had several rounds of virtual clay pigeon shooting (a slightly more advanced Duck Hunt), plus shooting-themed cocktails. I did pretty well after a slow start. 
+- For a few reasons it was my first proper company night out so I made sure I participated fully. It meant a slightly foggy Friday morning. Ever the pro, I soldiered on with a 10am interview, cursing our recruitment team's scheduling.
+- As mentioned [last week](https://barryfrost.com/2022/10/week-58-colder), after much um-ing and ah-ing over lack of HomeKit compatibility and sending (more of) our data to Amazon, I bought a Ring Doorbell. Specifically, the battery-powered second version. It only needed a tiny bit of drilling/fixing to our wooden door frame. I like it: I've already dealt with two delivery people remotely. 
+- We took the boys for another successful Sunday lunch, this time at [The Horns](https://barryfrost.com/2022/10/98586s8ryi) in Datchworth. Their table manners are a work-in-progress, but much improved. They even managed an hour's walk around the village after without too much grizzling.

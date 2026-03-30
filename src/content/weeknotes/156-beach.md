@@ -1,0 +1,14 @@
+---
+title: "Week 156 - Beach"
+date: 2024-08-25
+week: 156
+syndication:
+  - https://mastodon.social/@barryf/113024388518499465
+---
+
+- A shorter working week because on Friday we drove up to Norfolk for a summer holiday.
+- We returned to the cottage in Holt we stayed in [a year ago](https://barryfrost.com/2023/09/week-105-holt). We tend not to repeat holidays but this one ticks so many boxes for us: near quiet beaches, easy to walk to pubs/restaurants, good roads and plenty of room for us all.
+- This was the first serious trip for our new Tesla which cruised its way up to Holt without any fuss or range anxiety. We supercharged it once during the week in Kings Lynn for 30 minutes and had a coffee while waiting. It's like magic: you park up, plug in, wait for a few minutes until it reaches 80% and then drive away.
+- On our first day we had a lovely walk past the windmill in Cley, avoiding a wedding party and along the coastal path to its [stony beach](https://barryfrost.com/2024/08/pox0qa1jhg).
+- The sun came out so we went back to [Wells' (-Next-The-Sea) sandy beach](https://barryfrost.com/2024/08/fegvm2fl87s) where the boys occupied themselves finding spherical stones, digging holes and burying each other.
+- We ate and drank a little bit too much. To counteract the calories I took the boys down to the nearby park for Boys v Daddy football matches that only ended when we couldn't run anymore.

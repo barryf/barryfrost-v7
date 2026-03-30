@@ -1,0 +1,15 @@
+---
+title: "Week 86 - Beef"
+date: 2023-04-16
+week: 86
+syndication:
+  - https://mastodon.social/@barryf/110210087747211286
+  - https://twitter.com/barryf/status/1647680065474293767
+---
+
+- I had an empty house for most of this week. L drove the boys to her parents' in Wiltshire for the second half of the Easter holidays. My in-laws are both recovering from operations, so we were concerned that our two bundles of energy may be too much for them. But I'm told Grandpa was a willing footballer while Granny kept them busy with painting.
+- While the cats were away, the mouse didn't exactly play... I rewired faulty light fittings in the bathroom, labelled up spare keys and reorganised my bedside drawers. I did enjoy catching up on [some](https://barryfrost.com/2023/04/wrath-of-man) [films](https://barryfrost.com/2023/04/the-revenant) I (correctly) assumed L wouldn't watch.
+- I've been reading [James Stanier](http://www.twitter.com/jstanier)'s "[Become an Effective Software Engineering Manager](https://pragprog.com/titles/jsengman/become-an-effective-software-engineering-manager/)". It's a good management refresher and thought-provoker for me, written in a very readable style.
+- H's team had their latest fixture over in [Hertford](https://barryfrost.com/2023/04/it1ei8mzui). This match, however, was notable for his very first hat-trick. The first was a dribble and shot, the second a scuffed goal and the third a volley. He was a very happy boy afterwards.
+- His mood dipped however while watching Arsenal surrender a 2-0 lead to West Ham on Sunday. There were tears in his eyes and he buried his face in a cushion. Poor boy has a lifetime ahead of his team crushing his hopes each season — I'm so sorry!
+- L and I have been watching the much-hyped [Beef](https://www.netflix.com/title/81447461). No spoilers, but it's a gripping, nicely-paced drama with characters it's hard to like. It's time to end the week with the last few episodes.

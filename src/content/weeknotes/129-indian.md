@@ -1,0 +1,13 @@
+---
+title: "Week 129 - Indian"
+date: 2024-02-11
+week: 129
+syndication:
+  - https://mastodon.social/@barryf/111914912031897895
+---
+
+- My team at work are mostly based near our office in Cambridge, but we also have a few people dotted around the UK and several east and west coast Americans. To kick off the new year we assembled everyone together in one place for workshops and face-to-face time.
+- Their visit was also an excellent excuse for a work dinner. By popular request I booked us in at [Navadhanya](https://www.navadhanya.co.uk), a smart Indian restaurant in the centre of Cambridge. Apart from the cardamom cake it was all very tasty and a hit with our visitors. Recommended.
+- We drove into leafy west London on Saturday evening for L's aunt's 80th birthday party, joining many of her cousins and extended family. I'm not particularly fond of noisy parties, but her relatives are all friendly and talkative. I hadn't seen most since our wedding almost 10 years ago, but remarkably I remembered names and enjoyed myself.
+- Football was good this week. H's team won 7-5 (he scored two) and then Arsenal smashed West Ham 6-0 away.
+- I know we're late to discovering it, but we're working our way through [The Bear](https://www.imdb.com/title/tt14452776/) on Disney+. So so good.

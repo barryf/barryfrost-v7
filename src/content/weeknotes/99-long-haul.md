@@ -1,0 +1,13 @@
+---
+title: "Week 99 - Long-haul"
+date: 2023-07-17
+week: 99
+syndication:
+  - https://mastodon.social/@barryf/110730978445174197
+---
+
+- I write these weeknotes from a sunny San Diego. La Jolla, to be precise, where Altium has its US headquarters. I flew in on Sunday for four days of meetings, presentations and strategising as I hopefully form a clearer picture of how it all works. And some face-to-face time with new colleagues.
+- I'm still the new boy, so there are lots of in-the-flesh hellos and, "oh, you're that Barry Frost from my spreadsheet" conversations. Notorious already. But it's fine and it all feels familiar and reassuringly corporate up on the 7th and 8th floors.
+- The flight was very long. Three films and half a book long. I was told by L that the boys were excited to watch live updates from my flight on a map, especially when I was flying over Greenland. I'm missing them all already. FaceTime calls and notifications from the Ring doorbell(!) make me feel a bit more connected.
+- The day before my flight we all went to neighbour Anna's 40th barbecue. I brought home an exhausted C at a reasonable hour, thankfully just before the cocktails started to flow for the adults. I was very pleased and smug to have a clear head and settled stomach.
+- Earlier that day, H and I had an impromptu football training session with Dave and his son over the park. Dave brought his training cone discs and we wore our boots for some drills, ending with a dads vs boys match. I was fuming when my stunning rabona goal was outrageously adjudged to be wide, meaning we finished with a penalty shootout. The boys triumphed of course.

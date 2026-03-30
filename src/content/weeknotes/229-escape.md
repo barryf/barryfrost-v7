@@ -1,0 +1,15 @@
+---
+title: "Week 229 - Escape"
+date: 2026-01-12
+week: 229
+syndication:
+  - https://mastodon.social/@barryf/115883468676049344
+  - https://bsky.app/profile/barryfrost.com/post/3mcan6n3joq2a
+---
+
+- On the last day before returning to school and work we all challenged ourselves at the [Agent Brains](https://www.agentbrains.co.uk/) escape room in Letchworth. Our "Back to the Future" themed room was eighties themed, with an appropriate soundtrack, puzzles and decor. It was surprisingly tough but we escaped within the hour, thanks to a few generous clues from the operator(!) Recommended.
+- Back to school, and this term H is old enough to be allowed to walk to school on his own. It's only a 5-minute walk from home, there are no roads to cross and we still walk in his younger brother a few metres behind, but he's proud to have passed a little milestone.
+- Another growing-up moment: we've been watching the new [Traitors](https://www.bbc.co.uk/programmes/p0db9b2t) series, and he asked if he could too. "It's the only thing people talk about at school!" We agreed. It's family-friendly and before the [watershed](https://en.wikipedia.org/wiki/Watershed_(broadcasting)). Apart from live sport, it's probably the first programme he's wanted - and been old enough - to watch with us.
+- C continues to make progress with his piano-playing. His teacher asked that we upgrade his second-hand keyboard to a proper piano or a better keyboard with weighted keys. His birthday is coming up and he's very keen, so we visited a music shop in St Albans to try out the options. Of course, we were steered towards the pricier models, but we settled on a more modest option to last him for a few years.
+- Now that Ikea's new range of super-cheap [Matter smart devices](https://www.ikea.com/gb/en/search/?q=matter) are available, I've been planning replacements for our ageing wi-fi bulbs. I need to visit an Ikea shop to load up on buttons, sensors and bulbs. I'd also like to swap our Alexa boxes for HomePods when the rumoured new range is out.
+- Arsenal were drawn away in the third round of the FA Cup, so H and I missed out on our annual cup match. After watching us lose in [2025](https://barryfrost.com/2025/01/week-177-freezing) and [2024](https://barryfrost.com/2024/01/week-124-gluten) in the freezing cold, we enjoyed the [4-1 win](https://www.bbc.co.uk/sport/football/live/cx2pkje7znet) against Portsmouth on the sofa. It was made even sweeter knowing that Pompey fan, Andy, was in the crowd.

@@ -1,0 +1,16 @@
+---
+title: "Week 62 - Gaming"
+date: 2022-10-30
+week: 62
+syndication:
+  - https://twitter.com/barryf/status/1586822066686550016
+---
+
+- A busy week started with H's birthday. He wanted a gaming party, so we hired a [man with a tent and plenty of consoles](http://popuparcade.co.uk) to entertain H and nine other small boys in the garden. It was a hit. They gamed, scoffed pizza and crisps, played football in the garden and danced to songs from the Sing film. What a life!
+- H decided he wanted [Zelda: Breath of the Wild](https://www.zelda.com/breath-of-the-wild/) for the Switch, a choice which Daddy was very happy with. We're competing to see who solves the puzzles quickest and so far he's winning. I'm hoping my A Link to the Past knowledge from the SNES will help, but his greater daily gaming time is winning out. 
+- Both of our cars need work. L's went to the garage first to fix a brake servo fault, so she took my car for the week and managed to trigger a warning light. It's going to be an expensive month.
+- I met up with Andy on Wednesday after work for beers at [Little Creatures](https://barryfrost.com/2022/10/w9ukefy2eyq) and then saw [The Bug Club](https://thebugclub.bandcamp.com) at [Scala](https://barryfrost.com/2022/10/w7f0iym5dg8). They play nice, short, catchy tunes. Not bad live. Andy and I have been seeing bands together for 25 years now, meeting back at university in 1997, but whereas I go to a few each year, he averages three a week.
+- It was Henry's last day at work on Thursday. He's been a huge help to me, a big character in the team and has similar ideas about how to build software. A sad loss: it never gets easier.
+- With the recent reshuffle Henry was briefly reporting to me so the job of organising gifts fell to me. The jet boat experience, helter-skelter ride, language course, books and gift card to [Lisboeta](https://lisboeta.co.uk) went down well. We had drinks after work at [Beer Hawk](https://southbanklondon.com/attractions/beer-hawk) but I wisely left before the karaoke.
+- Earlier in the day my team had a lunch at nearby [Caravan](https://caravanrestaurants.co.uk/bankside.php). The others all ordered schnitzel, chips and a beer; I had a healthy poke bowl and juice. The waitress burst out laughing at my order! I felt compelled to add some chicken. 
+- I end the week with a sore eye, thanks to a Nerf bullet at close range from my wife. The boys have several Nerf weapons and demand family battles before bath time. Tonight someone got just a little carried away.

@@ -1,0 +1,15 @@
+---
+title: "Week 22: New"
+date: 2022-01-23
+week: 22
+syndication:
+  - https://twitter.com/barryf/status/1485353979353649152
+---
+
+- The week started with a very nice breakfast with L at Bill's in nearby Welwyn Garden City. Full English, naturally. No kids and a potter around the shops.
+- It was the first of a couple of days off between jobs, so I also took the chance to watch my eldest son's swimming lesson. He managed back crawl without a float for the first time. Amazing.
+- I tidied and cleaned my office and finished setting up my new work laptop. All ready for my first day on Wednesday. Gulp.
+- A new beginning at Privitar! I went straight into a two-day goal-setting workshop with my new engineering leadership team. I was straight into the deep end, but it meant I had valuable context to absorb from the off.
+- My first impressions are good: smart people, an ambitious company and an impressive product. 
+- With the government's WFH guidance relaxing next week, I've planned to visit the office (for the first time!) and properly meet people face-to-face. 
+- Having mostly avoided Covid, Chicken Pox is running through C's class. We've found a few spots on his back 😬

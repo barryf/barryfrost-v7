@@ -1,0 +1,15 @@
+---
+title: "Week 40: Bath"
+date: 2022-05-29
+week: 40
+syndication:
+  - https://twitter.com/barryf/status/1531002586010112001
+---
+
+- It wasn't the best start to the week. We discovered a water leak from the bath on Monday morning. Water was trickling down through the ceiling into the server cupboard which houses the fusebox, boiler and my rack. I found the router fizzing and dead, but we avoided shorting the electrics. It could have been much worse. The cause was the shower handset which was housed in its holster but left switched on to its lowest setting to dribble water down through the bath into the room below. 
+- I had a dentist appointment at 9am that morning, so the added stress wasn't welcome! I was a bit flustered sitting under the bright light thinking of my soggy home, but thankfully all was well with my teeth.
+- That evening the worry was that there was still water pooled under the bath, so I tried to remove the side panel by cutting away the sealant with a Stanley knife. This proved a waste of time because, as I found, our bath had been tiled in and its underneath made inaccessible. Great.
+- My dad visited to re-seal the bath and reassure us that it would be fine. It looks like we'll just need to dry out the cupboard and repair/repaint the ceiling and wall at some point.
+- The boys have been learning all about the Queen at school in preparation for their Jubilee party this week. The school had decorated the playground with red, white and blue bunting and the whole school sat down for a Jubilee tea party. They can both tell me how old she is, along with other royal facts they've learned.
+- We succumbed and bought a Nintendo Switch. H had been desperate for one for a long while, but it was never the right moment. He was too young. They were out of stock. The price was often marked-up, etc. But using a John Lewis offer we purchased the newish OLED version, extra Joy-Cons and three games: Minecraft, Mario Kart 8 Deluxe and Super Mario 3D World (with Bowser's Fury). It's as well-designed and the games as wonderful as I would expect from Nintendo.
+- We stressed this would be the family Switch, so that his little brother (and father!) can play and he wouldn't claim it as his. When we unveiled the box he bounced around the living room with the biggest smile on his face. I was excited to try it out, but that was nothing compared to the joy it brought him.

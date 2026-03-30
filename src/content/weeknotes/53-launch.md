@@ -1,0 +1,14 @@
+---
+title: "Week 53 - Launch"
+date: 2022-08-28
+week: 53
+syndication:
+  - https://twitter.com/barryf/status/1563965948050264071
+---
+
+- After last week's [peace and quiet](https://barryfrost.com/2022/08/week-52-solo), L brought the boys back from her parents'. Chaos has resumed.
+- At work we [announced](https://www.privitar.com/press-releases/privitar-announces-general-availability-of-privitar-modern-data-provisioning-platform/) the GA version of the platform we've been building since early 2020, long before I joined. Of course, software is never "done" and we're continuing to actively develop it, but it's now ready for some very large customers to use. Feels good to launch.
+- In my new VP Engineering role I've been engaging with contractors/consultants which has meant raising Purchase Orders in Oracle NetSuite. Whenever I get imposter syndrome working with the seriously talented, bright engineers in our team, I only need to use third-party ERP software like this where clearly no one cares about UX.
+- Unusually for me I felt a little poorly this week so took a sick day and skipped my two days in the office to avoid spreading germs. It was surprising how isolated I felt not joining my team in person. I think the hybrid working pattern is the best for me.
+- It was sad to read about the [end of free](https://barryfrost.com/2022/05/after-the-poor-comms-from-heroku) at Heroku. Although I'd [moved a paid app away to Render in May](https://barryfrost.com/2022/05/after-the-poor-comms-from-heroku), I still have a few tiny, rarely-used apps with Heroku. I also paid for commercial plans in two previous roles which I may not have done had I not kicked the tyres first with free apps. These days I build with [Architect](https://arc.codes/) and host for pennies with AWS.
+- We took the boys to nearby [Knebworth Cricket Club](https://kpcc.org.uk) for their family day. With beautiful Knebworth House in the background, both boys got to join in with some drills and play a game, while Daddy enjoyed a burger and pint. A winning combination.

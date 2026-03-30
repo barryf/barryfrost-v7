@@ -1,0 +1,15 @@
+---
+title: "Week 162 - Running"
+date: 2024-09-29
+week: 162
+syndication:
+  - https://mastodon.social/@barryf/113222490661663268
+---
+
+- It was the one week each year when I don't need heating or cooling in my office. So much rain though.
+- I was in the air when the iPhone 16 pre-orders opened earlier in September so I ordered mine late. It arrived just this week. I went for a 16 Pro in Black Titanium. I'm going to give my old 14 Pro to L to replace her 11 Pro. I've got time to migrate across so for the first time in generations I decided to do the setup from scratch. With iCloud and 1Password, logging in to everything is a fairly painless process and means I can selectively choose apps, notifications and settings as a fresh user.
+- If I wasn't giving my old phone to my wife it really wouldn't justify an upgrade. The slightly bigger battery and performance are welcome, but the camera technology feels like overkill for snaps of my family. If the 16 had a ProMotion (120Hz) display I'd have gone non-Pro.
+- The iPhone materials and design are as beautiful as ever. But of course it went straight into a case (Silicone Case with MagSafe - Ultramarine, to match my Watch) because I will inevitably drop it.
+- H competed in his first cross-country competition in the next age group up. He did very well and his school team finished second in the district. And then his football team won a Saturday friendly against Whitwell 6-3. His athletic and sporting ability clearly doesn't come from me!
+- I popped into the pharmacy during the week and was offered a routine blood pressure check while there. It's a bit on the high side. I've not felt particularly stressed, I don't drink all that much, but I could do with upping the cardio-vascular exercise to help bring it down.
+- So, it's time for a change. While my other son was enjoying his mini rugby I put on my football boots, had a kick-around with H (two nutmegs each) and joined L on a couple of laps of the playing fields. I'm not much of a runner but it did me good. It's my first step to a 5K.

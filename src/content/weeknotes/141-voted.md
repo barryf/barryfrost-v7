@@ -1,0 +1,12 @@
+---
+title: "Week 141 - Voted"
+date: 2024-05-06
+week: 141
+syndication:
+  - https://mastodon.social/@barryf/112393902692627164
+---
+
+- As part of my new role I've got some work travel coming up later this month. First, a few days in Amsterdam for a customer visit, then to San Diego to meet up with West Coast US colleagues at our HQ. I've had a couple of 8pm meetings this week; it's much easier to find sensible, mutual meeting times when you're in the main office.
+- The weather flits between encouraging sunshine and depressing drizzle. I often need a waterproof or umbrella for the steps between the house and my garden office so I've bought myself a smart freestanding [coat stand](https://www.johnlewis.com/john-lewis-anyday-coat-stand/p6171963) to hang up my jacket.
+- I voted in the local council and police commissioner elections, my first requiring a photo ID. We had a reasonable turnout but, in stark contrast to the rest of the country who sent a clear message to the inept government, [both seats went to the Tories](https://democracy.north-herts.gov.uk/mgElectionAreaResults.aspx?XXR=0&ID=500000095&RPID=504927674). It's that kind of area.
+- We drove over to Oxfordshire for Sunday lunch with Tim, Debbie and their son. The boys all played well together and ate their roast chicken. Tim cooks a mean roast, with the addition of beetroot which I will have to try. We brought cakes: a lemon-and-lime drizzle by me and a wheat-free, dairy-free chocolate cake by L. Both were enjoyed although I was particularly proud of my sponge.

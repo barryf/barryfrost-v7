@@ -1,0 +1,14 @@
+---
+title: "Week 108 - Gold"
+date: 2023-09-17
+week: 108
+syndication:
+  - https://mastodon.social/@barryf/111082164483576561
+---
+
+- We've been clobbered with two unplanned bills this week. First, an onlay (major filling) for L at a private dentist (private, because four years after moving to the area we're still on the waiting list for an NHS dentist). And then a gearbox inspection for her car revealed the brake brushes needed replacing, plus other smaller repairs. Not cheap.
+- My Series 4 Apple Watch's battery picked a bad week to start rapidly degrading. It no longer lasts a normal day. In any case, although Apple just [announced](https://www.apple.com/uk/apple-watch-series-9/) the Series 9, it's not particularly compelling to upgrade, especially with a [Series X](https://www.macrumors.com/guide/apple-watch-x/) being heavily rumoured.
+- After picking up the car at Audi we popped next door to Cupra to have a nose at the Born to replace my ageing car. We were fairly impressed: good room inside, smart body, sensible efficiency, but not particularly hot for a hot hatch. As with the Watch, is the Born exciting enough to consider if better EVs are around the corner?
+- I spent an enjoyable Wednesday at [The Oval](https://barryfrost.com/2023/09/england-v-nz-odi) with Andy for the third ODI between England and New Zealand. England crushed NZ by 181 runs, putting on such a huge total to make the Black Caps' innings feel a bit pointless. We did see Ben Stokes score a record 182, the highest for an Englishman in ODIs. And we did enjoy a few beers instead of being at work.
+- I helped H enter a [Fantasy Premier League](https://fantasy.premierleague.com) team into his school's new league. I did the account creation, but he picked his team entirely by himself. He's more than capable: this weekend his team scored more points than mine.
+- This Friday was my parents' 50th (Gold) anniversary. Fifty years is a staggering length of time to be married; I'm not sure L would put up with me for so long! They returned from a holiday in Cornwall for a lunch with my sister, me and our families. After, back at their house, we flicked through their wedding album, enjoying the attendees' seventies suits, flares, my dad's long hair and his mutton chops.

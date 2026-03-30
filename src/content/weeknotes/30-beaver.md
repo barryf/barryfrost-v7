@@ -1,0 +1,13 @@
+---
+title: "Week 30: Beaver"
+date: 2022-03-20
+week: 30
+syndication:
+  - https://twitter.com/barryf/status/1505640049983041536
+---
+
+- It's been an unsettled week. Rain storms and Saharan winds (leaving left red sand deposits) gave way to glorious sunshine and blue skies. I even packed my sunglasses in my work bag. Everyone's mood is lifted with a bit of sun on their faces.
+- Our parents haven't been enjoying things so much: both sets on either side of the country have caught Covid within days of each other. They've had all their jabs and avoided it for the whole two years but, with other people now throwing caution to the wind, they're suffering. 
+- After enjoying a gift subscription to Gergely Orosz's [Pragmatic Engineer](https://newsletter.pragmaticengineer.com) newsletter (for making a small contribution to one edition), it was time for me to pay to be a subscriber. An easy decision. It's the highest quality resource for software engineering leaders and worth every penny. Recommended.
+- It was H's investiture at [Beavers](https://www.scouts.org.uk/beavers/) this week. He had a few words to say, including a surprising (to me) promise to "love God", before getting his badges, scarf and woggle. It's only a small group, but he loves it already.
+- H was then taken shopping this week for some new football boots. My advice was to keep it simple, to avoid fluorescent yellow ones, and he chose nice simple black boots. He's very happy with them and took them for a test drive in the garden. Much better for kicking a leather ball than flimsy trainers.

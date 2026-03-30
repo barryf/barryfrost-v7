@@ -1,0 +1,16 @@
+---
+title: "Week 18: Christmas"
+date: 2021-12-27
+week: 18
+syndication:
+  - https://twitter.com/barryf/status/1475587478170046475
+---
+
+- This one's a little late, because... it's Christmas!
+- I was struggling to shake my cold from last week, so with my parents' impending visit in mind, I booked a drive-through PCR test. All very efficient. 36 hours later the result was thankfully negative.
+- In celebration, we had a takeaway curry. And started on the nuts. 
+- The boys dodged a mini Covid outbreak at school and broke up on the Wednesday, while I finished work on the 23rd. 10 days off for everyone.
+- My parents arrived on Christmas Eve. Everyone's LFTs were clear. It was a relief after being forced to cancel their visit last year because of the last-minute lockdown. The boys were waiting impatiently by the front door, jumping up-and-down as their grandparents' car pulled up. Adorable.
+- Their arrival marked the start of my cooking marathon, precisely scheduled by the minute. I gently boiled, glazed and roasted a big ham, before preparing the next day's vegetables. 
+- Santa visited and both boys continued to fully buy into the magic. We got them Fire HD 8 Kids tablets to replace their hand-me-down iPads mini. While the Amazon devices are no match for modern iPads, they are a fraction of the price and support recent games and apps. I received jumpers, books and DIY gadgets. Fully dad.
+- Christmas lunch was a success, with only one minor argument during my five hours of cooking. When the children were finally in bed, the adults settled down to watch the undeniably festive Die Hard. Perfect.

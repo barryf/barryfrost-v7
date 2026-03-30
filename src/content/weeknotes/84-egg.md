@@ -1,0 +1,15 @@
+---
+title: "Week 84 - Egg"
+date: 2023-04-02
+week: 84
+syndication:
+  - https://mastodon.social/@barryf/110131152636908760
+---
+
+- Our youngest has had an ear infection this week. The kind where goo seeps out 🤢 and means he was partially deaf. Eventually, after a few visits to the doctor, he was prescribed "banana medicine" - antibiotics for kids. The gunk has dried up and he's happy again. Hooray for science.
+- It did mean that he missed out on the last week of school before Easter. Luckily Numberblocks on iPlayer filled the maths gap.
+- I discovered [Readwise](http://readwise.io) and its newish [Reader](https://read.readwise.io/). It's a really nicely constructed service that I hope will have me reading more. Using a bit of [scripting](https://gist.github.com/barryf/5d4fbc563cbeffe31759f6db4b6cd1a6) I imported my Pocket list, my Reeder feed subscriptions and my very long read-later list. Whether it sticks and helps we'll see.
+- I also discovered [Britpopple](https://barryfrost.com/2023/03/enjoying-britpopple-a-fun-new-heardle) this week and so far have correctly guessed the answer in one second for each of the four days I've played. I have a gift.
+- Arsenal beat Leeds and remain eight points clear of City. Just nine matches to go.
+- I took the boys to the village church on Sunday for an Easter egg hunt. They found all the items scattered inside and outside the church on their sheets (with Daddy's help) and were rewarded with a Freddo egg and a little book. I bought myself tea and cake.
+- Full of sugar, we played football in the park in the sunshine. Alas, hay fever is back, and I spent a sneezy rest of the day. Pollen is the worst.

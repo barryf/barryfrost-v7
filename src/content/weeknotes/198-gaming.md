@@ -1,0 +1,16 @@
+---
+title: "Week 198 - Gaming"
+date: 2025-06-08
+week: 198
+syndication:
+  - https://mastodon.social/@barryf/114648577446646375
+  - https://bsky.app/profile/barryfrost.com/post/3lr4ad4zl6m2w
+---
+
+- We have a Switch 2! I missed the pre-orders and so assumed I'd have to wait, but on launch day I found one in stock at Argos for next-day delivery. It arrived late so I set it up ready to surprise the boys on Saturday morning. There has been a _lot _of screen time for us all since.
+- Mini-review: it's very familiar for owners of the Switch. Everything outside is a little better: the build quality, the screen size, the joy-cons. It's the beefed-up power and graphics that make the difference.
+- I bought it bundled with Mario Kart World. It's an evolution of the already excellent last edition. The graphics look gorgeous in 4K with the extra power. No slowdowns apparent, even with all 24 karts on screen. The free roam feature is fun, but it's the multiplayer grand prix races that we've spent most time on. Daddy is mostly the winner, but it's getting closer.
+- I also paid the £8 upgrade fee for "Zelda: Breath of the Wild" to get the [Switch 2 edition](https://www.nintendo.com/en-gb/Games/Nintendo-Switch-2-Edition/The-Legend-of-Zelda-Breath-of-the-Wild-Nintendo-Switch-2-Edition-2787250.html). I started again from the beginning. Time spent loading seems much briefer and fights with gangs of Bokoblins are silky smooth. The visuals were stunning enough on the Switch but are also even better in 4K on the TV. I just need to find time to play it!
+- My left arm is still fairly sore from last weekend's hyperextension mishap. The swelling at my elbow is stopping me from straightening my arm, so I'm eating with a fork in my right hand and trying my best not to sleep on it. I now at least have a dramatic yellow bruise to prove I'm injured.
+- Then I decided to go all-in on the self-punishment with back-to-back appointments at the dentist for a check-up and hygienist session. Ouch.
+- Last weekend it was H's football prize-giving; this Saturday was C's turn. We were all at the rainy Knebworth Recreation Ground at an ungodly 8:45am to see him receive his very first sporting trophy. He was so proud. Next week it's time for cricket.
