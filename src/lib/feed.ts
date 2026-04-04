@@ -90,7 +90,7 @@ export async function getUnifiedFeed(): Promise<FeedItem[]> {
     });
   }
 
-  for (const entry of bookEntries) {
+  for (const entry of bookEntries.filter(e => e.data.status === 'buzz.bookhive.defs#finished')) {
     const date = new Date(entry.data.finishedAt ?? entry.data.createdAt);
     items.push({
       type: 'book',
