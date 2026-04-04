@@ -22,7 +22,7 @@ const data = item.data as { title: string; authors: string; coverUrl?: string };
     <h2 class="font-semibold">
       <a class="p-name u-url" href={item.url} rel="noopener noreferrer">{data.title}</a>
     </h2>
-    <p class="text-sm text-neutral-600 dark:text-neutral-400">{data.authors}</p>
+    <p class="text-sm text-neutral-600 dark:text-neutral-400">by {data.authors}</p>
     <div class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
       <time class="dt-published" datetime={toISODate(item.date)}>Finished {formatDate(item.date)}</time>
     </div>

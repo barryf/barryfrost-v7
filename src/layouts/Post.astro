@@ -30,7 +30,7 @@ const matchingDoc = documents.find(doc => doc.data.path === currentPath);
       {categories && categories.length > 0 && (
         <div class="mt-2 flex flex-wrap gap-2">
           {categories.map(cat => (
-            <span class="p-category text-xs px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400">{cat}</span>
+            <a href={`/categories/${cat}`} class="p-category text-xs px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-700">{cat}</a>
           ))}
         </div>
       )}
@@ -43,5 +43,6 @@ const matchingDoc = documents.find(doc => doc.data.path === currentPath);
         <a class="u-syndication" href={matchingDoc.data.uri} rel="syndication">View on AT Protocol</a>
       </footer>
     )}
+    <slot name="nav" />
   </article>
 </Base>

@@ -1,18 +1,67 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Post from '../../layouts/Post.astro';
+import { plainExcerpt, weeknoteLabel } from '../../lib/weeknotes';
 
 export async function getStaticPaths() {
   const weeknotes = await getCollection('weeknotes');
-  return weeknotes.map((entry) => ({
-    params: { slug: entry.id },
-    props: { entry },
-  }));
+  const sorted = [...weeknotes].sort((a, b) => a.data.week - b.data.week);
+
+  return sorted.map((entry, i) => {
+    const weekNum = entry.data.week;
+    const onThisDay = sorted
+      .filter(e => {
+        const diff = Math.abs(weekNum - e.data.week);
+        return diff > 0 && diff % 52 === 0;
+      })
+      .sort((a, b) => b.data.week - a.data.week)
+      .map(e => ({
+        id: e.id,
+        title: e.data.title,
+        emoji: e.data.emoji,
+        year: e.data.date.getFullYear(),
+        excerpt: e.body ? plainExcerpt(e.body) : '',
+      }));
+
+    return {
+      params: { slug: entry.id },
+      props: {
+        entry,
+        prev: sorted[i - 1] ?? null,
+        next: sorted[i + 1] ?? null,
+        onThisDay,
+      },
+    };
+  });
 }
 
-const { entry } = Astro.props;
+const { entry, prev, next, onThisDay } = Astro.props;
 const { Content } = await render(entry);
 ---
-<Post title={entry.data.title} date={entry.data.date} description={entry.data.description} category="weeknotes" emoji={entry.data.emoji}>
+<Post title={entry.data.title} date={entry.data.date} description={entry.data.description} category="weeknotes" categories={entry.data.categories} emoji={entry.data.emoji}>
   <Content />
+  <Fragment slot="nav">
+    <nav class="mt-8 pt-6 border-t border-neutral-100 dark:border-neutral-800 flex justify-between gap-4 text-sm">
+      {prev ? (
+        <a href={`/weeknotes/${prev.id}`} class="hover:underline">← {weeknoteLabel(prev)}</a>
+      ) : <span />}
+      {next ? (
+        <a href={`/weeknotes/${next.id}`} class="hover:underline text-right">{weeknoteLabel(next)} →</a>
+      ) : <span />}
+    </nav>
+    {onThisDay.length > 0 && (
+      <aside class="mt-8 pt-6 border-t border-neutral-100 dark:border-neutral-800">
+        <h2 class="text-sm font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-4">On this day</h2>
+        <ul class="space-y-4">
+          {onThisDay.map(e => (
+            <li>
+              <span class="mr-1 text-sm">{e.year}</span>
+              <a href={`/weeknotes/${e.id}`} class="font-semibold hover:underline">{e.emoji && `${e.emoji} `}{e.title}</a>
+              {e.excerpt && <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-0.5">{e.excerpt}</p>}
+            </li>
+          ))}
+        </ul>
+      </aside>
+    )}
+  </Fragment>
 </Post>
