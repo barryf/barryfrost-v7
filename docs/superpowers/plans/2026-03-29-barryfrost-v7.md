@@ -79,6 +79,7 @@ src/
     categories/[category]/
       index.astro                   — Category feed page 1 (e.g. /categories/holiday)
       page/[page].astro             — Category feed pages 2+
+    feed.xml.ts                     — RSS feed: articles + weeknotes only
   styles/
     global.css                      — Tailwind directives + prose customisation
   assets/                           — Favicon, local images

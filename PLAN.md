@@ -59,3 +59,12 @@ Eventually I also want to write a script to create records in my PDS for selecte
 * It's fine to restructure/rewrite the plan to make it more readable.
 * Use git and make incremental, regular commits as we go along.
 * Keep dependencies minimal and prefer local solutions - confirm before adding any dependency.
+
+## Ideas
+
+* Instead of having articles/weeknotes as posts, create them as standard.site documents, e.g. [1](https://pdsls.dev/at://did:plc:ia2zdnhjaokf5lazhxrmj6eu/site.standard.document/3mbxqm3nrp22x)
+  * Create new repo for Markdown files with a GitHub Action to publish/update on push
+* Use data in my sifa.id to generate a /work page
+* Use profile data from bsky for my avatar, description, (name?)
+* Use bsky follows and standard.site subs to create a /following page
+*

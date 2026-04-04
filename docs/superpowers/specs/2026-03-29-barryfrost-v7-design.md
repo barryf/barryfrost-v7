@@ -72,7 +72,7 @@ Defined in `src/content.config.ts` with Zod:
 - **blueskyPosts**: text, createdAt, facets, embed (nullable), reply (nullable: { parentUri, parentHandle, parentRkey }), uri
 - **checkins**: venueName, venueCategory, venueAddress, venueUri, latitude, longitude, rating, createdAt, uri
 - **reviews**: title, creativeWorkType, rating, genres, posterUrl, backdropUrl, mainCredit, mainCreditRole, releaseDate, text, facets, imdbId, tmdbId, createdAt, uri
-- **books**: title, authors, status, hiveId, hiveBookUri, coverUrl, owned, createdAt, finishedAt, isbn10, isbn13, goodreadsId, uri
+- **books**: title, authors, status (`buzz.bookhive.defs#finished` etc.), hiveId, hiveBookUri, coverUrl, owned, createdAt, finishedAt, isbn10, isbn13, goodreadsId, uri — only `#finished` books appear in the feed
 - **documents**: title, path, publishedAt, description, tags, uri, createdAt
 
 ## Page Generation
@@ -94,6 +94,7 @@ Fully static (SSG). No SSR — the site rebuilds when PDS content changes.
 | `/app.beaconbits.beacon/` (+pagination) | Checkin list | No detail pages; items link to beaconbits.app |
 | `/social.popfeed.feed.review/` (+pagination) | Review list | No detail pages; items link to popfeed.social |
 | `/categories/[category]` (+pagination) | Category pages | Articles and weeknotes with that category; title shown as `#category` |
+| `/feed.xml` | RSS feed | Articles and weeknotes only (unlisted excluded); autodiscovery link in `<head>` |
 
 ### Bluesky Rich Text Rendering
 
