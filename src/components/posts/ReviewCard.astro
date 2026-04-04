@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import { formatDate, toISODate } from '../../lib/dates';
 import type { FeedItem } from '../../lib/feed';
 
@@ -18,11 +19,12 @@ function toStars(rating: number): string {
 ---
 <article class="h-entry flex gap-4">
   {data.posterUrl && (
-    <img
+    <Image
       src={data.posterUrl}
       alt={`Poster for ${data.title}`}
-      class="w-12 h-18 object-cover rounded"
-      loading="lazy"
+      width={48}
+      height={72}
+      class="w-12 object-cover rounded"
     />
   )}
   <div>
