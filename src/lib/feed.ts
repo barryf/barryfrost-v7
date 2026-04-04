@@ -29,7 +29,7 @@ export async function getUnifiedFeed(): Promise<FeedItem[]> {
 
   const items: FeedItem[] = [];
 
-  for (const entry of articles) {
+  for (const entry of articles.filter(e => e.data.visibility !== 'unlisted')) {
     const { year, month } = yearMonth(entry.data.date);
     items.push({
       type: 'article',
@@ -42,7 +42,7 @@ export async function getUnifiedFeed(): Promise<FeedItem[]> {
     });
   }
 
-  for (const entry of weeknotes) {
+  for (const entry of weeknotes.filter(e => e.data.visibility !== 'unlisted')) {
     items.push({
       type: 'weeknote',
       date: entry.data.date,
@@ -121,6 +121,24 @@ export function filterByMonth(items: FeedItem[], year: string, month: string): F
     const ym = yearMonth(item.date);
     return ym.year === year && ym.month === month;
   });
+}
+
+export function filterByCategory(items: FeedItem[], category: string): FeedItem[] {
+  return items.filter((item) => {
+    const cats = item.data.categories as string[] | undefined;
+    return Array.isArray(cats) && cats.includes(category);
+  });
+}
+
+export function getCategories(items: FeedItem[]): string[] {
+  const seen = new Set<string>();
+  for (const item of items) {
+    const cats = item.data.categories as string[] | undefined;
+    if (Array.isArray(cats)) {
+      for (const cat of cats) seen.add(cat);
+    }
+  }
+  return [...seen].sort();
 }
 
 export function getMonths(items: FeedItem[]): { year: string; month: string }[] {

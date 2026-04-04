@@ -1,6 +1,7 @@
 ---
 title: "Using camo for SSL image proxying"
 date: 2015-01-14
+visibility: unlisted
 categories:
   - moof
   - ssl
@@ -8,9 +9,9 @@ categories:
   - proxy
 ---
 
-I've just set up SSL image proxying on my website through [camo](https://github.com/atmos/camo) to make sure any external non-https images are served via https. Camo is a simple HTTP proxy that also encrypts URLs with HMAC to prevent someone piggy-backing off your service. 
+I've just set up SSL image proxying on my website through [camo](https://github.com/atmos/camo) to make sure any external non-https images are served via https. Camo is a simple HTTP proxy that also encrypts URLs with HMAC to prevent someone piggy-backing off your service.
 
-Currently running nicely through Heroku using their wildcard SSL herokuapp.com certificate. My first time using a ["Deploy to Heroku" button](https://blog.heroku.com/archives/2014/8/7/heroku-button) which made this ridiculously easy to get set up. 
+Currently running nicely through Heroku using their wildcard SSL herokuapp.com certificate. My first time using a ["Deploy to Heroku" button](https://blog.heroku.com/archives/2014/8/7/heroku-button) which made this ridiculously easy to get set up.
 
 I now wrap external (http) image URLs on here with `camo_image()`:
 

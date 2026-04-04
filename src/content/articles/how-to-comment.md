@@ -1,6 +1,7 @@
 ---
 title: "How to comment"
 date: 2015-01-17
+visibility: unlisted
 categories:
   - comment
   - transformative
@@ -17,7 +18,7 @@ You can comment on [any of the posts](/all) on this site using the [IndieWeb com
 
 ## Longer version
 
-### Write 
+### Write
 
 Publish a post on your own site with [Microformats 2](http://microformats.org/wiki/microformats2) markup. You don't need any special software, just a tool that allows you to enter raw HTML.
 
@@ -43,8 +44,8 @@ Instead of a comment you can alternatively indicate that you have **liked** or *
     <a href="https://barryfrost.com/2015/01/a-post" class="u-repost-of">
       I reposted this
     </a>
-    
-### Webmention 
+
+### Webmention
 
 Finally, send a Webmention from your post to mine to let me know you have a comment for me to retrieve.
 

@@ -1,6 +1,7 @@
 ---
 title: "About"
 date: 2015-01-04
+visibility: unlisted
 categories:
   - personal
 ---
@@ -11,7 +12,7 @@ Hello, I'm Barry, a web developer and manager, working in London. I live in a vi
 
 I've recently joined [The Influence Room](https://www.theinfluenceroom.com/) in West London as CTO.
 
-Previously I've worked in web agencies, corporates and startups, big and small, in and around London and New Zealand. You can read more about my professional background on [LinkedIn](http://www.linkedin.com/in/barryfrost). 
+Previously I've worked in web agencies, corporates and startups, big and small, in and around London and New Zealand. You can read more about my professional background on [LinkedIn](http://www.linkedin.com/in/barryfrost).
 
 *Any views or content posted here does not necessarily represent the views of my company.*
 
@@ -25,7 +26,7 @@ Read about how this is built and the ideas behind it in the [colophon](/colophon
 
 ## Interests
 
-I try to be an early adopter (my Twitter account [@barryf](http://twitter.com/barryf) is the 4,677th) and I enjoy trying new services and technologies to help improve my team’s effectiveness and happiness. I’ve been a Mac user since the early 2000s and have owned more iOS devices than I want to think about. 
+I try to be an early adopter (my Twitter account [@barryf](http://twitter.com/barryf) is the 4,677th) and I enjoy trying new services and technologies to help improve my team’s effectiveness and happiness. I’ve been a Mac user since the early 2000s and have owned more iOS devices than I want to think about.
 
 Away from technology, I’m a football fan, I enjoy rugby and cricket, [indie/rock music](http://last.fm/user/barryf), I like to keep up with politics and I try (unsuccessfully) to avoid showbiz news.
 

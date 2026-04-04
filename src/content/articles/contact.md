@@ -1,6 +1,7 @@
 ---
 title: "Contact"
 date: 2015-01-04
+visibility: unlisted
 categories:
   - legacy
 ---
@@ -13,7 +14,7 @@ The best way of contacting me is usually by my personal email address.
 
 ## <span class="fa fa-apple"></span> iMessage
 
-If you need to get hold of me in a hurry then you can send an iMessage from iOS or a Mac. 
+If you need to get hold of me in a hurry then you can send an iMessage from iOS or a Mac.
 
 [barry@barryfrost.com](imessage:barry@barryfrost.com)
 
