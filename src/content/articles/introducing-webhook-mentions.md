@@ -1,6 +1,11 @@
 ---
 title: "Introducing Webhook Mentions"
 date: 2016-07-28
+categories:
+  - indieweb
+  - webmention
+  - github
+  - jekyll
 syndication:
   - https://twitter.com/barryf/status/758767801523904513
 ---

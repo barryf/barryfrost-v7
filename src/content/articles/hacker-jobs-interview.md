@@ -1,6 +1,10 @@
 ---
 title: "Hacker Jobs interview"
 date: 2013-02-27
+categories:
+  - interview
+  - recruitment
+  - hiring
 ---
 
 *This is an interview I did in 2013 for Hacker Jobs, a website which is sadly no longer avaiable. Here are my Q&A answers.*

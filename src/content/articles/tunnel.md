@@ -1,6 +1,11 @@
 ---
 title: "Creating a tunnel to localhost with Cloudflare"
 date: 2023-03-11
+categories:
+  - til
+  - tunnel
+  - localhost
+  - dev
 syndication:
   - https://mastodon.social/@barryf/110004888458182990
 ---

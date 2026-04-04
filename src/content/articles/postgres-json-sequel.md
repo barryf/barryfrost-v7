@@ -1,6 +1,12 @@
 ---
 title: "Using JSON in Postgres with Ruby and Sequel"
 date: 2017-10-10
+categories:
+  - postgres
+  - sequel
+  - json
+  - jsonb
+  - ruby
 syndication:
   - https://medium.com/@barryf/using-json-in-postgres-with-ruby-and-sequel-897304158374
   - https://twitter.com/barryf/status/917858023191842818

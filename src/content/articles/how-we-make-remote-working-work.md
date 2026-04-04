@@ -1,6 +1,10 @@
 ---
 title: "How we make remote working work"
 date: 2017-10-18
+categories:
+  - remote
+  - work
+  - venntrodev
 syndication:
   - https://medium.com/@barryf/how-we-make-remote-working-work-dc0d4a0282cb
 ---

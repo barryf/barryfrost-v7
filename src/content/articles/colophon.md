@@ -1,6 +1,10 @@
 ---
 title: "Transformative"
 date: 2016-11-09
+categories:
+  - colophon
+  - legacy
+  - baker
 ---
 
 **UPDATE**: My website now uses newer software. This post is maintained for posterity.

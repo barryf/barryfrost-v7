@@ -1,6 +1,9 @@
 ---
 title: "Indie Microblogging"
 date: 2017-01-24
+categories:
+  - indieweb
+  - micro.blog
 syndication:
   - https://twitter.com/barryf/status/823970313893511169
 ---

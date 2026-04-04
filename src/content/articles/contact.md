@@ -1,6 +1,8 @@
 ---
 title: "Contact"
 date: 2015-01-04
+categories:
+  - legacy
 ---
 
 ## <span class="fa fa-envelope"></span> Email

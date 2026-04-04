@@ -1,6 +1,11 @@
 ---
 title: "Announcing Transformative"
 date: 2016-11-10
+categories:
+  - transformative
+  - indieweb
+  - micropub
+  - webmention
 syndication:
   - https://twitter.com/barryf/status/796780455425179648
 ---

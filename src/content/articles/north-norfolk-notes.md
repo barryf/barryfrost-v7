@@ -1,6 +1,11 @@
 ---
 title: "North Norfolk Notes"
 date: 2016-09-23
+categories:
+  - holiday
+  - norfolk
+  - travel
+  - uk
 ---
 
 Earlier this week I returned from a very enjoyable holiday in a surprisingly sunny North Norfolk with Laura and 10-month old Henry. For posterity and in case it's useful for those with a similarly-aged baby/toddler, here are a few of my highlights.

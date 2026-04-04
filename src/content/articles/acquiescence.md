@@ -1,6 +1,10 @@
 ---
 title: "Acquiescence: a basic IndieAuth server"
 date: 2017-05-24
+categories:
+  - indieweb
+  - indieauth
+  - acquiescence
 syndication:
   - https://twitter.com/barryf/status/867477079180414976
   - https://news.indieweb.org/en/barryfrost.com/2017/05/acquiescence

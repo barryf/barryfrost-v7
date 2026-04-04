@@ -1,6 +1,11 @@
 ---
 title: "Using camo for SSL image proxying"
 date: 2015-01-14
+categories:
+  - moof
+  - ssl
+  - https
+  - proxy
 ---
 
 I've just set up SSL image proxying on my website through [camo](https://github.com/atmos/camo) to make sure any external non-https images are served via https. Camo is a simple HTTP proxy that also encrypts URLs with HMAC to prevent someone piggy-backing off your service. 

@@ -1,6 +1,9 @@
 ---
 title: "Building a webmention receiver"
 date: 2021-05-15
+categories:
+  - webmention
+  - indieweb
 ---
 
 In today’s [Webmentions Beyond Webmention.io](https://events.indieweb.org/2021/05/webmentions-beyond-webmention-io-zG4JpHhZShVA) online meet-up there was a request for people who were willing to implement their own receiver.

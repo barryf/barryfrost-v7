@@ -1,6 +1,8 @@
 ---
 title: "About"
 date: 2015-01-04
+categories:
+  - personal
 ---
 
 Hello, I'm Barry, a web developer and manager, working in London. I live in a village in Hertfordshire with my wife and two boys.

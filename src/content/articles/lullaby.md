@@ -1,6 +1,10 @@
 ---
 title: "Making a looping lullaby box"
 date: 2017-12-29
+categories:
+  - baby
+  - music
+  - ffmpeg
 syndication:
   - https://twitter.com/barryf/status/946706289018785793
   - https://medium.com/@barryf/making-a-looping-lullaby-box-311673d1d692

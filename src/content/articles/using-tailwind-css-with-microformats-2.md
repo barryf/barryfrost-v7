@@ -1,6 +1,10 @@
 ---
 title: "Using Tailwind CSS with Microformats 2"
 date: 2021-05-29
+categories:
+  - tailwind
+  - css
+  - microformats
 ---
 
 [Tailwind CSS](https://tailwindcss.com/) has utility classes for height using the pattern `h-x` where x is a number, for example `h-4` which maps to a height of 16px.

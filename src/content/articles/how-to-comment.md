@@ -1,6 +1,9 @@
 ---
 title: "How to comment"
 date: 2015-01-17
+categories:
+  - comment
+  - transformative
 ---
 
 You can comment on [any of the posts](/all) on this site using the [IndieWeb comment](http://indiewebcamp.com/comment) method. Here's how it's done.

@@ -1,6 +1,13 @@
 ---
 title: "My serverless, headless, Micropub-powered, personal website"
 date: 2021-07-13
+categories:
+  - serverless
+  - cms
+  - architect
+  - micropub
+  - indieweb
+  - personal
 syndication:
   - https://twitter.com/barryf/status/1415033757661270018
 ---

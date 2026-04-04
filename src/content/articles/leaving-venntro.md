@@ -1,6 +1,10 @@
 ---
 title: "Leaving Venntro"
 date: 2018-04-03
+categories:
+  - personal
+  - venntro
+  - career
 syndication:
   - https://twitter.com/barryf/status/981141346068193280
   - https://www.linkedin.com/feed/update/urn:li:activity:6386909799560413184
