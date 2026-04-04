@@ -28,11 +28,11 @@ export function renderRichText(text: string, facets: Facet[]): string {
     const feature = facet.features[0];
 
     if (feature?.$type === 'app.bsky.richtext.facet#link') {
-      html += `<a href="${escapeAttr(feature.uri!)}" rel="nofollow noopener" target="_blank">${facetText}</a>`;
+      html += `<a class="underline" href="${escapeAttr(feature.uri!)}" rel="nofollow noopener" target="_blank">${facetText}</a>`;
     } else if (feature?.$type === 'app.bsky.richtext.facet#mention') {
-      html += `<a href="https://bsky.app/profile/${escapeAttr(feature.did!)}">${facetText}</a>`;
+      html += `<a class="underline" href="https://bsky.app/profile/${escapeAttr(feature.did!)}">${facetText}</a>`;
     } else if (feature?.$type === 'app.bsky.richtext.facet#tag') {
-      html += `<a href="https://bsky.app/hashtag/${escapeAttr(feature.tag!)}">${facetText}</a>`;
+      html += `<a class="underline" href="https://bsky.app/hashtag/${escapeAttr(feature.tag!)}">${facetText}</a>`;
     } else {
       html += facetText;
     }
