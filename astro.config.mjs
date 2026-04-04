@@ -13,6 +13,8 @@ export default defineConfig({
     remotePatterns: [
       { protocol: 'https', hostname: 'cdn.bsky.app' },
       { protocol: 'https', hostname: 'image.tmdb.org' },
+      { protocol: 'https', hostname: 'bsky.social' },
     ],
   },
+  compressHTML: false,
 });

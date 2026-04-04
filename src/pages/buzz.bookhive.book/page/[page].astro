@@ -1,0 +1,16 @@
+---
+import Feed from '../../../layouts/Feed.astro';
+import { getUnifiedFeed, paginateItems } from '../../../lib/feed';
+
+export async function getStaticPaths() {
+  const allItems = (await getUnifiedFeed()).filter(i => i.type === 'book');
+  const pages = paginateItems(allItems);
+  return pages.slice(1).map(({ page, items, totalPages }) => ({
+    params: { page: String(page) },
+    props: { items, currentPage: page, totalPages },
+  }));
+}
+
+const { items, currentPage, totalPages } = Astro.props;
+---
+<Feed title={`Books — Page ${currentPage}`} items={items} currentPage={currentPage} totalPages={totalPages} basePath="/buzz.bookhive.book" />
