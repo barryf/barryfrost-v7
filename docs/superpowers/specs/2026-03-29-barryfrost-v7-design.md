@@ -237,10 +237,12 @@ The `documents` collection provides AT Protocol URIs for articles/weeknotes. Mat
 
 ## Images
 
-- Astro's `<Image>` component with Cloudflare adapter's image service
-- Remote patterns allowed for `cdn.bsky.app`, `bsky.social` (Bluesky), and review/book poster CDNs
+- Astro's `<Image>` component with Cloudflare adapter's image service (served via `/_image/` path)
+- Remote patterns allowed for `cdn.bsky.app`, `bsky.social` (Bluesky), `image.tmdb.org` (reviews)
+- Review posters and book covers use `densities={[1, 2]}` and `quality={90}` for retina sharpness
 - Auto-optimised (format conversion, resizing) on Cloudflare; Sharp fallback in dev
 - No build-time image downloading
+- Bluesky embed images (ExternalEmbed, ImageEmbed) removed — no detail pages for Bluesky posts
 
 ## Redirects
 

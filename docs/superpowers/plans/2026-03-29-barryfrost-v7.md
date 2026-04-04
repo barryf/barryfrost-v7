@@ -48,11 +48,9 @@ src/
       WeeknoteCard.astro            — Weeknote list item (h-entry); shows emoji prefix
       BlueskyCard.astro             — Bluesky post list item (h-entry); shows reply context
       CheckinCard.astro             — Checkin list item (h-entry)
-      ReviewCard.astro              — Review list item (h-entry); star rating display
-      BookCard.astro                — Book list item (h-entry); cover image + bookhive link
-    embeds/
-      ExternalEmbed.astro           — Bluesky link card embed
-      ImageEmbed.astro              — Bluesky image gallery embed
+      ReviewCard.astro              — Review list item (h-entry); star rating display; retina poster image
+      BookCard.astro                — Book list item (h-entry); retina cover image + bookhive link
+    embeds/                         — (removed; no Bluesky detail pages)
   layouts/
     Base.astro                      — HTML shell: doctype, head, body, dark mode
     Post.astro                      — Single post wrapper with h-entry markup; emoji, categories (linked to /categories/), syndication, named nav slot
