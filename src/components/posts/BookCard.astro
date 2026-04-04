@@ -1,5 +1,4 @@
 ---
-import { Image } from 'astro:assets';
 import { formatDate, toISODate } from '../../lib/dates';
 import type { FeedItem } from '../../lib/feed';
 
@@ -12,14 +11,14 @@ const data = item.data as { title: string; authors: string; coverUrl?: string };
 ---
 <article class="h-entry flex gap-4">
   {data.coverUrl && (
-    <Image
+    <img
       src={data.coverUrl}
       alt={`Cover for ${data.title}`}
-      width={48}
-      height={72}
-      densities={[1, 2]}
-      quality={90}
+      width="48"
+      height="72"
       class="w-12 object-cover rounded"
+      loading="lazy"
+      decoding="async"
     />
   )}
   <div>

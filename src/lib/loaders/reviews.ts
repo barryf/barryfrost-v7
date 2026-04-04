@@ -1,5 +1,6 @@
 import type { Loader } from 'astro/loaders';
 import { fetchAllRecords, rkeyFromUri, DID, PDS_HOST } from '../pds';
+import { downloadImage } from '../download-image';
 
 export function reviewsLoader(): Loader {
   return {
@@ -13,6 +14,11 @@ export function reviewsLoader(): Loader {
         const rkey = rkeyFromUri(record.uri);
         const identifiers = value.identifiers as { imdbId?: string; tmdbId?: string } | undefined;
 
+        const rawPosterUrl = value.posterUrl as string | undefined;
+        const posterUrl = rawPosterUrl
+          ? await downloadImage(rawPosterUrl, 'reviews', `${rkey}.jpg`, 48, 72)
+          : undefined;
+
         store.set({
           id: rkey,
           data: {
@@ -20,7 +26,7 @@ export function reviewsLoader(): Loader {
             creativeWorkType: value.creativeWorkType as string,
             rating: value.rating as number | undefined,
             genres: (value.genres as string[]) ?? [],
-            posterUrl: value.posterUrl as string | undefined,
+            posterUrl,
             backdropUrl: value.backdropUrl as string | undefined,
             mainCredit: value.mainCredit as string | undefined,
             mainCreditRole: value.mainCreditRole as string | undefined,

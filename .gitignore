@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 # Wrangler
 .wrangler/
+
+# Downloaded images (build artifacts)
+public/images/
