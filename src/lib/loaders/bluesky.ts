@@ -48,7 +48,6 @@ export function blueskyLoader(): Loader {
             text: value.text as string,
             createdAt: value.createdAt as string,
             facets: (value.facets as unknown[]) ?? [],
-            embed: value.embed ?? null,
             reply,
             uri: record.uri,
           },

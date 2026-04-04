@@ -44,7 +44,6 @@ const blueskyPosts = defineCollection({
     text: z.string(),
     createdAt: z.string(),
     facets: z.array(z.unknown()),
-    embed: z.unknown().nullable(),
     reply: z.object({
       parentUri: z.string(),
       parentHandle: z.string(),
