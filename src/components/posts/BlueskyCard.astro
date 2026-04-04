@@ -8,14 +8,18 @@ interface Props {
 }
 
 const { item } = Astro.props;
-const data = item.data as { text: string; facets: unknown[]; uri: string };
+const data = item.data as { text: string; facets: unknown[]; uri: string; reply?: { parentHandle: string; parentRkey: string } | null };
 const html = renderRichText(data.text, data.facets as any);
 ---
 <article class="h-entry">
+  {data.reply && (
+    <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">
+      In reply to <a class="underline" href={`https://bsky.app/profile/${data.reply.parentHandle}/post/${data.reply.parentRkey}`} rel="noopener noreferrer">@{data.reply.parentHandle}'s post</a>
+    </p>
+  )}
   <div class="p-content" set:html={html} />
   <div class="mt-1 flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400">
     <time class="dt-published" datetime={toISODate(item.date)}>{formatDate(item.date)}</time>
-    <a class="u-url" href={item.url}>permalink</a>
-    <a class="u-syndication" href={`https://bsky.app/profile/barryfrost.com/post/${item.url.split('/').pop()}`} rel="syndication">Bluesky</a>
+    <a class="u-url" href={item.url} rel="noopener noreferrer">Bluesky</a>
   </div>
 </article>

@@ -8,6 +8,13 @@ interface Props {
 
 const { item } = Astro.props;
 const data = item.data as { title: string; creativeWorkType: string; rating?: number; mainCredit?: string; posterUrl?: string };
+
+function toStars(rating: number): string {
+  const stars = rating / 2;
+  const full = Math.floor(stars);
+  const half = stars % 1 >= 0.5;
+  return '★'.repeat(full) + (half ? '½' : '');
+}
 ---
 <article class="h-entry flex gap-4">
   {data.posterUrl && (
@@ -20,14 +27,13 @@ const data = item.data as { title: string; creativeWorkType: string; rating?: nu
   )}
   <div>
     <h2 class="font-semibold">
-      <a class="p-name u-url" href={item.url}>{data.title}</a>
+      <a class="p-name u-url" href={item.url} rel="noopener noreferrer">{data.title}</a>
     </h2>
-    <p class="text-sm text-neutral-600 dark:text-neutral-400">
-      {data.creativeWorkType}{data.mainCredit && ` · ${data.mainCredit}`}
+    <p class="text-sm mt-1 text-neutral-600 dark:text-neutral-400">
+      {data.rating !== undefined && <span class="p-rating" title={`${data.rating}/10`}>{toStars(data.rating)}</span>}
     </p>
-    <div class="mt-1 flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400">
+    <div class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
       <time class="dt-published" datetime={toISODate(item.date)}>{formatDate(item.date)}</time>
-      {data.rating !== undefined && <span class="p-rating">{data.rating}/10</span>}
     </div>
   </div>
 </article>
