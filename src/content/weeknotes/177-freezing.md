@@ -2,6 +2,7 @@
 title: "Week 177 - Freezing"
 date: 2025-01-13
 week: 177
+emoji: "🥶"
 syndication:
   - https://mastodon.social/@barryf/113822940824433474
   - https://bsky.app/profile/barryfrost.com/post/3lfnld4moop2x

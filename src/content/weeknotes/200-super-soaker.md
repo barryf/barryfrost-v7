@@ -2,6 +2,7 @@
 title: "Week 200 - Super-soaker"
 date: 2025-06-22
 week: 200
+emoji: "🔫"
 syndication:
   - https://mastodon.social/@barryf/114728730291993637
   - https://bsky.app/profile/barryfrost.com/post/3ls7tefzmy72i

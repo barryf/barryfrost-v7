@@ -2,6 +2,7 @@
 title: "Week 88 - Blue"
 date: 2023-04-30
 week: 88
+emoji: "💙"
 syndication:
   - https://twitter.com/barryf/status/1652766850328010753
   - https://mastodon.social/@barryf/110289572284856452

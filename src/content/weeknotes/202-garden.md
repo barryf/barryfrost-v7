@@ -2,6 +2,7 @@
 title: "Week 202 - Garden"
 date: 2025-07-07
 week: 202
+emoji: "🌳"
 syndication:
   - https://bsky.app/profile/barryfrost.com/post/3ltexdog27i2e
   - https://mastodon.social/@barryf/114812326750110875

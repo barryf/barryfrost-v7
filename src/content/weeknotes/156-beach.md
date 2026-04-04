@@ -2,6 +2,7 @@
 title: "Week 156 - Beach"
 date: 2024-08-25
 week: 156
+emoji: "🏖️"
 syndication:
   - https://mastodon.social/@barryf/113024388518499465
 ---

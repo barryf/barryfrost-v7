@@ -2,6 +2,7 @@
 title: "Week 157 - Maize"
 date: 2024-08-25
 week: 157
+emoji: "🌽"
 syndication:
   - https://mastodon.social/@barryf/113024395745866700
 ---

@@ -2,6 +2,7 @@
 title: "Week 138 - Typewriter"
 date: 2024-04-14
 week: 138
+emoji: "⌨️"
 syndication:
   - https://mastodon.social/@barryf/112271360705180435
 ---

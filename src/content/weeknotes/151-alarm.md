@@ -2,6 +2,7 @@
 title: "Week 151 - Alarm"
 date: 2024-07-15
 week: 151
+emoji: "🚨"
 syndication:
   - https://mastodon.social/@barryf/112792439385201836
 ---

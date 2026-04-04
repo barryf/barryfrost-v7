@@ -2,6 +2,7 @@
 title: "Week 34: Easter"
 date: 2022-04-17
 week: 34
+emoji: "🐣"
 syndication:
   - https://twitter.com/barryf/status/1515797906674130950
 ---

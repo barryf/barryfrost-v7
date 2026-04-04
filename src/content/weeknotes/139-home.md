@@ -2,6 +2,7 @@
 title: "Week 139 - Home"
 date: 2024-04-21
 week: 139
+emoji: "🏠"
 syndication:
   - https://mastodon.social/@barryf/112311085465956689
 ---

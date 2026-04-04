@@ -2,6 +2,7 @@
 title: "Week 83 - Britpop"
 date: 2023-03-26
 week: 83
+emoji: "🎸"
 syndication:
   - https://mastodon.social/@barryf/110091493680229701
 ---

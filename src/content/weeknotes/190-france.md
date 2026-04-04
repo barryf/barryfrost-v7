@@ -2,6 +2,7 @@
 title: "Week 190 - France"
 date: 2025-04-15
 week: 190
+emoji: "🇫🇷"
 syndication:
   - https://mastodon.social/@barryf/114341738636576084
   - https://bsky.app/profile/barryfrost.com/post/3lmtxuygddd2b

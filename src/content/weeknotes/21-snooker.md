@@ -2,6 +2,7 @@
 title: "Week 21: Snooker"
 date: 2022-01-16
 week: 21
+emoji: "🔴"
 syndication:
   - https://twitter.com/barryf/status/1482824207780171777
 ---

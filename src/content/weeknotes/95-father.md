@@ -2,6 +2,7 @@
 title: "Week 95 - Father"
 date: 2023-06-18
 week: 95
+emoji: "👨‍👦‍👦"
 syndication:
   - https://mastodon.social/@barryf/110566845393683603
   - https://staging.bsky.app/profile/barryfrost.com/post/3jyhlgd2vtj2t

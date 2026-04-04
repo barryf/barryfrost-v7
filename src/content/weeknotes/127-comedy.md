@@ -2,6 +2,7 @@
 title: "Week 127 - Comedy"
 date: 2024-01-28
 week: 127
+emoji: "😂"
 syndication:
   - https://mastodon.social/@barryf/111835588881384037
 ---

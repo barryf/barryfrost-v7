@@ -2,6 +2,7 @@
 title: "Week 143 - Amsterdam"
 date: 2024-05-20
 week: 143
+emoji: "🇳🇱"
 syndication:
   - https://mastodon.social/@barryf/112473395787250251
 ---

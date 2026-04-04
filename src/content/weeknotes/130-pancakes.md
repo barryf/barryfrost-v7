@@ -2,6 +2,7 @@
 title: "Week 130 - Pancakes"
 date: 2024-02-18
 week: 130
+emoji: "🥞"
 syndication:
   - https://mastodon.social/@barryf/111954336575099891
 ---

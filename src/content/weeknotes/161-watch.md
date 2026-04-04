@@ -2,6 +2,7 @@
 title: "Week 161 - Watch"
 date: 2024-09-23
 week: 161
+emoji: "⌚️"
 syndication:
   - https://mastodon.social/@barryf/113188088421984758
 ---

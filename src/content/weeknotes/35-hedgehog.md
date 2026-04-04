@@ -2,6 +2,7 @@
 title: "Week 35: Hedgehog"
 date: 2022-04-24
 week: 35
+emoji: "🦔"
 syndication:
   - https://twitter.com/barryf/status/1518314790862610432
 ---

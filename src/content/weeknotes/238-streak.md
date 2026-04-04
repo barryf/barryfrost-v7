@@ -2,6 +2,7 @@
 title: "Week 238 - Streak"
 date: 2026-03-16
 week: 238
+emoji: "🗓️"
 syndication:
   - https://mastodon.social/@barryf/116239384251542234
   - https://bsky.app/profile/barryfrost.com/post/3mh6p2c37wy2s

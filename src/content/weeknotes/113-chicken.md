@@ -2,6 +2,7 @@
 title: "Week 113 - Chicken"
 date: 2023-10-22
 week: 113
+emoji: "🐓"
 syndication:
   - https://mastodon.social/@barryf/111280495075004134
 ---

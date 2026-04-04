@@ -2,6 +2,7 @@
 title: "Week 193 - Repair"
 date: 2025-05-04
 week: 193
+emoji: "👨‍🔧"
 syndication:
   - https://mastodon.social/@barryf/114451581684647367
   - https://bsky.app/profile/barryfrost.com/post/3loeqtvym5m2r

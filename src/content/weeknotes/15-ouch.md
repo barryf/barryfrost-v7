@@ -2,6 +2,7 @@
 title: "Week 15: Ouch"
 date: 2021-12-05
 week: 15
+emoji: "😖"
 syndication:
   - https://twitter.com/barryf/status/1467608989680783362
 ---

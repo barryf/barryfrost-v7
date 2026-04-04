@@ -2,6 +2,7 @@
 title: "Week 236 - Glasses"
 date: 2026-03-02
 week: 236
+emoji: "👓"
 syndication:
   - https://mastodon.social/@barryf/116159986952072328
   - https://bsky.app/profile/barryfrost.com/post/3mg3gqkgq5s2i

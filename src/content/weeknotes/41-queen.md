@@ -2,6 +2,7 @@
 title: "Week 41: Queen"
 date: 2022-06-05
 week: 41
+emoji: "👑"
 syndication:
   - https://twitter.com/barryf/status/1533537387569111042
 ---

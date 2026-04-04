@@ -2,6 +2,7 @@
 title: "Week 170 - Eating"
 date: 2024-11-24
 week: 170
+emoji: "🍽️"
 syndication:
   - https://bsky.app/profile/barryfrost.com/post/3lbpurvkx3v2b
   - https://mastodon.social/@barryf/113539880957306122

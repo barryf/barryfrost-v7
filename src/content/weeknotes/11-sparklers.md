@@ -2,6 +2,7 @@
 title: "Week 11: Sparklers"
 date: 2021-11-07
 week: 11
+emoji: "🎆"
 syndication:
   - https://twitter.com/barryf/status/1457439025321627663
 ---

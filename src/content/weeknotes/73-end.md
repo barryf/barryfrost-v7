@@ -2,6 +2,7 @@
 title: "Week 73 - End"
 date: 2023-01-15
 week: 73
+emoji: "😔"
 syndication:
   - https://mastodon.social/@barryf/109695110945605306
   - https://twitter.com/barryf/status/1614721476979982336

@@ -2,6 +2,7 @@
 title: "Week 232 - Dinosaur"
 date: 2026-02-03
 week: 232
+emoji: "🦕"
 syndication:
   - https://mastodon.social/@barryf/116007159622294382
   - https://bsky.app/profile/barryfrost.com/post/3mdxkwsg5qo24

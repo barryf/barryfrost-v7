@@ -2,6 +2,7 @@
 title: "Week 5: Derby"
 date: 2021-09-26
 week: 5
+emoji: "⚽️"
 syndication:
   - https://twitter.com/barryf/status/1442214363893575681
 ---

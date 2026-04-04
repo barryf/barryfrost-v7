@@ -2,6 +2,7 @@
 title: "Week 205 - Ticket"
 date: 2025-07-27
 week: 205
+emoji: "🎫"
 syndication:
   - https://mastodon.social/@barryf/114927186778505837
   - https://bsky.app/profile/barryfrost.com/post/3luxxlyquhi2c

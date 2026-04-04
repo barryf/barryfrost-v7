@@ -2,6 +2,7 @@
 title: "Week 219 - Paint"
 date: 2025-11-03
 week: 219
+emoji: "🫟"
 syndication:
   - https://mastodon.social/@barryf/115485631493421378
   - https://bsky.app/profile/barryfrost.com/post/3m4pxlcx34g2l

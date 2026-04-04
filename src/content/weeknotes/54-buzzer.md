@@ -2,6 +2,7 @@
 title: "Week 54 - Buzzer"
 date: 2022-09-04
 week: 54
+emoji: "☎️"
 syndication:
   - https://twitter.com/barryf/status/1566523376390344704
 ---

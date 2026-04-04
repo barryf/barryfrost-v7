@@ -2,6 +2,7 @@
 title: "Week 155 - Bang"
 date: 2024-08-11
 week: 155
+emoji: "💥"
 syndication:
   - https://mastodon.social/@barryf/112945291338420067
 ---

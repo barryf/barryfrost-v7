@@ -8,9 +8,11 @@ interface Props {
   date: Date;
   description?: string;
   category?: string;
+  categories?: string[];
+  emoji?: string;
 }
 
-const { title, date, description, category } = Astro.props;
+const { title, date, description, category, categories, emoji } = Astro.props;
 
 // Find matching document in PDS for syndication link
 const currentPath = Astro.url.pathname.replace(/\/$/, '');
@@ -20,11 +22,18 @@ const matchingDoc = documents.find(doc => doc.data.path === currentPath);
 <Base title={title} description={description}>
   <article class="h-entry">
     <header class="mb-8">
-      <h1 class="p-name text-2xl font-bold">{title}</h1>
+      <h1 class="p-name text-2xl font-bold">{emoji && `${emoji} `}{title}</h1>
       <time class="dt-published text-sm text-neutral-500 dark:text-neutral-400" datetime={toISODate(date)}>
         {formatDate(date)}
       </time>
       {category && <data class="p-category hidden" value={category} />}
+      {categories && categories.length > 0 && (
+        <div class="mt-2 flex flex-wrap gap-2">
+          {categories.map(cat => (
+            <span class="p-category text-xs px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400">{cat}</span>
+          ))}
+        </div>
+      )}
     </header>
     <div class="e-content prose dark:prose-invert max-w-none">
       <slot />

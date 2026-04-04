@@ -2,6 +2,7 @@
 title: "Week 209 - Firsts"
 date: 2025-08-25
 week: 209
+emoji: "1️⃣"
 syndication:
   - https://mastodon.social/@barryf/115089981067452419
   - https://bsky.app/profile/barryfrost.com/post/3lxab2ah25y2d

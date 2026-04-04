@@ -2,6 +2,7 @@
 title: "Week 79 - Burglars"
 date: 2023-02-26
 week: 79
+emoji: "🦹‍♂️"
 syndication:
   - https://mastodon.social/@barryf/109932830124827509
   - https://twitter.com/barryf/status/1629936204899557376

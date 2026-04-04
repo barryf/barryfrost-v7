@@ -2,6 +2,7 @@
 title: "Week 128 - Sofa"
 date: 2024-02-04
 week: 128
+emoji: "🛋️"
 syndication:
   - https://mastodon.social/@barryf/111875165734398945
 ---

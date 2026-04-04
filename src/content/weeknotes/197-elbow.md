@@ -2,6 +2,7 @@
 title: "Week 197 - Elbow"
 date: 2025-06-02
 week: 197
+emoji: "💪"
 syndication:
   - https://mastodon.social/@barryf/114614145447611720
   - https://bsky.app/profile/barryfrost.com/post/3lqmwzdkdau2e

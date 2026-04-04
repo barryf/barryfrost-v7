@@ -2,6 +2,7 @@
 title: "Week 7: Together"
 date: 2021-10-10
 week: 7
+emoji: "🤝"
 syndication:
   - https://twitter.com/barryf/status/1447282867793547265
 ---

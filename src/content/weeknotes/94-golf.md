@@ -2,6 +2,7 @@
 title: "Week 94 - Golf"
 date: 2023-06-11
 week: 94
+emoji: "⛳️"
 syndication:
   - https://mastodon.social/@barryf/110527568590578280
   - https://staging.bsky.app/profile/barryfrost.com/post/3jxw5bdv4qi2e

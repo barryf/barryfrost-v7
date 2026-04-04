@@ -2,6 +2,7 @@
 title: "Week 116 - Quiz"
 date: 2023-11-12
 week: 116
+emoji: "🤔"
 syndication:
   - https://mastodon.social/@barryf/111399365906291011
 ---

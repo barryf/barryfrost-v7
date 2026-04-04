@@ -2,6 +2,7 @@
 title: "Week 39: Sword"
 date: 2022-05-22
 week: 39
+emoji: "🗡"
 syndication:
   - https://twitter.com/barryf/status/1528479492083269632
 ---

@@ -2,6 +2,7 @@
 title: "Week 53 - Launch"
 date: 2022-08-28
 week: 53
+emoji: "🚀"
 syndication:
   - https://twitter.com/barryf/status/1563965948050264071
 ---

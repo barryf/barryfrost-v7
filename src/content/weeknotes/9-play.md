@@ -2,6 +2,7 @@
 title: "Week 9: Play"
 date: 2021-10-24
 week: 9
+emoji: "🥳"
 syndication:
   - https://twitter.com/barryf/status/1452358698479783938
 ---

@@ -2,6 +2,7 @@
 title: "Week 17: Beds"
 date: 2021-12-19
 week: 17
+emoji: "🛏"
 syndication:
   - https://twitter.com/barryf/status/1472675795290181640
 ---

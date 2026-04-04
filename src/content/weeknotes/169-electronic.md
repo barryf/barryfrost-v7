@@ -2,6 +2,7 @@
 title: "Week 169 - Electronic"
 date: 2024-11-17
 week: 169
+emoji: "🔋"
 syndication:
   - https://mastodon.social/@barryf/113499948459894406
   - https://bsky.app/profile/barryfrost.com/post/3lb65d66p5t2h

@@ -2,6 +2,7 @@
 title: "Week 226 - Repair"
 date: 2025-12-22
 week: 226
+emoji: "🧑‍🔧"
 syndication:
   - https://mastodon.social/@barryf/115764459800721818
   - https://bsky.app/profile/barryfrost.com/post/3malrxo6nkx2k

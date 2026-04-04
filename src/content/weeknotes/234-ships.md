@@ -2,6 +2,7 @@
 title: "Week 234 - Ships"
 date: 2026-02-19
 week: 234
+emoji: "🚢"
 syndication:
   - https://mastodon.social/@barryf/116098668685522979
   - https://bsky.app/profile/barryfrost.com/post/3mfa7ec4t7c2i

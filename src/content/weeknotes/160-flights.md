@@ -2,6 +2,7 @@
 title: "Week 160 - Flights"
 date: 2024-09-15
 week: 160
+emoji: "🛫"
 syndication:
   - https://mastodon.social/@barryf/113143352443119081
 ---

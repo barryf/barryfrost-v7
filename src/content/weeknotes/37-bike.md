@@ -2,6 +2,7 @@
 title: "Week 37: Bike"
 date: 2022-05-08
 week: 37
+emoji: "🚲"
 syndication:
   - https://twitter.com/barryf/status/1523376988672520192
 ---

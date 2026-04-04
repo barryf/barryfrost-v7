@@ -2,6 +2,7 @@
 title: "Week 171 - Advent"
 date: 2024-12-01
 week: 171
+emoji: "🎄"
 syndication:
   - https://mastodon.social/@barryf/113579592939224682
   - https://bsky.app/profile/barryfrost.com/post/3lcbj5dwtzh2c

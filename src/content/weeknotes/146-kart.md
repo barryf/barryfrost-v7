@@ -2,6 +2,7 @@
 title: "Week 146 - Kart"
 date: 2024-06-09
 week: 146
+emoji: "🏎️"
 syndication:
   - https://mastodon.social/@barryf/112588473547365348
 ---

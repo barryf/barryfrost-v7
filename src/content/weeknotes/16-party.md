@@ -2,6 +2,7 @@
 title: "Week 16: Party"
 date: 2021-12-12
 week: 16
+emoji: "🎉"
 syndication:
   - https://twitter.com/barryf/status/1470125719606939649
 ---

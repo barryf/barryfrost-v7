@@ -2,6 +2,7 @@
 title: "Week 135 - Science"
 date: 2024-03-25
 week: 135
+emoji: "🧬"
 syndication:
   - https://mastodon.social/@barryf/112158334275484805
 ---

@@ -2,6 +2,7 @@
 title: "Week 179 - Loaf"
 date: 2025-01-26
 week: 179
+emoji: "🍞"
 syndication:
   - https://mastodon.social/@barryf/113895862626988222
   - https://bsky.app/profile/barryfrost.com/post/3lgnxm2xpzw2v

@@ -2,6 +2,7 @@
 title: "Week 33: Sprinklers"
 date: 2022-04-10
 week: 33
+emoji: "⛲️"
 ---
 
 - We're back from our holiday at the lovely [Workers Cottage](https://www.theworkerscottage.co.uk) in Norfolk. 

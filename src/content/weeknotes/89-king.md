@@ -2,6 +2,7 @@
 title: "Week 89 - King"
 date: 2023-05-08
 week: 89
+emoji: "🤴"
 syndication:
   - https://mastodon.social/@barryf/110333129461640065
   - https://twitter.com/barryf/status/1655554633593397251

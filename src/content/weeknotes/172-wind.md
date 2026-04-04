@@ -2,6 +2,7 @@
 title: "Week 172 - Wind"
 date: 2024-12-08
 week: 172
+emoji: "💨"
 syndication:
   - https://mastodon.social/@barryf/113618975532180504
   - https://bsky.app/profile/barryfrost.com/post/3lcsysevkhs2w

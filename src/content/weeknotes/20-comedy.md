@@ -2,6 +2,7 @@
 title: "Week 20: Comedy"
 date: 2022-01-09
 week: 20
+emoji: "😂"
 syndication:
   - https://twitter.com/barryf/status/1480279630498213894
 ---

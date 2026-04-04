@@ -2,6 +2,7 @@
 title: "Week 108 - Gold"
 date: 2023-09-17
 week: 108
+emoji: "🌟"
 syndication:
   - https://mastodon.social/@barryf/111082164483576561
 ---

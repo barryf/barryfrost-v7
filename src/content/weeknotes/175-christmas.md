@@ -2,6 +2,7 @@
 title: "Week 175 - Christmas"
 date: 2024-12-30
 week: 175
+emoji: "🎄"
 syndication:
   - https://bsky.app/profile/barryfrost.com/post/3leklcykl562c
   - https://mastodon.social/@barryf/113744127847229873

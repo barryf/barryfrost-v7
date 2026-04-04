@@ -2,6 +2,7 @@
 title: "Week 199 - Bucket"
 date: 2025-06-16
 week: 199
+emoji: "🪣"
 syndication:
   - https://mastodon.social/@barryf/114694819565363156
   - https://bsky.app/profile/barryfrost.com/post/3lrqrhpgdaj2v

@@ -2,6 +2,7 @@
 title: "Week 147 - Socks"
 date: 2024-06-17
 week: 147
+emoji: "🧦"
 syndication:
   - https://mastodon.social/@barryf/112633702898323476
 ---

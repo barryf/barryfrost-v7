@@ -2,6 +2,7 @@
 title: "Week 141 - Voted"
 date: 2024-05-06
 week: 141
+emoji: "🗳️"
 syndication:
   - https://mastodon.social/@barryf/112393902692627164
 ---

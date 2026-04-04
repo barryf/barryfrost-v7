@@ -2,6 +2,7 @@
 title: "Week 92 - Employed"
 date: 2023-05-28
 week: 92
+emoji: "👨🏻‍💼"
 syndication:
   - https://mastodon.social/@barryf/110448148131948765
   - https://staging.bsky.app/profile/barryfrost.com/post/3jwsunh4w2i2t

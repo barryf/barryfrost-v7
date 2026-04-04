@@ -4,6 +4,7 @@ import { blueskyLoader } from './lib/loaders/bluesky';
 import { checkinsLoader } from './lib/loaders/checkins';
 import { reviewsLoader } from './lib/loaders/reviews';
 import { documentsLoader } from './lib/loaders/documents';
+import { booksLoader } from './lib/loaders/books';
 
 const articles = defineCollection({
   loader: glob({ pattern: '**/*.md', base: 'src/content/articles' }),
@@ -11,6 +12,7 @@ const articles = defineCollection({
     title: z.string(),
     date: z.coerce.date(),
     description: z.string().optional(),
+    categories: z.array(z.string()).optional(),
   }),
 });
 
@@ -21,6 +23,7 @@ const weeknotes = defineCollection({
     date: z.coerce.date(),
     week: z.number(),
     description: z.string().optional(),
+    emoji: z.string().optional(),
   }),
 });
 
@@ -39,6 +42,11 @@ const blueskyPosts = defineCollection({
     createdAt: z.string(),
     facets: z.array(z.unknown()),
     embed: z.unknown().nullable(),
+    reply: z.object({
+      parentUri: z.string(),
+      parentHandle: z.string(),
+      parentRkey: z.string(),
+    }).nullable(),
     uri: z.string(),
   }),
 });
@@ -79,6 +87,25 @@ const reviews = defineCollection({
   }),
 });
 
+const books = defineCollection({
+  loader: booksLoader(),
+  schema: z.object({
+    title: z.string(),
+    authors: z.string(),
+    status: z.string(),
+    hiveId: z.string().optional(),
+    hiveBookUri: z.string().optional(),
+    coverUrl: z.string().optional(),
+    owned: z.boolean().optional(),
+    createdAt: z.string(),
+    finishedAt: z.string().optional(),
+    isbn10: z.string().optional(),
+    isbn13: z.string().optional(),
+    goodreadsId: z.string().optional(),
+    uri: z.string(),
+  }),
+});
+
 const documents = defineCollection({
   loader: documentsLoader(),
   schema: z.object({
@@ -99,5 +126,6 @@ export const collections = {
   blueskyPosts,
   checkins,
   reviews,
+  books,
   documents,
 };

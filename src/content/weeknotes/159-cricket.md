@@ -2,6 +2,7 @@
 title: "Week 159 - Cricket"
 date: 2024-09-10
 week: 159
+emoji: "🏏"
 syndication:
   - https://mastodon.social/@barryf/113113437562821873
 ---

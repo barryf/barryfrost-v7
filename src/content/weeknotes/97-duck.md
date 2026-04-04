@@ -2,6 +2,7 @@
 title: "Week 97 - Duck"
 date: 2023-07-02
 week: 97
+emoji: "🦆"
 syndication:
   - https://mastodon.social/@barryf/110646259417372688
   - https://staging.bsky.app/profile/barryfrost.com/post/3jzku6qih4h2s

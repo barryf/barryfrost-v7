@@ -2,6 +2,7 @@
 title: "Week 149 - Builders"
 date: 2024-07-01
 week: 149
+emoji: "👷"
 syndication:
   - https://mastodon.social/@barryf/112712776892330361
 ---

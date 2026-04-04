@@ -2,6 +2,7 @@
 title: "Week 12: Drinks"
 date: 2021-11-14
 week: 12
+emoji: "🍷"
 syndication:
   - https://twitter.com/barryf/status/1459980108371013633
 ---

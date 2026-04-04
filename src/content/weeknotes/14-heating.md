@@ -2,6 +2,7 @@
 title: "Week 14: Heating"
 date: 2021-11-28
 week: 14
+emoji: "🔥"
 syndication:
   - https://twitter.com/barryf/status/1465061793554964498
 ---

@@ -2,6 +2,7 @@
 title: "Week 145 - Robot"
 date: 2024-06-03
 week: 145
+emoji: "🤖"
 ---
 
 - I was happy to be back home after my US trip, with a bank holiday to catch up on sleep. I think I'm just about readjusted now.

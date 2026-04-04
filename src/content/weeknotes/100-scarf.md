@@ -2,6 +2,7 @@
 title: "Week 100 - Scarf"
 date: 2023-07-24
 week: 100
+emoji: "🧣"
 syndication:
   - https://mastodon.social/@barryf/110768262884729653
 ---

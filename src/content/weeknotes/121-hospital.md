@@ -2,6 +2,7 @@
 title: "Week 121 - Hospital"
 date: 2023-12-20
 week: 121
+emoji: "🏥"
 syndication:
   - https://mastodon.social/@barryf/111614674845384437
 ---

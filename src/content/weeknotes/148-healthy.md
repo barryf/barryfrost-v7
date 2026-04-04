@@ -2,6 +2,7 @@
 title: "Week 148 - Healthy"
 date: 2024-06-23
 week: 148
+emoji: "💪"
 syndication:
   - https://mastodon.social/@barryf/112667668091533010
 ---

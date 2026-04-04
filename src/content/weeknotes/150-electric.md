@@ -2,6 +2,7 @@
 title: "Week 150 - Electric"
 date: 2024-07-07
 week: 150
+emoji: "⚡️"
 syndication:
   - https://mastodon.social/@barryf/112747012175847933
 ---

@@ -2,6 +2,7 @@
 title: "Week 207 - Yurt"
 date: 2025-08-10
 week: 207
+emoji: "⛺️"
 syndication:
   - https://mastodon.social/@barryf/115006605692405596
   - https://bsky.app/profile/barryfrost.com/post/3lw3a7opeen2o

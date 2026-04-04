@@ -2,6 +2,7 @@
 title: "Week 10: Clocks"
 date: 2021-10-31
 week: 10
+emoji: "⏰"
 syndication:
   - https://twitter.com/barryf/status/1454905185197826051
 ---

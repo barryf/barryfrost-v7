@@ -2,6 +2,7 @@
 title: "Week 36: Boozy"
 date: 2022-05-01
 week: 36
+emoji: "🥂"
 syndication:
   - https://twitter.com/barryf/status/1520849911113306113
 ---

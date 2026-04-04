@@ -2,6 +2,7 @@
 title: "Week 164 - Nuclear"
 date: 2024-10-14
 week: 164
+emoji: "☢️"
 syndication:
   - https://mastodon.social/@barryf/113306359395221635
 ---

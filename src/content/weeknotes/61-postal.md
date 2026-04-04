@@ -2,6 +2,7 @@
 title: "Week 61 - Postal"
 date: 2022-10-23
 week: 61
+emoji: "📮"
 syndication:
   - https://twitter.com/barryf/status/1584280100345741312
 ---

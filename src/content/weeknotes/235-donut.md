@@ -2,6 +2,7 @@
 title: "Week 235 - Donut"
 date: 2026-02-25
 week: 235
+emoji: "🍩"
 syndication:
   - https://mastodon.social/@barryf/116130904598325997
   - https://bsky.app/profile/barryfrost.com/post/3mfojhft5ng2d

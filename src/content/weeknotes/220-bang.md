@@ -2,6 +2,7 @@
 title: "Week 220 - Bang"
 date: 2025-11-10
 week: 220
+emoji: "💥"
 syndication:
   - https://mastodon.social/@barryf/115525867103229729
   - https://bsky.app/profile/barryfrost.com/post/3m5btecd3dw2l

@@ -2,6 +2,7 @@
 title: "Week 96 - Festival"
 date: 2023-06-27
 week: 96
+emoji: "🎸"
 syndication:
   - https://mastodon.social/@barryf/110617789761618455
 ---

@@ -2,6 +2,7 @@
 title: "Week 192 - Smell"
 date: 2025-04-27
 week: 192
+emoji: "😷"
 syndication:
   - https://mastodon.social/@barryf/114411747788365764
   - https://bsky.app/profile/barryfrost.com/post/3lnt2rj6nwo2r

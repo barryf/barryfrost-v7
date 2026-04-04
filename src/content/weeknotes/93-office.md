@@ -2,6 +2,7 @@
 title: "Week 93 - Office"
 date: 2023-06-05
 week: 93
+emoji: "🏢"
 syndication:
   - https://mastodon.social/@barryf/110491478452646092
   - https://staging.bsky.app/profile/barryfrost.com/post/3jxg4fqiewp2b

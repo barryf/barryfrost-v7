@@ -2,6 +2,7 @@
 title: "Week 74 - Pirate"
 date: 2023-01-22
 week: 74
+emoji: "🏴‍☠️"
 syndication:
   - https://mastodon.social/@barryf/109734807160342808
   - https://twitter.com/barryf/status/1617262048739577857

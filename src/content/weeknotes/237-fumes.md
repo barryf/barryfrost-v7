@@ -2,6 +2,7 @@
 title: "Week 237 - Fumes"
 date: 2026-03-10
 week: 237
+emoji: "🌫️"
 syndication:
   - https://mastodon.social/@barryf/116206090183742707
   - https://bsky.app/profile/barryfrost.com/post/3mgpvvugzqf2g

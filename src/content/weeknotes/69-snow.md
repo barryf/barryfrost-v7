@@ -2,6 +2,7 @@
 title: "Week 69 - Snow"
 date: 2022-12-18
 week: 69
+emoji: "☃️"
 syndication:
   - https://mastodon.social/@barryf/109536630869568514
   - https://twitter.com/barryf/status/1604580239677456384

@@ -2,6 +2,7 @@
 title: "Week 62 - Gaming"
 date: 2022-10-30
 week: 62
+emoji: "👾"
 syndication:
   - https://twitter.com/barryf/status/1586822066686550016
 ---

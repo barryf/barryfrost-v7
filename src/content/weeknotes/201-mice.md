@@ -2,6 +2,7 @@
 title: "Week 201 - Mice"
 date: 2025-06-30
 week: 201
+emoji: "🐁"
 syndication:
   - https://bsky.app/profile/barryfrost.com/post/3lsti27cu7l2x
   - https://mastodon.social/@barryf/114772970686482002

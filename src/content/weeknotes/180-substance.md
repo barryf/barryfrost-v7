@@ -2,6 +2,7 @@
 title: "Week 180 - Substance"
 date: 2025-02-03
 week: 180
+emoji: "🧪"
 syndication:
   - https://mastodon.social/@barryf/113940912823531067
   - https://bsky.app/profile/barryfrost.com/post/3lhbxsnbftc2c

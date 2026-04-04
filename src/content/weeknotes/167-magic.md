@@ -2,6 +2,7 @@
 title: "Week 167 - Magic"
 date: 2024-11-04
 week: 167
+emoji: "🪄"
 syndication:
   - https://mastodon.social/@barryf/113426759939823132
   - https://bsky.app/profile/barryfrost.com/post/3la5nbhnwrh2u

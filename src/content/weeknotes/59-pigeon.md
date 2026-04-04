@@ -2,6 +2,7 @@
 title: "Week 59 - Pigeon"
 date: 2022-10-10
 week: 59
+emoji: "🐦"
 syndication:
   - https://twitter.com/barryf/status/1579576462486556673
 ---

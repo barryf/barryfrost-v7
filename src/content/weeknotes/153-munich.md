@@ -2,6 +2,7 @@
 title: "Week 153 - Munich"
 date: 2024-07-29
 week: 153
+emoji: "🇩🇪"
 syndication:
   - https://mastodon.social/@barryf/112871486467066739
 ---

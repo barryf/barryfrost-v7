@@ -2,6 +2,7 @@
 title: "Week 52 - Solo"
 date: 2022-08-21
 week: 52
+emoji: "🙋‍♂️"
 syndication:
   - https://twitter.com/barryf/status/1561444226076114944
 ---

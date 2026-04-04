@@ -2,6 +2,7 @@
 title: "Week 58 - Colder"
 date: 2022-10-02
 week: 58
+emoji: "❄️"
 syndication:
   - https://twitter.com/barryf/status/1576663753332035584
 ---

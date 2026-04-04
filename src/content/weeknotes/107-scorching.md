@@ -2,6 +2,7 @@
 title: "Week 107 - Scorching"
 date: 2023-09-10
 week: 107
+emoji: "🥵"
 syndication:
   - https://mastodon.social/@barryf/111042672273635565
 ---

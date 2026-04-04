@@ -2,6 +2,7 @@
 title: "Week 210 - Ibiza"
 date: 2025-09-07
 week: 210
+emoji: "🇪🇸"
 syndication:
   - https://mastodon.social/@barryf/115162038357808016
   - https://bsky.app/profile/barryfrost.com/post/3lyab247qpm2h

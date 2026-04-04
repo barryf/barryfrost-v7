@@ -2,6 +2,7 @@
 title: "Week 55 - Succession"
 date: 2022-09-11
 week: 55
+emoji: "🇬🇧"
 syndication:
   - https://twitter.com/barryf/status/1569065222714826753
 ---

@@ -2,6 +2,7 @@
 title: "Week 203 - Alarmed"
 date: 2025-07-14
 week: 203
+emoji: "🚨"
 syndication:
   - https://mastodon.social/@barryf/114852005209978699
   - https://bsky.app/profile/barryfrost.com/post/3ltwl7iajvq2d

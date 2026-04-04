@@ -2,6 +2,7 @@
 title: "Week 163 - Celebrities"
 date: 2024-10-07
 week: 163
+emoji: "🤩"
 syndication:
   - https://mastodon.social/@barryf/113267209902833728
 ---

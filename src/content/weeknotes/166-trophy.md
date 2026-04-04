@@ -2,6 +2,7 @@
 title: "Week 166 - Trophy"
 date: 2024-10-28
 week: 166
+emoji: "🏆"
 syndication:
   - https://mastodon.social/@barryf/113386605623855898
 ---

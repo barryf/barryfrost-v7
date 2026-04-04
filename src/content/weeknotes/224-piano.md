@@ -2,6 +2,7 @@
 title: "Week 224 - Piano"
 date: 2025-12-08
 week: 224
+emoji: "🎹"
 syndication:
   - https://mastodon.social/@barryf/115684967424385884
   - https://bsky.app/profile/barryfrost.com/post/3m7iicsihew2m

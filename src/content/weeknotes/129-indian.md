@@ -2,6 +2,7 @@
 title: "Week 129 - Indian"
 date: 2024-02-11
 week: 129
+emoji: "🇮🇳"
 syndication:
   - https://mastodon.social/@barryf/111914912031897895
 ---

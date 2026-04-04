@@ -2,6 +2,7 @@
 title: "Week 119 - Ouch"
 date: 2023-12-03
 week: 119
+emoji: "😖"
 syndication:
   - https://mastodon.social/@barryf/111518484424874898
 ---

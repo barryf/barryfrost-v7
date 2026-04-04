@@ -2,6 +2,7 @@
 title: "Week 211 - School"
 date: 2025-09-07
 week: 211
+emoji: "📚"
 syndication:
   - https://mastodon.social/@barryf/115162047799110818
   - https://bsky.app/profile/barryfrost.com/post/3lyab6gbxie2l

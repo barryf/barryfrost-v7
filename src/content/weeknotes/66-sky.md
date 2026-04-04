@@ -2,6 +2,7 @@
 title: "Week 66 - Sky"
 date: 2022-11-27
 week: 66
+emoji: "📡"
 syndication:
   - https://mastodon.social/@barryf/109417772592422352
   - https://twitter.com/barryf/status/1596971891553865728

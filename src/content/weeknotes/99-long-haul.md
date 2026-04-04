@@ -2,6 +2,7 @@
 title: "Week 99 - Long-haul"
 date: 2023-07-17
 week: 99
+emoji: "🛫"
 syndication:
   - https://mastodon.social/@barryf/110730978445174197
 ---

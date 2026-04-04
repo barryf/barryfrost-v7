@@ -2,6 +2,7 @@
 title: "Week 120 - Hotel"
 date: 2023-12-10
 week: 120
+emoji: "🏨"
 syndication:
   - https://mastodon.social/@barryf/111557956708798303
 ---

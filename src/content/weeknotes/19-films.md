@@ -2,6 +2,7 @@
 title: "Week 19: Films"
 date: 2022-01-02
 week: 19
+emoji: "🎬"
 syndication:
   - https://twitter.com/barryf/status/1477746296958111758
 ---

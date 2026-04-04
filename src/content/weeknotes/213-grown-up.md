@@ -2,6 +2,7 @@
 title: "Week 213 - Grown-up"
 date: 2025-09-22
 week: 213
+emoji: "👴🏻"
 syndication:
   - https://mastodon.social/@barryf/115248597205112788
   - https://bsky.app/profile/barryfrost.com/post/3lzgp4nn4el2v

@@ -2,6 +2,7 @@
 title: "Week 214 - Last-minute"
 date: 2025-09-28
 week: 214
+emoji: "⏱️"
 syndication:
   - https://mastodon.social/@barryf/115283737535779522
   - https://bsky.app/profile/barryfrost.com/post/3lzwcimblkz2i

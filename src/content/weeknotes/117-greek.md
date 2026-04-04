@@ -2,6 +2,7 @@
 title: "Week 117 - Greek"
 date: 2023-11-19
 week: 117
+emoji: "🇬🇷"
 syndication:
   - https://mastodon.social/@barryf/111439382230937204
 ---

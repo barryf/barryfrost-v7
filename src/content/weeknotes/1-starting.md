@@ -2,6 +2,7 @@
 title: "Week 1: Starting"
 date: 2021-08-29
 week: 1
+emoji: "👋"
 syndication:
   - https://twitter.com/barryf/status/1432277030188552194
 ---

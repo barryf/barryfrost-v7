@@ -2,6 +2,7 @@
 title: "Week 111 - Pigs"
 date: 2023-10-08
 week: 111
+emoji: "🐷"
 syndication:
   - https://mastodon.social/@barryf/111200941627711681
 ---

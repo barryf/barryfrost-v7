@@ -2,6 +2,7 @@
 title: "Week 45: Lightning"
 date: 2022-07-04
 week: 45
+emoji: "⚡️"
 syndication:
   - https://twitter.com/barryf/status/1544069197126373379
 ---

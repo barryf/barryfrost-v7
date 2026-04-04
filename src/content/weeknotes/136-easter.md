@@ -2,6 +2,7 @@
 title: "Week 136 - Easter"
 date: 2024-03-31
 week: 136
+emoji: "🐰"
 syndication:
   - https://mastodon.social/@barryf/112192220788647922
 ---

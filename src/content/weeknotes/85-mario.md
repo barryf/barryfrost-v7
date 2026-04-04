@@ -2,6 +2,7 @@
 title: "Week 85 - Mario"
 date: 2023-04-10
 week: 85
+emoji: "🍄"
 syndication:
   - https://mastodon.social/@barryf/110174240487033793
   - https://twitter.com/barryf/status/1645385753218940928

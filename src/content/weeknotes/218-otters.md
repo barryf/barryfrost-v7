@@ -2,6 +2,7 @@
 title: "Week 218 - Otters"
 date: 2025-10-26
 week: 218
+emoji: "🦦"
 syndication:
   - https://mastodon.social/@barryf/115441676985902608
   - https://bsky.app/profile/barryfrost.com/post/3m44gx23apl25

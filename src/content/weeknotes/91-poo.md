@@ -2,6 +2,7 @@
 title: "Week 91 - Poo"
 date: 2023-05-22
 week: 91
+emoji: "💩"
 syndication:
   - https://staging.bsky.app/profile/barryfrost.com/post/3jwcr7bgfmu2x
   - https://mastodon.social/@barryf/110411881400389964

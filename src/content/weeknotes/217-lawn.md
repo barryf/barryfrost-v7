@@ -2,6 +2,7 @@
 title: "Week 217 - Lawn"
 date: 2025-10-19
 week: 217
+emoji: "🌱"
 syndication:
   - https://mastodon.social/@barryf/115402595064051274
   - https://bsky.app/profile/barryfrost.com/post/3m3l3kl6zzt2o

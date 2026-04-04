@@ -2,6 +2,7 @@
 title: "Week 125 - Masters"
 date: 2024-01-14
 week: 125
+emoji: "⚪️"
 syndication:
   - https://mastodon.social/@barryf/111755929214449650
 ---

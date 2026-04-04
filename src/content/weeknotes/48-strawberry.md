@@ -2,6 +2,7 @@
 title: "Week 48 - Strawberry"
 date: 2022-07-24
 week: 48
+emoji: "🍓"
 syndication:
   - https://twitter.com/barryf/status/1551289568988741634
 ---

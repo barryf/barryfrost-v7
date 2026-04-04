@@ -2,6 +2,7 @@
 title: "Week 188 - Mother"
 date: 2025-03-31
 week: 188
+emoji: "👩"
 syndication:
   - https://mastodon.social/@barryf/114256160700569184
   - https://bsky.app/profile/barryfrost.com/post/3llnxqo3os227

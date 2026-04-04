@@ -2,6 +2,7 @@
 title: "Week 183 - Loud"
 date: 2025-02-23
 week: 183
+emoji: "🙉"
 syndication:
   - https://mastodon.social/@barryf/114055255723788227
   - https://bsky.app/profile/barryfrost.com/post/3liuqpolecp22

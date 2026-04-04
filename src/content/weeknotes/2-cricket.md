@@ -2,6 +2,7 @@
 title: "Week 2: Cricket"
 date: 2021-09-05
 week: 2
+emoji: "🏏"
 syndication:
   - https://twitter.com/barryf/status/1434599469706842113
 ---

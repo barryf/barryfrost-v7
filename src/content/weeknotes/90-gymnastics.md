@@ -2,6 +2,7 @@
 title: "Week 90 - Gymnastics"
 date: 2023-05-15
 week: 90
+emoji: "🤸‍♀️"
 syndication:
   - https://twitter.com/barryf/status/1658035864226652161
   - https://mastodon.social/@barryf/110371899641874696

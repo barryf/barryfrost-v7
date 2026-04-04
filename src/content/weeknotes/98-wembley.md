@@ -2,6 +2,7 @@
 title: "Week 98 - Wembley"
 date: 2023-07-09
 week: 98
+emoji: "🏟️"
 syndication:
   - https://mastodon.social/@barryf/110685903133674241
 ---

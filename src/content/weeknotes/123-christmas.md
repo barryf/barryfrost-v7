@@ -2,6 +2,7 @@
 title: "Week 123 - Christmas"
 date: 2024-01-01
 week: 123
+emoji: "🎄"
 syndication:
   - https://mastodon.social/@barryf/111680677380623312
   - https://bsky.app/profile/barryfrost.com/post/3khw7warbe22b

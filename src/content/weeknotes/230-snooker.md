@@ -2,6 +2,7 @@
 title: "Week 230 - Snooker"
 date: 2026-01-19
 week: 230
+emoji: "🎱"
 syndication:
   - https://mastodon.social/@barryf/115923007940002483
   - https://bsky.app/profile/barryfrost.com/post/3mcs732bq5d2u

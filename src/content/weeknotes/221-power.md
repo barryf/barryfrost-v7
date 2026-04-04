@@ -2,6 +2,7 @@
 title: "Week 221 - Power"
 date: 2025-11-17
 week: 221
+emoji: "🔋"
 syndication:
   - https://mastodon.social/@barryf/115565886474032774
   - https://bsky.app/profile/barryfrost.com/post/3m5tm33meb32d

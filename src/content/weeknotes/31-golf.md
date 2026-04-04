@@ -2,6 +2,7 @@
 title: "Week 31: Golf"
 date: 2022-03-27
 week: 31
+emoji: "⛳️"
 syndication:
   - https://twitter.com/barryf/status/1508184460965130246
 ---

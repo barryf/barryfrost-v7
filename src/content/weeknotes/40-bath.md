@@ -2,6 +2,7 @@
 title: "Week 40: Bath"
 date: 2022-05-29
 week: 40
+emoji: "🛁"
 syndication:
   - https://twitter.com/barryf/status/1531002586010112001
 ---

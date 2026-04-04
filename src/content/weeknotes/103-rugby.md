@@ -2,6 +2,7 @@
 title: "Week 103 - Rugby"
 date: 2023-08-13
 week: 103
+emoji: "🏉"
 syndication:
   - https://mastodon.social/@barryf/110884055633566835
 ---

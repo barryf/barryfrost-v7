@@ -2,6 +2,7 @@
 title: "Week 137 - Cycling"
 date: 2024-04-08
 week: 137
+emoji: "🚲"
 syndication:
   - https://mastodon.social/@barryf/112236790318596381
 ---

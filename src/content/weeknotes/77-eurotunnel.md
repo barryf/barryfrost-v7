@@ -2,6 +2,7 @@
 title: "Week 77 - Eurotunnel"
 date: 2023-02-19
 week: 77
+emoji: "🚇"
 syndication:
   - https://mastodon.social/@barryf/109893337833025603
 ---

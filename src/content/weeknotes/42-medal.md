@@ -2,6 +2,7 @@
 title: "Week 42: Medal"
 date: 2022-06-12
 week: 42
+emoji: "🏅"
 syndication:
   - https://twitter.com/barryf/status/1536085630505066496
 ---

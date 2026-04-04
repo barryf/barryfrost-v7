@@ -2,6 +2,7 @@
 title: "Week 43: Father"
 date: 2022-06-19
 week: 43
+emoji: "👨‍👦‍👦"
 syndication:
   - https://twitter.com/barryf/status/1538602383290294273
 ---

@@ -2,6 +2,7 @@
 title: "Week 185 - Pancakes"
 date: 2025-03-10
 week: 185
+emoji: "🥞"
 syndication:
   - https://mastodon.social/@barryf/114139243294167934
   - https://bsky.app/profile/barryfrost.com/post/3lk22atg44g2c

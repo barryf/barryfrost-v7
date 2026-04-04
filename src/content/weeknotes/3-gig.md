@@ -2,6 +2,7 @@
 title: "Week 3: Gig"
 date: 2021-09-12
 week: 3
+emoji: "🎶"
 syndication:
   - https://twitter.com/barryf/status/1437143944912121856
 ---

@@ -2,6 +2,7 @@
 title: "Week 72 - Bowling"
 date: 2023-01-08
 week: 72
+emoji: "🎳"
 syndication:
   - https://mastodon.social/@barryf/109655419183547574
   - https://twitter.com/barryf/status/1612181192475820033

@@ -2,6 +2,7 @@
 title: "Week 104 - Lionesses"
 date: 2023-08-21
 week: 104
+emoji: "🦁"
 syndication:
   - https://mastodon.social/@barryf/110926903745942656
   - https://staging.bsky.app/profile/barryfrost.com/post/3k5hi5palul26

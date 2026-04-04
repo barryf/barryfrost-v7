@@ -2,6 +2,7 @@
 title: "Week 162 - Running"
 date: 2024-09-29
 week: 162
+emoji: "🏃‍♂️"
 syndication:
   - https://mastodon.social/@barryf/113222490661663268
 ---

@@ -2,6 +2,7 @@
 title: "Week 189 - Injury"
 date: 2025-04-06
 week: 189
+emoji: "🤕"
 syndication:
   - https://mastodon.social/@barryf/114292757388842280
   - https://bsky.app/profile/barryfrost.com/post/3lm67swm2nq2v

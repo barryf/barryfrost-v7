@@ -2,6 +2,7 @@
 title: "Week 51 - Spider"
 date: 2022-08-14
 week: 51
+emoji: "🕷"
 syndication:
   - https://twitter.com/barryf/status/1558905000360820736
 ---

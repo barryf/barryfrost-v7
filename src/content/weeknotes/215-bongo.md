@@ -2,6 +2,7 @@
 title: "Week 215 - Bongo"
 date: 2025-10-10
 week: 215
+emoji: "🪘"
 syndication:
   - https://bsky.app/profile/barryfrost.com/post/3m2u6nu2alf2i
   - https://mastodon.social/@barryf/115351022879043936

@@ -2,6 +2,7 @@
 title: "Week 109 - Football"
 date: 2023-09-24
 week: 109
+emoji: "⚽️"
 syndication:
   - https://mastodon.social/@barryf/111121649829817729
 ---

@@ -2,6 +2,7 @@
 title: "Week 198 - Gaming"
 date: 2025-06-08
 week: 198
+emoji: "🕹️"
 syndication:
   - https://mastodon.social/@barryf/114648577446646375
   - https://bsky.app/profile/barryfrost.com/post/3lr4ad4zl6m2w

@@ -2,6 +2,7 @@
 title: "Week 82 - Clean"
 date: 2023-03-19
 week: 82
+emoji: "🧼"
 syndication:
   - https://mastodon.social/@barryf/110052092895156978
 ---

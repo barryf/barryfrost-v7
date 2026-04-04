@@ -2,6 +2,7 @@
 title: "Week 87 - Anniversary"
 date: 2023-04-23
 week: 87
+emoji: "🥂"
 syndication:
   - https://mastodon.social/@barryf/110249951555278741
   - https://twitter.com/barryf/status/1650231240312725504

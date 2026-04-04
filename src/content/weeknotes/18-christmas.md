@@ -2,6 +2,7 @@
 title: "Week 18: Christmas"
 date: 2021-12-27
 week: 18
+emoji: "🎄"
 syndication:
   - https://twitter.com/barryf/status/1475587478170046475
 ---

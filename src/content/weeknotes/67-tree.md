@@ -2,6 +2,7 @@
 title: "Week 67 - Tree"
 date: 2022-12-04
 week: 67
+emoji: "🎄"
 syndication:
   - https://twitter.com/barryf/status/1599525700343660552
   - https://mastodon.social/@barryf/109457678525924900

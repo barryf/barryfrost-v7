@@ -2,6 +2,7 @@
 title: "Week 174 - Church"
 date: 2024-12-23
 week: 174
+emoji: "⛪️"
 syndication:
   - https://mastodon.social/@barryf/113701990773806753
   - https://bsky.app/profile/barryfrost.com/post/3ldxujef4on2b

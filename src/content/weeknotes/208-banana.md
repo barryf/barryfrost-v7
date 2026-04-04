@@ -2,6 +2,7 @@
 title: "Week 208 - Banana"
 date: 2025-08-18
 week: 208
+emoji: "🍌"
 syndication:
   - https://mastodon.social/@barryf/115049359535942330
   - https://bsky.app/profile/barryfrost.com/post/3lwo7sslyee2m

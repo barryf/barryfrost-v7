@@ -2,6 +2,7 @@
 title: "Week 56 - Quiz"
 date: 2022-09-18
 week: 56
+emoji: "🤔"
 syndication:
   - https://twitter.com/barryf/status/1571593032616607751
 ---

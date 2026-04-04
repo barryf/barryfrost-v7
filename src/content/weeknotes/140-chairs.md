@@ -2,6 +2,7 @@
 title: "Week 140 - Chairs"
 date: 2024-04-28
 week: 140
+emoji: "🪑"
 syndication:
   - https://mastodon.social/@barryf/112350820835715556
 ---

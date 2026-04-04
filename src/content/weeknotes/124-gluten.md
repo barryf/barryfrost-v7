@@ -2,6 +2,7 @@
 title: "Week 124 - Gluten"
 date: 2024-01-08
 week: 124
+emoji: "🍞"
 syndication:
   - https://mastodon.social/@barryf/111722385991225499
   - https://bsky.app/profile/barryfrost.com/post/3kiiqn4u3mw2z

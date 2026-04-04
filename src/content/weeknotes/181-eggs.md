@@ -2,6 +2,7 @@
 title: "Week 181 - Eggs"
 date: 2025-02-09
 week: 181
+emoji: "🍳"
 syndication:
   - https://mastodon.social/@barryf/113975826621745490
   - https://bsky.app/profile/barryfrost.com/post/3lhrhxl3p6g2u

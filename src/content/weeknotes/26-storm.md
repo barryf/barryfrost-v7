@@ -2,6 +2,7 @@
 title: "Week 26: Storm"
 date: 2022-02-20
 week: 26
+emoji: "💨"
 syndication:
   - https://twitter.com/barryf/status/1495499452597080064
 ---

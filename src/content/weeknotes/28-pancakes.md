@@ -2,6 +2,7 @@
 title: "Week 28: Pancakes"
 date: 2022-03-06
 week: 28
+emoji: "🥞"
 syndication:
   - https://twitter.com/barryf/status/1500578318122459137
 ---

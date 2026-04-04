@@ -2,6 +2,7 @@
 title: "Week 71 - Coat"
 date: 2023-01-01
 week: 71
+emoji: "🧥"
 syndication:
   - https://twitter.com/barryf/status/1609674830999060482
   - https://mastodon.social/@barryf/109616260184631726

@@ -2,6 +2,7 @@
 title: "Week 134 - Yawn"
 date: 2024-03-17
 week: 134
+emoji: "🥱"
 syndication:
   - https://mastodon.social/@barryf/112112800014446785
 ---

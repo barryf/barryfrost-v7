@@ -2,6 +2,7 @@
 title: "Week 101 - Glasses"
 date: 2023-07-31
 week: 101
+emoji: "👓"
 syndication:
   - https://mastodon.social/@barryf/110810437685032784
 ---

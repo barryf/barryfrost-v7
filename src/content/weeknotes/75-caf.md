@@ -2,6 +2,7 @@
 title: "Week 75 - Café"
 date: 2023-01-29
 week: 75
+emoji: "☕️"
 ---
 
 - More calls and a couple of interviews this week. I'm narrowing down to a few roles that I like, although all are at early stages. The initial panic of unemployment has subsided as I realise I'm lucky to have enough time to be picky.

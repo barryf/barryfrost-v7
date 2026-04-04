@@ -2,6 +2,7 @@
 title: "Week 225 - Lunch"
 date: 2025-12-16
 week: 225
+emoji: "🍽️"
 syndication:
   - https://bsky.app/profile/barryfrost.com/post/3ma4cgvrzyl26
   - https://mastodon.social/@barryf/115729591321557664

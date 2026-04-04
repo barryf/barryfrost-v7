@@ -2,6 +2,7 @@
 title: "Week 6: Local"
 date: 2021-10-03
 week: 6
+emoji: "🏡"
 syndication:
   - https://twitter.com/barryf/status/1444739073323802630
 ---

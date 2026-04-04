@@ -2,6 +2,7 @@
 title: "Week 131 - Towers"
 date: 2024-02-25
 week: 131
+emoji: "🗼"
 syndication:
   - https://mastodon.social/@barryf/111994201763931201
 ---

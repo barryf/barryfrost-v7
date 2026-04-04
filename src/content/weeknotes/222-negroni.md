@@ -2,6 +2,7 @@
 title: "Week 222 - Negroni"
 date: 2025-11-24
 week: 222
+emoji: "🥃"
 syndication:
   - https://mastodon.social/@barryf/115604575472627867
   - https://bsky.app/profile/barryfrost.com/post/3m6eruozm7x2d

@@ -13,6 +13,6 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 ---
-<Post title={entry.data.title} date={entry.data.date} description={entry.data.description} category="weeknotes">
+<Post title={entry.data.title} date={entry.data.date} description={entry.data.description} category="weeknotes" emoji={entry.data.emoji}>
   <Content />
 </Post>

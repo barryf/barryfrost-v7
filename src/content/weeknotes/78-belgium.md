@@ -2,6 +2,7 @@
 title: "Week 78 - Belgium"
 date: 2023-02-19
 week: 78
+emoji: "🇧🇪"
 ---
 
 - Our holiday continued at Center Parcs in De Haan, Belgium.

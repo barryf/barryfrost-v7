@@ -2,6 +2,7 @@
 title: "Week 173 - Rainbows"
 date: 2024-12-16
 week: 173
+emoji: "🌈"
 syndication:
   - https://mastodon.social/@barryf/113662621720004253
   - https://bsky.app/profile/barryfrost.com/post/3ldgf2h2o722k

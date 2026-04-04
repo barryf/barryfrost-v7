@@ -2,6 +2,7 @@
 title: "Week 84 - Egg"
 date: 2023-04-02
 week: 84
+emoji: "🥚"
 syndication:
   - https://mastodon.social/@barryf/110131152636908760
 ---

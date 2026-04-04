@@ -2,6 +2,7 @@
 title: "Week 182 - Celebrate"
 date: 2025-02-17
 week: 182
+emoji: "🥳"
 syndication:
   - https://mastodon.social/@barryf/114020444649183822
   - https://bsky.app/profile/barryfrost.com/post/3lifbzfoigs2x

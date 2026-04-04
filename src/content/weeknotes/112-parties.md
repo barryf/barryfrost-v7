@@ -2,6 +2,7 @@
 title: "Week 112 - Parties"
 date: 2023-10-15
 week: 112
+emoji: "🎊"
 syndication:
   - https://mastodon.social/@barryf/111240848139411531
 ---

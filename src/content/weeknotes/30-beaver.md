@@ -2,6 +2,7 @@
 title: "Week 30: Beaver"
 date: 2022-03-20
 week: 30
+emoji: "🦫"
 syndication:
   - https://twitter.com/barryf/status/1505640049983041536
 ---

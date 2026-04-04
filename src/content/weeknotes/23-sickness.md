@@ -2,6 +2,7 @@
 title: "Week 23: Sickness"
 date: 2022-01-30
 week: 23
+emoji: "😷"
 syndication:
   - https://twitter.com/barryf/status/1487888389844213764
 ---

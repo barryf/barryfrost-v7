@@ -2,6 +2,7 @@
 title: "Week 29: Park"
 date: 2022-03-13
 week: 29
+emoji: "🏞"
 syndication:
   - https://twitter.com/barryf/status/1503116170513334284
 ---

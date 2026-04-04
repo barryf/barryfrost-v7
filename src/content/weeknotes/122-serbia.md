@@ -2,6 +2,7 @@
 title: "Week 122 - Serbia"
 date: 2023-12-24
 week: 122
+emoji: "🇷🇸"
 syndication:
   - https://mastodon.social/@barryf/111635604888411741
   - https://bsky.app/profile/barryfrost.com/post/3khc7fnmqv72c

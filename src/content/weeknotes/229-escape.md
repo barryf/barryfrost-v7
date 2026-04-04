@@ -2,6 +2,7 @@
 title: "Week 229 - Escape"
 date: 2026-01-12
 week: 229
+emoji: "🚪"
 syndication:
   - https://mastodon.social/@barryf/115883468676049344
   - https://bsky.app/profile/barryfrost.com/post/3mcan6n3joq2a

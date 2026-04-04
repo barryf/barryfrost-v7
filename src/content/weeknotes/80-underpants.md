@@ -2,6 +2,7 @@
 title: "Week 80 - Underpants"
 date: 2023-03-05
 week: 80
+emoji: "🩲"
 syndication:
   - https://mastodon.social/@barryf/109972879368148057
 ---

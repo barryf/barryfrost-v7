@@ -2,6 +2,7 @@
 title: "Week 114 - Stadium"
 date: 2023-10-29
 week: 114
+emoji: "🏟️"
 syndication:
   - https://mastodon.social/@barryf/111320460674134196
 ---

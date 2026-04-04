@@ -2,6 +2,7 @@
 title: "Week 178 - Maximum"
 date: 2025-01-20
 week: 178
+emoji: "⚫️"
 syndication:
   - https://mastodon.social/@barryf/113861444020196906
   - https://bsky.app/profile/barryfrost.com/post/3lg6oidsd262v

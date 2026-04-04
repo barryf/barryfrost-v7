@@ -2,6 +2,7 @@
 title: "Week 27: Ukraine"
 date: 2022-02-27
 week: 27
+emoji: "🇺🇦"
 syndication:
   - https://twitter.com/barryf/status/1498029284543324161
 ---

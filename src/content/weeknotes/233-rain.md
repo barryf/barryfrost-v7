@@ -2,6 +2,7 @@
 title: "Week 233 - Rain"
 date: 2026-02-09
 week: 233
+emoji: "☔️"
 syndication:
   - https://mastodon.social/@barryf/116041381474483313
   - https://bsky.app/profile/barryfrost.com/post/3megrb4zids2k

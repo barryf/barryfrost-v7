@@ -2,6 +2,7 @@
 title: "Week 49 - Kite"
 date: 2022-07-31
 week: 49
+emoji: "🪁"
 syndication:
   - https://twitter.com/barryf/status/1553850609870278657
 ---

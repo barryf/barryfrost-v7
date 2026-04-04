@@ -2,6 +2,7 @@
 title: "Week 204 - Kong"
 date: 2025-07-21
 week: 204
+emoji: "🦍"
 syndication:
   - https://mastodon.social/@barryf/114892551603079407
   - https://bsky.app/profile/barryfrost.com/post/3luilfprb242d

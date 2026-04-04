@@ -1,12 +1,16 @@
 import { getCollection } from 'astro:content';
 import { yearMonth } from './dates';
+import { DID } from './pds';
+
+const DID_SHORT = DID.replace('did:plc:', '');
 
 export interface FeedItem {
-  type: 'article' | 'weeknote' | 'bluesky' | 'checkin' | 'review';
+  type: 'article' | 'weeknote' | 'bluesky' | 'checkin' | 'review' | 'book';
   date: Date;
   url: string;
   title?: string;
   summary?: string;
+  emoji?: string;
   id: string;
   data: Record<string, unknown>;
 }
@@ -14,12 +18,13 @@ export interface FeedItem {
 export const PAGE_SIZE = 20;
 
 export async function getUnifiedFeed(): Promise<FeedItem[]> {
-  const [articles, weeknotes, blueskyPosts, checkinEntries, reviewEntries] = await Promise.all([
+  const [articles, weeknotes, blueskyPosts, checkinEntries, reviewEntries, bookEntries] = await Promise.all([
     getCollection('articles'),
     getCollection('weeknotes'),
     getCollection('blueskyPosts'),
     getCollection('checkins'),
     getCollection('reviews'),
+    getCollection('books'),
   ]);
 
   const items: FeedItem[] = [];
@@ -44,6 +49,7 @@ export async function getUnifiedFeed(): Promise<FeedItem[]> {
       url: `/weeknotes/${entry.id}`,
       title: entry.data.title,
       summary: entry.data.description,
+      emoji: entry.data.emoji,
       id: `weeknote:${entry.id}`,
       data: entry.data as unknown as Record<string, unknown>,
     });
@@ -53,7 +59,7 @@ export async function getUnifiedFeed(): Promise<FeedItem[]> {
     items.push({
       type: 'bluesky',
       date: new Date(entry.data.createdAt),
-      url: `/app.bsky.feed.post/${entry.id}`,
+      url: `https://bsky.app/profile/${DID}/post/${entry.id}`,
       summary: entry.data.text.slice(0, 200),
       id: `bluesky:${entry.id}`,
       data: entry.data as unknown as Record<string, unknown>,
@@ -64,7 +70,7 @@ export async function getUnifiedFeed(): Promise<FeedItem[]> {
     items.push({
       type: 'checkin',
       date: new Date(entry.data.createdAt),
-      url: `/app.beaconbits.beacon/${entry.id}`,
+      url: `https://www.beaconbits.app/beacons/${DID_SHORT}/${entry.id}`,
       title: entry.data.venueName,
       summary: entry.data.venueAddress,
       id: `checkin:${entry.id}`,
@@ -76,10 +82,23 @@ export async function getUnifiedFeed(): Promise<FeedItem[]> {
     items.push({
       type: 'review',
       date: new Date(entry.data.createdAt),
-      url: `/social.popfeed.feed.review/${entry.id}`,
+      url: `https://popfeed.social/review/at:/${DID}/social.popfeed.feed.review/${entry.id}`,
       title: entry.data.title,
       summary: entry.data.text || `${entry.data.creativeWorkType} — ${entry.data.rating}/10`,
       id: `review:${entry.id}`,
+      data: entry.data as unknown as Record<string, unknown>,
+    });
+  }
+
+  for (const entry of bookEntries) {
+    const date = new Date(entry.data.finishedAt ?? entry.data.createdAt);
+    items.push({
+      type: 'book',
+      date,
+      url: `https://bookhive.buzz/books/${entry.data.hiveId}`,
+      title: entry.data.title,
+      summary: entry.data.authors,
+      id: `book:${entry.id}`,
       data: entry.data as unknown as Record<string, unknown>,
     });
   }

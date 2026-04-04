@@ -2,6 +2,7 @@
 title: "Week 81 - Presentation"
 date: 2023-03-12
 week: 81
+emoji: "🧑‍💻"
 ---
 
 - I don't want to break the streak of posting weeknotes for the last 80 weeks, but I'm struggling to fill this week's entry with anything other than job-hunting. I won't be insulted if you skip this!

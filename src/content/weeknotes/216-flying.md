@@ -2,6 +2,7 @@
 title: "Week 216 - Flying"
 date: 2025-10-12
 week: 216
+emoji: "✈️"
 syndication:
   - https://mastodon.social/@barryf/115363058509789504
   - https://bsky.app/profile/barryfrost.com/post/3m2zjpjupf622

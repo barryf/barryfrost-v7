@@ -2,6 +2,7 @@
 title: "Week 212 - Together"
 date: 2025-09-14
 week: 212
+emoji: "🤝"
 syndication:
   - https://mastodon.social/@barryf/115204324198929071
   - https://bsky.app/profile/barryfrost.com/post/3lyszxlk7f72q

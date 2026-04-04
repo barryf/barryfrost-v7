@@ -2,6 +2,7 @@
 title: "Week 63 - Halloween"
 date: 2022-11-06
 week: 63
+emoji: "🎃"
 syndication:
   - https://twitter.com/barryf/status/1589358557811871745
 ---

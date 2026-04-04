@@ -2,6 +2,7 @@
 title: "Week 227 - Christmas"
 date: 2025-12-30
 week: 227
+emoji: "🎅"
 syndication:
   - https://mastodon.social/@barryf/115809665945798570
   - https://bsky.app/profile/barryfrost.com/post/3mb7uf3ejnp2a

@@ -2,6 +2,7 @@
 title: "Week 68 - Santa"
 date: 2022-12-11
 week: 68
+emoji: "🎅"
 syndication:
   - https://twitter.com/barryf/status/1602027278120230913
   - https://mastodon.social/@barryf/109496765618361204

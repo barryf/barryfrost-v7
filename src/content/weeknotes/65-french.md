@@ -2,6 +2,7 @@
 title: "Week 65 - French"
 date: 2022-11-20
 week: 65
+emoji: "🇫🇷"
 syndication:
   - https://twitter.com/barryf/status/1594439999663083523
   - https://mastodon.social/@barryf/109378214728368088

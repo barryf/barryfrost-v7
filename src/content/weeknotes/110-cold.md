@@ -2,6 +2,7 @@
 title: "Week 110 - Cold"
 date: 2023-10-01
 week: 110
+emoji: "🤕"
 syndication:
   - https://mastodon.social/@barryf/111161507988841869
 ---

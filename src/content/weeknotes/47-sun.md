@@ -2,6 +2,7 @@
 title: "Week 47 - Sun"
 date: 2022-07-17
 week: 47
+emoji: "🔆"
 syndication:
   - https://twitter.com/barryf/status/1548768170919559168
 ---

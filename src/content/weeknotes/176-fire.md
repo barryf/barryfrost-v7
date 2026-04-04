@@ -2,6 +2,7 @@
 title: "Week 176 - Fire"
 date: 2025-01-05
 week: 176
+emoji: "🔥"
 syndication:
   - https://mastodon.social/@barryf/113777941321499362
   - https://bsky.app/profile/barryfrost.com/post/3lezltrlgji2b

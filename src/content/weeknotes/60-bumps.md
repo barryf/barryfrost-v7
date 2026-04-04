@@ -2,6 +2,7 @@
 title: "Week 60 - Bumps"
 date: 2022-10-16
 week: 60
+emoji: "🤕"
 syndication:
   - https://twitter.com/barryf/status/1581718713245454337
 ---

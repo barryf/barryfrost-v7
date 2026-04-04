@@ -2,6 +2,7 @@
 title: "Week 57 - Fraud"
 date: 2022-09-25
 week: 57
+emoji: "👹"
 syndication:
   - https://twitter.com/barryf/status/1574132579791519746
 ---

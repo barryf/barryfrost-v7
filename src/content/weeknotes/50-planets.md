@@ -2,6 +2,7 @@
 title: "Week 50 - Planets"
 date: 2022-08-07
 week: 50
+emoji: "🪐"
 syndication:
   - https://twitter.com/barryf/status/1556369994413445121
 ---

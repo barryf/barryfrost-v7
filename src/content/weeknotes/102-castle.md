@@ -2,6 +2,7 @@
 title: "Week 102 - Castle"
 date: 2023-08-07
 week: 102
+emoji: "🏰"
 syndication:
   - https://mastodon.social/@barryf/110850181467371706
 ---

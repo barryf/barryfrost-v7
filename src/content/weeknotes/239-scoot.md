@@ -2,6 +2,7 @@
 title: "Week 239 - Scoot"
 date: 2026-03-23
 week: 239
+emoji: "🛴"
 syndication:
   - https://mastodon.social/@barryf/116279069102173069
   - https://bsky.app/profile/barryfrost.com/post/3mhqcyvdxic2i

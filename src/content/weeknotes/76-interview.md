@@ -2,6 +2,7 @@
 title: "Week 76 - Interview"
 date: 2023-02-05
 week: 76
+emoji: "🤔"
 syndication:
   - https://twitter.com/barryf/status/1622334991718809600
   - https://mastodon.social/@barryf/109814074474506956

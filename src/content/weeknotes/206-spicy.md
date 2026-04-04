@@ -2,6 +2,7 @@
 title: "Week 206 - Spicy"
 date: 2025-08-04
 week: 206
+emoji: "🥵"
 syndication:
   - https://mastodon.social/@barryf/114970498158478950
   - https://bsky.app/profile/barryfrost.com/post/3lvl73vkc3w2p

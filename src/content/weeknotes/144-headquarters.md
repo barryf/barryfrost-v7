@@ -2,6 +2,7 @@
 title: "Week 144 - Headquarters"
 date: 2024-05-26
 week: 144
+emoji: "🏢"
 syndication:
   - https://mastodon.social/@barryf/112509433718843464
 ---

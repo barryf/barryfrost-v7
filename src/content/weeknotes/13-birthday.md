@@ -2,6 +2,7 @@
 title: "Week 13: Birthday"
 date: 2021-11-22
 week: 13
+emoji: "🎂"
 syndication:
   - https://twitter.com/barryf/status/1462799342717345793
 ---

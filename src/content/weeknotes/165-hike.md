@@ -2,6 +2,7 @@
 title: "Week 165 - Hike"
 date: 2024-10-20
 week: 165
+emoji: "🥾"
 syndication:
   - https://mastodon.social/@barryf/113341509811121720
 ---

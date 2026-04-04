@@ -2,6 +2,7 @@
 title: "Week 187 - Singing"
 date: 2025-03-24
 week: 187
+emoji: "🎵"
 syndication:
   - https://mastodon.social/@barryf/114217409197076282
   - https://bsky.app/profile/barryfrost.com/post/3ll4r2skp2o2t

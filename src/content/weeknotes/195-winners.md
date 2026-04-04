@@ -2,6 +2,7 @@
 title: "Week 195 - Winners"
 date: 2025-05-19
 week: 195
+emoji: "🥇"
 syndication:
   - https://mastodon.social/@barryf/114534277033772740
   - https://bsky.app/profile/barryfrost.com/post/3lpjhzclb6v2z

@@ -2,6 +2,7 @@
 title: "Week 4: Fête"
 date: 2021-09-19
 week: 4
+emoji: "🎪"
 syndication:
   - https://twitter.com/barryf/status/1439671056382533634
 ---

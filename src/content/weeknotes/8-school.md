@@ -2,6 +2,7 @@
 title: "Week 8: School"
 date: 2021-10-17
 week: 8
+emoji: "🎓"
 syndication:
   - https://twitter.com/barryf/status/1449832594355458053
 ---

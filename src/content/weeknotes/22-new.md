@@ -2,6 +2,7 @@
 title: "Week 22: New"
 date: 2022-01-23
 week: 22
+emoji: "💫"
 syndication:
   - https://twitter.com/barryf/status/1485353979353649152
 ---

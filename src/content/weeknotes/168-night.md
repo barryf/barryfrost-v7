@@ -2,6 +2,7 @@
 title: "Week 168 - Night"
 date: 2024-11-10
 week: 168
+emoji: "🌚"
 syndication:
   - https://mastodon.social/@barryf/113460902918585304
   - https://bsky.app/profile/barryfrost.com/post/3lamshe3zvb2z

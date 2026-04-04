@@ -2,6 +2,7 @@
 title: "Week 64 - League"
 date: 2022-11-13
 week: 64
+emoji: "🏉"
 syndication:
   - https://mastodon.social/@barryf/109338404660014175
   - https://twitter.com/barryf/status/1591892329908129793

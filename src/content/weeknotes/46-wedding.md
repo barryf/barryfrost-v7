@@ -2,6 +2,7 @@
 title: "Week 46: Wedding"
 date: 2022-07-10
 week: 46
+emoji: "👰‍♀️"
 syndication:
   - https://twitter.com/barryf/status/1546232775614816256
 ---

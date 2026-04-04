@@ -2,6 +2,7 @@
 title: "Week 126 - Chess"
 date: 2024-01-21
 week: 126
+emoji: "♟️"
 syndication:
   - https://mastodon.social/@barryf/111796097900843896
 ---

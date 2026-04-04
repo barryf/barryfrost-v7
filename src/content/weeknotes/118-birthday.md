@@ -2,6 +2,7 @@
 title: "Week 118 - Birthday"
 date: 2023-11-26
 week: 118
+emoji: "🎂"
 syndication:
   - https://mastodon.social/@barryf/111478017785491343
 ---

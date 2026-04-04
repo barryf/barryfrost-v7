@@ -2,6 +2,7 @@
 title: "Week 86 - Beef"
 date: 2023-04-16
 week: 86
+emoji: "🥩"
 syndication:
   - https://mastodon.social/@barryf/110210087747211286
   - https://twitter.com/barryf/status/1647680065474293767

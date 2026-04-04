@@ -2,6 +2,7 @@
 title: "Week 186 - Fake"
 date: 2025-03-17
 week: 186
+emoji: "🥸"
 syndication:
   - https://mastodon.social/@barryf/114179062225942511
   - https://bsky.app/profile/barryfrost.com/post/3lklq4cuzje25

@@ -2,6 +2,7 @@
 title: "Week 194 - Flowers"
 date: 2025-05-12
 week: 194
+emoji: "🪻"
 syndication:
   - https://mastodon.social/@barryf/114495797120343291
   - https://bsky.app/profile/barryfrost.com/post/3loyf6nutcr2x

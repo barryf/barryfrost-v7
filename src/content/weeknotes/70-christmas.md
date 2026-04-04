@@ -2,6 +2,7 @@
 title: "Week 70 - Christmas"
 date: 2022-12-28
 week: 70
+emoji: "🎁"
 syndication:
   - https://twitter.com/barryf/status/1608111346633023490
   - https://mastodon.social/@barryf/109591829384817676

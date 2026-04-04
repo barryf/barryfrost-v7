@@ -2,6 +2,7 @@
 title: "Week 115 - Fireworks"
 date: 2023-11-05
 week: 115
+emoji: "🎆"
 syndication:
   - https://mastodon.social/@barryf/111359816521655717
 ---

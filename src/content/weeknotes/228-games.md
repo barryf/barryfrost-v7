@@ -2,6 +2,7 @@
 title: "Week 228 - Games"
 date: 2026-01-05
 week: 228
+emoji: "🎲"
 syndication:
   - https://mastodon.social/@barryf/115844531147607335
   - https://bsky.app/profile/barryfrost.com/post/3mbpdtutnhq2p

@@ -2,6 +2,7 @@
 title: "Week 196 - Glasses"
 date: 2025-05-26
 week: 196
+emoji: "👓"
 syndication:
   - https://mastodon.social/@barryf/114573315947205367
   - https://bsky.app/profile/barryfrost.com/post/3lq2ss5ayed2m
