@@ -20,66 +20,70 @@ package.json                        — Dependencies and scripts
 tsconfig.json                       — TypeScript config extending Astro's strictest preset
 wrangler.jsonc                      — Cloudflare Workers deployment config
 src/
-  content.config.ts                 — All 7 content collections: articles, weeknotes, pages + 4 PDS loaders
+  content.config.ts                 — All 8 content collections: articles, weeknotes, pages + 5 PDS loaders
   content/
-    articles/                       — Markdown article files (backfilled + new)
-    weeknotes/                      — Markdown weeknote files (backfilled + new)
+    articles/                       — Markdown article files (backfilled + new); support categories + visibility frontmatter
+    weeknotes/                      — Markdown weeknote files (backfilled + new); support emoji + categories + visibility frontmatter
     pages/                          — Markdown slash pages (about, colophon, etc.)
   lib/
     pds.ts                          — AT Protocol XRPC fetch helper with cursor pagination
     loaders/
-      bluesky.ts                    — Custom loader for app.bsky.feed.post
+      bluesky.ts                    — Custom loader for app.bsky.feed.post (filters Week N posts; resolves reply handles)
       checkins.ts                   — Custom loader for app.beaconbits.beacon
       reviews.ts                    — Custom loader for social.popfeed.feed.review
       documents.ts                  — Custom loader for site.standard.document
-    feed.ts                         — Unified feed: merge, normalise, sort, filter, paginate
-    richtext.ts                     — Bluesky facets → HTML converter
+      books.ts                      — Custom loader for buzz.bookhive.book
+    feed.ts                         — Unified feed: merge, normalise, sort, filter, paginate; filterByCategory, getCategories helpers
+    richtext.ts                     — Bluesky facets → HTML converter (links styled with underline class)
     dates.ts                        — Date formatting helpers
+    weeknotes.ts                    — plainExcerpt(), weeknoteLabel() helpers for weeknote detail pages
   components/
     BaseHead.astro                  — <head>: meta, OG tags, fonts, CSS
     Header.astro                    — Site header with nav
     Footer.astro                    — Site footer with h-card
-    Pagination.astro                — Numbered pagination with prev/next
+    Pagination.astro                — 5-page window pagination with prev/next
     FeedEntry.astro                 — Dispatcher: renders the right card by post type
     posts/
       ArticleCard.astro             — Article list item (h-entry)
-      WeeknoteCard.astro            — Weeknote list item (h-entry)
-      BlueskyCard.astro             — Bluesky post list item (h-entry)
+      WeeknoteCard.astro            — Weeknote list item (h-entry); shows emoji prefix
+      BlueskyCard.astro             — Bluesky post list item (h-entry); shows reply context
       CheckinCard.astro             — Checkin list item (h-entry)
-      ReviewCard.astro              — Review list item (h-entry)
+      ReviewCard.astro              — Review list item (h-entry); star rating display
+      BookCard.astro                — Book list item (h-entry); cover image + bookhive link
     embeds/
       ExternalEmbed.astro           — Bluesky link card embed
       ImageEmbed.astro              — Bluesky image gallery embed
   layouts/
     Base.astro                      — HTML shell: doctype, head, body, dark mode
-    Post.astro                      — Single post wrapper with h-entry markup
+    Post.astro                      — Single post wrapper with h-entry markup; emoji, categories (linked to /categories/), syndication, named nav slot
     Feed.astro                      — List page wrapper with h-feed markup
   pages/
     index.astro                     — Homepage: header + feed page 1
     page/[page].astro               — Feed pages 2+
     [...slug].astro                 — Slash pages (/about, /colophon)
     [year]/[month]/index.astro      — Monthly archive
-    [year]/[month]/[slug].astro     — Article detail pages
+    [year]/[month]/[slug].astro     — Article detail pages (passes categories to Post layout)
     weeknotes/
       index.astro                   — Weeknotes list page 1
       page/[page].astro             — Weeknotes list pages 2+
-      [slug].astro                  — Weeknote detail page
+      [slug].astro                  — Weeknote detail page (prev/next nav + "on this day" section)
     app.bsky.feed.post/
       index.astro                   — Bluesky list page 1
       page/[page].astro             — Bluesky list pages 2+
-      [rkey].astro                  — Bluesky post detail page
     app.beaconbits.beacon/
       index.astro                   — Checkins list page 1
       page/[page].astro             — Checkins list pages 2+
-      [rkey].astro                  — Checkin detail page
     social.popfeed.feed.review/
       index.astro                   — Reviews list page 1
       page/[page].astro             — Reviews list pages 2+
-      [rkey].astro                  — Review detail page
+    categories/[category]/
+      index.astro                   — Category feed page 1 (e.g. /categories/holiday)
+      page/[page].astro             — Category feed pages 2+
   styles/
     global.css                      — Tailwind directives + prose customisation
   assets/                           — Favicon, local images
-_redirects                          — Cloudflare redirects for legacy URLs → archive.barryfrost.com
+public/
+  _redirects                        — Cloudflare redirects for legacy URLs → archive.barryfrost.com
 .github/
   workflows/
     deploy.yml                      — Build + deploy to Cloudflare Workers
