@@ -6,6 +6,8 @@ emoji: "👨🏻‍💼"
 syndication:
   - https://mastodon.social/@barryf/110448148131948765
   - https://staging.bsky.app/profile/barryfrost.com/post/3jwsunh4w2i2t
+categories:
+  - job
 ---
 
 - I (finally) have a new job! On Tuesday I'm joining [Altium](https://altium.com), a leading electronics design software company, as VP Product & Engineering of its [Nexar](https://nexar.com) division in Cambridge.

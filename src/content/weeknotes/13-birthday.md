@@ -5,6 +5,11 @@ week: 13
 emoji: "🎂"
 syndication:
   - https://twitter.com/barryf/status/1462799342717345793
+categories:
+  - gig
+  - cricket
+  - birthday
+  - music
 ---
 
 - We had a mini re-org at work this week as we push for the release of our new platform. Organisational changes are not to be taken lightly, but the team have responded well. Relevant: we're now [hiring for three new contract roles](https://theroom.recruitee.com/).

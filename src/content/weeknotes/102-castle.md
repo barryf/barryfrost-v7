@@ -5,6 +5,9 @@ week: 102
 emoji: "🏰"
 syndication:
   - https://mastodon.social/@barryf/110850181467371706
+categories:
+  - windsor
+  - anniversary
 ---
 
 - I spent the first half of the week in onsite planning meetings with colleagues over from the US. I'm pleased because I have plenty of hiring and team-building to do. I can't say too much more, but there's plenty of growth to come over the next year.

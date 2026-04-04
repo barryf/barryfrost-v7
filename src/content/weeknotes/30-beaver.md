@@ -5,6 +5,8 @@ week: 30
 emoji: "🦫"
 syndication:
   - https://twitter.com/barryf/status/1505640049983041536
+categories:
+  - beavers
 ---
 
 - It's been an unsettled week. Rain storms and Saharan winds (leaving left red sand deposits) gave way to glorious sunshine and blue skies. I even packed my sunglasses in my work bag. Everyone's mood is lifted with a bit of sun on their faces.

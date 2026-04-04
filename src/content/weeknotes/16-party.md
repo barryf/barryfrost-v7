@@ -5,6 +5,10 @@ week: 16
 emoji: "🎉"
 syndication:
   - https://twitter.com/barryf/status/1470125719606939649
+categories:
+  - party
+  - christmas
+  - f1
 ---
 
 - It was my work Christmas party this week at [Bistrotheque](https://barryfrost.com/2021/12/mme2g2f41go) in East London. It was a boozy one: margaritas were offered as we arrived at 11am to accompany the All-Hands meeting and awards. Some were still going at midnight; I drank slowly and slipped out early evening. Nice to chat to people in the company over lunch that I wouldn't normally spend time with.

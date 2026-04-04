@@ -6,6 +6,8 @@ emoji: "😔"
 syndication:
   - https://mastodon.social/@barryf/109695110945605306
   - https://twitter.com/barryf/status/1614721476979982336
+categories:
+  - job
 ---
 
 - Not the best start to the week: on Monday I was made redundant after just one year at Privitar. The company had been struggling with sales and a number of people were let go. Thankfully I do have some notice paid to give me time to find a new job.

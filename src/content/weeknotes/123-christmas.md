@@ -6,6 +6,8 @@ emoji: "🎄"
 syndication:
   - https://mastodon.social/@barryf/111680677380623312
   - https://bsky.app/profile/barryfrost.com/post/3khw7warbe22b
+categories:
+  - christmas
 ---
 
 - Merry Christmas! My parents arrived on Christmas Eve and the cooking marathon began. While the ham boiled I had a couple of pints with my dad in the pub; everyone else visited the local church for its crib service.

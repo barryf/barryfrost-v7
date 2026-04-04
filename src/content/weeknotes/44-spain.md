@@ -3,6 +3,8 @@ title: "Week 44: Spain"
 date: 2022-06-26
 week: 44
 emoji: "🇪🇸"
+categories:
+  - holiday
 ---
 
 - This last week and a bit we were on holiday in [Majorca](https://barryfrost.com/2022/07/24aawlxnjum), staying at the [Protur Bonaire](https://barryfrost.com/2022/06/dlgto54bhfq) in Cala Bona. Because of Covid restrictions, it was to be the boys' first time outside the UK, their first flights and also their first time staying in a hotel.

@@ -5,6 +5,10 @@ week: 14
 emoji: "🔥"
 syndication:
   - https://twitter.com/barryf/status/1465061793554964498
+categories:
+  - smart
+  - shopping
+  - blackfriday
 ---
 
 - I had the day off on Monday, shopping for a Big Coat for me with L in John Lewis. I don't like shopping. I was unsuccessful, but at least enjoyed the coffee and panettone cheesecake in the cafe with my lovely wife.

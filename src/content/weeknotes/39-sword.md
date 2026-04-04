@@ -5,6 +5,8 @@ week: 39
 emoji: "🗡"
 syndication:
   - https://twitter.com/barryf/status/1528479492083269632
+categories:
+  - nintendo
 ---
 
 - Our engineering leadership team sat down for three strategy days this week, aiming to define a vision to take us to 2025. I enjoy these opportunities to step back and think about where the gaps are, what our focus should be and what needs to be done. Plenty of [Miro](http://miro.com) boards full of Post-It notes to review.

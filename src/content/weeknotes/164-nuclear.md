@@ -5,6 +5,8 @@ week: 164
 emoji: "☢️"
 syndication:
   - https://mastodon.social/@barryf/113306359395221635
+categories:
+  - threads
 ---
 
 - My cold from last weekend kept me off work this Monday. I was still foggy the next morning so didn't risk the drive up to our office in Cambridge in the rain. I've been mostly cooped up indoors 😔

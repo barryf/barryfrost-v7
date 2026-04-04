@@ -5,6 +5,8 @@ week: 23
 emoji: "😷"
 syndication:
   - https://twitter.com/barryf/status/1487888389844213764
+categories:
+  - covid
 ---
 
 - As I feared in [last week's weeknotes](https://barryfrost.com/2022/01/week-22-new), C was struck down with chicken pox this week. Poor boy has had little spots all over his body and head. His nightly bath now includes a sock filled with porridge oats to soothe him, which I'm assured by L is more than just an old wives' tale! He should be well enough to go back to nursery on Monday.

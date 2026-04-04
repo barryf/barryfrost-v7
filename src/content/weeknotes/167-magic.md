@@ -6,6 +6,8 @@ emoji: "🪄"
 syndication:
   - https://mastodon.social/@barryf/113426759939823132
   - https://bsky.app/profile/barryfrost.com/post/3la5nbhnwrh2u
+categories:
+  - activitypub
 ---
 
 - I had a couple more nights by myself this week while the rest were still away. I cooked myself an amazing ribeye steak (and filled downstairs with smoke), cooked (too much) curry and watched AI/sci-fi films. Nice to recharge my introvert batteries for a bit, but I was happy when the family hurricane returned.

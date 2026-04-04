@@ -5,6 +5,9 @@ week: 156
 emoji: "🏖️"
 syndication:
   - https://mastodon.social/@barryf/113024388518499465
+categories:
+  - holiday
+  - norfolk
 ---
 
 - A shorter working week because on Friday we drove up to Norfolk for a summer holiday.

@@ -5,6 +5,8 @@ week: 63
 emoji: "🎃"
 syndication:
   - https://twitter.com/barryf/status/1589358557811871745
+categories:
+  - halloween
 ---
 
 - We went trick-or-treating for Halloween with the boys around the village. The curmudgeon in me grumbles about the Americanisation of my children, but I can't argue with the fun they have with their friends. It hammered down with rain and they barely noticed. 

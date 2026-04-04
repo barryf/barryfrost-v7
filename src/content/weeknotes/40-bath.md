@@ -5,6 +5,8 @@ week: 40
 emoji: "🛁"
 syndication:
   - https://twitter.com/barryf/status/1531002586010112001
+categories:
+  - switch
 ---
 
 - It wasn't the best start to the week. We discovered a water leak from the bath on Monday morning. Water was trickling down through the ceiling into the server cupboard which houses the fusebox, boiler and my rack. I found the router fizzing and dead, but we avoided shorting the electrics. It could have been much worse. The cause was the shower handset which was housed in its holster but left switched on to its lowest setting to dribble water down through the bath into the room below. 

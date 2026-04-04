@@ -5,6 +5,9 @@ week: 26
 emoji: "💨"
 syndication:
   - https://twitter.com/barryf/status/1495499452597080064
+categories:
+  - storm
+  - birthday
 ---
 
 - The [Covid shackles](https://barryfrost.com/2022/02/week-25-hibernation) are off – and just in time for a busy week of birthdays in the family.

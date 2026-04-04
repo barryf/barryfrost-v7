@@ -5,6 +5,10 @@ week: 15
 emoji: "😖"
 syndication:
   - https://twitter.com/barryf/status/1467608989680783362
+categories:
+  - covid
+  - clothes
+  - family
 ---
 
 - The Omicron variant is on its way and could be serious. I'll continue being careful, avoiding crowds, wearing my mask on public transport and in shops. And I booked my booster jab for the earliest slot I could, six months after my second vaccination on New Year's Eve. 

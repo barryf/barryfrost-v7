@@ -5,6 +5,8 @@ week: 18
 emoji: "🎄"
 syndication:
   - https://twitter.com/barryf/status/1475587478170046475
+categories:
+  - christmas
 ---
 
 - This one's a little late, because... it's Christmas!

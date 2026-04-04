@@ -5,6 +5,9 @@ week: 19
 emoji: "🎬"
 syndication:
   - https://twitter.com/barryf/status/1477746296958111758
+categories:
+  - keyboard
+  - film
 ---
 
 - I had a surprise present from L: a [Yamaha Reface YC](https://uk.yamaha.com/en/products/music_production/synthesizers/reface/reface_yc.html) synth/organ donated to a charity auction by the band [Django Django](http://www.djangodjango.co.uk/) that she won. It's been a long time since I've owned a keyboard, but I'm enjoying playing carols and tinkering on Garageband. 

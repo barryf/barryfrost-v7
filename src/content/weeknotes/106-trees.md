@@ -3,6 +3,9 @@ title: "Week 106 - Trees"
 date: 2023-09-09
 week: 106
 emoji: "🌳"
+categories:
+  - holiday
+  - norfolk
 ---
 
 - A few notes on the second half of our [Norfolk holiday](https://barryfrost.com/2023/09/week-105-holt).

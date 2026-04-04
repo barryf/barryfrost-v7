@@ -6,6 +6,8 @@ emoji: "🍽️"
 syndication:
   - https://bsky.app/profile/barryfrost.com/post/3lbpurvkx3v2b
   - https://mastodon.social/@barryf/113539880957306122
+categories:
+  - birthday
 ---
 
 - It was my birthday this week. I don't always take time off work to celebrate, but with a few holiday days left in the bank I decided to make the most of it with a longer weekend.

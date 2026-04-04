@@ -6,6 +6,8 @@ emoji: "🤴"
 syndication:
   - https://mastodon.social/@barryf/110333129461640065
   - https://twitter.com/barryf/status/1655554633593397251
+categories:
+  - king
 ---
 
 - The week started with a Bank Holiday, the first of three this month. It was pretty grey outside so I stayed inside to watch the World Snooker Championship final on the sofa. C joined me for a few frames to count the points as balls were potted. I was delighted to see a slightly overawed Luca Brecel [hold on to win](https://www.bbc.co.uk/sport/snooker/65450133).

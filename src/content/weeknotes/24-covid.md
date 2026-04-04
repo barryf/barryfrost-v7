@@ -5,6 +5,8 @@ week: 24
 emoji: "🦠"
 syndication:
   - https://twitter.com/barryf/status/1490438856482689031
+categories:
+  - covid
 ---
 
 - Our family's Covid saga escalated as expected. It spread from one boy to the other, then to L and me. After two years of the pandemic without catching Covid I was hoping I'd escaped, but there's very little you can do when your own children are coughing in your face! 

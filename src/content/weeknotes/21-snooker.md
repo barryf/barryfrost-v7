@@ -5,6 +5,9 @@ week: 21
 emoji: "🔴"
 syndication:
   - https://twitter.com/barryf/status/1482824207780171777
+categories:
+  - snooker
+  - job
 ---
 
 - I've got a new job! I'm joining [Privitar](https://www.privitar.com/) as Director of Engineering this coming Wednesday. The opportunity to manage multiple teams again in a Series C fintech was very attractive. I'm sad to leave my team at The Room, but excited for what's next.

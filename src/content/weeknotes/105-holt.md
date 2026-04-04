@@ -6,6 +6,9 @@ emoji: "🏖️"
 syndication:
   - https://mastodon.social/@barryf/111000260708574849
   - https://bsky.app/profile/barryfrost.com/post/3k6i6iecxg623
+categories:
+  - holiday
+  - norfolk
 ---
 
 - We've been on holiday this past week-and-a-bit, so these weeknotes are a little late to be published.

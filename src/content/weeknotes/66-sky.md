@@ -6,6 +6,8 @@ emoji: "📡"
 syndication:
   - https://mastodon.social/@barryf/109417772592422352
   - https://twitter.com/barryf/status/1596971891553865728
+categories:
+  - birthday
 ---
 
 - It was my birthday on Monday. I had taken the day off, but was feeling a bit under the weather, so lunch out with L was swapped for a takeaway. It did mean I could watch [England's 6-2 romp against Iran](https://www.bbc.co.uk/sport/football/63603382), plus some time playing FIFA 23, a present from my boys. 
