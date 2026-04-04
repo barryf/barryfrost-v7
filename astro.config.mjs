@@ -5,7 +5,9 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   site: 'https://barryfrost.com',
   output: 'static',
-  adapter: cloudflare(),
+  adapter: cloudflare({
+    imageService: { build: 'compile', runtime: 'cloudflare-binding' },
+  }),
   vite: {
     plugins: [tailwindcss()],
   },
