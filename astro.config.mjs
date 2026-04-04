@@ -6,7 +6,7 @@ export default defineConfig({
   site: 'https://barryfrost.com',
   output: 'static',
   adapter: cloudflare({
-    imageService: { build: 'compile', runtime: 'cloudflare-binding' },
+    imageService: 'cloudflare-binding',
   }),
   vite: {
     plugins: [tailwindcss()],
