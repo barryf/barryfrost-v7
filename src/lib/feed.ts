@@ -30,11 +30,10 @@ export async function getUnifiedFeed(): Promise<FeedItem[]> {
   const items: FeedItem[] = [];
 
   for (const entry of articles.filter(e => e.data.visibility !== 'unlisted')) {
-    const { year, month } = yearMonth(entry.data.date);
     items.push({
       type: 'article',
       date: entry.data.date,
-      url: `/${year}/${month}/${entry.id}`,
+      url: `/articles/${entry.id}`,
       title: entry.data.title,
       summary: entry.data.description,
       id: `article:${entry.id}`,

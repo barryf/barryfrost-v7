@@ -39,7 +39,7 @@ Architect has been a breath of fresh air and reminds me of how natural Rails fel
 
 ## Backend
 
-![Backend architecture](https://barryf.s3.eu-west-1.amazonaws.com/vibrancy-backend.png)
+![Backend architecture](../../assets/vibrancy-backend.png)
 
 *Vibrancy's backend architecture, hosted using AWS.*
 
@@ -71,7 +71,7 @@ Using Architect’s `event` handlers, the server fires off asynchronous tasks in
 
 ## Frontend
 
-![Frontend architecture](https://barryf.s3.eu-west-1.amazonaws.com/vibrancy-frontend.png)
+![Frontend architecture](../../assets/vibrancy-frontend.png)
 
 *Vibrancy’s frontend architecture, hosted using AWS and Cloudflare.*
 
@@ -120,7 +120,7 @@ The frontend is not static. It queries and renders pages on demand. However, pos
 
 Vibrancy fully supports [webmentions](https://webmentions.net/) for replies, reposts, likes or mentions from another IndieWeb website or service.
 
-- **Receiving**: Vibrancy currently uses [webmention.io](http://webmention.io) to receive webmentions, accepting a Microformats payload using a webhook. Next on my list is [building my own receiver](/2021/05/building-a-webmention-receiver).
+- **Receiving**: Vibrancy currently uses [webmention.io](http://webmention.io) to receive webmentions, accepting a Microformats payload using a webhook. Next on my list is [building my own receiver](/articles/building-a-webmention-receiver).
 - **Sending**: Webmentions are sent via [Telegraph](https://telegraph.p3k.io) using a background event whenever a post is created or updated.
 - **Backfeed**: Using the magic of [Bridgy](https://brid.gy/), responses to my syndicated copies (e.g. tweets) are pulled back as webmentions.
 

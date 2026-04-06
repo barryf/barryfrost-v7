@@ -41,7 +41,7 @@ More detail on 4 - I want to display lists of posts from selected types of recor
 
 ## URL design
 
-- Articles: /2026/03/my-article
+- Articles: /articles/my-article
 - Weeknotes: /weeknotes/123-example
 - Slash pages: /colophon
 - Posts from PDS (type/rkey): /app.bsky.feed.post/3mgezmuywgk2b

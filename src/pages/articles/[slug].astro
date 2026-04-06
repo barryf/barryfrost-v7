@@ -1,17 +1,13 @@
 ---
 import { getCollection, render } from 'astro:content';
-import Post from '../../../layouts/Post.astro';
-import { yearMonth } from '../../../lib/dates';
+import Post from '../../layouts/Post.astro';
 
 export async function getStaticPaths() {
   const articles = await getCollection('articles');
-  return articles.map((entry) => {
-    const { year, month } = yearMonth(entry.data.date);
-    return {
-      params: { year, month, slug: entry.id },
-      props: { entry },
-    };
-  });
+  return articles.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
 }
 
 const { entry } = Astro.props;

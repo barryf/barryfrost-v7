@@ -1,6 +1,6 @@
-# Legacy posts redirect to archive
-# Add specific legacy URLs here as needed, e.g.:
-# /2015/01/old-post https://archive.barryfrost.com/2015/01/old-post 301
+# Cloudflare Pages allows for:
+# * 100 dynamic redirects (rules using wildcards * / :splat or :placeholders)
+# * 2,000 static redirects, for a combined total of 2,100
 
 # Weeknote redirects (old URL → new URL)
 /2021/08/weeknotes-001 /weeknotes/1-starting 301
@@ -243,3 +243,62 @@
 /2026/03/week-237-fumes /weeknotes/237-fumes 301
 /2026/03/week-238-streak /weeknotes/238-streak 301
 /2026/03/week-239-scoot /weeknotes/239-scoot 301
+
+# Article redirects (old /yyyy/mm/slug → /articles/slug)
+/2011/05/get-your-eyes-lasered /articles/get-your-eyes-lasered 301
+/2011/05/the-recruitment-threesome /articles/the-recruitment-threesome 301
+/2011/06/witness-the-fitness /articles/witness-the-fitness 301
+/2013/02/hacker-jobs-interview /articles/hacker-jobs-interview 301
+/2013/11/monitoring-my-broadband-connection /articles/monitoring-my-broadband-connection 301
+/2014/06/ux-london /articles/ux-london 301
+/2015/01/about /articles/about 301
+/2015/01/contact /articles/contact 301
+/2015/01/how-to-comment /articles/how-to-comment 301
+/2015/01/i-ve-just-set-up-ssl /articles/i-ve-just-set-up-ssl 301
+/2016/07/introducing-webhook-mentions /articles/introducing-webhook-mentions 301
+/2016/09/north-norfolk-notes /articles/north-norfolk-notes 301
+/2016/11/colophon /articles/colophon 301
+/2016/11/transformative /articles/transformative 301
+/2016/12/micropublish-2 /articles/micropublish-2 301
+/2017/01/indie-microblogging /articles/indie-microblogging 301
+/2017/05/acquiescence /articles/acquiescence 301
+/2017/10/how-we-make-remote-working-work /articles/how-we-make-remote-working-work 301
+/2017/10/postgres-json-sequel /articles/postgres-json-sequel 301
+/2017/12/lullaby /articles/lullaby 301
+/2018/04/leaving-venntro /articles/leaving-venntro 301
+/2020/10/micropublish-2-3-0 /articles/micropublish-2-3-0 301
+/2020/12/micropublish-indieauth /articles/micropublish-indieauth 301
+/2021/05/building-a-webmention-receiver /articles/building-a-webmention-receiver 301
+/2021/05/using-tailwind-css-with-microformats-2 /articles/using-tailwind-css-with-microformats-2 301
+/2021/07/vibrancy /articles/vibrancy 301
+/2023/03/tunnel /articles/tunnel 301
+/2023/11/app-defaults-in-late-2023 /articles/app-defaults-in-late-2023 301
+
+# Redirect archived barryfrost.com posts (2000–Mar 2026) to archive.barryfrost.com
+/2000/* https://archive.barryfrost.com/2000/:splat 301
+/2001/* https://archive.barryfrost.com/2001/:splat 301
+/2004/* https://archive.barryfrost.com/2004/:splat 301
+/2005/* https://archive.barryfrost.com/2005/:splat 301
+/2006/* https://archive.barryfrost.com/2006/:splat 301
+/2007/* https://archive.barryfrost.com/2007/:splat 301
+/2008/* https://archive.barryfrost.com/2008/:splat 301
+/2009/* https://archive.barryfrost.com/2009/:splat 301
+/2010/* https://archive.barryfrost.com/2010/:splat 301
+/2011/* https://archive.barryfrost.com/2011/:splat 301
+/2012/* https://archive.barryfrost.com/2012/:splat 301
+/2013/* https://archive.barryfrost.com/2013/:splat 301
+/2014/* https://archive.barryfrost.com/2014/:splat 301
+/2015/* https://archive.barryfrost.com/2015/:splat 301
+/2016/* https://archive.barryfrost.com/2016/:splat 301
+/2017/* https://archive.barryfrost.com/2017/:splat 301
+/2018/* https://archive.barryfrost.com/2018/:splat 301
+/2019/* https://archive.barryfrost.com/2019/:splat 301
+/2020/* https://archive.barryfrost.com/2020/:splat 301
+/2021/* https://archive.barryfrost.com/2021/:splat 301
+/2022/* https://archive.barryfrost.com/2022/:splat 301
+/2023/* https://archive.barryfrost.com/2023/:splat 301
+/2024/* https://archive.barryfrost.com/2024/:splat 301
+/2025/* https://archive.barryfrost.com/2025/:splat 301
+/2026/01/* https://archive.barryfrost.com/2026/01/:splat 301
+/2026/02/* https://archive.barryfrost.com/2026/02/:splat 301
+/2026/03/* https://archive.barryfrost.com/2026/03/:splat 301
