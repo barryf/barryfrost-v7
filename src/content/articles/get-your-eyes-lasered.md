@@ -19,11 +19,11 @@ And of course, despite the advertisements quoting prices of (from) £395 per eye
 
 I'd love to say there was a life-changing moment which pushed me into finding out more. In reality, it was the increasing discomfort from wearing contact lenses all day. My eyes were often sore in the evening and getting worse from staring at computer screens in an air-conditioned office. Nights out ended in blinking Barry trying to get moisture from tears to lubricate my contact lenses.
 
-So I did some research. I thankfully didn't trawl YouTube to find horror videos of surgery (don't do it), but I did enough simple Google searching and reading to be satisfied that success rates and satisfaction was high. Laser eye surgery is now wholly normal and mainstream. 
+So I did some research. I thankfully didn't trawl YouTube to find horror videos of surgery (don't do it), but I did enough simple Google searching and reading to be satisfied that success rates and satisfaction was high. Laser eye surgery is now wholly normal and mainstream.
 
 I searched for reputable companies near me, including Optimax, Ultralase and [Optical Express](http://www.opticalexpress.co.uk/laser-eye-surgery.html), and picked the latter. It looked professional from the website and it was nearest me. Don't underestimate closeness as a factor: you will need to make a number of visits for pre and post check-ups.
 
-## Consultation 
+## Consultation
 
 I booked a visit to Optical Express in High Wycombe on 9 October 2010. First impressions were that it seemed professional and the clinic appeared smart and clean. This was important to me. I really didn't want to be seen or operated on in the back room of shabby side-street shop.
 
@@ -33,11 +33,11 @@ The optometrist was convincing. After a series of questions and measurements, in
 
 The alternative method we discussed was [LASEK](http://en.wikipedia.org/wiki/Photorefractive_keratectomy): instead of a flap, a thin layer is removed from the eye's surface. I was told this requires a much longer recovery time (up to a week) and is significantly more painful. I rejected this fairly quickly. I wanted to go for the best option recommended to me with the least pain and discomfort.
 
-Among other warnings and precautions I was given, she stressed the fact that old-age long-sightedness will still affect me and may even begin slightly earlier. 
+Among other warnings and precautions I was given, she stressed the fact that old-age long-sightedness will still affect me and may even begin slightly earlier.
 
 Leaving the surgery I was given my quote. Total cost, including eye drops and check-ups, was £2,400. More than I thought, but reasonable.
 
-Thinking back, maybe I could have asked for a discount or haggled in some way -- the optometrist's sales technique was fairly sharp and I'm sure they work on margin -- but I feared some sort of lower quality or reduced service. Ridiculous, I know. 
+Thinking back, maybe I could have asked for a discount or haggled in some way -- the optometrist's sales technique was fairly sharp and I'm sure they work on margin -- but I feared some sort of lower quality or reduced service. Ridiculous, I know.
 
 I went home to discuss with my other half, Laura, and think about it. It didn't take long to decide.
 
@@ -45,7 +45,7 @@ After the consultation you get gently chased to make your decision. I didn't hav
 
 ## Pre-surgery
 
-<img src="https://barryf.s3.amazonaws.com/fml.jpg" title="FML: Fuck My Life" alt="FML bottle" style="float: right; margin: 0 0 10px 10px;" />
+![Fuck My Life - box containing bottle of eye drops](../../assets/fml.jpg)
 
 I initially booked my surgery for 13 November 2010 and was told to stop wearing contact lenses on 24 October to give my eyes time to breathe. I was told my eyes were quite dry during the consultation. This wasn't a surprise to me, but the optometrist insisted that the dryness would need to clear up before surgery.
 
