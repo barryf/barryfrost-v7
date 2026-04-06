@@ -3,7 +3,7 @@ import Feed from '../../../layouts/Feed.astro';
 import { getUnifiedFeed, paginateItems } from '../../../lib/feed';
 
 export async function getStaticPaths() {
-  const allItems = (await getUnifiedFeed()).filter(i => i.type === 'review');
+  const allItems = (await getUnifiedFeed()).filter(i => i.type === 'checkin');
   const pages = paginateItems(allItems);
   return pages.slice(1).map(({ page, items, totalPages }) => ({
     params: { page: String(page) },
@@ -13,4 +13,4 @@ export async function getStaticPaths() {
 
 const { items, currentPage, totalPages } = Astro.props;
 ---
-<Feed title={`Reviews — Page ${currentPage}`} items={items} currentPage={currentPage} totalPages={totalPages} basePath="/social.popfeed.feed.review" />
+<Feed title={`Checkins — Page ${currentPage}`} items={items} currentPage={currentPage} totalPages={totalPages} basePath="/checkins" />
