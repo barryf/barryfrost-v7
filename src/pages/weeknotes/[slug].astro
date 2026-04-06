@@ -50,9 +50,9 @@ const { Content } = await render(entry);
       ) : <span />}
     </nav>
     {onThisDay.length > 0 && (
-      <aside class="mt-8 pt-6 border-t border-neutral-100 dark:border-neutral-800">
-        <h2 class="text-sm font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-4">Previously</h2>
-        <ul class="space-y-4">
+      <aside class="mt-8 pt-6">
+        <h2 class="text-sm font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-6">Previously</h2>
+        <ul class="space-y-6">
           {onThisDay.map(e => (
             <li>
               <span class="mr-1 text-sm">{e.year}</span>
