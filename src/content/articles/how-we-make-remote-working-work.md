@@ -9,7 +9,7 @@ syndication:
   - https://medium.com/@barryf/how-we-make-remote-working-work-dc0d4a0282cb
 ---
 
-![Our remote team](https://barryf.s3.amazonaws.com/remoters-680.jpg)
+![Our remote team](../../assets/remoters.jpg)
 
 Now that, according to a recent study, [over half of employees work remotely at
 least once per week][owl], remote working is no longer considered an exception.
@@ -154,8 +154,6 @@ and advice for making a success of working remotely. Here are their suggestions:
 
 > "I tend to take small breaks from the screen to grab a drink and talk to the
 > guinea pigs. So maybe all remoters should have guinea pigs."
-
-<br>*Orginally published at [dev.venntro.com][original]*
 
 [owl]: https://www.owllabs.com/state-of-remote-work
 [slack]: https://slack.com
