@@ -8,8 +8,8 @@ interface Props {
 const { currentPage, totalPages, basePath = '' } = Astro.props;
 
 function pageUrl(page: number): string {
-  if (page === 1) return basePath ? `${basePath}/` : '/';
-  return basePath ? `${basePath}/page/${page}/` : `/page/${page}/`;
+  if (page === 1) return basePath || '/';
+  return basePath ? `${basePath}/page/${page}` : `/page/${page}`;
 }
 
 const windowSize = 5;
