@@ -1,0 +1,40 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { formatDate, toISODate } from '../../lib/dates';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('travelblog');
+  const sorted = [...entries].sort((a, b) => Number(a.id) - Number(b.id));
+  return sorted.map((entry, i) => ({
+    params: { num: entry.id },
+    props: { entry, prev: sorted[i - 1] ?? null, next: sorted[i + 1] ?? null },
+  }));
+}
+
+const { entry, prev, next } = Astro.props;
+const { Content } = await render(entry);
+---
+<Base title="Travelblog">
+  <article class="h-entry">
+    <header class="mb-8">
+      <h1 class="p-name text-2xl font-bold">Travelblog</h1>
+      <h2 class="text-xl font-semibold mt-1">
+        <time class="dt-published" datetime={toISODate(entry.data.date)}>
+          {formatDate(entry.data.date)}
+        </time>
+      </h2>
+    </header>
+    <div class="e-content prose dark:prose-invert max-w-none">
+      <Content />
+    </div>
+    <nav class="mt-8 pt-6 border-t border-neutral-100 dark:border-neutral-800 flex justify-between gap-4 text-sm">
+      {prev ? (
+        <a href={`/travelblog/${prev.id}`} class="hover:underline">← {formatDate(prev.data.date)}</a>
+      ) : <span />}
+      {next ? (
+        <a href={`/travelblog/${next.id}`} class="hover:underline text-right">{formatDate(next.data.date)} →</a>
+      ) : <span />}
+    </nav>
+  </article>
+</Base>

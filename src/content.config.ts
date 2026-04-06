@@ -38,6 +38,13 @@ const pages = defineCollection({
   }),
 });
 
+const travelblog = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: 'src/content/travelblog' }),
+  schema: z.object({
+    date: z.coerce.date(),
+  }),
+});
+
 const blueskyPosts = defineCollection({
   loader: blueskyLoader(),
   schema: z.object({
@@ -125,6 +132,7 @@ export const collections = {
   articles,
   weeknotes,
   pages,
+  travelblog,
   blueskyPosts,
   checkins,
   reviews,

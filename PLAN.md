@@ -67,4 +67,5 @@ Eventually I also want to write a script to create records in my PDS for selecte
 * Use data in my sifa.id to generate a /work page
 * Use profile data from bsky for my avatar, description, (name?)
 * Use bsky follows and standard.site subs to create a /following page
+* ~~Add travelblog: reverse order, one post at a time. Explanation page then each post /travelblog/1~~ ✓ Done — 83 posts imported from 2000-10-14 to 2001-11-07, collection at /travelblog/1–83
 *
