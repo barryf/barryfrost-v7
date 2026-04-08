@@ -2,6 +2,9 @@
 # * 100 dynamic redirects (rules using wildcards * / :splat or :placeholders)
 # * 2,000 static redirects, for a combined total of 2,100
 
+# RSS alias
+/rss /feed.xml 301
+
 # Weeknote redirects (old URL → new URL)
 /2021/08/weeknotes-001 /weeknotes/1-starting 301
 /2021/09/weeknotes-002 /weeknotes/2-cricket 301

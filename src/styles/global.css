@@ -1,2 +1,26 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
+
+@theme {
+  --color-neutral-50: #f5f2ef;
+  --color-neutral-100: #ebe7e2;
+  --color-neutral-200: #d5d0c9;
+  --color-neutral-300: #b8b2aa;
+  --color-neutral-400: #9a9389;
+  --color-neutral-500: #7d766c;
+  --color-neutral-600: #635d55;
+  --color-neutral-700: #4a4540;
+  --color-neutral-800: #37342f;
+  --color-neutral-900: #2a2d37;
+  --color-neutral-950: #1a1c24;
+
+  --color-accent: #f76902;
+  --color-accent-hover: #e55e00;
+}
+
+a:not([class]) {
+  color: var(--color-accent);
+}
+a:not([class]):hover {
+  color: var(--color-accent-hover);
+}
