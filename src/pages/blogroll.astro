@@ -20,10 +20,10 @@ publications.sort((a, b) => a.data.name.localeCompare(b.data.name));
       {blogs.map(blog => (
         <li class="py-4 border-b border-neutral-100 dark:border-neutral-800 last:border-0">
           <FollowCard
-            name={blog.name}
-            description={blog.hostname}
-            avatarUrl={blog.avatarUrl}
-            profileUrl={blog.url}
+            name={blog.data.name}
+            description={blog.data.hostname}
+            avatarUrl={blog.data.avatarUrl}
+            profileUrl={blog.data.url}
             rounded="md"
           />
         </li>
