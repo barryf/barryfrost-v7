@@ -1,12 +1,5 @@
 import type { Loader } from 'astro/loaders';
-import { fetchAllRecords, rkeyFromUri, DID, PDS_HOST } from '../pds';
-
-async function resolveHandle(did: string, host: string): Promise<string> {
-  const res = await fetch(`https://${host}/xrpc/com.atproto.repo.describeRepo?repo=${did}`);
-  if (!res.ok) return did;
-  const data = await res.json() as { handle?: string };
-  return data.handle ?? did;
-}
+import { fetchAllRecords, rkeyFromUri, resolveHandle, DID, PDS_HOST } from '../pds';
 
 export function blueskyLoader(): Loader {
   return {

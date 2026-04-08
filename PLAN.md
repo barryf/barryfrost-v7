@@ -66,8 +66,9 @@ Eventually I also want to write a script to create records in my PDS for selecte
   * Create new repo for Markdown files with a GitHub Action to publish/update on push
 * Use data in my sifa.id to generate a /work page
 * Use profile data from bsky for my avatar, description, (name?)
-* Use bsky follows and standard.site subs to create a /following page
+* ~~Use bsky follows and standard.site subs to create a /following page~~ ✓ Done — /blogroll with curated blogs + Standard publications
 * ~~Add travelblog: reverse order, one post at a time. Explanation page then each post /travelblog/1~~ ✓ Done — 83 posts imported from 2000-10-14 to 2001-11-07, collection at /travelblog/1–83
+* Gigs I've been to
 
 ## Slash pages to write
 
@@ -76,7 +77,7 @@ Eventually I also want to write a script to create records in my PDS for selecte
 * /contact
 * /defaults
 * /follow
-* /following (or /blogroll)
+* ~~**/blogroll**~~ ✓ Done
 * /now
 * /pay
 * /uses

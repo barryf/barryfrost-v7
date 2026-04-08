@@ -5,6 +5,7 @@ import { checkinsLoader } from './lib/loaders/checkins';
 import { reviewsLoader } from './lib/loaders/reviews';
 import { documentsLoader } from './lib/loaders/documents';
 import { booksLoader } from './lib/loaders/books';
+import { subscriptionsLoader } from './lib/loaders/subscriptions';
 
 const articles = defineCollection({
   loader: glob({ pattern: '**/*.md', base: 'src/content/articles' }),
@@ -128,6 +129,17 @@ const documents = defineCollection({
   }),
 });
 
+const standardSubscriptions = defineCollection({
+  loader: subscriptionsLoader(),
+  schema: z.object({
+    name: z.string(),
+    description: z.string().optional(),
+    siteUrl: z.string(),
+    iconUrl: z.string().optional(),
+    handle: z.string().optional(),
+  }),
+});
+
 export const collections = {
   articles,
   weeknotes,
@@ -138,4 +150,5 @@ export const collections = {
   reviews,
   books,
   documents,
+  standardSubscriptions,
 };

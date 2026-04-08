@@ -1,0 +1,42 @@
+---
+interface Props {
+  name: string;
+  handle?: string;
+  avatarUrl?: string;
+  description?: string;
+  profileUrl: string;
+  rounded?: 'full' | 'md';
+}
+
+const { name, handle, avatarUrl, description, profileUrl, rounded = 'full' } = Astro.props;
+const imgClass = rounded === 'full'
+  ? 'w-12 h-12 rounded-full object-cover shrink-0'
+  : 'w-12 h-12 rounded object-cover shrink-0';
+---
+<div class="h-card flex gap-4 items-center">
+  {avatarUrl && (
+    <img
+      src={avatarUrl}
+      alt=""
+      width="48"
+      height="48"
+      class={`u-photo ${imgClass}`}
+      loading="lazy"
+      decoding="async"
+    />
+  )}
+  {!avatarUrl && (
+    <div class="w-12 h-12 rounded-full bg-neutral-200 dark:bg-neutral-700 shrink-0" />
+  )}
+  <div class="min-w-0">
+    <a href={profileUrl} class="p-name u-url font-semibold hover:underline" rel="noopener noreferrer">
+      {name}
+    </a>
+    {handle && name !== handle && (
+      <p class="text-sm text-neutral-500 dark:text-neutral-400">@{handle}</p>
+    )}
+    {description && (
+      <p class="text-sm text-neutral-600 dark:text-neutral-400 truncate">{description}</p>
+    )}
+  </div>
+</div>
