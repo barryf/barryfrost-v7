@@ -2,23 +2,14 @@
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import FollowCard from '../components/FollowCard.astro';
-import blogsData from '../data/blogroll.json';
-import { downloadImage } from '../lib/download-image';
 
-const publications = await getCollection('standardSubscriptions');
+const [blogsRaw, publications] = await Promise.all([
+  getCollection('blogroll'),
+  getCollection('standardSubscriptions'),
+]);
+
+const blogs = blogsRaw.slice().sort((a, b) => a.data.name.localeCompare(b.data.name));
 publications.sort((a, b) => a.data.name.localeCompare(b.data.name));
-
-const blogs = await Promise.all(
-  blogsData
-    .slice()
-    .sort((a, b) => a.name.localeCompare(b.name))
-    .map(async (blog) => {
-      const hostname = new URL(blog.url).hostname;
-      const faviconUrl = `https://www.google.com/s2/favicons?domain=${hostname}&sz=96`;
-      const avatarUrl = await downloadImage(faviconUrl, 'blogroll', `${hostname}.png`, 48, 48);
-      return { ...blog, hostname, avatarUrl };
-    })
-);
 ---
 <Base title="Blogroll" description="Blogs and publications I follow">
   <h1 class="text-2xl font-bold mb-8">Blogroll</h1>

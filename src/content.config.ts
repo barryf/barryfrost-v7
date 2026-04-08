@@ -6,6 +6,7 @@ import { reviewsLoader } from './lib/loaders/reviews';
 import { documentsLoader } from './lib/loaders/documents';
 import { booksLoader } from './lib/loaders/books';
 import { subscriptionsLoader } from './lib/loaders/subscriptions';
+import { blogrollLoader } from './lib/loaders/blogroll';
 
 const articles = defineCollection({
   loader: glob({ pattern: '**/*.md', base: 'src/content/articles' }),
@@ -129,6 +130,16 @@ const documents = defineCollection({
   }),
 });
 
+const blogroll = defineCollection({
+  loader: blogrollLoader(),
+  schema: z.object({
+    name: z.string(),
+    url: z.string(),
+    hostname: z.string(),
+    avatarUrl: z.string().optional(),
+  }),
+});
+
 const standardSubscriptions = defineCollection({
   loader: subscriptionsLoader(),
   schema: z.object({
@@ -150,5 +161,6 @@ export const collections = {
   reviews,
   books,
   documents,
+  blogroll,
   standardSubscriptions,
 };
