@@ -2,5 +2,10 @@
   "app.bsky.feed.post": "bafyreibgqm3khw766eoankd7dwbfhbqbcm4dtkuydjjxvvhzcjf6qglxda",
   "app.beaconbits.beacon": "bafyreiemqm3psy3atzyimvacijeny2gfn7es34sxrdqr3fzh6slnlvijsq",
   "social.popfeed.feed.review": "bafyreiax7ink2r36hchtydhdvskeeswymknx5u7wskugltwxdwgkbeympi",
-  "site.standard.document": ""
+  "site.standard.document": "",
+  "buzz.bookhive.book": "bafyreic3nt72bn5bbckirlwjwhpnkmgfqmggryxkjcvjdqmrecls7omsza",
+  "site.standard.graph.subscription": "bafyreientnkqi4s27nmsmcdulo5gpvtov5jcsfnfchmr5zonabouvxclsy",
+  "social.grain.gallery": "bafyreie4kajrwvx34uqcshejw6xjvqhy53hpj4n7xw7odfacv7be5zuzd4",
+  "social.grain.gallery.item": "bafyreihuw6jxsocjhbgzqpln6srhx2r75qblmim7hdrjke4fpjmhzuoxsm",
+  "social.grain.photo": "bafyreidx3qvm4mom6ok2da5yt2ilxxotqxsn73gf4kdtps3wq2m7yxqe5q"
 }
