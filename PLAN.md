@@ -1,83 +1,158 @@
-# barryfrost-v7
+# barryfrost.com v7
 
-I want to build a new version of my personal website (barryfrost.com) for my content and information about me. I want a statically-generated mobile-friendly website that considers performance, standards, accessibilty and the IndieWeb principles. It should clearly be my personal website - see the current iteration at https://barryfrost.com for inspiration.
+Personal website for Barry Frost — statically generated, IndieWeb-compliant, deployed to Cloudflare Pages.
 
-There should be multiple types of post:
+## Stack
 
-1. Articles in Markdown, with a publish date, published occasionally
-2. Weeknotes in Markdown, published every Sunday (or a day or two later if I forget)
-3. Slash pages that may be updated but are not date-bound (e.g. /about)
-4. Posts created from selected records in my atproto PDS
+- **Astro 6** — static output (`output: 'static'`), `build.format: 'file'`
+- **Tailwind CSS v4** — via `@tailwindcss/vite` plugin, `@tailwindcss/typography` for prose
+- **`@astrojs/rss`** — RSS feed generation
+- No SSR adapter; pure static build
 
-More detail on 4 - I want to display lists of posts from selected types of record stored in my atproto PDS. For example, it should display my Bluesky posts, BookHive books I've read, Beacon Bits (or Drop Anchor) checkins, KipClip bookmarks, etc. I will define which types I want to ingest.
+## Content Sources
 
-* List pages of posts from my PDS should be the primary navigation for content.
-* Because I intend to publish my articles and weeknotes as standard.site documents, they should also appear in the feed on my website and link to the canonical URLs also on my website.
-* We should distinguish between feed posts for articles and weeknotes by a "weeknotes" category for weeknotes.
-* Lists of feed posts should be created split by post type and separately by month+year.
-* Lists should be paginated if necessary.
+Two sources are merged into a single unified feed at build time:
 
-## Homepage
+### 1. Local Markdown (`src/content/`)
+| Collection | Path | Notes |
+|---|---|---|
+| `articles` | `src/content/articles/` | Long-form posts |
+| `weeknotes` | `src/content/weeknotes/` | Weekly notes, published Sundays |
+| `pages` | `src/content/pages/` | Slash pages (about, colophon, etc.) |
+| `travelblog` | `src/content/travelblog/` | Archived travel blog (2000–2001) |
 
-* Blurb about me
-* Links to feed pages for articles, weeknotes and the atproto post lists.
-* Links to slash pages for about, follow, contact, archive
-* The title of the most recent article
-* The 10 most recent weeknotes' titles
+### 2. AT Protocol PDS Records
+Fetched at build time from `bsky.social` for DID `did:plc:j5ksi3y4tdtbp7vpsxsfyask` via custom Astro content loaders in `src/lib/loaders/`.
 
-## Other requirements
+| Collection | Loader | Feed type |
+|---|---|---|
+| `app.bsky.feed.post` | `bluesky.ts` | `bluesky` |
+| `app.beaconbits.beacon` | `checkins.ts` | `checkin` |
+| `social.popfeed.feed.review` | `reviews.ts` | `review` |
+| `buzz.bookhive.book` | `books.ts` | `book` |
+| `social.grain.gallery` + `.gallery.item` + `.photo` | `photos.ts` | `photo` |
+| `site.standard.document` | `documents.ts` | (enrichment only — not feed entries) |
+| `site.standard.graph.subscription` | `subscriptions.ts` | (blogroll only) |
 
-* Statically generate pages using Astro (latest stable version)
-* Build with GitHub Actions, host on Cloudflare Workers
-* Style with Tailwind. I want auto light mode and dark mode.
-* Redirect legacy posts/pages to archive.barryfrost.com/* (I have created a _redirects file for this)
-* Mark up posts with Microformats 2 (MF2)
-  * `h-feed` for feeds, `h-entry` for posts
-  * `syndication` to link to syndicated copies on Bluesky or elsewhere
-  * atproto posts should map to MF2 post types and use relevant properties
-* Use Cloudflare Images in Astro to generate optimised/resized images
-* Publish articles and weeknotes as standard.site records to my PDS (probably via sequoia.pub)
-* GitHub Action should be scheduled to periodically check for a newer/updated record in my PDS compared to the last item seen and then trigger a rebuild.
+The `documents` collection maps AT URIs to local articles/weeknotes for MF2 syndication links — it does not produce duplicate feed entries.
 
-## URL design
+Blogroll blogs come from `src/data/blogroll.json` (static JSON).
 
-- Articles: /articles/my-article
-- Weeknotes: /weeknotes/123-example
-- Slash pages: /colophon
-- Posts from PDS (type/rkey): /app.bsky.feed.post/3mgezmuywgk2b
+### Loader pattern
+Each PDS loader implements `Loader` from `astro/loaders`:
+- `store.clear()` at the start (full refresh each build)
+- Iterates `fetchAllRecords(collection, DID, PDS_HOST)` from `src/lib/pds.ts`
+- Downloads and caches image blobs via `downloadImage()` from `src/lib/download-image.ts` — saves to `public/images/{subdir}/`, skips if already exists, converts to WebP at 2× dimensions
+- Stores entries with `generateDigest(record.cid)` for change detection
 
-## Backfill
+## Unified Feed
 
-I want to bring across the articles from my existing website and split them into articles and weeknotes posts as described above. Currently they are mixed together.
+`src/lib/feed.ts` exports `getUnifiedFeed()` which merges all collections into `FeedItem[]` sorted by date descending.
 
-Eventually I also want to write a script to create records in my PDS for selected checkins, reviews, possibly notes, etc. from the archive. This will be a separate project/script and out of scope for launch.
+```ts
+interface FeedItem {
+  type: 'article' | 'weeknote' | 'bluesky' | 'checkin' | 'review' | 'book' | 'photo';
+  date: Date;
+  url: string;
+  title?: string;
+  summary?: string;
+  emoji?: string;
+  id: string;
+  data: Record<string, unknown>;
+}
+```
 
-## Agents
+Page size is 20. `paginateItems()` splits any array into `{ page, items, totalPages }[]`.
 
-* Ask clarifying questions before making decisions on our approach.
-* Always keep this plan updated as decisions are made.
-* It's fine to restructure/rewrite the plan to make it more readable.
-* Use git and make incremental, regular commits as we go along.
-* Keep dependencies minimal and prefer local solutions - confirm before adding any dependency.
+## URL Structure
 
-## Ideas
+| URL | Content |
+|---|---|
+| `/` | Unified feed, page 1 |
+| `/page/2` | Unified feed, subsequent pages |
+| `/articles` | Articles feed |
+| `/articles/{slug}` | Individual article |
+| `/weeknotes` | Weeknotes feed |
+| `/weeknotes/{slug}` | Individual weeknote |
+| `/posts` | Bluesky posts feed |
+| `/checkins` | Checkins feed |
+| `/reviews` | Reviews feed |
+| `/books` | Books feed |
+| `/blogroll` | Curated blogs + Standard publications |
+| `/{year}/{month}/` | Monthly archive (all types) |
+| `/categories/{category}` | Category filter |
+| `/{slug}` | Slash pages (about, colophon, etc.) |
+| `/travelblog/{num}` | Travel blog entries |
+| `/feed.xml` | RSS feed (articles + weeknotes, latest 10, full content) |
 
-* Instead of having articles/weeknotes as posts, create them as standard.site documents, e.g. [1](https://pdsls.dev/at://did:plc:ia2zdnhjaokf5lazhxrmj6eu/site.standard.document/3mbxqm3nrp22x)
-  * Create new repo for Markdown files with a GitHub Action to publish/update on push
-* Use data in my sifa.id to generate a /work page
-* Use profile data from bsky for my avatar, description, (name?)
-* ~~Use bsky follows and standard.site subs to create a /following page~~ ✓ Done — /blogroll with curated blogs + Standard publications
-* ~~Add travelblog: reverse order, one post at a time. Explanation page then each post /travelblog/1~~ ✓ Done — 83 posts imported from 2000-10-14 to 2001-11-07, collection at /travelblog/1–83
-* Gigs I've been to
+Each type-specific feed has `/page/{n}` pagination. Categories come from the `categories` frontmatter array on articles/weeknotes.
 
-## Slash pages to write
+## Layouts & Components
 
-* /about
-* /colophon
-* /contact
-* /defaults
-* /follow
-* ~~**/blogroll**~~ ✓ Done
-* /now
-* /pay
-* /uses
+- `Base.astro` — HTML shell, `max-w-2xl mx-auto px-4`, dark mode via `prefers-color-scheme`
+- `Feed.astro` — wraps `FeedEntry` list + `Pagination`, accepts `basePath` for paginated routes
+- `Post.astro` — individual article/weeknote with prose styles
+- `FeedEntry.astro` — dispatches to per-type card components by `item.type`
+- Card components in `src/components/posts/`: `ArticleCard`, `WeeknoteCard`, `BlueskyCard`, `CheckinCard`, `ReviewCard`, `BookCard`, `PhotoCard`
+
+## Styling
+
+Tailwind v4 with a custom warm neutral palette and orange accent (`--color-accent: #f76902`) defined in `src/styles/global.css`. Unclassed `<a>` tags default to the accent colour. Dark mode is CSS-only via `prefers-color-scheme` — no JS toggle.
+
+## Microformats 2 (MF2)
+
+Applied as static classes directly in Astro templates:
+- Feed containers: `h-feed`, `p-name`
+- Post wrappers: `h-entry`
+- Fields: `p-name`, `u-url`, `dt-published`, `p-summary`, `p-category`, `u-syndication`
+- No runtime JS required
+
+## RSS Feed
+
+`/feed.xml` — articles + weeknotes only, latest 10, full HTML content rendered via `AstroContainer`.
+
+## Deployment
+
+**GitHub Actions → Cloudflare Pages**
+
+Two workflows:
+
+### `deploy.yml`
+Triggers on: push to `main`, `workflow_dispatch`, `repository_dispatch` (type: `pds-update`)
+1. `npm ci`
+2. Cache `public/images/` between runs (avoids re-downloading blobs)
+3. `npm run build`
+4. `wrangler pages deploy dist --project-name barryfrost-v7`
+
+### `poll-pds.yml`
+Runs every 15 minutes via cron. For each monitored collection, fetches the latest record CID and compares to `.github/last-seen-cids.json`. If any CID changed, commits the updated JSON and fires a `repository_dispatch` to trigger a rebuild.
+
+Monitored collections: `app.bsky.feed.post`, `app.beaconbits.beacon`, `social.popfeed.feed.review`, `buzz.bookhive.book`, `site.standard.document`, `site.standard.graph.subscription`, `social.grain.gallery`, `social.grain.gallery.item`, `social.grain.photo`
+
+Required secrets: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`
+
+## Key Conventions
+
+- **No runtime JS** — all rendering is static; MF2, dark mode, and layout are pure HTML/CSS
+- **Local Markdown is canonical** — PDS documents are syndication targets, not the source of truth
+- **Images cached at build time** — blobs downloaded once to `public/images/`, persisted in CI cache
+- **`visibility: unlisted`** frontmatter hides articles/weeknotes from feeds (but pages still generate)
+- **`build.format: 'file'`** — generates `about.html` not `about/index.html`
+- **`compressHTML: false`** — keeps HTML readable
+
+## Adding a New PDS Content Type
+
+1. Create `src/lib/loaders/{type}.ts` — implement `Loader`, use `fetchAllRecords`, optionally `downloadImage`
+2. Add collection to `src/content.config.ts` with a Zod schema
+3. Add `'{type}'` to `FeedItem.type` union in `src/lib/feed.ts`
+4. Fetch collection in `getUnifiedFeed()` and map to `FeedItem`
+5. Create `src/components/posts/{Type}Card.astro`
+6. Register in `src/components/FeedEntry.astro` components map
+7. Add collection NSID to the `poll-pds.yml` monitored list
+
+## Ideas / Backlog
+
+- `/work` page from sifa.id data
+- `/now`, `/uses`, `/defaults`, `/pay`, `/contact` slash pages
+- Gigs attended
+- Script to backfill historical checkins/reviews/notes as PDS records
