@@ -20,7 +20,7 @@ jobs:
           HOST="bsky.social"
           CHANGED=false
 
-          for COLLECTION in app.bsky.feed.post app.beaconbits.beacon social.popfeed.feed.review site.standard.document; do
+          for COLLECTION in app.bsky.feed.post app.beaconbits.beacon social.popfeed.feed.review buzz.bookhive.book site.standard.document site.standard.graph.subscription social.grain.gallery social.grain.gallery.item social.grain.photo; do
             LATEST=$(curl -sf "https://${HOST}/xrpc/com.atproto.repo.listRecords?repo=${DID}&collection=${COLLECTION}&limit=1" | jq -r '.records[0].cid // "none"')
             CACHED=$(jq -r ".\"${COLLECTION}\" // \"\"" .github/last-seen-cids.json)
 
