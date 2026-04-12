@@ -1,14 +1,18 @@
 [
   {
-    "name": "Example Blog",
-    "url": "https://example.com"
+    "name": "Ben Werdmuller",
+    "url": "https://werd.io/"
   },
   {
     "name": "Henrique Dias",
-    "url": "https://hacdias.com"
+    "url": "https://hacdias.com/"
   },
   {
     "name": "Jamie Tanna",
-    "url": "https://www.jvt.me"
+    "url": "https://www.jvt.me/"
+  },
+  {
+    "name": "Jim Nielsen",
+    "url": "https://blog.jim-nielsen.com/"
   }
 ]
