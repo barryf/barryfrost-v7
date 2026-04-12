@@ -1,0 +1,34 @@
+---
+import { formatDate, toISODate } from '../../lib/dates';
+import type { FeedItem } from '../../lib/feed';
+
+interface Props {
+  item: FeedItem;
+}
+
+const { item } = Astro.props;
+const data = item.data as { title: string; address?: string; thumbnailUrl?: string; photoCount: number };
+---
+<article class="h-entry flex gap-4">
+  {data.thumbnailUrl && (
+    <img
+      src={data.thumbnailUrl}
+      alt={data.title}
+      width="96"
+      height="96"
+      class="w-24 h-24 object-cover rounded flex-shrink-0"
+      loading="lazy"
+      decoding="async"
+    />
+  )}
+  <div>
+    <h2 class="font-semibold">
+      <a class="p-name u-url" href={item.url} rel="noopener noreferrer">{data.title}</a>
+    </h2>
+    {data.address && <p class="text-sm text-neutral-600 dark:text-neutral-400">{data.address}</p>}
+    <div class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
+      <time class="dt-published" datetime={toISODate(item.date)}>{formatDate(item.date)}</time>
+      {data.photoCount > 1 && <span class="ml-2">{data.photoCount} photos</span>}
+    </div>
+  </div>
+</article>

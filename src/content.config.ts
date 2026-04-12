@@ -7,6 +7,7 @@ import { documentsLoader } from './lib/loaders/documents';
 import { booksLoader } from './lib/loaders/books';
 import { subscriptionsLoader } from './lib/loaders/subscriptions';
 import { blogrollLoader } from './lib/loaders/blogroll';
+import { photosLoader } from './lib/loaders/photos';
 
 const articles = defineCollection({
   loader: glob({ pattern: '**/*.md', base: 'src/content/articles' }),
@@ -151,6 +152,18 @@ const standardSubscriptions = defineCollection({
   }),
 });
 
+const photos = defineCollection({
+  loader: photosLoader(),
+  schema: z.object({
+    title: z.string(),
+    address: z.string().optional(),
+    thumbnailUrl: z.string().optional(),
+    photoCount: z.number(),
+    createdAt: z.string(),
+    galleryRkey: z.string(),
+  }),
+});
+
 export const collections = {
   articles,
   weeknotes,
@@ -163,4 +176,5 @@ export const collections = {
   documents,
   blogroll,
   standardSubscriptions,
+  photos,
 };

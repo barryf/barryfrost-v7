@@ -6,6 +6,7 @@ import BlueskyCard from './posts/BlueskyCard.astro';
 import CheckinCard from './posts/CheckinCard.astro';
 import ReviewCard from './posts/ReviewCard.astro';
 import BookCard from './posts/BookCard.astro';
+import PhotoCard from './posts/PhotoCard.astro';
 
 interface Props {
   item: FeedItem;
@@ -20,6 +21,7 @@ const components = {
   checkin: CheckinCard,
   review: ReviewCard,
   book: BookCard,
+  photo: PhotoCard,
 };
 
 const Component = components[item.type];

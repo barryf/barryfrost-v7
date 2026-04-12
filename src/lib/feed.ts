@@ -5,7 +5,7 @@ import { DID } from './pds';
 const DID_SHORT = DID.replace('did:plc:', '');
 
 export interface FeedItem {
-  type: 'article' | 'weeknote' | 'bluesky' | 'checkin' | 'review' | 'book';
+  type: 'article' | 'weeknote' | 'bluesky' | 'checkin' | 'review' | 'book' | 'photo';
   date: Date;
   url: string;
   title?: string;
@@ -18,13 +18,14 @@ export interface FeedItem {
 export const PAGE_SIZE = 20;
 
 export async function getUnifiedFeed(): Promise<FeedItem[]> {
-  const [articles, weeknotes, blueskyPosts, checkinEntries, reviewEntries, bookEntries] = await Promise.all([
+  const [articles, weeknotes, blueskyPosts, checkinEntries, reviewEntries, bookEntries, photoEntries] = await Promise.all([
     getCollection('articles'),
     getCollection('weeknotes'),
     getCollection('blueskyPosts'),
     getCollection('checkins'),
     getCollection('reviews'),
     getCollection('books'),
+    getCollection('photos'),
   ]);
 
   const items: FeedItem[] = [];
@@ -98,6 +99,18 @@ export async function getUnifiedFeed(): Promise<FeedItem[]> {
       title: entry.data.title,
       summary: entry.data.authors,
       id: `book:${entry.id}`,
+      data: entry.data as unknown as Record<string, unknown>,
+    });
+  }
+
+  for (const entry of photoEntries) {
+    items.push({
+      type: 'photo',
+      date: new Date(entry.data.createdAt),
+      url: `https://grain.social/profile/${DID}/gallery/${entry.data.galleryRkey}`,
+      title: entry.data.title,
+      summary: entry.data.address,
+      id: `photo:${entry.id}`,
       data: entry.data as unknown as Record<string, unknown>,
     });
   }
