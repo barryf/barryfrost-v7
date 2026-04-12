@@ -23,6 +23,7 @@ interface PublicationRecord {
   name?: string;
   description?: string;
   url?: string;
+  base_path?: string;
   icon?: { ref?: { $link?: string }; mimeType?: string };
 }
 
@@ -54,7 +55,7 @@ export function subscriptionsLoader(): Loader {
         const pubData = await pubRes.json() as { value: PublicationRecord; cid: string };
         const pub = pubData.value;
 
-        const siteUrl = pub.url;
+        const siteUrl = pub.url ?? (pub.base_path ? `https://${pub.base_path}` : undefined);
         if (!siteUrl) {
           logger.warn(`No URL in publication record ${publicationUri}`);
           continue;
