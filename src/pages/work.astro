@@ -1,0 +1,209 @@
+---
+import Base from '../layouts/Base.astro';
+import { fetchAllRecords, DID, PDS_HOST } from '../lib/pds';
+import { formatMonthYear } from '../lib/dates';
+
+async function collectAll(collection: string) {
+  const records: Record<string, unknown>[] = [];
+  for await (const r of fetchAllRecords(collection, DID, PDS_HOST)) {
+    records.push(r.value as Record<string, unknown>);
+  }
+  return records;
+}
+
+const [selfArr, positionsArr, educationArr, projectsArr, skillsArr, languagesArr] = await Promise.all([
+  collectAll('id.sifa.profile.self'),
+  collectAll('id.sifa.profile.position'),
+  collectAll('id.sifa.profile.education'),
+  collectAll('id.sifa.profile.project'),
+  collectAll('id.sifa.profile.skill'),
+  collectAll('id.sifa.profile.language'),
+]);
+
+function parseYM(ym: string): Date {
+  const [year, month] = ym.split('-').map(Number);
+  return new Date(year, month - 1);
+}
+
+const self = selfArr[0];
+const headline = self?.headline as string | undefined;
+const location = self?.location as { city?: string; region?: string; country?: string } | undefined;
+const locationStr = location
+  ? [location.city, location.region, location.country].filter(Boolean).join(', ')
+  : undefined;
+
+const positions = positionsArr
+  .map(p => ({
+    title: p.title as string,
+    company: p.company as string,
+    startedAt: p.startedAt as string,
+    endedAt: p.endedAt as string | undefined,
+    description: p.description as string | undefined,
+  }))
+  .sort((a, b) => parseYM(b.startedAt).getTime() - parseYM(a.startedAt).getTime());
+
+const education = educationArr.map(e => ({
+  institution: e.institution as string,
+  degree: e.degree as string,
+  fieldOfStudy: e.fieldOfStudy as string | undefined,
+  endedAt: e.endedAt as string | undefined,
+}));
+
+const projects = projectsArr.map(p => ({
+  name: p.name as string,
+  url: p.url as string | undefined,
+  description: p.description as string | undefined,
+}));
+
+type SkillCategory = 'technical' | 'business' | 'interpersonal';
+const skillsByCategory = skillsArr.reduce<Record<SkillCategory, string[]>>(
+  (acc, s) => {
+    const cat = (s.category as SkillCategory) ?? 'technical';
+    if (!acc[cat]) acc[cat] = [];
+    acc[cat].push(s.name as string);
+    return acc;
+  },
+  { technical: [], business: [], interpersonal: [] },
+);
+
+const proficiencyLabel: Record<string, string> = {
+  native: 'Native',
+  limited_working: 'Limited working',
+  professional_working: 'Professional working',
+  full_professional: 'Full professional',
+  elementary: 'Elementary',
+};
+
+const languages = languagesArr.map(l => ({
+  name: l.name as string,
+  proficiency: l.proficiency as string,
+}));
+---
+
+<Base title="Work" description="Barry Frost's work history, skills and projects">
+  <h1 class="text-2xl font-bold mb-2">Work</h1>
+
+  {(headline || locationStr) && (
+    <div class="mb-10 text-neutral-600 dark:text-neutral-400">
+      {headline && <p class="text-lg">{headline}</p>}
+      {locationStr && <p class="text-sm mt-1">{locationStr}</p>}
+    </div>
+  )}
+
+  <section class="mb-10">
+    <h2 class="text-lg font-semibold mb-4 pb-2 border-b border-neutral-200 dark:border-neutral-700">Career</h2>
+    <ul class="space-y-8">
+      {positions.map(pos => (
+        <li>
+          <div class="flex flex-wrap justify-between items-baseline gap-x-4 gap-y-1">
+            <div>
+              <span class="font-semibold">{pos.title}</span>
+              <span class="text-neutral-600 dark:text-neutral-400"> · {pos.company}</span>
+            </div>
+            <span class="text-sm text-neutral-500 dark:text-neutral-500 whitespace-nowrap">
+              {formatMonthYear(parseYM(pos.startedAt))}–{pos.endedAt ? formatMonthYear(parseYM(pos.endedAt)) : 'Present'}
+            </span>
+          </div>
+          {pos.description && (
+            <p class="mt-2 text-sm text-neutral-700 dark:text-neutral-300 whitespace-pre-wrap">{pos.description.trim()}</p>
+          )}
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  {education.length > 0 && (
+    <section class="mb-10">
+      <h2 class="text-lg font-semibold mb-4 pb-2 border-b border-neutral-200 dark:border-neutral-700">Education</h2>
+      <ul class="space-y-4">
+        {education.map(edu => (
+          <li>
+            <div class="flex flex-wrap justify-between items-baseline gap-x-4 gap-y-1">
+              <span class="font-semibold">{edu.institution}</span>
+              {edu.endedAt && (
+                <span class="text-sm text-neutral-500 dark:text-neutral-500 whitespace-nowrap">
+                  {formatMonthYear(parseYM(edu.endedAt))}
+                </span>
+              )}
+            </div>
+            <p class="text-sm text-neutral-700 dark:text-neutral-300 mt-0.5">
+              {edu.degree}{edu.fieldOfStudy ? `, ${edu.fieldOfStudy}` : ''}
+            </p>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  {projects.length > 0 && (
+    <section class="mb-10">
+      <h2 class="text-lg font-semibold mb-4 pb-2 border-b border-neutral-200 dark:border-neutral-700">Projects</h2>
+      <ul class="space-y-4">
+        {projects.map(proj => (
+          <li>
+            {proj.url ? (
+              <a href={proj.url} class="font-semibold hover:underline">{proj.name}</a>
+            ) : (
+              <span class="font-semibold">{proj.name}</span>
+            )}
+            {proj.description && (
+              <p class="text-sm text-neutral-700 dark:text-neutral-300 mt-1">{proj.description.trim()}</p>
+            )}
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  {(skillsByCategory.technical.length > 0 || skillsByCategory.business.length > 0 || skillsByCategory.interpersonal.length > 0) && (
+    <section class="mb-10">
+      <h2 class="text-lg font-semibold mb-4 pb-2 border-b border-neutral-200 dark:border-neutral-700">Skills</h2>
+      <div class="space-y-4">
+        {skillsByCategory.technical.length > 0 && (
+          <div>
+            <h3 class="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-500 mb-2">Technical</h3>
+            <div class="flex flex-wrap gap-2">
+              {skillsByCategory.technical.map(name => (
+                <span class="px-2 py-0.5 text-sm bg-neutral-100 dark:bg-neutral-800 rounded">{name}</span>
+              ))}
+            </div>
+          </div>
+        )}
+        {skillsByCategory.business.length > 0 && (
+          <div>
+            <h3 class="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-500 mb-2">Business</h3>
+            <div class="flex flex-wrap gap-2">
+              {skillsByCategory.business.map(name => (
+                <span class="px-2 py-0.5 text-sm bg-neutral-100 dark:bg-neutral-800 rounded">{name}</span>
+              ))}
+            </div>
+          </div>
+        )}
+        {skillsByCategory.interpersonal.length > 0 && (
+          <div>
+            <h3 class="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-500 mb-2">Interpersonal</h3>
+            <div class="flex flex-wrap gap-2">
+              {skillsByCategory.interpersonal.map(name => (
+                <span class="px-2 py-0.5 text-sm bg-neutral-100 dark:bg-neutral-800 rounded">{name}</span>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </section>
+  )}
+
+  {languages.length > 0 && (
+    <section class="mb-10">
+      <h2 class="text-lg font-semibold mb-4 pb-2 border-b border-neutral-200 dark:border-neutral-700">Languages</h2>
+      <ul class="space-y-2">
+        {languages.map(lang => (
+          <li class="flex justify-between text-sm">
+            <span class="font-medium">{lang.name}</span>
+            <span class="text-neutral-500 dark:text-neutral-500">{proficiencyLabel[lang.proficiency] ?? lang.proficiency}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+</Base>
