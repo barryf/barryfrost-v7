@@ -1,9 +1,26 @@
 ---
-import Feed from '../../layouts/Feed.astro';
-import { getUnifiedFeed, paginateItems } from '../../lib/feed';
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
 
-const allItems = (await getUnifiedFeed()).filter(i => i.type === 'weeknote');
-const pages = paginateItems(allItems);
-const { items, totalPages } = pages[0] ?? { items: [], totalPages: 1 };
+const allWeeknotes = await getCollection('weeknotes');
+allWeeknotes.sort((a, b) => b.data.week - a.data.week);
+
+function titleWord(title: string): string {
+  return title.replace(/^Week \d+\s*[-:]\s*/i, '');
+}
 ---
-<Feed title="Weeknotes" items={items} currentPage={1} totalPages={totalPages} basePath="/weeknotes" />
+<Base title="Weeknotes">
+  <h1 class="text-2xl font-bold mb-8">Weeknotes</h1>
+
+  <div class="grid grid-cols-3 gap-x-4 gap-y-1">
+    {allWeeknotes.map(entry => (
+      <a href={`/weeknotes/${entry.id}`} class="flex items-center gap-2 py-1.5 hover:bg-neutral-100 dark:hover:bg-neutral-900 rounded -mx-1.5 px-1.5 transition-colors group">
+        <span class="text-neutral-400 dark:text-neutral-600 text-xs tabular-nums w-6 text-right shrink-0">{entry.data.week}</span>
+        <span class="text-base w-6 text-center shrink-0 leading-none">{entry.data.emoji}</span>
+        <span class="text-sm font-medium group-hover:underline truncate">{titleWord(entry.data.title)}</span>
+      </a>
+    ))}
+  </div>
+
+  <p class="text-sm text-neutral-400 dark:text-neutral-600 mt-8">{allWeeknotes.length} weeknotes</p>
+</Base>

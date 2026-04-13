@@ -8,7 +8,7 @@ export function formatDate(date: Date): string {
 
 export function formatMonthYear(date: Date): string {
   return date.toLocaleDateString('en-GB', {
-    month: 'long',
+    month: 'short',
     year: 'numeric',
   });
 }
