@@ -15,53 +15,70 @@ interface Props {
 const { checkins } = Astro.props;
 ---
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" crossorigin="" />
-<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" crossorigin="" />
-
 <div id="checkin-map" class="w-full rounded-lg mb-8 bg-neutral-100 dark:bg-neutral-800 overflow-hidden" style="height: 360px;"></div>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV/XN/TAbg=" crossorigin=""></script>
-<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js" crossorigin=""></script>
 <script is:inline define:vars={{ checkins }}>
   (function () {
-    const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const tileUrl = dark
-      ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-      : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
-
-    const map = L.map('checkin-map');
-    L.tileLayer(tileUrl, {
-      attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors ' +
-        '&copy; <a href="https://carto.com/attributions">CARTO</a>',
-      subdomains: 'abcd',
-      maxZoom: 20,
-    }).addTo(map);
-
-    const cluster = L.markerClusterGroup();
-
-    for (const c of checkins) {
-      const marker = L.marker([parseFloat(c.latitude), parseFloat(c.longitude)]);
-      const date = new Date(c.createdAt).toLocaleDateString('en-GB', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-      });
-      marker.bindPopup(
-        '<strong><a href="' + c.url + '">' + c.venueName + '</a></strong>' +
-        (c.venueCategory ? '<br><span style="font-size:0.85em">' + c.venueCategory + '</span>' : '') +
-        '<br><small>' + date + '</small>'
-      );
-      cluster.addLayer(marker);
+    function loadCSS(href) {
+      const el = document.createElement('link');
+      el.rel = 'stylesheet';
+      el.href = href;
+      document.head.appendChild(el);
     }
 
-    map.addLayer(cluster);
-
-    if (checkins.length > 0) {
-      map.fitBounds(cluster.getBounds(), { padding: [30, 30] });
-    } else {
-      map.setView([51.5, -0.1], 10);
+    function loadScript(src, cb) {
+      const el = document.createElement('script');
+      el.src = src;
+      el.onload = cb;
+      document.head.appendChild(el);
     }
+
+    function initMap() {
+      const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const tileUrl = dark
+        ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+        : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+
+      const map = L.map('checkin-map');
+      L.tileLayer(tileUrl, {
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors ' +
+          '&copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 20,
+      }).addTo(map);
+
+      const cluster = L.markerClusterGroup();
+
+      for (const c of checkins) {
+        const marker = L.marker([parseFloat(c.latitude), parseFloat(c.longitude)]);
+        const date = new Date(c.createdAt).toLocaleDateString('en-GB', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+        });
+        marker.bindPopup(
+          '<strong><a href="' + c.url + '">' + c.venueName + '</a></strong>' +
+          (c.venueCategory ? '<br><span style="font-size:0.85em">' + c.venueCategory + '</span>' : '') +
+          '<br><small>' + date + '</small>'
+        );
+        cluster.addLayer(marker);
+      }
+
+      map.addLayer(cluster);
+
+      if (checkins.length > 0) {
+        map.fitBounds(cluster.getBounds(), { padding: [30, 30] });
+      } else {
+        map.setView([51.5, -0.1], 10);
+      }
+    }
+
+    loadCSS('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css');
+    loadCSS('https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css');
+    loadCSS('https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css');
+    loadScript('https://unpkg.com/leaflet@1.9.4/dist/leaflet.js', function () {
+      loadScript('https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js', initMap);
+    });
   })();
 </script>
