@@ -72,8 +72,9 @@ Page size is 20. `paginateItems()` splits any array into `{ page, items, totalPa
 | `/page/2` | Unified feed, subsequent pages |
 | `/articles` | Articles feed |
 | `/articles/{slug}` | Individual article |
-| `/weeknotes` | Weeknotes feed |
+| `/weeknotes` | All weeknotes, 3-column grid (no pagination) |
 | `/weeknotes/{slug}` | Individual weeknote |
+| `/work` | CV page — career, education, projects, skills, languages from `id.sifa.profile.*` PDS records |
 | `/posts` | Bluesky posts feed |
 | `/checkins` | Checkins feed |
 | `/reviews` | Reviews feed |
@@ -85,7 +86,7 @@ Page size is 20. `paginateItems()` splits any array into `{ page, items, totalPa
 | `/travelblog/{num}` | Travel blog entries |
 | `/feed.xml` | RSS feed (articles + weeknotes, latest 10, full content) |
 
-Each type-specific feed has `/page/{n}` pagination. Categories come from the `categories` frontmatter array on articles/weeknotes.
+Most type-specific feeds have `/page/{n}` pagination. The weeknotes index is an exception — it shows all entries on a single page. Categories come from the `categories` frontmatter array on articles/weeknotes.
 
 ## Layouts & Components
 
@@ -133,7 +134,8 @@ Required secrets: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`
 
 ## Key Conventions
 
-- **No runtime JS** — all rendering is static; MF2, dark mode, and layout are pure HTML/CSS
+- **Minimal JS** — the `/checkins` page loads Leaflet + Leaflet.markercluster via dynamic `createElement` (CDN) for the cluster map; all other pages are JS-free
+- **No runtime JS elsewhere** — MF2, dark mode, and layout are pure HTML/CSS
 - **Local Markdown is canonical** — PDS documents are syndication targets, not the source of truth
 - **Images cached at build time** — blobs downloaded once to `public/images/`, persisted in CI cache
 - **`visibility: unlisted`** frontmatter hides articles/weeknotes from feeds (but pages still generate)
@@ -152,7 +154,6 @@ Required secrets: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`
 
 ## Ideas / Backlog
 
-- `/work` page from sifa.id data
 - `/now`, `/uses`, `/defaults`, `/pay`, `/contact` slash pages
 - Gigs attended
 - Script to backfill historical checkins/reviews/notes as PDS records

@@ -10,7 +10,7 @@ See `PLAN.md` for full architecture, URL structure, and content type details.
 
 ## Key Conventions
 - Local Markdown is canonical; PDS records are syndication targets
-- MF2 classes applied directly in Astro templates — no runtime JS
+- MF2 classes applied directly in Astro templates — no runtime JS except `/checkins` (Leaflet map)
 - Light/dark mode via `prefers-color-scheme` only — no JS toggle
 - Images downloaded at build time to `public/images/`, cached in CI
 - No SSR — rebuilds trigger via GitHub Actions `repository_dispatch` when PDS changes
