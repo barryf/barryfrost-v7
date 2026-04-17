@@ -7,6 +7,7 @@ import CheckinCard from './posts/CheckinCard.astro';
 import ReviewCard from './posts/ReviewCard.astro';
 import BookCard from './posts/BookCard.astro';
 import PhotoCard from './posts/PhotoCard.astro';
+import TypeIcon from './TypeIcon.astro';
 
 interface Props {
   item: FeedItem;
@@ -26,6 +27,9 @@ const components = {
 
 const Component = components[item.type];
 ---
-<div class="py-4 border-b border-neutral-100 dark:border-neutral-800 last:border-0">
-  <Component item={item} />
+<div class="py-4 border-b border-neutral-100 dark:border-neutral-800 last:border-0 flex items-start gap-3">
+  <TypeIcon type={item.type} class="size-5 shrink-0 mt-0.5 text-neutral-400 dark:text-neutral-500" />
+  <div class="flex-1 min-w-0">
+    <Component item={item} />
+  </div>
 </div>
