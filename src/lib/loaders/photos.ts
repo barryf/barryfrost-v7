@@ -64,13 +64,13 @@ export function photosLoader(): Loader {
         const items = (galleryItems.get(galleryUri) ?? []).sort((a, b) => a.position - b.position);
         const photoCount = items.length;
 
-        let thumbnailUrl: string | undefined;
-        const firstItem = items[0];
-        if (firstItem) {
-          const photo = photos.get(firstItem.photoUri);
+        const thumbnailUrls: string[] = [];
+        for (const [index, item] of items.slice(0, 3).entries()) {
+          const photo = photos.get(item.photoUri);
           if (photo?.photo?.ref?.$link) {
             const blobUrl = `https://${PDS_HOST}/xrpc/com.atproto.sync.getBlob?did=${DID}&cid=${photo.photo.ref.$link}`;
-            thumbnailUrl = await downloadImage(blobUrl, 'photos', `${gallery.rkey}.jpg`, 300, 300);
+            const url = await downloadImage(blobUrl, 'photos', `${gallery.rkey}-${index}.jpg`, 300, 300);
+            if (url) thumbnailUrls.push(url);
           }
         }
 
@@ -79,7 +79,7 @@ export function photosLoader(): Loader {
           data: {
             title: gallery.title,
             address: gallery.address,
-            thumbnailUrl,
+            thumbnailUrls,
             photoCount,
             createdAt: gallery.createdAt,
             galleryRkey: gallery.rkey,

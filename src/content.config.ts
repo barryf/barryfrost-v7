@@ -157,7 +157,7 @@ const photos = defineCollection({
   schema: z.object({
     title: z.string(),
     address: z.string().optional(),
-    thumbnailUrl: z.string().optional(),
+    thumbnailUrls: z.array(z.string()),
     photoCount: z.number(),
     createdAt: z.string(),
     galleryRkey: z.string(),

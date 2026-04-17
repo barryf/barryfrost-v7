@@ -7,28 +7,31 @@ interface Props {
 }
 
 const { item } = Astro.props;
-const data = item.data as { title: string; address?: string; thumbnailUrl?: string; photoCount: number };
+const data = item.data as { title: string; address?: string; thumbnailUrls: string[]; photoCount: number };
+const thumbs = data.thumbnailUrls ?? [];
 ---
-<article class="h-entry flex gap-4">
-  {data.thumbnailUrl && (
-    <img
-      src={data.thumbnailUrl}
-      alt={data.title}
-      width="96"
-      height="96"
-      class="w-24 h-24 object-cover rounded flex-shrink-0"
-      loading="lazy"
-      decoding="async"
-    />
-  )}
-  <div>
-    <h2 class="font-semibold">
-      <a class="p-name u-url" href={item.url} rel="noopener noreferrer">{data.title}</a>
-    </h2>
-    {data.address && <p class="text-sm text-neutral-600 dark:text-neutral-400">{data.address}</p>}
-    <div class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
-      <time class="dt-published" datetime={toISODate(item.date)}>{formatDate(item.date)}</time>
-      {data.photoCount > 1 && <span class="ml-2">{data.photoCount} photos</span>}
+<article class="h-entry">
+  {thumbs.length > 0 && (
+    <div class="flex gap-2 mb-2">
+      {thumbs.slice(0, 3).map((url) => (
+        <img
+          src={url}
+          alt={data.title}
+          width="80"
+          height="80"
+          class="w-30 h-30 object-cover rounded"
+          loading="lazy"
+          decoding="async"
+        />
+      ))}
     </div>
+  )}
+  <h2 class="font-semibold">
+    <a class="p-name u-url" href={item.url} rel="noopener noreferrer">{data.title}</a>
+  </h2>
+  {data.address && <p class="text-sm text-neutral-600 dark:text-neutral-400">{data.address}</p>}
+  <div class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
+    <time class="dt-published" datetime={toISODate(item.date)}>{formatDate(item.date)}</time>
+    {data.photoCount > 1 && <span class="ml-2">{data.photoCount} photos</span>}
   </div>
 </article>
