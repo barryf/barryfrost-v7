@@ -7,7 +7,8 @@ export async function downloadImage(
   subdir: string,
   filename: string,
   width: number,
-  height: number
+  height: number,
+  fit: 'cover' | 'inside' = 'cover'
 ): Promise<string | undefined> {
   const webFilename = filename.replace(/\.[^.]+$/, '.webp');
   const webPath = `/images/${subdir}/${webFilename}`;
@@ -17,7 +18,7 @@ export async function downloadImage(
     const res = await fetch(url);
     if (!res.ok) return undefined;
     const buffer = await sharp(Buffer.from(await res.arrayBuffer()))
-      .resize(width * 2, height * 2, { fit: 'cover' })
+      .resize(width * 2, height * 2, { fit })
       .webp({ quality: 85 })
       .toBuffer();
     mkdirSync(dirname(filePath), { recursive: true });

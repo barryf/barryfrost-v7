@@ -60,6 +60,8 @@ const blueskyPosts = defineCollection({
       parentRkey: z.string(),
     }).nullable(),
     uri: z.string(),
+    imageUrls: z.array(z.string()),
+    imageAlts: z.array(z.string()),
   }),
 });
 

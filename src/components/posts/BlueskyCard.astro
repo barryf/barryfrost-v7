@@ -8,8 +8,10 @@ interface Props {
 }
 
 const { item } = Astro.props;
-const data = item.data as { text: string; facets: unknown[]; uri: string; reply?: { parentHandle: string; parentRkey: string } | null };
+const data = item.data as { text: string; facets: unknown[]; uri: string; reply?: { parentHandle: string; parentRkey: string } | null; imageUrls?: string[]; imageAlts?: string[] };
 const html = renderRichText(data.text, data.facets as any);
+const images = data.imageUrls ?? [];
+const alts = data.imageAlts ?? [];
 ---
 <article class="h-entry">
   {data.reply && (
@@ -18,6 +20,19 @@ const html = renderRichText(data.text, data.facets as any);
     </p>
   )}
   <div class="p-content" set:html={html} />
+  {images.length > 0 && (
+    <div class="flex flex-wrap gap-2 mt-2">
+      {images.map((url, i) => (
+        <img
+          src={url}
+          alt={alts[i] ?? ''}
+          class="h-24 w-auto max-w-full rounded"
+          loading="lazy"
+          decoding="async"
+        />
+      ))}
+    </div>
+  )}
   <div class="mt-1 flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400">
     <time class="dt-published" datetime={toISODate(item.date)}>{formatDate(item.date)}</time>
     <a class="u-url" href={item.url} rel="noopener noreferrer">Bluesky</a>
