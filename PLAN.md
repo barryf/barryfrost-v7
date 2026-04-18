@@ -105,15 +105,26 @@ Tailwind v4 with a custom warm neutral palette and orange accent (`--color-accen
 
 ## Microformats 2 (MF2)
 
-Applied as static classes directly in Astro templates:
-- Feed containers: `h-feed`, `p-name`
-- Post wrappers: `h-entry`
-- Fields: `p-name`, `u-url`, `dt-published`, `p-summary`, `p-category`, `u-syndication`
-- No runtime JS required
+Applied as static classes directly in Astro templates so IndieWeb parsers (XRay, Monocle, pin13) classify posts correctly via [Post-Type Discovery](https://indieweb.org/Post_Type_Discovery). No runtime JS required.
+
+- **Feed** (`src/layouts/Feed.astro`): `h-feed` + `p-name` + hidden `h-card p-author` containing `u-photo` (`/barryfrost.jpg`, 192×192), `p-name`, `u-url` — parsers attach this author to every child entry
+- **All cards**: `h-entry` with `dt-published`, `u-url`, optional `p-category` entries from `categories` frontmatter
+- **ArticleCard / WeeknoteCard**: `p-name`, `p-summary`; weeknotes also emit an implicit `p-category="weeknotes"`
+- **BlueskyCard**: `e-content` for rich text, `u-in-reply-to` on reply link, `u-photo` on each embedded image
+- **CheckinCard**: nested `p-checkin h-card` with `p-name`, `p-latitude`, `p-longitude`, `p-street-address`; `p-rating` (hidden) when present; hidden `u-url` as a direct child of `h-entry` (visible click target is the venue name) so parsers attribute the Beaconbits URL to the entry rather than the venue h-card
+- **ReviewCard**: nested `p-item h-cite` with `u-photo` (poster) and hidden `p-name u-url`; numeric `p-rating` exposed via `<data value=...>` alongside star glyphs
+- **BookCard**: nested `p-read-of h-cite` with `u-photo` (cover), hidden `p-name u-url`, `p-author`
+- **PhotoCard**: `u-photo` on each gallery thumbnail, `p-location` on address, `p-name u-url` on title
+
+Image `src` and `href` attributes use `new URL(path, Astro.site).href` so parsers that don't resolve relative URLs (e.g. pin13) see absolute URLs.
 
 ## RSS Feed
 
-`/feed.xml` — articles + weeknotes only, latest 10, full HTML content rendered via `AstroContainer`.
+`/feed.xml` — articles + weeknotes only, latest 10, full HTML content rendered via `AstroContainer`. `trailingSlash: false` is passed to `@astrojs/rss` so item `<link>` / `<guid>` URLs match the site's no-trailing-slash convention.
+
+## Canonical URLs
+
+`BaseHead.astro` normalises `Astro.url.pathname` before building the canonical/og:url: `/index.html` → `/`, and strips the `.html` suffix on other paths (required because `build.format: 'file'`).
 
 ## Deployment
 
