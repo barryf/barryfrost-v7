@@ -31,3 +31,26 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy dist --project-name barryfrost-v7
+      - name: Notify Pushover on success
+        if: success()
+        run: |
+          curl -s -f \
+            --form-string "token=${{ secrets.PUSHOVER_TOKEN }}" \
+            --form-string "user=${{ secrets.PUSHOVER_USER }}" \
+            --form-string "title=barryfrost.com deployed" \
+            --form-string "message=Commit ${GITHUB_SHA::7} via ${{ github.event_name }}" \
+            --form-string "url=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            --form-string "url_title=View workflow run" \
+            https://api.pushover.net/1/messages.json
+      - name: Notify Pushover on failure
+        if: failure()
+        run: |
+          curl -s -f \
+            --form-string "token=${{ secrets.PUSHOVER_TOKEN }}" \
+            --form-string "user=${{ secrets.PUSHOVER_USER }}" \
+            --form-string "title=barryfrost.com deploy failed" \
+            --form-string "message=Commit ${GITHUB_SHA::7} via ${{ github.event_name }}" \
+            --form-string "priority=1" \
+            --form-string "url=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            --form-string "url_title=View workflow run" \
+            https://api.pushover.net/1/messages.json
