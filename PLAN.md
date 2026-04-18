@@ -42,7 +42,7 @@ Blogroll blogs come from `src/data/blogroll.json` (static JSON).
 Each PDS loader implements `Loader` from `astro/loaders`:
 - `store.clear()` at the start (full refresh each build)
 - Iterates `fetchAllRecords(collection, DID, PDS_HOST)` from `src/lib/pds.ts`
-- Downloads and caches image blobs via `downloadImage()` from `src/lib/download-image.ts` — saves to `public/images/{subdir}/`, skips if already exists, converts to WebP at 2× dimensions
+- Downloads and caches image blobs via `downloadImage()` from `src/lib/download-image.ts` — saves to `public/images/{subdir}/`, skips if already exists, converts to WebP at 2× dimensions. Accepts an optional `fit` parameter (`'cover'` default, or `'inside'` to preserve aspect ratio — used by the Bluesky loader for embedded images)
 - Stores entries with `generateDigest(record.cid)` for change detection
 
 ## Unified Feed
@@ -93,8 +93,11 @@ Most type-specific feeds have `/page/{n}` pagination. The weeknotes index is an 
 - `Base.astro` — HTML shell, `max-w-2xl mx-auto px-4`, dark mode via `prefers-color-scheme`
 - `Feed.astro` — wraps `FeedEntry` list + `Pagination`, accepts `basePath` for paginated routes
 - `Post.astro` — individual article/weeknote with prose styles
-- `FeedEntry.astro` — dispatches to per-type card components by `item.type`
+- `FeedEntry.astro` — dispatches to per-type card components by `item.type`, rendering a `TypeIcon` in a left gutter so each entry's type is recognisable at a glance
+- `TypeIcon.astro` — inline Heroicons (outline, 24px) keyed by `FeedItem.type`
 - Card components in `src/components/posts/`: `ArticleCard`, `WeeknoteCard`, `BlueskyCard`, `CheckinCard`, `ReviewCard`, `BookCard`, `PhotoCard`
+  - `BlueskyCard` renders up to 4 embedded images below the post text at fixed 96px height preserving aspect ratio
+  - `PhotoCard` renders up to 3 gallery thumbnails in a row and the total photo count
 
 ## Styling
 
@@ -124,13 +127,14 @@ Triggers on: push to `main`, `workflow_dispatch`, `repository_dispatch` (type: `
 2. Cache `public/images/` between runs (avoids re-downloading blobs)
 3. `npm run build`
 4. `wrangler pages deploy dist --project-name barryfrost-v7`
+5. Pushover notification — normal-priority on success, high-priority on failure, linking to the workflow run
 
 ### `poll-pds.yml`
 Runs every 15 minutes via cron. For each monitored collection, fetches the latest record CID and compares to `.github/last-seen-cids.json`. If any CID changed, commits the updated JSON and fires a `repository_dispatch` to trigger a rebuild.
 
 Monitored collections: `app.bsky.feed.post`, `app.beaconbits.beacon`, `social.popfeed.feed.review`, `buzz.bookhive.book`, `site.standard.document`, `site.standard.graph.subscription`, `social.grain.gallery`, `social.grain.gallery.item`, `social.grain.photo`
 
-Required secrets: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`
+Required secrets: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`, `PUSHOVER_TOKEN`, `PUSHOVER_USER`
 
 ## Key Conventions
 
@@ -150,7 +154,8 @@ Required secrets: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`
 4. Fetch collection in `getUnifiedFeed()` and map to `FeedItem`
 5. Create `src/components/posts/{Type}Card.astro`
 6. Register in `src/components/FeedEntry.astro` components map
-7. Add collection NSID to the `poll-pds.yml` monitored list
+7. Add an entry to `src/components/TypeIcon.astro` (label + Heroicon path) for the left-gutter icon
+8. Add collection NSID to the `poll-pds.yml` monitored list
 
 ## Ideas / Backlog
 
