@@ -11,7 +11,7 @@ const categories = (item.data.categories as string[] | undefined) ?? [];
 ---
 <article class="h-entry">
   <h2 class="text-lg font-semibold">
-    <a class="p-name u-url" href={new URL(item.url, Astro.site).href}>{item.emoji && `${item.emoji} `}{item.title}</a>
+    <a class="p-name u-url" href={item.url}>{item.emoji && `${item.emoji} `}{item.title}</a>
   </h2>
   <time class="dt-published text-sm text-neutral-500 dark:text-neutral-400" datetime={toISODate(item.date)}>
     {formatDate(item.date)}
