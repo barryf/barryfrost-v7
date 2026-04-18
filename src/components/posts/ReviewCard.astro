@@ -18,19 +18,22 @@ function toStars(rating: number): string {
 ---
 <article class="h-entry flex gap-4">
   {data.posterUrl && (
-    <img
-      src={data.posterUrl}
-      alt={`Poster for ${data.title}`}
-      width="48"
-      height="72"
-      class="u-photo w-12 object-cover rounded"
-      loading="lazy"
-      decoding="async"
-    />
+    <div class="p-item h-cite shrink-0">
+      <img
+        src={data.posterUrl}
+        alt={`Poster for ${data.title}`}
+        width="48"
+        height="72"
+        class="u-photo w-12 object-cover rounded"
+        loading="lazy"
+        decoding="async"
+      />
+      <a class="p-name u-url hidden" href={item.url} rel="noopener noreferrer">{data.title}</a>
+    </div>
   )}
   <div>
-    <h2 class="font-semibold p-item h-cite">
-      <a class="p-name u-url" href={item.url} rel="noopener noreferrer">{data.title}</a>
+    <h2 class="font-semibold">
+      <a class="u-url" href={item.url} rel="noopener noreferrer">{data.title}</a>
     </h2>
     <p class="text-sm mt-1 text-neutral-600 dark:text-neutral-400">
       {data.rating !== undefined && <data class="p-rating" value={data.rating} title={`${data.rating}/10`}>{toStars(data.rating)}</data>}
