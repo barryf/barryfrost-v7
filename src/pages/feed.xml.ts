@@ -51,5 +51,6 @@ export async function GET(context: APIContext) {
     description: 'Articles and weeknotes from Barry Frost',
     site: context.site!,
     items,
+    trailingSlash: false,
   });
 }
