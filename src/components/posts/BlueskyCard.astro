@@ -16,17 +16,17 @@ const alts = data.imageAlts ?? [];
 <article class="h-entry">
   {data.reply && (
     <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">
-      In reply to <a class="underline" href={`https://bsky.app/profile/${data.reply.parentHandle}/post/${data.reply.parentRkey}`} rel="noopener noreferrer">@{data.reply.parentHandle}'s post</a>
+      In reply to <a class="u-in-reply-to underline" href={`https://bsky.app/profile/${data.reply.parentHandle}/post/${data.reply.parentRkey}`} rel="noopener noreferrer">@{data.reply.parentHandle}'s post</a>
     </p>
   )}
-  <div class="p-content" set:html={html} />
+  <div class="e-content" set:html={html} />
   {images.length > 0 && (
     <div class="flex flex-wrap gap-2 mt-2">
       {images.map((url, i) => (
         <img
           src={url}
           alt={alts[i] ?? ''}
-          class="h-24 w-auto max-w-full rounded"
+          class="u-photo h-24 w-auto max-w-full rounded"
           loading="lazy"
           decoding="async"
         />

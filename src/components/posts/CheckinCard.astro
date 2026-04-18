@@ -7,16 +7,19 @@ interface Props {
 }
 
 const { item } = Astro.props;
-const data = item.data as { venueName: string; venueCategory?: string; venueAddress?: string; rating?: number };
+const data = item.data as { venueName: string; venueCategory?: string; venueAddress?: string; latitude?: string; longitude?: string; rating?: number };
 ---
 <article class="h-entry">
-  <div>
+  <div class="p-checkin h-card">
     <a class="u-url" href={item.url} rel="noopener noreferrer">
       <span class="p-name font-semibold">{data.venueName}</span>
     </a>
     {data.venueCategory && <span class="text-sm text-neutral-500 dark:text-neutral-400"> · {data.venueCategory}</span>}
+    {data.venueAddress && <p class="p-street-address text-sm text-neutral-600 dark:text-neutral-400 mt-0.5">{data.venueAddress}</p>}
+    {data.latitude && <data class="p-latitude" value={data.latitude} />}
+    {data.longitude && <data class="p-longitude" value={data.longitude} />}
   </div>
-  {data.venueAddress && <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-0.5">{data.venueAddress}</p>}
+  {data.rating !== undefined && <data class="p-rating hidden" value={data.rating} />}
   <div class="mt-1 flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400">
     <time class="dt-published" datetime={toISODate(item.date)}>{formatDate(item.date)}</time>
   </div>

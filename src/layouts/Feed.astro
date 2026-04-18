@@ -19,6 +19,9 @@ const { title, description, items, currentPage, totalPages, basePath } = Astro.p
   <slot name="header" />
   <div class="h-feed">
     <span class="p-name hidden">{title}</span>
+    <div class="h-card p-author hidden">
+      <a class="p-name u-url" href="/">Barry Frost</a>
+    </div>
     {items.map(item => <FeedEntry item={item} />)}
   </div>
   <Pagination currentPage={currentPage} totalPages={totalPages} basePath={basePath} />

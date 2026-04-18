@@ -7,6 +7,7 @@ interface Props {
 }
 
 const { item } = Astro.props;
+const categories = (item.data.categories as string[] | undefined) ?? [];
 ---
 <article class="h-entry">
   <h2 class="text-lg font-semibold">
@@ -16,5 +17,5 @@ const { item } = Astro.props;
     {formatDate(item.date)}
   </time>
   {item.summary && <p class="p-summary mt-1 text-neutral-700 dark:text-neutral-300">{item.summary}</p>}
-  <data class="p-category hidden" value="article" />
+  {categories.map(c => <data class="p-category hidden" value={c} />)}
 </article>
