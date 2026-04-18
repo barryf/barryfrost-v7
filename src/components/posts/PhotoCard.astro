@@ -15,7 +15,7 @@ const thumbs = data.thumbnailUrls ?? [];
     <div class="flex gap-2 mb-2">
       {thumbs.slice(0, 3).map((url) => (
         <img
-          src={url}
+          src={new URL(url, Astro.site).href}
           alt={data.title}
           width="80"
           height="80"
