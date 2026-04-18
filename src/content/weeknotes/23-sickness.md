@@ -5,7 +5,7 @@ week: 23
 emoji: "😷"
 syndication:
   - https://twitter.com/barryf/status/1487888389844213764
-categories:
+tags:
   - covid
 ---
 

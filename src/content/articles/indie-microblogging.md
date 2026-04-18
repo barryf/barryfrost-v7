@@ -1,7 +1,7 @@
 ---
 title: "Indie Microblogging"
 date: 2017-01-24
-categories:
+tags:
   - indieweb
   - micro.blog
 syndication:

@@ -5,7 +5,7 @@ week: 26
 emoji: "💨"
 syndication:
   - https://twitter.com/barryf/status/1495499452597080064
-categories:
+tags:
   - storm
   - birthday
 ---

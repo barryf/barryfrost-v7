@@ -15,10 +15,10 @@ publications.sort((a, b) => a.data.name.localeCompare(b.data.name));
   <h1 class="text-2xl font-bold mb-8">Blogroll</h1>
 
   <section class="mb-12">
-    <h2 class="text-lg font-semibold mb-2">Blogs</h2>
+    <h2 class="text-lg font-semibold mb-4 pb-2 border-b border-neutral-200 dark:border-neutral-700">Blogs</h2>
     <ul class="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
       {blogs.map(blog => (
-        <li class="py-4 border-b border-neutral-100 dark:border-neutral-800">
+        <li class="py-4">
           <FollowCard
             name={blog.data.name}
             description={blog.data.hostname}
@@ -33,10 +33,10 @@ publications.sort((a, b) => a.data.name.localeCompare(b.data.name));
 
   {publications.length > 0 && (
     <section>
-      <h2 class="text-lg font-semibold mb-2">Publications</h2>
+      <h2 class="text-lg font-semibold mb-4 pb-2 border-b border-neutral-200 dark:border-neutral-700">Publications</h2>
       <ul class="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
         {publications.map(s => (
-          <li class="py-4 border-b border-neutral-100 dark:border-neutral-800">
+          <li class="py-4">
             <FollowCard
               name={s.data.name}
               handle={s.data.handle}

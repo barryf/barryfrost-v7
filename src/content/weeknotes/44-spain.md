@@ -3,7 +3,7 @@ title: "Week 44: Spain"
 date: 2022-06-26
 week: 44
 emoji: "🇪🇸"
-categories:
+tags:
   - holiday
 ---
 

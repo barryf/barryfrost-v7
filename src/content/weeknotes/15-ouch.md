@@ -5,7 +5,7 @@ week: 15
 emoji: "😖"
 syndication:
   - https://twitter.com/barryf/status/1467608989680783362
-categories:
+tags:
   - covid
   - clothes
   - family

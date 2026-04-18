@@ -2,7 +2,7 @@
 title: "About"
 date: 2015-01-04
 visibility: unlisted
-categories:
+tags:
   - personal
 ---
 

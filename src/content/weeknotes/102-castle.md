@@ -5,7 +5,7 @@ week: 102
 emoji: "🏰"
 syndication:
   - https://mastodon.social/@barryf/110850181467371706
-categories:
+tags:
   - windsor
   - anniversary
 ---

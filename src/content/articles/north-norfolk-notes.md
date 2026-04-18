@@ -1,7 +1,7 @@
 ---
 title: "North Norfolk Notes"
 date: 2016-09-23
-categories:
+tags:
   - holiday
   - norfolk
   - travel

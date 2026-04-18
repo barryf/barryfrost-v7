@@ -5,7 +5,7 @@ week: 14
 emoji: "🔥"
 syndication:
   - https://twitter.com/barryf/status/1465061793554964498
-categories:
+tags:
   - smart
   - shopping
   - blackfriday

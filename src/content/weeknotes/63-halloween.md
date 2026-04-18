@@ -5,7 +5,7 @@ week: 63
 emoji: "🎃"
 syndication:
   - https://twitter.com/barryf/status/1589358557811871745
-categories:
+tags:
   - halloween
 ---
 

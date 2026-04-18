@@ -5,7 +5,7 @@ week: 24
 emoji: "🦠"
 syndication:
   - https://twitter.com/barryf/status/1490438856482689031
-categories:
+tags:
   - covid
 ---
 

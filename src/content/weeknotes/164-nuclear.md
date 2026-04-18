@@ -5,7 +5,7 @@ week: 164
 emoji: "☢️"
 syndication:
   - https://mastodon.social/@barryf/113306359395221635
-categories:
+tags:
   - threads
 ---
 

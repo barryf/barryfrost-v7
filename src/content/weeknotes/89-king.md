@@ -6,7 +6,7 @@ emoji: "🤴"
 syndication:
   - https://mastodon.social/@barryf/110333129461640065
   - https://twitter.com/barryf/status/1655554633593397251
-categories:
+tags:
   - king
 ---
 

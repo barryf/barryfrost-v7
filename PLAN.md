@@ -81,12 +81,12 @@ Page size is 20. `paginateItems()` splits any array into `{ page, items, totalPa
 | `/books` | Books feed |
 | `/blogroll` | Curated blogs + Standard publications |
 | `/{year}/{month}/` | Monthly archive (all types) |
-| `/categories/{category}` | Category filter |
+| `/tags/{tag}` | Tag filter |
 | `/{slug}` | Slash pages (about, colophon, etc.) |
 | `/travelblog/{num}` | Travel blog entries |
 | `/feed.xml` | RSS feed (articles + weeknotes, latest 10, full content) |
 
-Most type-specific feeds have `/page/{n}` pagination. The weeknotes index is an exception — it shows all entries on a single page. Categories come from the `categories` frontmatter array on articles/weeknotes.
+Most type-specific feeds have `/page/{n}` pagination. The weeknotes index is an exception — it shows all entries on a single page. Tags come from the `tags` frontmatter array on articles/weeknotes.
 
 ## Layouts & Components
 

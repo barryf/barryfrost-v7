@@ -135,19 +135,19 @@ export function filterByMonth(items: FeedItem[], year: string, month: string): F
   });
 }
 
-export function filterByCategory(items: FeedItem[], category: string): FeedItem[] {
+export function filterByTag(items: FeedItem[], tag: string): FeedItem[] {
   return items.filter((item) => {
-    const cats = item.data.categories as string[] | undefined;
-    return Array.isArray(cats) && cats.includes(category);
+    const tags = item.data.tags as string[] | undefined;
+    return Array.isArray(tags) && tags.includes(tag);
   });
 }
 
-export function getCategories(items: FeedItem[]): string[] {
+export function getTags(items: FeedItem[]): string[] {
   const seen = new Set<string>();
   for (const item of items) {
-    const cats = item.data.categories as string[] | undefined;
-    if (Array.isArray(cats)) {
-      for (const cat of cats) seen.add(cat);
+    const tags = item.data.tags as string[] | undefined;
+    if (Array.isArray(tags)) {
+      for (const tag of tags) seen.add(tag);
     }
   }
   return [...seen].sort();

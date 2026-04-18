@@ -7,7 +7,7 @@ interface Props {
 }
 
 const { item } = Astro.props;
-const categories = (item.data.categories as string[] | undefined) ?? [];
+const categories = (item.data.tags as string[] | undefined) ?? [];
 ---
 <article class="h-entry">
   <h2 class="text-lg font-semibold">

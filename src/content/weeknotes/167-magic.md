@@ -6,7 +6,7 @@ emoji: "🪄"
 syndication:
   - https://mastodon.social/@barryf/113426759939823132
   - https://bsky.app/profile/barryfrost.com/post/3la5nbhnwrh2u
-categories:
+tags:
   - activitypub
 ---
 

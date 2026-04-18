@@ -2,7 +2,7 @@
 title: "Using camo for SSL image proxying"
 date: 2015-01-14
 visibility: unlisted
-categories:
+tags:
   - moof
   - ssl
   - https

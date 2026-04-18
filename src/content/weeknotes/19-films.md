@@ -5,7 +5,7 @@ week: 19
 emoji: "🎬"
 syndication:
   - https://twitter.com/barryf/status/1477746296958111758
-categories:
+tags:
   - keyboard
   - film
 ---

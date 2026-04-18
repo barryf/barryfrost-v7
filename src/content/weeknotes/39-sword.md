@@ -5,7 +5,7 @@ week: 39
 emoji: "🗡"
 syndication:
   - https://twitter.com/barryf/status/1528479492083269632
-categories:
+tags:
   - nintendo
 ---
 

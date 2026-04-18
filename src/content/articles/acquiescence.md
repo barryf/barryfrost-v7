@@ -1,7 +1,7 @@
 ---
 title: "Acquiescence: a basic IndieAuth server"
 date: 2017-05-24
-categories:
+tags:
   - indieweb
   - indieauth
   - acquiescence

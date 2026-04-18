@@ -1,7 +1,7 @@
 ---
 title: "My serverless, headless, Micropub-powered, personal website"
 date: 2021-07-13
-categories:
+tags:
   - serverless
   - cms
   - architect

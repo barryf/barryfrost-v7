@@ -1,7 +1,7 @@
 ---
 title: "Using JSON in Postgres with Ruby and Sequel"
 date: 2017-10-10
-categories:
+tags:
   - postgres
   - sequel
   - json

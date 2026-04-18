@@ -3,7 +3,7 @@ title: "Week 38: Seaside"
 date: 2022-05-15
 week: 38
 emoji: "🏖"
-categories:
+tags:
   - holiday
   - norfolk
 syndication:

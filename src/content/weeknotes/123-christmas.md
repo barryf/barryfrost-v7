@@ -6,7 +6,7 @@ emoji: "🎄"
 syndication:
   - https://mastodon.social/@barryf/111680677380623312
   - https://bsky.app/profile/barryfrost.com/post/3khw7warbe22b
-categories:
+tags:
   - christmas
 ---
 

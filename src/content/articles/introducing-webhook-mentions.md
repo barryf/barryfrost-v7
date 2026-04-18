@@ -1,7 +1,7 @@
 ---
 title: "Introducing Webhook Mentions"
 date: 2016-07-28
-categories:
+tags:
   - indieweb
   - webmention
   - github

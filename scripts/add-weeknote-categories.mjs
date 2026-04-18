@@ -52,23 +52,23 @@ for (const jsonPath of jsonFiles) {
     continue;
   }
 
-  // Skip if already has categories
-  if (md.includes('\ncategories:')) {
-    console.log(`Already has categories: ${slug}`);
+  // Skip if already has tags
+  if (md.includes('\ntags:')) {
+    console.log(`Already has tags: ${slug}`);
     continue;
   }
 
-  // Insert categories after the emoji line (or before visibility/end of frontmatter)
-  const categoriesYaml = `categories:\n${extras.map(c => `  - ${c}`).join('\n')}`;
+  // Insert tags after the emoji line (or before visibility/end of frontmatter)
+  const tagsYaml = `tags:\n${extras.map(c => `  - ${c}`).join('\n')}`;
 
   // Insert before closing ---
   const newMd = md.replace(
     /^(---\n[\s\S]*?)(^---)/m,
-    (_, front, close) => `${front}${categoriesYaml}\n${close}`
+    (_, front, close) => `${front}${tagsYaml}\n${close}`
   );
 
   if (newMd === md) {
-    console.warn(`Couldn't insert categories for ${slug}`);
+    console.warn(`Couldn't insert tags for ${slug}`);
     continue;
   }
 

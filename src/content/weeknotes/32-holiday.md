@@ -3,7 +3,7 @@ title: "Week 32: Holiday"
 date: 2022-04-03
 week: 32
 emoji: "⛱️"
-categories:
+tags:
   - holiday
   - norfolk
 ---

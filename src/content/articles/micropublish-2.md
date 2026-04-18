@@ -1,7 +1,7 @@
 ---
 title: "Micropublish 2"
 date: 2016-12-31
-categories:
+tags:
   - indieweb
   - micropub
   - micropublish

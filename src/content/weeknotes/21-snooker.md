@@ -5,7 +5,7 @@ week: 21
 emoji: "🔴"
 syndication:
   - https://twitter.com/barryf/status/1482824207780171777
-categories:
+tags:
   - snooker
   - job
 ---

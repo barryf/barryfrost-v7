@@ -1,7 +1,7 @@
 ---
 title: "Hacker Jobs interview"
 date: 2013-02-27
-categories:
+tags:
   - interview
   - recruitment
   - hiring

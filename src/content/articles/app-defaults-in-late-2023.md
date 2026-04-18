@@ -1,7 +1,7 @@
 ---
 title: "App defaults in late 2023"
 date: 2023-11-08
-categories:
+tags:
   - defaults
   - mac
   - ios

@@ -15,7 +15,7 @@ const articles = defineCollection({
     title: z.string(),
     date: z.coerce.date(),
     description: z.string().optional(),
-    categories: z.array(z.string()).optional(),
+    tags: z.array(z.string()).optional(),
     visibility: z.string().optional(),
   }),
 });
@@ -28,7 +28,7 @@ const weeknotes = defineCollection({
     week: z.number(),
     description: z.string().optional(),
     emoji: z.string().optional(),
-    categories: z.array(z.string()).optional(),
+    tags: z.array(z.string()).optional(),
     visibility: z.string().optional(),
   }),
 });

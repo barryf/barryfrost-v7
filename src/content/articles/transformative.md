@@ -2,7 +2,7 @@
 title: "Announcing Transformative"
 date: 2016-11-10
 visibility: unlisted
-categories:
+tags:
   - transformative
   - indieweb
   - micropub

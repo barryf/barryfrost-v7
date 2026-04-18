@@ -6,7 +6,7 @@ emoji: "😔"
 syndication:
   - https://mastodon.social/@barryf/109695110945605306
   - https://twitter.com/barryf/status/1614721476979982336
-categories:
+tags:
   - job
 ---
 

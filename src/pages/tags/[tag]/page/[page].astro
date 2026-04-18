@@ -1,0 +1,23 @@
+---
+import Feed from '../../../../layouts/Feed.astro';
+import { getUnifiedFeed, filterByTag, getTags, paginateItems } from '../../../../lib/feed';
+
+export async function getStaticPaths() {
+  const allItems = await getUnifiedFeed();
+  const tags = getTags(allItems);
+
+  return tags.flatMap((tag) => {
+    const items = filterByTag(allItems, tag);
+    const pages = paginateItems(items);
+    return pages.slice(1).map(({ page, items, totalPages }) => ({
+      params: { tag, page: String(page) },
+      props: { items, currentPage: page, totalPages, tag },
+    }));
+  });
+}
+
+const { items, currentPage, totalPages, tag } = Astro.props;
+---
+<Feed title={`#${tag} — Page ${currentPage}`} items={items} currentPage={currentPage} totalPages={totalPages} basePath={`/tags/${tag}`}>
+  <h1 slot="header" class="text-2xl font-bold mb-8">#{tag}</h1>
+</Feed>

@@ -5,6 +5,9 @@
 # RSS alias
 /rss /feed.xml 301
 
+# Categories renamed to tags
+/categories/* /tags/:splat 301
+
 # Weeknote redirects (old URL → new URL)
 /2021/08/weeknotes-001 /weeknotes/1-starting 301
 /2021/09/weeknotes-002 /weeknotes/2-cricket 301

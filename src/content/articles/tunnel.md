@@ -1,7 +1,7 @@
 ---
 title: "Creating a tunnel to localhost with Cloudflare"
 date: 2023-03-11
-categories:
+tags:
   - til
   - tunnel
   - localhost

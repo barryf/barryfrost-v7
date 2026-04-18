@@ -5,7 +5,7 @@ week: 13
 emoji: "🎂"
 syndication:
   - https://twitter.com/barryf/status/1462799342717345793
-categories:
+tags:
   - gig
   - cricket
   - birthday

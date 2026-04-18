@@ -2,7 +2,7 @@
 title: "How to comment"
 date: 2015-01-17
 visibility: unlisted
-categories:
+tags:
   - comment
   - transformative
 ---

@@ -5,7 +5,7 @@ week: 40
 emoji: "🛁"
 syndication:
   - https://twitter.com/barryf/status/1531002586010112001
-categories:
+tags:
   - switch
 ---
 

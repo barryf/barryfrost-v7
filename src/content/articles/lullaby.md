@@ -1,7 +1,7 @@
 ---
 title: "Making a looping lullaby box"
 date: 2017-12-29
-categories:
+tags:
   - baby
   - music
   - ffmpeg

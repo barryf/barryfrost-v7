@@ -5,7 +5,7 @@ week: 30
 emoji: "🦫"
 syndication:
   - https://twitter.com/barryf/status/1505640049983041536
-categories:
+tags:
   - beavers
 ---
 

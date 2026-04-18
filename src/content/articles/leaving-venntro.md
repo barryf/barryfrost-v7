@@ -1,7 +1,7 @@
 ---
 title: "Leaving Venntro"
 date: 2018-04-03
-categories:
+tags:
   - personal
   - venntro
   - career

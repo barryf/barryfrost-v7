@@ -6,7 +6,7 @@ emoji: "🎅"
 syndication:
   - https://twitter.com/barryf/status/1602027278120230913
   - https://mastodon.social/@barryf/109496765618361204
-categories:
+tags:
   - christmas
 ---
 

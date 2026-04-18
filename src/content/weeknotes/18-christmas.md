@@ -5,7 +5,7 @@ week: 18
 emoji: "🎄"
 syndication:
   - https://twitter.com/barryf/status/1475587478170046475
-categories:
+tags:
   - christmas
 ---
 

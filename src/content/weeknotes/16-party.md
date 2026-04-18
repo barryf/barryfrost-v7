@@ -5,7 +5,7 @@ week: 16
 emoji: "🎉"
 syndication:
   - https://twitter.com/barryf/status/1470125719606939649
-categories:
+tags:
   - party
   - christmas
   - f1

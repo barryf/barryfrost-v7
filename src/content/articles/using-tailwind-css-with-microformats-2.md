@@ -1,7 +1,7 @@
 ---
 title: "Using Tailwind CSS with Microformats 2"
 date: 2021-05-29
-categories:
+tags:
   - tailwind
   - css
   - microformats

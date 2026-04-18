@@ -5,7 +5,7 @@ week: 156
 emoji: "🏖️"
 syndication:
   - https://mastodon.social/@barryf/113024388518499465
-categories:
+tags:
   - holiday
   - norfolk
 ---

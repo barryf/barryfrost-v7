@@ -1,7 +1,7 @@
 ---
 title: "Micropublish v2.3.0"
 date: 2020-10-12
-categories:
+tags:
   - micropublish
 ---
 

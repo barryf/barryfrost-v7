@@ -6,7 +6,7 @@ emoji: "📡"
 syndication:
   - https://mastodon.social/@barryf/109417772592422352
   - https://twitter.com/barryf/status/1596971891553865728
-categories:
+tags:
   - birthday
 ---
 

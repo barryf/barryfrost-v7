@@ -6,7 +6,7 @@ emoji: "🏖️"
 syndication:
   - https://mastodon.social/@barryf/111000260708574849
   - https://bsky.app/profile/barryfrost.com/post/3k6i6iecxg623
-categories:
+tags:
   - holiday
   - norfolk
 ---

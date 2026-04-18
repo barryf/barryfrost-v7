@@ -1,7 +1,7 @@
 ---
 title: "How we make remote working work"
 date: 2017-10-18
-categories:
+tags:
   - remote
   - work
   - venntrodev

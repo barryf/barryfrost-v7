@@ -6,7 +6,7 @@ emoji: "👨🏻‍💼"
 syndication:
   - https://mastodon.social/@barryf/110448148131948765
   - https://staging.bsky.app/profile/barryfrost.com/post/3jwsunh4w2i2t
-categories:
+tags:
   - job
 ---
 
