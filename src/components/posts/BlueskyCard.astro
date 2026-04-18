@@ -19,7 +19,7 @@ const alts = data.imageAlts ?? [];
       In reply to <a class="u-in-reply-to underline" href={`https://bsky.app/profile/${data.reply.parentHandle}/post/${data.reply.parentRkey}`} rel="noopener noreferrer">@{data.reply.parentHandle}'s post</a>
     </p>
   )}
-  <div class="e-content" set:html={html} />
+  <div class="e-content break-words" set:html={html} />
   {images.length > 0 && (
     <div class="flex flex-wrap gap-2 mt-2">
       {images.map((url, i) => (
