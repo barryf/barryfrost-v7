@@ -5,7 +5,8 @@ interface Props {
 }
 
 const { title, description = 'Personal website of Barry Frost' } = Astro.props;
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const cleanPath = Astro.url.pathname.replace(/\/index\.html$/, '/').replace(/\.html$/, '');
+const canonicalURL = new URL(cleanPath, Astro.site);
 ---
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
