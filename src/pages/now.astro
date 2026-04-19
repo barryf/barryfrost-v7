@@ -44,7 +44,14 @@ const latestWeeknote = [...weeknoteEntries]
   .filter(e => e.data.visibility !== 'unlisted')
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())[0];
 
-const latestPost = feed.find(i => i.type === 'bluesky' || i.type === 'review');
+const latestReview = feed.find(i => i.type === 'review');
+
+function toStars(rating: number): string {
+  const stars = rating / 2;
+  const full = Math.floor(stars);
+  const half = stars % 1 >= 0.5;
+  return '★'.repeat(full) + (half ? '½' : '');
+}
 
 interface Source {
   label: string;
@@ -53,7 +60,7 @@ interface Source {
 const sifaSource: Source = { label: 'Sifa', url: 'https://sifa.id' };
 const bookhiveSource: Source = { label: 'Bookhive', url: 'https://bookhive.buzz' };
 const beaconbitsSource: Source = { label: 'Beaconbits', url: 'https://www.beaconbits.app' };
-const siteSource: Source = { label: 'Site' };
+const popfeedSource: Source = { label: 'Popfeed', url: 'https://popfeed.social' };
 ---
 <Base title="Now" description={nowEntry.data.description}>
   <article>
@@ -115,6 +122,9 @@ const siteSource: Source = { label: 'Site' };
                   <span class="font-medium">{book.data.title}</span>
                 )}
                 <p class="text-sm text-neutral-600 dark:text-neutral-400">by {book.data.authors}</p>
+                <p class="text-sm text-neutral-500 dark:text-neutral-500 mt-0.5">
+                  Started <time datetime={toISODate(new Date(book.data.createdAt))}>{formatDate(new Date(book.data.createdAt))}</time>
+                </p>
               </div>
             </li>
           ))}
@@ -141,13 +151,10 @@ const siteSource: Source = { label: 'Site' };
 
     {latestWeeknote && (
       <section class="mb-8">
-        <div class="flex items-baseline gap-2 mb-2 pb-2 border-b border-neutral-200 dark:border-neutral-700">
-          <h2 class="text-lg font-semibold">Latest weeknote</h2>
-          <span class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded text-neutral-500">{siteSource.label}</span>
-        </div>
+        <h2 class="text-lg font-semibold mb-2 pb-2 border-b border-neutral-200 dark:border-neutral-700">Latest weeknote</h2>
         <p>
           <a href={`/weeknotes/${latestWeeknote.id}`} class="font-medium hover:underline">
-            Week {latestWeeknote.data.week} — {latestWeeknote.data.title}
+            {latestWeeknote.data.emoji && `${latestWeeknote.data.emoji} `}{latestWeeknote.data.title}
           </a>
           <span class="block text-sm text-neutral-500 dark:text-neutral-500 mt-1">
             <time datetime={toISODate(latestWeeknote.data.date)}>{formatDate(latestWeeknote.data.date)}</time>
@@ -156,21 +163,42 @@ const siteSource: Source = { label: 'Site' };
       </section>
     )}
 
-    {latestPost && (
-      <section class="mb-8">
-        <div class="flex items-baseline gap-2 mb-2 pb-2 border-b border-neutral-200 dark:border-neutral-700">
-          <h2 class="text-lg font-semibold">Latest {latestPost.type === 'review' ? 'review' : 'post'}</h2>
-          <span class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded text-neutral-500">{siteSource.label}</span>
-        </div>
-        <p class="text-neutral-700 dark:text-neutral-300">
-          <a href={latestPost.url} class="hover:underline" rel="noopener noreferrer">
-            {latestPost.title ?? latestPost.summary}
-          </a>
-        </p>
-        <p class="text-sm text-neutral-500 dark:text-neutral-500 mt-1">
-          <time datetime={toISODate(latestPost.date)}>{formatDate(latestPost.date)}</time>
-        </p>
-      </section>
-    )}
+    {latestReview && (() => {
+      const reviewData = latestReview.data as { title: string; rating?: number; posterUrl?: string };
+      return (
+        <section class="mb-8">
+          <div class="flex items-baseline gap-2 mb-4 pb-2 border-b border-neutral-200 dark:border-neutral-700">
+            <h2 class="text-lg font-semibold">Last film watched</h2>
+            <a href={popfeedSource.url} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300">{popfeedSource.label}</a>
+          </div>
+          <div class="flex gap-4">
+            {reviewData.posterUrl && (
+              <img
+                src={new URL(reviewData.posterUrl, Astro.site).href}
+                alt={`Poster for ${reviewData.title}`}
+                width="48"
+                height="72"
+                class="w-12 object-cover rounded shrink-0"
+                loading="lazy"
+                decoding="async"
+              />
+            )}
+            <div>
+              <a href={latestReview.url} class="font-medium hover:underline" rel="noopener noreferrer">
+                {reviewData.title}
+              </a>
+              {reviewData.rating !== undefined && (
+                <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1" title={`${reviewData.rating}/10`}>
+                  {toStars(reviewData.rating)}
+                </p>
+              )}
+              <p class="text-sm text-neutral-500 dark:text-neutral-500 mt-1">
+                <time datetime={toISODate(latestReview.date)}>{formatDate(latestReview.date)}</time>
+              </p>
+            </div>
+          </div>
+        </section>
+      );
+    })()}
   </article>
 </Base>
