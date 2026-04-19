@@ -5,6 +5,9 @@
 # RSS alias
 /rss /feed.xml 301
 
+# Travelblog
+/categories/travelblog /travelblog 301
+
 # Categories renamed to tags
 /categories/* /tags/:splat 301
 
