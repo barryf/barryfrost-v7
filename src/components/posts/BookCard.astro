@@ -7,7 +7,8 @@ interface Props {
 }
 
 const { item } = Astro.props;
-const data = item.data as { title: string; authors: string; coverUrl?: string };
+const data = item.data as { title: string; authors: string; coverUrl?: string; status?: string };
+const dateLabel = data.status === 'buzz.bookhive.defs#reading' ? 'Started' : 'Finished';
 ---
 <article class="h-entry flex gap-4">
   <div class="p-read-of h-cite shrink-0">
@@ -31,7 +32,7 @@ const data = item.data as { title: string; authors: string; coverUrl?: string };
     </h2>
     <p class="text-sm text-neutral-600 dark:text-neutral-400">by {data.authors}</p>
     <div class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
-      <time class="dt-published" datetime={toISODate(item.date)}>Finished {formatDate(item.date)}</time>
+      <time class="dt-published" datetime={toISODate(item.date)}>{dateLabel} {formatDate(item.date)}</time>
     </div>
   </div>
 </article>
