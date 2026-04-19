@@ -1,6 +1,6 @@
 ---
 import { statSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
+import { resolve } from 'node:path';
 import { getCollection, getEntry, render } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import { formatDate, toISODate } from '../lib/dates';
@@ -14,7 +14,7 @@ const nowEntry = await getEntry('pages', 'now');
 if (!nowEntry) throw new Error('src/content/pages/now.md not found');
 const { Content } = await render(nowEntry);
 
-const nowMdPath = fileURLToPath(new URL('../content/pages/now.md', import.meta.url));
+const nowMdPath = resolve(process.cwd(), 'src/content/pages/now.md');
 const lastUpdated = statSync(nowMdPath).mtime;
 
 const [position, self, bookEntries, checkinEntries, weeknoteEntries, feed] = await Promise.all([
