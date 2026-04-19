@@ -5,7 +5,7 @@ import { DID } from './pds';
 const DID_SHORT = DID.replace('did:plc:', '');
 
 export interface FeedItem {
-  type: 'article' | 'weeknote' | 'bluesky' | 'checkin' | 'review' | 'book' | 'photo';
+  type: 'article' | 'weeknote' | 'bluesky' | 'checkin' | 'film' | 'book' | 'photo';
   date: Date;
   url: string;
   title?: string;
@@ -18,12 +18,12 @@ export interface FeedItem {
 export const PAGE_SIZE = 20;
 
 export async function getUnifiedFeed(): Promise<FeedItem[]> {
-  const [articles, weeknotes, blueskyPosts, checkinEntries, reviewEntries, bookEntries, photoEntries] = await Promise.all([
+  const [articles, weeknotes, blueskyPosts, checkinEntries, filmEntries, bookEntries, photoEntries] = await Promise.all([
     getCollection('articles'),
     getCollection('weeknotes'),
     getCollection('blueskyPosts'),
     getCollection('checkins'),
-    getCollection('reviews'),
+    getCollection('films'),
     getCollection('books'),
     getCollection('photos'),
   ]);
@@ -78,14 +78,14 @@ export async function getUnifiedFeed(): Promise<FeedItem[]> {
     });
   }
 
-  for (const entry of reviewEntries) {
+  for (const entry of filmEntries) {
     items.push({
-      type: 'review',
+      type: 'film',
       date: new Date(entry.data.createdAt),
       url: `https://popfeed.social/review/at:/${DID}/social.popfeed.feed.review/${entry.id}`,
       title: entry.data.title,
       summary: entry.data.text || `${entry.data.creativeWorkType} — ${entry.data.rating}/10`,
-      id: `review:${entry.id}`,
+      id: `film:${entry.id}`,
       data: entry.data as unknown as Record<string, unknown>,
     });
   }

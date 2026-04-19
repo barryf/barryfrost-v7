@@ -2,11 +2,11 @@ import type { Loader } from 'astro/loaders';
 import { fetchAllRecords, rkeyFromUri, DID, PDS_HOST } from '../pds';
 import { downloadImage } from '../download-image';
 
-export function reviewsLoader(): Loader {
+export function filmsLoader(): Loader {
   return {
-    name: 'reviews-loader',
+    name: 'films-loader',
     async load({ store, logger, generateDigest }) {
-      logger.info('Fetching reviews');
+      logger.info('Fetching films');
       store.clear();
 
       for await (const record of fetchAllRecords('social.popfeed.feed.review', DID, PDS_HOST)) {
@@ -16,7 +16,7 @@ export function reviewsLoader(): Loader {
 
         const rawPosterUrl = value.posterUrl as string | undefined;
         const posterUrl = rawPosterUrl
-          ? await downloadImage(rawPosterUrl, 'reviews', `${rkey}.jpg`, 48, 72)
+          ? await downloadImage(rawPosterUrl, 'films', `${rkey}.jpg`, 48, 72)
           : undefined;
 
         store.set({

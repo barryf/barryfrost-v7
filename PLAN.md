@@ -28,7 +28,7 @@ Fetched at build time from `bsky.social` for DID `did:plc:j5ksi3y4tdtbp7vpsxsfya
 |---|---|---|
 | `app.bsky.feed.post` | `bluesky.ts` | `bluesky` |
 | `app.beaconbits.beacon` | `checkins.ts` | `checkin` |
-| `social.popfeed.feed.review` | `reviews.ts` | `review` |
+| `social.popfeed.feed.review` | `films.ts` | `film` |
 | `buzz.bookhive.book` | `books.ts` | `book` |
 | `social.grain.gallery` + `.gallery.item` + `.photo` | `photos.ts` | `photo` |
 | `site.standard.document` | `documents.ts` | (enrichment only — not feed entries) |
@@ -51,7 +51,7 @@ Each PDS loader implements `Loader` from `astro/loaders`:
 
 ```ts
 interface FeedItem {
-  type: 'article' | 'weeknote' | 'bluesky' | 'checkin' | 'review' | 'book' | 'photo';
+  type: 'article' | 'weeknote' | 'bluesky' | 'checkin' | 'film' | 'book' | 'photo';
   date: Date;
   url: string;
   title?: string;
@@ -77,7 +77,7 @@ Page size is 20. `paginateItems()` splits any array into `{ page, items, totalPa
 | `/work` | CV page — career, education, projects, skills, languages from `id.sifa.profile.*` PDS records |
 | `/posts` | Bluesky posts feed |
 | `/checkins` | Checkins feed |
-| `/reviews` | Reviews feed |
+| `/films` | Films feed |
 | `/books` | Books feed |
 | `/blogroll` | Curated blogs + Standard publications |
 | `/{year}/{month}/` | Monthly archive (all types) |
@@ -95,7 +95,7 @@ Most type-specific feeds have `/page/{n}` pagination. The weeknotes index is an 
 - `Post.astro` — individual article/weeknote with prose styles
 - `FeedEntry.astro` — dispatches to per-type card components by `item.type`, rendering a `TypeIcon` in a left gutter so each entry's type is recognisable at a glance
 - `TypeIcon.astro` — inline Heroicons (outline, 24px) keyed by `FeedItem.type`
-- Card components in `src/components/posts/`: `ArticleCard`, `WeeknoteCard`, `BlueskyCard`, `CheckinCard`, `ReviewCard`, `BookCard`, `PhotoCard`
+- Card components in `src/components/posts/`: `ArticleCard`, `WeeknoteCard`, `BlueskyCard`, `CheckinCard`, `FilmCard`, `BookCard`, `PhotoCard`
   - `BlueskyCard` renders up to 4 embedded images below the post text at fixed 96px height preserving aspect ratio
   - `PhotoCard` renders up to 3 gallery thumbnails in a row and the total photo count
 
@@ -112,11 +112,11 @@ Applied as static classes directly in Astro templates so IndieWeb parsers (XRay,
 - **ArticleCard / WeeknoteCard**: `p-name`, `p-summary`; weeknotes also emit an implicit `p-category="weeknotes"`
 - **BlueskyCard**: `e-content` for rich text, `u-in-reply-to` on reply link, `u-photo` on each embedded image
 - **CheckinCard**: nested `p-checkin h-card` with `p-name`, `p-latitude`, `p-longitude`, `p-street-address`; `p-rating` (hidden) when present; hidden `u-url` as a direct child of `h-entry` (visible click target is the venue name) so parsers attribute the Beaconbits URL to the entry rather than the venue h-card
-- **ReviewCard**: nested `p-item h-cite` with `u-photo` (poster) and hidden `p-name u-url`; numeric `p-rating` exposed via `<data value=...>` alongside star glyphs
+- **FilmCard**: nested `p-item h-cite` with `u-photo` (poster) and hidden `p-name u-url`; numeric `p-rating` exposed via `<data value=...>` alongside star glyphs
 - **BookCard**: nested `p-read-of h-cite` with `u-photo` (cover), hidden `p-name u-url`, `p-author`
 - **PhotoCard**: `u-photo` on each gallery thumbnail, `p-location` on address, `p-name u-url` on title
 
-Image `src` and `href` attributes use `new URL(path, Astro.site).href` so parsers that don't resolve relative URLs (e.g. pin13) see absolute URLs.
+Image `src` attributes use `new URL(path, Astro.url).href` — `Astro.url` reflects the current host, so images resolve against `localhost` in dev and `https://new.barryfrost.com` in production builds. Non-image absolute URLs (canonical, og:url, h-card `u-url`, RSS) use `Astro.site` / `context.site`.
 
 ## RSS Feed
 
@@ -172,4 +172,4 @@ Required secrets: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`, `PUSHOVER_TOK
 
 - `/now`, `/uses`, `/defaults`, `/pay`, `/contact` slash pages
 - Gigs attended
-- Script to backfill historical checkins/reviews/notes as PDS records
+- Script to backfill historical checkins/films/notes as PDS records

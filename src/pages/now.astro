@@ -44,7 +44,7 @@ const latestWeeknote = [...weeknoteEntries]
   .filter(e => e.data.visibility !== 'unlisted')
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())[0];
 
-const latestReview = feed.find(i => i.type === 'review');
+const latestFilm = feed.find(i => i.type === 'film');
 
 function toStars(rating: number): string {
   const stars = rating / 2;
@@ -106,7 +106,7 @@ const popfeedSource: Source = { label: 'Popfeed', url: 'https://popfeed.social' 
             <li class="flex gap-4">
               {book.data.coverUrl && (
                 <img
-                  src={new URL(book.data.coverUrl, Astro.site).href}
+                  src={new URL(book.data.coverUrl, Astro.url).href}
                   alt={`Cover for ${book.data.title}`}
                   width="48"
                   height="72"
@@ -163,8 +163,8 @@ const popfeedSource: Source = { label: 'Popfeed', url: 'https://popfeed.social' 
       </section>
     )}
 
-    {latestReview && (() => {
-      const reviewData = latestReview.data as { title: string; rating?: number; posterUrl?: string };
+    {latestFilm && (() => {
+      const filmData = latestFilm.data as { title: string; rating?: number; posterUrl?: string };
       return (
         <section class="mb-8">
           <div class="flex items-baseline gap-2 mb-4 pb-2 border-b border-neutral-200 dark:border-neutral-700">
@@ -172,10 +172,10 @@ const popfeedSource: Source = { label: 'Popfeed', url: 'https://popfeed.social' 
             <a href={popfeedSource.url} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300">{popfeedSource.label}</a>
           </div>
           <div class="flex gap-4">
-            {reviewData.posterUrl && (
+            {filmData.posterUrl && (
               <img
-                src={new URL(reviewData.posterUrl, Astro.site).href}
-                alt={`Poster for ${reviewData.title}`}
+                src={new URL(filmData.posterUrl, Astro.url).href}
+                alt={`Poster for ${filmData.title}`}
                 width="48"
                 height="72"
                 class="w-12 object-cover rounded shrink-0"
@@ -184,16 +184,16 @@ const popfeedSource: Source = { label: 'Popfeed', url: 'https://popfeed.social' 
               />
             )}
             <div>
-              <a href={latestReview.url} class="font-medium hover:underline" rel="noopener noreferrer">
-                {reviewData.title}
+              <a href={latestFilm.url} class="font-medium hover:underline" rel="noopener noreferrer">
+                {filmData.title}
               </a>
-              {reviewData.rating !== undefined && (
-                <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1" title={`${reviewData.rating}/10`}>
-                  {toStars(reviewData.rating)}
+              {filmData.rating !== undefined && (
+                <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1" title={`${filmData.rating}/10`}>
+                  {toStars(filmData.rating)}
                 </p>
               )}
               <p class="text-sm text-neutral-500 dark:text-neutral-500 mt-1">
-                <time datetime={toISODate(latestReview.date)}>{formatDate(latestReview.date)}</time>
+                <time datetime={toISODate(latestFilm.date)}>{formatDate(latestFilm.date)}</time>
               </p>
             </div>
           </div>
