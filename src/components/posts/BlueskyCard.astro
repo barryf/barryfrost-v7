@@ -24,7 +24,7 @@ const alts = data.imageAlts ?? [];
     <div class="flex flex-wrap gap-2 mt-2">
       {images.map((url, i) => (
         <img
-          src={new URL(url, Astro.site).href}
+          src={new URL(url, Astro.url).href}
           alt={alts[i] ?? ''}
           class="u-photo h-24 w-auto max-w-full rounded"
           loading="lazy"

@@ -20,7 +20,7 @@ const { title, description, items, currentPage, totalPages, basePath } = Astro.p
   <div class="h-feed">
     <span class="p-name hidden">{title}</span>
     <div class="h-card p-author hidden">
-      <img class="u-photo" src={new URL('/barryfrost.jpg', Astro.site).href} alt="Barry Frost" width="192" height="192" />
+      <img class="u-photo" src={new URL('/barryfrost.jpg', Astro.url).href} alt="Barry Frost" width="192" height="192" />
       <a class="p-name u-url" href={Astro.site?.href}>Barry Frost</a>
     </div>
     {items.map(item => <FeedEntry item={item} />)}

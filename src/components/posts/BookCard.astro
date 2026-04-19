@@ -14,7 +14,7 @@ const dateLabel = data.status === 'buzz.bookhive.defs#reading' ? 'Started' : 'Fi
   <div class="p-read-of h-cite shrink-0">
     {data.coverUrl && (
       <img
-        src={new URL(data.coverUrl, Astro.site).href}
+        src={new URL(data.coverUrl, Astro.url).href}
         alt={`Cover for ${data.title}`}
         width="48"
         height="72"
