@@ -28,14 +28,14 @@ const { items, totalPages } = pages[0] ?? { items: [], totalPages: 1 };
 ---
 <Feed title="Books" items={items} currentPage={1} totalPages={totalPages} basePath="/books">
   <h1 slot="header" class="text-2xl font-bold mb-4">Books</h1>
-  <p slot="header" class="text-neutral-600 dark:text-neutral-400 mb-8">
-    Books I'm currently reading and books I've finished, tracked on my <a href="https://bookhive.buzz/profile/barryf.bsky.social">Bookhive profile</a>.
+  <p slot="header" class="text-neutral-600 dark:text-neutral-400 mb-6">
+    Books I'm currently reading and books I've finished, tracked on my <a href="https://bookhive.buzz/profile/barryfrost.com">Bookhive profile</a>.
   </p>
   {readingItems.length > 0 && (
-    <section slot="header" class="mb-12">
-      <h2 class="text-lg font-semibold mb-4 pb-2 border-b border-neutral-200 dark:border-neutral-700">Reading</h2>
+    <section slot="header" class="mb-6">
+      <h2 class="text-lg font-semibold mb-2 pb-2 border-b border-neutral-200 dark:border-neutral-700">Reading</h2>
       {readingItems.map(item => <FeedEntry item={item} />)}
     </section>
   )}
-  <h2 slot="header" class="text-lg font-semibold mb-4 pb-2 border-b border-neutral-200 dark:border-neutral-700">Read</h2>
+  <h2 slot="header" class="text-lg font-semibold mb-2 pb-2 border-b border-neutral-200 dark:border-neutral-700">Read</h2>
 </Feed>
