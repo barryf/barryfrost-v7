@@ -1,55 +1,40 @@
 ---
 import { getCollection } from 'astro:content';
 import Feed from '../../layouts/Feed.astro';
-import { formatDate, toISODate } from '../../lib/dates';
-import { getUnifiedFeed, paginateItems } from '../../lib/feed';
+import FeedEntry from '../../components/FeedEntry.astro';
+import { getUnifiedFeed, paginateItems, type FeedItem } from '../../lib/feed';
 
 const [bookEntries, feed] = await Promise.all([
   getCollection('books'),
   getUnifiedFeed(),
 ]);
 
-const currentlyReading = bookEntries
+const readingItems: FeedItem[] = bookEntries
   .filter(b => b.data.status === 'buzz.bookhive.defs#reading')
-  .sort((a, b) => new Date(b.data.createdAt).getTime() - new Date(a.data.createdAt).getTime());
+  .sort((a, b) => new Date(b.data.createdAt).getTime() - new Date(a.data.createdAt).getTime())
+  .map(entry => ({
+    type: 'book',
+    date: new Date(entry.data.createdAt),
+    url: `https://bookhive.buzz/books/${entry.data.hiveId}`,
+    title: entry.data.title,
+    summary: entry.data.authors,
+    id: `book:${entry.id}`,
+    data: entry.data as unknown as Record<string, unknown>,
+  }));
 
 const allItems = feed.filter(i => i.type === 'book');
 const pages = paginateItems(allItems);
 const { items, totalPages } = pages[0] ?? { items: [], totalPages: 1 };
 ---
 <Feed title="Books" items={items} currentPage={1} totalPages={totalPages} basePath="/books">
-  <h1 slot="header" class="text-2xl font-bold mb-8">Books</h1>
-  {currentlyReading.length > 0 && (
+  <h1 slot="header" class="text-2xl font-bold mb-4">Books</h1>
+  <p slot="header" class="text-neutral-600 dark:text-neutral-400 mb-8">
+    Books I'm currently reading and books I've finished, tracked on my <a href="https://bookhive.buzz/profile/barryf.bsky.social">Bookhive profile</a>.
+  </p>
+  {readingItems.length > 0 && (
     <section slot="header" class="mb-12">
       <h2 class="text-lg font-semibold mb-4 pb-2 border-b border-neutral-200 dark:border-neutral-700">Reading</h2>
-      <ul class="space-y-4">
-        {currentlyReading.map(book => (
-          <li class="flex gap-4">
-            {book.data.coverUrl && (
-              <img
-                src={new URL(book.data.coverUrl, Astro.site).href}
-                alt={`Cover for ${book.data.title}`}
-                width="48"
-                height="72"
-                class="w-12 object-cover rounded shrink-0"
-                loading="lazy"
-                decoding="async"
-              />
-            )}
-            <div>
-              {book.data.hiveId ? (
-                <a href={`https://bookhive.buzz/books/${book.data.hiveId}`} class="font-semibold hover:underline">{book.data.title}</a>
-              ) : (
-                <span class="font-semibold">{book.data.title}</span>
-              )}
-              <p class="text-sm text-neutral-600 dark:text-neutral-400">by {book.data.authors}</p>
-              <p class="text-sm text-neutral-500 dark:text-neutral-500 mt-0.5">
-                Started <time datetime={toISODate(new Date(book.data.createdAt))}>{formatDate(new Date(book.data.createdAt))}</time>
-              </p>
-            </div>
-          </li>
-        ))}
-      </ul>
+      {readingItems.map(item => <FeedEntry item={item} />)}
     </section>
   )}
   <h2 slot="header" class="text-lg font-semibold mb-4 pb-2 border-b border-neutral-200 dark:border-neutral-700">Read</h2>
