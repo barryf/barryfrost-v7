@@ -1,0 +1,176 @@
+---
+import { statSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { getCollection, getEntry, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { formatDate, toISODate } from '../lib/dates';
+import { getCurrentPosition, getSelf, formatLocation } from '../lib/sifa';
+import { getUnifiedFeed } from '../lib/feed';
+import { DID } from '../lib/pds';
+
+const DID_SHORT = DID.replace('did:plc:', '');
+
+const nowEntry = await getEntry('pages', 'now');
+if (!nowEntry) throw new Error('src/content/pages/now.md not found');
+const { Content } = await render(nowEntry);
+
+const nowMdPath = fileURLToPath(new URL('../content/pages/now.md', import.meta.url));
+const lastUpdated = statSync(nowMdPath).mtime;
+
+const [position, self, bookEntries, checkinEntries, weeknoteEntries, feed] = await Promise.all([
+  getCurrentPosition(),
+  getSelf(),
+  getCollection('books'),
+  getCollection('checkins'),
+  getCollection('weeknotes'),
+  getUnifiedFeed(),
+]);
+
+const locationStr = formatLocation(self);
+
+const currentlyReading = bookEntries
+  .filter(b => b.data.status === 'buzz.bookhive.defs#reading')
+  .sort((a, b) => new Date(b.data.createdAt).getTime() - new Date(a.data.createdAt).getTime());
+
+const latestCheckin = [...checkinEntries].sort(
+  (a, b) => new Date(b.data.createdAt).getTime() - new Date(a.data.createdAt).getTime(),
+)[0];
+const todayKey = new Date().toDateString();
+const checkinToday = latestCheckin && new Date(latestCheckin.data.createdAt).toDateString() === todayKey
+  ? latestCheckin
+  : undefined;
+
+const latestWeeknote = [...weeknoteEntries]
+  .filter(e => e.data.visibility !== 'unlisted')
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())[0];
+
+const latestPost = feed.find(i => i.type === 'bluesky' || i.type === 'review');
+
+interface Source {
+  label: string;
+  url?: string;
+}
+const sifaSource: Source = { label: 'Sifa', url: 'https://sifa.id' };
+const bookhiveSource: Source = { label: 'Bookhive', url: 'https://bookhive.buzz' };
+const beaconbitsSource: Source = { label: 'Beaconbits', url: 'https://www.beaconbits.app' };
+const siteSource: Source = { label: 'Site' };
+---
+<Base title="Now" description={nowEntry.data.description}>
+  <article>
+    <h1 class="text-2xl font-bold mb-2">Now</h1>
+    <p class="text-sm text-neutral-500 dark:text-neutral-500 mb-6">
+      Last updated <time datetime={toISODate(lastUpdated)}>{formatDate(lastUpdated)}</time>
+    </p>
+
+    <div class="prose dark:prose-invert max-w-none mb-10">
+      <Content />
+    </div>
+
+    {(position || locationStr) && (
+      <section class="mb-8">
+        <div class="flex items-baseline gap-2 mb-2 pb-2 border-b border-neutral-200 dark:border-neutral-700">
+          <h2 class="text-lg font-semibold">Working</h2>
+          {sifaSource.url ? (
+            <a href={sifaSource.url} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300">{sifaSource.label}</a>
+          ) : (
+            <span class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded text-neutral-500">{sifaSource.label}</span>
+          )}
+        </div>
+        {position && (
+          <p>
+            <span class="font-medium">{position.title}</span>
+            <span class="text-neutral-600 dark:text-neutral-400"> at {position.company}</span>
+          </p>
+        )}
+        {locationStr && (
+          <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1">Based in {locationStr}</p>
+        )}
+      </section>
+    )}
+
+    {currentlyReading.length > 0 && (
+      <section class="mb-8">
+        <div class="flex items-baseline gap-2 mb-4 pb-2 border-b border-neutral-200 dark:border-neutral-700">
+          <h2 class="text-lg font-semibold">Reading</h2>
+          <a href={bookhiveSource.url} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300">{bookhiveSource.label}</a>
+        </div>
+        <ul class="space-y-3">
+          {currentlyReading.map(book => (
+            <li class="flex gap-4">
+              {book.data.coverUrl && (
+                <img
+                  src={new URL(book.data.coverUrl, Astro.site).href}
+                  alt={`Cover for ${book.data.title}`}
+                  width="48"
+                  height="72"
+                  class="w-12 object-cover rounded shrink-0"
+                  loading="lazy"
+                  decoding="async"
+                />
+              )}
+              <div>
+                {book.data.hiveId ? (
+                  <a href={`https://bookhive.buzz/books/${book.data.hiveId}`} class="font-medium hover:underline">{book.data.title}</a>
+                ) : (
+                  <span class="font-medium">{book.data.title}</span>
+                )}
+                <p class="text-sm text-neutral-600 dark:text-neutral-400">by {book.data.authors}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    {checkinToday && (
+      <section class="mb-8">
+        <div class="flex items-baseline gap-2 mb-2 pb-2 border-b border-neutral-200 dark:border-neutral-700">
+          <h2 class="text-lg font-semibold">Checked in today</h2>
+          <a href={beaconbitsSource.url} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300">{beaconbitsSource.label}</a>
+        </div>
+        <p>
+          <a href={`https://www.beaconbits.app/beacons/${DID_SHORT}/${checkinToday.id}`} class="font-medium hover:underline">
+            {checkinToday.data.venueName}
+          </a>
+          {checkinToday.data.venueCategory && (
+            <span class="text-sm text-neutral-600 dark:text-neutral-400"> · {checkinToday.data.venueCategory}</span>
+          )}
+        </p>
+      </section>
+    )}
+
+    {latestWeeknote && (
+      <section class="mb-8">
+        <div class="flex items-baseline gap-2 mb-2 pb-2 border-b border-neutral-200 dark:border-neutral-700">
+          <h2 class="text-lg font-semibold">Latest weeknote</h2>
+          <span class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded text-neutral-500">{siteSource.label}</span>
+        </div>
+        <p>
+          <a href={`/weeknotes/${latestWeeknote.id}`} class="font-medium hover:underline">
+            Week {latestWeeknote.data.week} — {latestWeeknote.data.title}
+          </a>
+          <span class="block text-sm text-neutral-500 dark:text-neutral-500 mt-1">
+            <time datetime={toISODate(latestWeeknote.data.date)}>{formatDate(latestWeeknote.data.date)}</time>
+          </span>
+        </p>
+      </section>
+    )}
+
+    {latestPost && (
+      <section class="mb-8">
+        <div class="flex items-baseline gap-2 mb-2 pb-2 border-b border-neutral-200 dark:border-neutral-700">
+          <h2 class="text-lg font-semibold">Latest {latestPost.type === 'review' ? 'review' : 'post'}</h2>
+          <span class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded text-neutral-500">{siteSource.label}</span>
+        </div>
+        <p class="text-neutral-700 dark:text-neutral-300">
+          <a href={latestPost.url} class="hover:underline" rel="noopener noreferrer">
+            {latestPost.title ?? latestPost.summary}
+          </a>
+        </p>
+        <p class="text-sm text-neutral-500 dark:text-neutral-500 mt-1">
+          <time datetime={toISODate(latestPost.date)}>{formatDate(latestPost.date)}</time>
+        </p>
+      </section>
+    )}
+  </article>
+</Base>

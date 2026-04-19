@@ -1,66 +1,35 @@
 ---
 import Base from '../layouts/Base.astro';
-import { fetchAllRecords, DID, PDS_HOST } from '../lib/pds';
 import { formatMonthYear } from '../lib/dates';
+import {
+  getSelf,
+  getPositions,
+  getEducation,
+  getProjects,
+  getSkills,
+  getLanguages,
+  formatLocation,
+  parseYM,
+} from '../lib/sifa';
 
-async function collectAll(collection: string) {
-  const records: Record<string, unknown>[] = [];
-  for await (const r of fetchAllRecords(collection, DID, PDS_HOST)) {
-    records.push(r.value as Record<string, unknown>);
-  }
-  return records;
-}
-
-const [selfArr, positionsArr, educationArr, projectsArr, skillsArr, languagesArr] = await Promise.all([
-  collectAll('id.sifa.profile.self'),
-  collectAll('id.sifa.profile.position'),
-  collectAll('id.sifa.profile.education'),
-  collectAll('id.sifa.profile.project'),
-  collectAll('id.sifa.profile.skill'),
-  collectAll('id.sifa.profile.language'),
+const [self, positions, education, projects, skills, languages] = await Promise.all([
+  getSelf(),
+  getPositions(),
+  getEducation(),
+  getProjects(),
+  getSkills(),
+  getLanguages(),
 ]);
 
-function parseYM(ym: string): Date {
-  const [year, month] = ym.split('-').map(Number);
-  return new Date(year, month - 1);
-}
-
-const self = selfArr[0];
-const headline = self?.headline as string | undefined;
-const location = self?.location as { city?: string; region?: string; country?: string } | undefined;
-const locationStr = location
-  ? [location.city, location.region, location.country].filter(Boolean).join(', ')
-  : undefined;
-
-const positions = positionsArr
-  .map(p => ({
-    title: p.title as string,
-    company: p.company as string,
-    startedAt: p.startedAt as string,
-    endedAt: p.endedAt as string | undefined,
-    description: p.description as string | undefined,
-  }))
-  .sort((a, b) => parseYM(b.startedAt).getTime() - parseYM(a.startedAt).getTime());
-
-const education = educationArr.map(e => ({
-  institution: e.institution as string,
-  degree: e.degree as string,
-  fieldOfStudy: e.fieldOfStudy as string | undefined,
-  endedAt: e.endedAt as string | undefined,
-}));
-
-const projects = projectsArr.map(p => ({
-  name: p.name as string,
-  url: p.url as string | undefined,
-  description: p.description as string | undefined,
-}));
+const headline = self?.headline;
+const locationStr = formatLocation(self);
 
 type SkillCategory = 'technical' | 'business' | 'interpersonal';
-const skillsByCategory = skillsArr.reduce<Record<SkillCategory, string[]>>(
+const skillsByCategory = skills.reduce<Record<SkillCategory, string[]>>(
   (acc, s) => {
-    const cat = (s.category as SkillCategory) ?? 'technical';
+    const cat = s.category ?? 'technical';
     if (!acc[cat]) acc[cat] = [];
-    acc[cat].push(s.name as string);
+    acc[cat].push(s.name);
     return acc;
   },
   { technical: [], business: [], interpersonal: [] },
@@ -73,11 +42,6 @@ const proficiencyLabel: Record<string, string> = {
   full_professional: 'Full professional',
   elementary: 'Elementary',
 };
-
-const languages = languagesArr.map(l => ({
-  name: l.name as string,
-  proficiency: l.proficiency as string,
-}));
 ---
 
 <Base title="Work" description="Barry Frost's work history, skills and projects">
