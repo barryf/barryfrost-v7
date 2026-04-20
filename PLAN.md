@@ -72,7 +72,7 @@ Page size is 20. `paginateItems()` splits any array into `{ page, items, totalPa
 | `/page/2` | Unified feed, subsequent pages |
 | `/articles` | Articles feed |
 | `/articles/{slug}` | Individual article |
-| `/weeknotes` | All weeknotes, 3-column grid (no pagination) |
+| `/weeknotes` | Weeknotes index: featured latest entry (title link, truncated body, tags) + 3-column grid of the rest (no pagination) |
 | `/weeknotes/{slug}` | Individual weeknote |
 | `/work` | CV page — career, education, projects, skills, languages from `id.sifa.profile.*` PDS records |
 | `/posts` | Bluesky posts feed |
@@ -86,16 +86,20 @@ Page size is 20. `paginateItems()` splits any array into `{ page, items, totalPa
 | `/travelblog/{num}` | Travel blog entries |
 | `/feed.xml` | RSS feed (articles + weeknotes, latest 10, full content) |
 
-Most type-specific feeds have `/page/{n}` pagination. The weeknotes index is an exception — it shows all entries on a single page. Tags come from the `tags` frontmatter array on articles/weeknotes.
+Most type-specific feeds have `/page/{n}` pagination. The weeknotes index is an exception — it shows all entries on a single page with a featured latest entry. Tags come from the `tags` frontmatter array on articles/weeknotes.
+
+Type-specific feed index pages (`/posts`, `/films`, `/checkins`, `/books`) include an optional intro paragraph explaining the source service, rendered via `slot="header"` which now appears *after* the `<h1>` inside the `h-feed` element.
 
 ## Layouts & Components
 
 - `Base.astro` — HTML shell, `max-w-2xl mx-auto px-4`, dark mode via `prefers-color-scheme`
-- `Feed.astro` — wraps `FeedEntry` list + `Pagination`, accepts `basePath` for paginated routes
+- `Feed.astro` — wraps `FeedEntry` list + `Pagination`, accepts `basePath` for paginated routes. The `slot="header"` renders inside `h-feed` *after* the `<h1>`, so pages can inject intro text, maps, or subsections (e.g. a "Reading" section before the "Read" list on `/books`) that sit between the title and the feed items.
 - `Post.astro` — individual article/weeknote with prose styles
-- `FeedEntry.astro` — dispatches to per-type card components by `item.type`, rendering a `TypeIcon` in a left gutter so each entry's type is recognisable at a glance
+- `FeedEntry.astro` — dispatches to per-type card components by `item.type`, rendering a `TypeIcon` in a left gutter. For Bluesky reply posts (where `item.data.reply` is set) the gutter shows the Heroicons `arrow-uturn-left` icon instead of the TypeIcon.
 - `TypeIcon.astro` — inline Heroicons (outline, 24px) keyed by `FeedItem.type`
 - Card components in `src/components/posts/`: `ArticleCard`, `WeeknoteCard`, `BlueskyCard`, `CheckinCard`, `FilmCard`, `BookCard`, `PhotoCard`
+  - All external-service cards (`BlueskyCard`, `FilmCard`, `BookCard`, `CheckinCard`, `PhotoCard`) render a styled service pill next to the date that links to the item on the originating service (Bluesky, Popfeed, Bookhive, Beaconbits, Grain)
+  - `ArticleCard` shows tags as visible linked pills (linking to `/tags/{tag}`) below the title/summary, with the date rendered after the tags
   - `BlueskyCard` renders up to 4 embedded images below the post text at fixed 96px height preserving aspect ratio
   - `PhotoCard` renders up to 3 gallery thumbnails in a row and the total photo count
 
@@ -109,7 +113,7 @@ Applied as static classes directly in Astro templates so IndieWeb parsers (XRay,
 
 - **Feed** (`src/layouts/Feed.astro`): `h-feed` + `p-name` + hidden `h-card p-author` containing `u-photo` (`/barryfrost.jpg`, 192×192), `p-name`, `u-url` — parsers attach this author to every child entry
 - **All cards**: `h-entry` with `dt-published`, `u-url`, optional `p-category` entries from `categories` frontmatter
-- **ArticleCard / WeeknoteCard**: `p-name`, `p-summary`; weeknotes also emit an implicit `p-category="weeknotes"`
+- **ArticleCard / WeeknoteCard**: `p-name`, `p-summary`; article tags are emitted as `p-category` on visible `<a>` elements (text content = tag value); weeknotes also emit an implicit `p-category="weeknotes"`
 - **BlueskyCard**: `e-content` for rich text, `u-in-reply-to` on reply link, `u-photo` on each embedded image
 - **CheckinCard**: nested `p-checkin h-card` with `p-name`, `p-latitude`, `p-longitude`, `p-street-address`; `p-rating` (hidden) when present; hidden `u-url` as a direct child of `h-entry` (visible click target is the venue name) so parsers attribute the Beaconbits URL to the entry rather than the venue h-card
 - **FilmCard**: nested `p-item h-cite` with `u-photo` (poster) and hidden `p-name u-url`; numeric `p-rating` exposed via `<data value=...>` alongside star glyphs
@@ -164,12 +168,12 @@ Required secrets: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`, `PUSHOVER_TOK
 3. Add `'{type}'` to `FeedItem.type` union in `src/lib/feed.ts`
 4. Fetch collection in `getUnifiedFeed()` and map to `FeedItem`
 5. Create `src/components/posts/{Type}Card.astro`
-6. Register in `src/components/FeedEntry.astro` components map
+6. Register in `src/components/FeedEntry.astro` components map (and add a service pill to the card's date row)
 7. Add an entry to `src/components/TypeIcon.astro` (label + Heroicon path) for the left-gutter icon
 8. Add collection NSID to the `poll-pds.yml` monitored list
 
 ## Ideas / Backlog
 
-- `/now`, `/uses`, `/defaults`, `/pay`, `/contact` slash pages
+- `/uses`, `/defaults`, `/pay`, `/contact` slash pages
 - Gigs attended
 - Script to backfill historical checkins/films/notes as PDS records
