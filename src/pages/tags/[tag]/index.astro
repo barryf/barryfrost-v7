@@ -19,6 +19,4 @@ export async function getStaticPaths() {
 
 const { items, totalPages, tag } = Astro.props;
 ---
-<Feed title={`#${tag}`} items={items} currentPage={1} totalPages={totalPages} basePath={`/tags/${tag}`}>
-  <h1 slot="header" class="text-2xl font-bold mb-8">#{tag}</h1>
-</Feed>
+<Feed title={`#${tag}`} items={items} currentPage={1} totalPages={totalPages} basePath={`/tags/${tag}`} />

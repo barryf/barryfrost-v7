@@ -7,6 +7,7 @@ import { formatDate, toISODate } from '../lib/dates';
 import { getCurrentPosition, getSelf, formatLocation } from '../lib/sifa';
 import { getUnifiedFeed } from '../lib/feed';
 import { DID } from '../lib/pds';
+import TypeIcon from '../components/TypeIcon.astro';
 
 const DID_SHORT = DID.replace('did:plc:', '');
 
@@ -74,8 +75,8 @@ const popfeedSource: Source = { label: 'Popfeed', url: 'https://popfeed.social' 
     </div>
 
     {(position || locationStr) && (
-      <section class="mb-8">
-        <div class="flex items-baseline gap-2 mb-2 pb-2 border-b border-neutral-200 dark:border-neutral-700">
+      <section class="mb-6">
+        <div class="flex items-center gap-2 mb-2 pb-2 border-b border-neutral-200 dark:border-neutral-700">
           <h2 class="text-lg font-semibold">Working</h2>
           {sifaSource.url ? (
             <a href={sifaSource.url} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300">{sifaSource.label}</a>
@@ -96,18 +97,97 @@ const popfeedSource: Source = { label: 'Popfeed', url: 'https://popfeed.social' 
     )}
 
     {currentlyReading.length > 0 && (
-      <section class="mb-8">
-        <div class="flex items-baseline gap-2 mb-4 pb-2 border-b border-neutral-200 dark:border-neutral-700">
-          <h2 class="text-lg font-semibold">Reading</h2>
-          <a href={bookhiveSource.url} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300">{bookhiveSource.label}</a>
-        </div>
-        <ul class="space-y-3">
+      <section class="mb-6">
+        <h2 class="text-lg font-semibold mb-2 pb-2 border-b border-neutral-200 dark:border-neutral-700">Reading</h2>
+        <div class="divide-y divide-neutral-100 dark:divide-neutral-800">
           {currentlyReading.map(book => (
-            <li class="flex gap-4">
-              {book.data.coverUrl && (
+            <div class="py-3 flex items-start gap-3">
+              <TypeIcon type="book" class="size-5 shrink-0 mt-0.5 text-neutral-400 dark:text-neutral-500" />
+              <div class="flex gap-3 flex-1 min-w-0">
+                {book.data.coverUrl && (
+                  <img
+                    src={new URL(book.data.coverUrl, Astro.url).href}
+                    alt={`Cover for ${book.data.title}`}
+                    width="48"
+                    height="72"
+                    class="w-12 object-cover rounded shrink-0"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                )}
+                <div>
+                  {book.data.hiveId ? (
+                    <a href={`https://bookhive.buzz/books/${book.data.hiveId}`} class="font-medium hover:underline">{book.data.title}</a>
+                  ) : (
+                    <span class="font-medium">{book.data.title}</span>
+                  )}
+                  <p class="text-sm text-neutral-600 dark:text-neutral-400">by {book.data.authors}</p>
+                  <div class="mt-0.5 flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-500">
+                    <time datetime={toISODate(new Date(book.data.createdAt))}>Started {formatDate(new Date(book.data.createdAt))}</time>
+                    {book.data.hiveId && (
+                      <a href={`https://bookhive.buzz/books/${book.data.hiveId}`} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded hover:text-neutral-700 dark:hover:text-neutral-300">Bookhive</a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {checkinToday && (
+      <section class="mb-6">
+        <h2 class="text-lg font-semibold mb-2 pb-2 border-b border-neutral-200 dark:border-neutral-700">Checked in today</h2>
+        <div class="flex items-start gap-3">
+          <TypeIcon type="checkin" class="size-5 shrink-0 mt-0.5 text-neutral-400 dark:text-neutral-500" />
+          <div>
+            <p>
+              <a href={`https://www.beaconbits.app/beacons/${DID_SHORT}/${checkinToday.id}`} class="font-medium hover:underline">
+                {checkinToday.data.venueName}
+              </a>
+              {checkinToday.data.venueCategory && (
+                <span class="text-sm text-neutral-600 dark:text-neutral-400"> · {checkinToday.data.venueCategory}</span>
+              )}
+            </p>
+            <div class="mt-0.5 flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-500">
+              <time datetime={toISODate(new Date(checkinToday.data.createdAt))}>{formatDate(new Date(checkinToday.data.createdAt))}</time>
+              <a href={beaconbitsSource.url} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded hover:text-neutral-700 dark:hover:text-neutral-300">{beaconbitsSource.label}</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    )}
+
+    {latestWeeknote && (
+      <section class="mb-6">
+        <h2 class="text-lg font-semibold mb-2 pb-2 border-b border-neutral-200 dark:border-neutral-700">Latest weeknote</h2>
+        <div class="flex items-start gap-3">
+          <TypeIcon type="weeknote" class="size-5 shrink-0 mt-0.5 text-neutral-400 dark:text-neutral-500" />
+          <div>
+            <a href={`/weeknotes/${latestWeeknote.id}`} class="font-medium hover:underline">
+              {latestWeeknote.data.emoji && `${latestWeeknote.data.emoji} `}{latestWeeknote.data.title}
+            </a>
+            <div class="mt-0.5 text-sm text-neutral-500 dark:text-neutral-500">
+              <time datetime={toISODate(latestWeeknote.data.date)}>{formatDate(latestWeeknote.data.date)}</time>
+            </div>
+          </div>
+        </div>
+      </section>
+    )}
+
+    {latestFilm && (() => {
+      const filmData = latestFilm.data as { title: string; rating?: number; posterUrl?: string };
+      return (
+        <section class="mb-6">
+          <h2 class="text-lg font-semibold mb-2 pb-2 border-b border-neutral-200 dark:border-neutral-700">Last film watched</h2>
+          <div class="flex items-start gap-3">
+            <TypeIcon type="film" class="size-5 shrink-0 mt-0.5 text-neutral-400 dark:text-neutral-500" />
+            <div class="flex gap-3 flex-1 min-w-0">
+              {filmData.posterUrl && (
                 <img
-                  src={new URL(book.data.coverUrl, Astro.url).href}
-                  alt={`Cover for ${book.data.title}`}
+                  src={new URL(filmData.posterUrl, Astro.url).href}
+                  alt={`Poster for ${filmData.title}`}
                   width="48"
                   height="72"
                   class="w-12 object-cover rounded shrink-0"
@@ -116,85 +196,19 @@ const popfeedSource: Source = { label: 'Popfeed', url: 'https://popfeed.social' 
                 />
               )}
               <div>
-                {book.data.hiveId ? (
-                  <a href={`https://bookhive.buzz/books/${book.data.hiveId}`} class="font-medium hover:underline">{book.data.title}</a>
-                ) : (
-                  <span class="font-medium">{book.data.title}</span>
+                <a href={latestFilm.url} class="font-medium hover:underline" rel="noopener noreferrer">
+                  {filmData.title}
+                </a>
+                {filmData.rating !== undefined && (
+                  <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-0.5" title={`${filmData.rating}/10`}>
+                    {toStars(filmData.rating)}
+                  </p>
                 )}
-                <p class="text-sm text-neutral-600 dark:text-neutral-400">by {book.data.authors}</p>
-                <p class="text-sm text-neutral-500 dark:text-neutral-500 mt-0.5">
-                  Started <time datetime={toISODate(new Date(book.data.createdAt))}>{formatDate(new Date(book.data.createdAt))}</time>
-                </p>
+                <div class="mt-0.5 flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-500">
+                  <time datetime={toISODate(latestFilm.date)}>{formatDate(latestFilm.date)}</time>
+                  <a href={popfeedSource.url} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded hover:text-neutral-700 dark:hover:text-neutral-300">{popfeedSource.label}</a>
+                </div>
               </div>
-            </li>
-          ))}
-        </ul>
-      </section>
-    )}
-
-    {checkinToday && (
-      <section class="mb-8">
-        <div class="flex items-baseline gap-2 mb-2 pb-2 border-b border-neutral-200 dark:border-neutral-700">
-          <h2 class="text-lg font-semibold">Checked in today</h2>
-          <a href={beaconbitsSource.url} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300">{beaconbitsSource.label}</a>
-        </div>
-        <p>
-          <a href={`https://www.beaconbits.app/beacons/${DID_SHORT}/${checkinToday.id}`} class="font-medium hover:underline">
-            {checkinToday.data.venueName}
-          </a>
-          {checkinToday.data.venueCategory && (
-            <span class="text-sm text-neutral-600 dark:text-neutral-400"> · {checkinToday.data.venueCategory}</span>
-          )}
-        </p>
-      </section>
-    )}
-
-    {latestWeeknote && (
-      <section class="mb-8">
-        <h2 class="text-lg font-semibold mb-2 pb-2 border-b border-neutral-200 dark:border-neutral-700">Latest weeknote</h2>
-        <p>
-          <a href={`/weeknotes/${latestWeeknote.id}`} class="font-medium hover:underline">
-            {latestWeeknote.data.emoji && `${latestWeeknote.data.emoji} `}{latestWeeknote.data.title}
-          </a>
-          <span class="block text-sm text-neutral-500 dark:text-neutral-500 mt-1">
-            <time datetime={toISODate(latestWeeknote.data.date)}>{formatDate(latestWeeknote.data.date)}</time>
-          </span>
-        </p>
-      </section>
-    )}
-
-    {latestFilm && (() => {
-      const filmData = latestFilm.data as { title: string; rating?: number; posterUrl?: string };
-      return (
-        <section class="mb-8">
-          <div class="flex items-baseline gap-2 mb-4 pb-2 border-b border-neutral-200 dark:border-neutral-700">
-            <h2 class="text-lg font-semibold">Last film watched</h2>
-            <a href={popfeedSource.url} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300">{popfeedSource.label}</a>
-          </div>
-          <div class="flex gap-4">
-            {filmData.posterUrl && (
-              <img
-                src={new URL(filmData.posterUrl, Astro.url).href}
-                alt={`Poster for ${filmData.title}`}
-                width="48"
-                height="72"
-                class="w-12 object-cover rounded shrink-0"
-                loading="lazy"
-                decoding="async"
-              />
-            )}
-            <div>
-              <a href={latestFilm.url} class="font-medium hover:underline" rel="noopener noreferrer">
-                {filmData.title}
-              </a>
-              {filmData.rating !== undefined && (
-                <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1" title={`${filmData.rating}/10`}>
-                  {toStars(filmData.rating)}
-                </p>
-              )}
-              <p class="text-sm text-neutral-500 dark:text-neutral-500 mt-1">
-                <time datetime={toISODate(latestFilm.date)}>{formatDate(latestFilm.date)}</time>
-              </p>
             </div>
           </div>
         </section>

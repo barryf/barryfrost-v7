@@ -13,9 +13,15 @@ const categories = (item.data.tags as string[] | undefined) ?? [];
   <h2 class="text-lg font-semibold">
     <a class="p-name u-url" href={item.url}>{item.title}</a>
   </h2>
-  <time class="dt-published text-sm text-neutral-500 dark:text-neutral-400" datetime={toISODate(item.date)}>
+  {item.summary && <p class="p-summary mt-1 text-neutral-700 dark:text-neutral-300">{item.summary}</p>}
+  {categories.length > 0 && (
+    <div class="mt-1.5 flex flex-wrap gap-1">
+      {categories.map(c => (
+        <a href={`/tags/${c}`} class="p-category px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300">{c}</a>
+      ))}
+    </div>
+  )}
+  <time class="dt-published block mt-1.5 text-sm text-neutral-500 dark:text-neutral-400" datetime={toISODate(item.date)}>
     {formatDate(item.date)}
   </time>
-  {item.summary && <p class="p-summary mt-1 text-neutral-700 dark:text-neutral-300">{item.summary}</p>}
-  {categories.map(c => <data class="p-category hidden" value={c} />)}
 </article>

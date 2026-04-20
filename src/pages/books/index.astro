@@ -27,7 +27,6 @@ const pages = paginateItems(allItems);
 const { items, totalPages } = pages[0] ?? { items: [], totalPages: 1 };
 ---
 <Feed title="Books" items={items} currentPage={1} totalPages={totalPages} basePath="/books">
-  <h1 slot="header" class="text-2xl font-bold mb-4">Books</h1>
   <p slot="header" class="text-neutral-600 dark:text-neutral-400 mb-6">
     Books I'm currently reading and books I've finished, tracked on my <a href="https://bookhive.buzz/profile/barryfrost.com">Bookhive profile</a>.
   </p>

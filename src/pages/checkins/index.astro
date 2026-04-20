@@ -19,5 +19,8 @@ const mapCheckins = allItems
   }));
 ---
 <Feed title="Checkins" items={items} currentPage={1} totalPages={totalPages} basePath="/checkins">
+  <p slot="header" class="text-neutral-600 dark:text-neutral-400 mb-4">
+    Places I've checked in to, via <a href="https://www.beaconbits.app" class="underline hover:text-neutral-900 dark:hover:text-neutral-100">Beaconbits</a>.
+  </p>
   {mapCheckins.length > 0 && <CheckinMap slot="header" checkins={mapCheckins} />}
 </Feed>

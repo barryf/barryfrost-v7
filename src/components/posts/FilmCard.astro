@@ -38,8 +38,9 @@ function toStars(rating: number): string {
     <p class="text-sm mt-1 text-neutral-600 dark:text-neutral-400">
       {data.rating !== undefined && <data class="p-rating" value={data.rating} title={`${data.rating}/10`}>{toStars(data.rating)}</data>}
     </p>
-    <div class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
+    <div class="mt-1 flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400">
       <time class="dt-published" datetime={toISODate(item.date)}>{formatDate(item.date)}</time>
+      <a href={item.url} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded hover:text-neutral-700 dark:hover:text-neutral-300" rel="noopener noreferrer">Popfeed</a>
     </div>
   </div>
 </article>

@@ -6,4 +6,8 @@ const allItems = (await getUnifiedFeed()).filter(i => i.type === 'bluesky');
 const pages = paginateItems(allItems);
 const { items, totalPages } = pages[0] ?? { items: [], totalPages: 1 };
 ---
-<Feed title="Posts" items={items} currentPage={1} totalPages={totalPages} basePath="/posts" />
+<Feed title="Posts" items={items} currentPage={1} totalPages={totalPages} basePath="/posts">
+  <p slot="header" class="text-neutral-600 dark:text-neutral-400 mb-6">
+    Short posts from my <a href="https://bsky.app/profile/barryfrost.com" class="underline hover:text-neutral-900 dark:hover:text-neutral-100">Bluesky profile</a>.
+  </p>
+</Feed>

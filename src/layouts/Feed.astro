@@ -16,15 +16,15 @@ interface Props {
 const { title, description, items, currentPage, totalPages, basePath } = Astro.props;
 ---
 <Base title={title} description={description}>
-  <slot name="header" />
   <div class="h-feed">
-    {title != 'Barry Frost' && (
-      <h1 class="p-name text-2xl font-bold mb-4">{title}</h1>
-    )}
     <div class="h-card p-author hidden">
       <img class="u-photo" src={new URL('/barryfrost.jpg', Astro.url).href} alt="Barry Frost" width="192" height="192" />
       <a class="p-name u-url" href={Astro.site?.href}>Barry Frost</a>
     </div>
+    {title != 'Barry Frost' && (
+      <h1 class="p-name text-2xl font-bold mb-4">{title}</h1>
+    )}
+    <slot name="header" />
     {items.map(item => <FeedEntry item={item} />)}
   </div>
   <Pagination currentPage={currentPage} totalPages={totalPages} basePath={basePath} />

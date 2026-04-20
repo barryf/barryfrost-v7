@@ -1,19 +1,61 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { getCollection } from 'astro:content';
+import { formatDate, toISODate } from '../../lib/dates';
 
 const allWeeknotes = await getCollection('weeknotes');
 allWeeknotes.sort((a, b) => b.data.week - a.data.week);
+const [latestWeeknote, ...restWeeknotes] = allWeeknotes;
 
 function titleWord(title: string): string {
   return title.replace(/^Week \d+\s*[-:]\s*/i, '');
 }
+
+function truncateBody(body: string, maxLen = 280): string {
+  const text = body
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/^\s*[-*]\s+/gm, '')
+    .replace(/\n+/g, ' ')
+    .trim();
+  return text.length > maxLen ? text.slice(0, maxLen).trimEnd() + '…' : text;
+}
 ---
 <Base title="Weeknotes">
-  <h1 class="text-2xl font-bold mb-8">Weeknotes</h1>
+  <h1 class="text-2xl font-bold mb-4">Weeknotes</h1>
+  <p class="text-neutral-600 dark:text-neutral-400 mb-8">
+    Weekly notes about what I've been up to — work, home, sport, reading, watching, and life in general.
+  </p>
+
+  {latestWeeknote && (
+    <div class="mb-8 pb-8 border-b border-neutral-200 dark:border-neutral-700">
+      <p class="text-xs font-semibold uppercase tracking-wide text-neutral-400 dark:text-neutral-500 mb-2">Latest</p>
+      <div class="flex items-center gap-2 mb-1">
+        {latestWeeknote.data.emoji && <span class="text-2xl leading-none">{latestWeeknote.data.emoji}</span>}
+        <h2 class="text-xl font-bold">
+          <a href={`/weeknotes/${latestWeeknote.id}`} class="hover:underline">{latestWeeknote.data.title}</a>
+        </h2>
+      </div>
+      <p class="text-sm text-neutral-500 dark:text-neutral-500 mb-2">
+        <time datetime={toISODate(latestWeeknote.data.date)}>{formatDate(latestWeeknote.data.date)}</time>
+      </p>
+      {latestWeeknote.body && (
+        <p class="text-sm text-neutral-700 dark:text-neutral-300 mb-2 leading-relaxed">
+          {truncateBody(latestWeeknote.body)}
+        </p>
+      )}
+      {latestWeeknote.data.tags && latestWeeknote.data.tags.length > 0 && (
+        <div class="flex flex-wrap gap-1">
+          {latestWeeknote.data.tags.map(tag => (
+            <a href={`/tags/${tag}`} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300">{tag}</a>
+          ))}
+        </div>
+      )}
+    </div>
+  )}
 
   <div class="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-1">
-    {allWeeknotes.map(entry => (
+    {restWeeknotes.map(entry => (
       <a href={`/weeknotes/${entry.id}`} class="flex items-center gap-2 py-1.5 hover:bg-neutral-100 dark:hover:bg-neutral-900 rounded -mx-1.5 px-1.5 transition-colors group">
         <span class="text-neutral-400 dark:text-neutral-600 text-xs tabular-nums w-6 text-right shrink-0">{entry.data.week}</span>
         <span class="text-base w-6 text-center shrink-0 leading-none">{entry.data.emoji}</span>

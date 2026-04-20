@@ -31,8 +31,9 @@ const dateLabel = data.status === 'buzz.bookhive.defs#reading' ? 'Started' : 'Fi
       <a href={item.url} rel="noopener noreferrer">{data.title}</a>
     </h2>
     <p class="text-sm text-neutral-600 dark:text-neutral-400">by {data.authors}</p>
-    <div class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
+    <div class="mt-1 flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400">
       <time class="dt-published" datetime={toISODate(item.date)}>{dateLabel} {formatDate(item.date)}</time>
+      <a href={item.url} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded hover:text-neutral-700 dark:hover:text-neutral-300" rel="noopener noreferrer">Bookhive</a>
     </div>
   </div>
 </article>
