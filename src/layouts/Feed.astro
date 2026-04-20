@@ -18,7 +18,9 @@ const { title, description, items, currentPage, totalPages, basePath } = Astro.p
 <Base title={title} description={description}>
   <slot name="header" />
   <div class="h-feed">
-    <span class="p-name hidden">{title}</span>
+    {title != 'Barry Frost' && (
+      <h1 class="p-name text-2xl font-bold mb-4">{title}</h1>
+    )}
     <div class="h-card p-author hidden">
       <img class="u-photo" src={new URL('/barryfrost.jpg', Astro.url).href} alt="Barry Frost" width="192" height="192" />
       <a class="p-name u-url" href={Astro.site?.href}>Barry Frost</a>
