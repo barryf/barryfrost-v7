@@ -72,12 +72,13 @@ Page size is 20. `paginateItems()` splits any array into `{ page, items, totalPa
 | `/page/2` | Unified feed, subsequent pages |
 | `/articles` | Articles feed |
 | `/articles/{slug}` | Individual article |
-| `/weeknotes` | Weeknotes index: featured latest entry (title link, truncated body, tags) + 3-column grid of the rest (no pagination) |
-| `/weeknotes/{slug}` | Individual weeknote |
+| `/weeknotes` | Weeknotes index: featured latest entry (no bottom border) + 3-column grid of the rest with `font-mono` week numbers (no pagination) |
+| `/weeknotes/{slug}` | Individual weeknote with "Previous years this week" aside (increased spacing, larger year label) |
 | `/work` | CV page — career, education, projects, skills, languages from `id.sifa.profile.*` PDS records |
 | `/posts` | Bluesky posts feed |
 | `/checkins` | Checkins feed |
 | `/films` | Films feed |
+| `/photos` | Photos feed |
 | `/books` | Books feed |
 | `/blogroll` | Curated blogs + Standard publications |
 | `/{year}/{month}/` | Monthly archive (all types) |
@@ -99,8 +100,9 @@ Type-specific feed index pages (`/posts`, `/films`, `/checkins`, `/books`) inclu
 - `TypeIcon.astro` — inline Heroicons (outline, 24px) keyed by `FeedItem.type`
 - Card components in `src/components/posts/`: `ArticleCard`, `WeeknoteCard`, `BlueskyCard`, `CheckinCard`, `FilmCard`, `BookCard`, `PhotoCard`
   - All external-service cards (`BlueskyCard`, `FilmCard`, `BookCard`, `CheckinCard`, `PhotoCard`) render a styled service pill next to the date that links to the item on the originating service (Bluesky, Popfeed, Bookhive, Beaconbits, Grain)
+  - External-service card title links include a Heroicons micro `arrow-top-right-on-square` icon (16px, filled, `inline size-3.5 ml-1 align-middle`) to signal navigation away from the site
   - `ArticleCard` shows tags as visible linked pills (linking to `/tags/{tag}`) below the title/summary, with the date rendered after the tags
-  - `BlueskyCard` renders up to 4 embedded images below the post text at fixed 96px height preserving aspect ratio
+  - `BlueskyCard` renders up to 4 embedded images below the post text at fixed 96px height preserving aspect ratio; each image has `mb-1` bottom margin
   - `PhotoCard` renders up to 3 gallery thumbnails in a row and the total photo count
 
 ## Styling
@@ -176,4 +178,4 @@ Required secrets: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`, `PUSHOVER_TOK
 
 - `/uses`, `/defaults`, `/pay`, `/contact` slash pages
 - Gigs attended
-- Script to backfill historical checkins/films/notes as PDS records
+- Script to backfill historical checkins/films/notes as PDS records (or /data/*.json)
