@@ -26,7 +26,7 @@ const alts = data.imageAlts ?? [];
         <img
           src={new URL(url, Astro.url).href}
           alt={alts[i] ?? ''}
-          class="u-photo h-24 w-auto max-w-full rounded"
+          class="u-photo h-24 w-auto max-w-full rounded mb-1"
           loading="lazy"
           decoding="async"
         />
