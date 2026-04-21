@@ -50,14 +50,14 @@ const { Content } = await render(entry);
       ) : <span />}
     </nav>
     {onThisDay.length > 0 && (
-      <aside class="mt-8 pt-6">
-        <h2 class="text-sm font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-6">Previously</h2>
-        <ul class="space-y-6">
+      <aside class="mt-8 pt-8">
+        <h2 class="text-sm font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-8">Previous years this week</h2>
+        <ul class="space-y-8">
           {onThisDay.map(e => (
             <li>
-              <span class="mr-1 text-sm">{e.year}</span>
+              <span class="mr-1">{e.year}</span>
               <a href={`/weeknotes/${e.id}`} class="font-semibold hover:underline">{e.emoji && `${e.emoji} `}{e.title}</a>
-              {e.excerpt && <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-0.5">{e.excerpt}</p>}
+              {e.excerpt && <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1">{e.excerpt}</p>}
             </li>
           ))}
         </ul>
