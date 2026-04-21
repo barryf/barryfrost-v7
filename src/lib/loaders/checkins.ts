@@ -1,5 +1,6 @@
 import type { Loader } from 'astro/loaders';
 import { fetchAllRecords, rkeyFromUri, DID, PDS_HOST } from '../pds';
+import historicalCheckins from '../../data/historical-checkins.json';
 
 export function checkinsLoader(): Loader {
   return {
@@ -25,8 +26,27 @@ export function checkinsLoader(): Loader {
             rating: value.rating as number | undefined,
             createdAt: value.createdAt as string,
             uri: record.uri,
+            source: 'beaconbits' as const,
           },
           digest: generateDigest(record.cid),
+        });
+      }
+
+      logger.info(`Loading ${historicalCheckins.length} historical checkins`);
+      for (const entry of historicalCheckins) {
+        store.set({
+          id: `v6-${entry.id}`,
+          data: {
+            venueName: entry.venueName,
+            venueAddress: entry.venueAddress,
+            venueUri: entry.venueUri,
+            swarmUrl: entry.swarmUrl,
+            latitude: entry.latitude,
+            longitude: entry.longitude,
+            createdAt: entry.createdAt,
+            source: 'foursquare' as const,
+          },
+          digest: generateDigest(entry.createdAt + entry.venueName),
         });
       }
     },

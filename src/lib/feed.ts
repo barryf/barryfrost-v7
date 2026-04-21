@@ -67,14 +67,18 @@ export async function getUnifiedFeed(): Promise<FeedItem[]> {
   }
 
   for (const entry of checkinEntries) {
+    const data = entry.data;
+    const url = data.source === 'foursquare'
+      ? (data.latitude && data.longitude ? `https://maps.google.com/maps?q=${data.latitude},${data.longitude}` : '')
+      : `https://www.beaconbits.app/beacons/${DID_SHORT}/${entry.id}`;
     items.push({
       type: 'checkin',
-      date: new Date(entry.data.createdAt),
-      url: `https://www.beaconbits.app/beacons/${DID_SHORT}/${entry.id}`,
-      title: entry.data.venueName,
-      summary: entry.data.venueAddress,
+      date: new Date(data.createdAt),
+      url,
+      title: data.venueName,
+      summary: data.venueAddress,
       id: `checkin:${entry.id}`,
-      data: entry.data as unknown as Record<string, unknown>,
+      data: data as unknown as Record<string, unknown>,
     });
   }
 

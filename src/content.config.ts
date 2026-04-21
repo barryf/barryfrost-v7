@@ -72,11 +72,13 @@ const checkins = defineCollection({
     venueCategory: z.string().optional(),
     venueAddress: z.string().optional(),
     venueUri: z.string().optional(),
+    swarmUrl: z.string().optional(),
     latitude: z.string().optional(),
     longitude: z.string().optional(),
     rating: z.number().optional(),
     createdAt: z.string(),
-    uri: z.string(),
+    uri: z.string().optional(),
+    source: z.enum(['beaconbits', 'foursquare']).default('beaconbits'),
   }),
 });
 
