@@ -1,15 +1,13 @@
 # Cloudflare Pages allows for:
 # * 100 dynamic redirects (rules using wildcards * / :splat or :placeholders)
 # * 2,000 static redirects, for a combined total of 2,100
+# Remember: specify static redirects before wildcard redirects
 
 # RSS alias
 /rss /feed.xml 301
 
 # Travelblog
 /categories/travelblog /travelblog 301
-
-# Categories renamed to tags
-/categories/* /tags/:splat 301
 
 # Weeknote redirects (old URL → new URL)
 /2021/08/weeknotes-001 /weeknotes/1-starting 301
@@ -108,11 +106,11 @@
 /2023/06/week-94-golf /weeknotes/94-golf 301
 /2023/06/week-95-father /weeknotes/95-father 301
 /2023/06/week-96-festival /weeknotes/96-festival 301
-/2023/07/week-100-scarf /weeknotes/100-scarf 301
-/2023/07/week-101-glasses /weeknotes/101-glasses 301
 /2023/07/week-97-duck /weeknotes/97-duck 301
 /2023/07/week-98-wembley /weeknotes/98-wembley 301
 /2023/07/week-99-long-haul /weeknotes/99-long-haul 301
+/2023/07/week-100-scarf /weeknotes/100-scarf 301
+/2023/07/week-101-glasses /weeknotes/101-glasses 301
 /2023/08/week-102-castle /weeknotes/102-castle 301
 /2023/08/week-103-rugby /weeknotes/103-rugby 301
 /2023/08/week-104-lionesses /weeknotes/104-lionesses 301
@@ -252,6 +250,10 @@
 /2026/03/week-237-fumes /weeknotes/237-fumes 301
 /2026/03/week-238-streak /weeknotes/238-streak 301
 /2026/03/week-239-scoot /weeknotes/239-scoot 301
+/2026/03/week-240-ancient /weeknotes/240-ancient 301
+/2026/04/week-241-hero /weeknotes/241-hero 301
+/2026/04/week-242-gardens /weeknotes/242-gardens 301
+/2026/04/week-243-sofa /weeknotes/243-sofa 301
 
 # Article redirects (old /yyyy/mm/slug → /articles/slug)
 /2011/05/get-your-eyes-lasered /articles/get-your-eyes-lasered 301
@@ -283,6 +285,8 @@
 /2023/03/tunnel /articles/tunnel 301
 /2023/11/app-defaults-in-late-2023 /articles/app-defaults-in-late-2023 301
 
+# WILDCARD REDIRECTS
+
 # Redirect archived barryfrost.com posts (2000–Mar 2026) to archive.barryfrost.com
 /2000/* https://archive.barryfrost.com/2000/:splat 301
 /2001/* https://archive.barryfrost.com/2001/:splat 301
@@ -311,3 +315,6 @@
 /2026/01/* https://archive.barryfrost.com/2026/01/:splat 301
 /2026/02/* https://archive.barryfrost.com/2026/02/:splat 301
 /2026/03/* https://archive.barryfrost.com/2026/03/:splat 301
+
+# Categories renamed to tags
+/categories/* /tags/:splat 301
