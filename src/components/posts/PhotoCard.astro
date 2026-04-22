@@ -1,5 +1,5 @@
 ---
-import { formatDate, toISODate } from '../../lib/dates';
+import { formatDateShort, toISODate } from '../../lib/dates';
 import type { FeedItem } from '../../lib/feed';
 
 interface Props {
@@ -31,8 +31,7 @@ const thumbs = data.thumbnailUrls ?? [];
   </h2>
   {data.address && <p class="p-location text-sm text-neutral-600 dark:text-neutral-400">{data.address}</p>}
   <div class="mt-1 flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400">
-    <time class="dt-published" datetime={toISODate(item.date)}>{formatDate(item.date)}</time>
-    {data.photoCount > 1 && <span>{data.photoCount} photos</span>}
+    <time class="dt-published" datetime={toISODate(item.date)}>{formatDateShort(item.date)}</time>
     <a href={item.url} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded hover:text-neutral-700 dark:hover:text-neutral-300" rel="noopener noreferrer">Grain</a>
   </div>
 </article>

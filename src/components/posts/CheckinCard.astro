@@ -1,5 +1,5 @@
 ---
-import { formatDate, toISODate } from '../../lib/dates';
+import { formatDateShort, toISODate } from '../../lib/dates';
 import type { FeedItem } from '../../lib/feed';
 
 interface Props {
@@ -26,7 +26,7 @@ const data = item.data as { venueName: string; venueCategory?: string; venueAddr
   </div>
   {data.rating !== undefined && <data class="p-rating hidden" value={data.rating} />}
   <div class="mt-1 flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400">
-    <time class="dt-published" datetime={toISODate(item.date)}>{formatDate(item.date)}</time>
+    <time class="dt-published" datetime={toISODate(item.date)}>{formatDateShort(item.date)}</time>
     {data.source !== 'foursquare' && item.url && <a href={item.url} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded hover:text-neutral-700 dark:hover:text-neutral-300" rel="noopener noreferrer">Beaconbits</a>}
   </div>
 </article>

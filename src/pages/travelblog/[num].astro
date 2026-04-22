@@ -1,7 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import { formatDate, toISODate } from '../../lib/dates';
+import { formatDateShort, toISODate } from '../../lib/dates';
 
 export async function getStaticPaths() {
   const entries = await getCollection('travelblog');
@@ -21,7 +21,7 @@ const { Content } = await render(entry);
       <h1 class="p-name text-2xl font-bold">Travelblog</h1>
       <h2 class="text-xl font-semibold mt-1">
         <time class="dt-published" datetime={toISODate(entry.data.date)}>
-          {formatDate(entry.data.date)}
+          {formatDateShort(entry.data.date)}
         </time>
       </h2>
     </header>
@@ -30,10 +30,10 @@ const { Content } = await render(entry);
     </div>
     <nav class="mt-8 pt-6 border-t border-neutral-100 dark:border-neutral-800 flex justify-between gap-4 text-sm">
       {prev ? (
-        <a href={`/travelblog/${prev.id}`} class="hover:underline">← {formatDate(prev.data.date)}</a>
+        <a href={`/travelblog/${prev.id}`} class="hover:underline">← {formatDateShort(prev.data.date)}</a>
       ) : <span />}
       {next ? (
-        <a href={`/travelblog/${next.id}`} class="hover:underline text-right">{formatDate(next.data.date)} →</a>
+        <a href={`/travelblog/${next.id}`} class="hover:underline text-right">{formatDateShort(next.data.date)} →</a>
       ) : <span />}
     </nav>
   </article>

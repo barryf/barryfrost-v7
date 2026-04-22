@@ -3,7 +3,7 @@ import { statSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { getCollection, getEntry, render } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import { formatDate, toISODate } from '../lib/dates';
+import { formatDateShort, toISODate } from '../lib/dates';
 import { getCurrentPosition, getSelf, formatLocation } from '../lib/sifa';
 import { getUnifiedFeed } from '../lib/feed';
 import { DID } from '../lib/pds';
@@ -67,7 +67,7 @@ const popfeedSource: Source = { label: 'Popfeed', url: 'https://popfeed.social' 
   <article>
     <h1 class="text-2xl font-bold mb-4">Now</h1>
     <p class="text-sm text-neutral-500 dark:text-neutral-500 mb-6">
-      Last updated <time datetime={toISODate(lastUpdated)}>{formatDate(lastUpdated)}</time>
+      Last updated <time datetime={toISODate(lastUpdated)}>{formatDateShort(lastUpdated)}</time>
     </p>
 
     <div class="prose dark:prose-invert max-w-none mb-10">
@@ -123,7 +123,7 @@ const popfeedSource: Source = { label: 'Popfeed', url: 'https://popfeed.social' 
                   )}
                   <p class="text-sm text-neutral-600 dark:text-neutral-400">by {book.data.authors}</p>
                   <div class="mt-0.5 flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-500">
-                    <time datetime={toISODate(new Date(book.data.createdAt))}>Started {formatDate(new Date(book.data.createdAt))}</time>
+                    <time datetime={toISODate(new Date(book.data.createdAt))}>Started {formatDateShort(new Date(book.data.createdAt))}</time>
                     {book.data.hiveId && (
                       <a href={`https://bookhive.buzz/books/${book.data.hiveId}`} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded hover:text-neutral-700 dark:hover:text-neutral-300">Bookhive</a>
                     )}
@@ -151,7 +151,7 @@ const popfeedSource: Source = { label: 'Popfeed', url: 'https://popfeed.social' 
               )}
             </p>
             <div class="mt-0.5 flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-500">
-              <time datetime={toISODate(new Date(checkinToday.data.createdAt))}>{formatDate(new Date(checkinToday.data.createdAt))}</time>
+              <time datetime={toISODate(new Date(checkinToday.data.createdAt))}>{formatDateShort(new Date(checkinToday.data.createdAt))}</time>
               <a href={beaconbitsSource.url} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded hover:text-neutral-700 dark:hover:text-neutral-300">{beaconbitsSource.label}</a>
             </div>
           </div>
@@ -169,7 +169,7 @@ const popfeedSource: Source = { label: 'Popfeed', url: 'https://popfeed.social' 
               {latestWeeknote.data.emoji && `${latestWeeknote.data.emoji} `}{latestWeeknote.data.title}
             </a>
             <div class="mt-0.5 text-sm text-neutral-500 dark:text-neutral-500">
-              <time datetime={toISODate(latestWeeknote.data.date)}>{formatDate(latestWeeknote.data.date)}</time>
+              <time datetime={toISODate(latestWeeknote.data.date)}>{formatDateShort(latestWeeknote.data.date)}</time>
             </div>
           </div>
         </div>
@@ -205,7 +205,7 @@ const popfeedSource: Source = { label: 'Popfeed', url: 'https://popfeed.social' 
                   </p>
                 )}
                 <div class="mt-0.5 flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-500">
-                  <time datetime={toISODate(latestFilm.date)}>{formatDate(latestFilm.date)}</time>
+                  <time datetime={toISODate(latestFilm.date)}>{formatDateShort(latestFilm.date)}</time>
                   <a href={popfeedSource.url} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded hover:text-neutral-700 dark:hover:text-neutral-300">{popfeedSource.label}</a>
                 </div>
               </div>
