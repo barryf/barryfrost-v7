@@ -6,4 +6,4 @@ const allItems = (await getUnifiedFeed()).filter(i => i.type === 'article');
 const pages = paginateItems(allItems);
 const { items, totalPages } = pages[0] ?? { items: [], totalPages: 1 };
 ---
-<Feed title="Articles" items={items} currentPage={1} totalPages={totalPages} basePath="/articles" />
+<Feed title="Articles" items={items} currentPage={1} totalPages={totalPages} basePath="/articles" showIcon={false} />

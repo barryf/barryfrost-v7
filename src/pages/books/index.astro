@@ -26,14 +26,14 @@ const allItems = feed.filter(i => i.type === 'book');
 const pages = paginateItems(allItems);
 const { items, totalPages } = pages[0] ?? { items: [], totalPages: 1 };
 ---
-<Feed title="Books" items={items} currentPage={1} totalPages={totalPages} basePath="/books">
+<Feed title="Books" items={items} currentPage={1} totalPages={totalPages} basePath="/books" showIcon={false}>
   <p slot="header" class="text-neutral-600 dark:text-neutral-400 mb-6">
     Books I'm currently reading and books I've finished, tracked on my <a href="https://bookhive.buzz/profile/barryfrost.com">Bookhive profile</a>.
   </p>
   {readingItems.length > 0 && (
     <section slot="header" class="mb-6">
       <h2 class="text-lg font-semibold mb-2 pb-2 border-b border-neutral-200 dark:border-neutral-700">Reading</h2>
-      {readingItems.map(item => <FeedEntry item={item} />)}
+      {readingItems.map(item => <FeedEntry item={item} showIcon={false} />)}
     </section>
   )}
   <h2 slot="header" class="text-lg font-semibold mb-2 pb-2 border-b border-neutral-200 dark:border-neutral-700">Read</h2>

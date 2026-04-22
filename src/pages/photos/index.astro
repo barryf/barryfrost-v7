@@ -6,7 +6,7 @@ const allItems = (await getUnifiedFeed()).filter(i => i.type === 'photo');
 const pages = paginateItems(allItems);
 const { items, totalPages } = pages[0] ?? { items: [], totalPages: 1 };
 ---
-<Feed title="Photos" items={items} currentPage={1} totalPages={totalPages} basePath="/photos">
+<Feed title="Photos" items={items} currentPage={1} totalPages={totalPages} basePath="/photos" showIcon={false}>
   <p slot="header" class="text-neutral-600 dark:text-neutral-400 mb-6">
     Photo galleries I've posted on <a href="https://grain.social" class="underline hover:text-neutral-900 dark:hover:text-neutral-100">Grain</a>.
   </p>

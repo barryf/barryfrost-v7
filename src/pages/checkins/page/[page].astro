@@ -13,4 +13,4 @@ export async function getStaticPaths() {
 
 const { items, currentPage, totalPages } = Astro.props;
 ---
-<Feed title={`Checkins — Page ${currentPage}`} items={items} currentPage={currentPage} totalPages={totalPages} basePath="/checkins" />
+<Feed title={`Checkins — Page ${currentPage}`} items={items} currentPage={currentPage} totalPages={totalPages} basePath="/checkins" showIcon={false} />

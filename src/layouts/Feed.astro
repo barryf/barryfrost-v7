@@ -11,9 +11,10 @@ interface Props {
   currentPage: number;
   totalPages: number;
   basePath?: string;
+  showIcon?: boolean;
 }
 
-const { title, description, items, currentPage, totalPages, basePath } = Astro.props;
+const { title, description, items, currentPage, totalPages, basePath, showIcon = true } = Astro.props;
 ---
 <Base title={title} description={description}>
   <div class="h-feed">
@@ -25,7 +26,7 @@ const { title, description, items, currentPage, totalPages, basePath } = Astro.p
       <h1 class="p-name text-2xl font-bold mb-4">{title}</h1>
     )}
     <slot name="header" />
-    {items.map(item => <FeedEntry item={item} />)}
+    {items.map(item => <FeedEntry item={item} showIcon={showIcon} />)}
   </div>
   <Pagination currentPage={currentPage} totalPages={totalPages} basePath={basePath} />
   <slot name="footer" />
