@@ -28,4 +28,5 @@ const { title, description, items, currentPage, totalPages, basePath } = Astro.p
     {items.map(item => <FeedEntry item={item} />)}
   </div>
   <Pagination currentPage={currentPage} totalPages={totalPages} basePath={basePath} />
+  <slot name="footer" />
 </Base>

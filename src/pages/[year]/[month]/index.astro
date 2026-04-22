@@ -6,17 +6,43 @@ import { formatMonthYear } from '../../../lib/dates';
 export async function getStaticPaths() {
   const allItems = await getUnifiedFeed();
   const months = getMonths(allItems);
+  const sorted = [...months].sort((a, b) =>
+    `${a.year}-${a.month}`.localeCompare(`${b.year}-${b.month}`)
+  );
 
-  return months.map(({ year, month }) => {
+  return sorted.map(({ year, month }, i) => {
     const items = filterByMonth(allItems, year, month);
+    const prev = i > 0 ? sorted[i - 1] : null;
+    const next = i < sorted.length - 1 ? sorted[i + 1] : null;
     return {
       params: { year, month },
-      props: { items, year, month },
+      props: { items, year, month, prev, next },
     };
   });
 }
 
-const { items, year, month } = Astro.props;
+const { items, year, month, prev, next } = Astro.props;
 const displayDate = formatMonthYear(new Date(Number(year), Number(month) - 1));
+
+function monthLabel(m: { year: string; month: string }) {
+  return formatMonthYear(new Date(Number(m.year), Number(m.month) - 1));
+}
 ---
-<Feed title={displayDate} items={items} currentPage={1} totalPages={1} />
+<Feed title={displayDate} items={items} currentPage={1} totalPages={1}>
+  <nav slot="footer" class="flex justify-between mt-6 text-sm">
+    <div>
+      {prev && (
+        <a href={`/${prev.year}/${prev.month}`} class="text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100">
+          &larr; {monthLabel(prev)}
+        </a>
+      )}
+    </div>
+    <div>
+      {next && (
+        <a href={`/${next.year}/${next.month}`} class="text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100">
+          {monthLabel(next)} &rarr;
+        </a>
+      )}
+    </div>
+  </nav>
+</Feed>
