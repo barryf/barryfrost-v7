@@ -17,7 +17,7 @@ interface Props {
 const { title, description, items, currentPage, totalPages, basePath, sort = 'date' } = Astro.props;
 ---
 <Base title={title} description={description}>
-  <div class="h-feed">
+  <div class="h-feed mb-4">
     <div class="h-card p-author hidden">
       <img class="u-photo" src={new URL('/barryfrost.jpg', Astro.url).href} alt="Barry Frost" width="192" height="192" />
       <a class="p-name u-url" href={Astro.site?.href}>Barry Frost</a>
@@ -38,12 +38,16 @@ const { title, description, items, currentPage, totalPages, basePath, sort = 'da
       </div>
     </div>
     {currentPage === 1 && (
-      <p class="text-neutral-600 dark:text-neutral-400 mb-6">
+      <p class="text-neutral-600 dark:text-neutral-400 mb-8">
         Films and TV shows I've watched and rated on <a href="https://popfeed.social" class="underline hover:text-neutral-900 dark:hover:text-neutral-100">Popfeed</a>.
       </p>
     )}
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-      {items.map(item => <FilmCard item={item} />)}
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 mt-8">
+      {items.map(item => (
+        <div class="border-b border-neutral-100 dark:border-neutral-800 py-4">
+          <FilmCard item={item} />
+        </div>
+      ))}
     </div>
   </div>
   <Pagination currentPage={currentPage} totalPages={totalPages} basePath={basePath} />

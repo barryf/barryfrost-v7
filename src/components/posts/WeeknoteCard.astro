@@ -13,7 +13,7 @@ const categories = (item.data.tags as string[] | undefined) ?? [];
   <h2 class="text-lg font-semibold">
     <a class="p-name u-url" href={item.url}>{item.emoji && `${item.emoji} `}{item.title}</a>
   </h2>
-  <time class="dt-published text-sm text-neutral-500 dark:text-neutral-400" datetime={toISODate(item.date)}>
+  <time class="dt-published text-xs text-neutral-500 dark:text-neutral-400" datetime={toISODate(item.date)}>
     {formatDate(item.date)}
   </time>
   {item.summary && <p class="p-summary mt-1 text-neutral-700 dark:text-neutral-300">{item.summary}</p>}

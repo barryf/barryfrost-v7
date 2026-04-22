@@ -103,15 +103,16 @@ Type-specific feed pages (articles, photos, checkins, books, films) suppress the
 - Card components in `src/components/posts/`: `ArticleCard`, `WeeknoteCard`, `BlueskyCard`, `CheckinCard`, `FilmCard`, `BookCard`, `PhotoCard`
   - All external-service cards except `FilmCard` render a styled service pill next to the date that links to the item on the originating service (Bluesky, Bookhive, Beaconbits, Grain)
   - External-service card title links include a Heroicons micro `arrow-top-right-on-square` icon (16px, filled, `inline size-3.5 ml-1 align-middle`) to signal navigation away from the site
-  - `ArticleCard` shows tags as visible linked pills (linking to `/tags/{tag}`) below the title/summary, with the date rendered after the tags
+  - `ArticleCard` shows tags as visible linked pills (linking to `/tags/{tag}`) below the title/summary, with the date rendered after the tags in `text-xs`
+  - All card timestamp/metadata rows use `text-xs`
   - `BlueskyCard` renders up to 4 embedded images below the post text at fixed 96px height preserving aspect ratio; each image has `mb-1` bottom margin
   - `PhotoCard` renders up to 3 gallery thumbnails in a row and the total photo count
 
 ## Date Formatting
 
 `src/lib/dates.ts` exports two display formatters:
-- `formatDate(date)` — "22 April 2026" (full month name). Used only for dates displayed *under* article and weeknote titles (`ArticleCard`, `WeeknoteCard`, `Post.astro`).
-- `formatDateShort(date)` — "22 Apr 2026" (abbreviated month). Used everywhere else: card timestamps, `now.astro`, travelblog nav, weeknotes index.
+- `formatDate(date)` — "22 April 2026" (full month name). Used only for dates displayed *under* weeknote titles (`WeeknoteCard`, `Post.astro`).
+- `formatDateShort(date)` — "22 Apr 2026" (abbreviated month). Used everywhere else: all card timestamps (including `ArticleCard`), `now.astro`, travelblog nav, weeknotes index.
 
 ## Styling
 
