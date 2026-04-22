@@ -1,0 +1,21 @@
+---
+import FilmFeed from '../../../../layouts/FilmFeed.astro';
+import { getUnifiedFeed, paginateItems } from '../../../../lib/feed';
+
+export async function getStaticPaths() {
+  const allItems = (await getUnifiedFeed()).filter(i => i.type === 'film');
+  const sorted = [...allItems].sort((a, b) => {
+    const rA = (a.data as { rating?: number }).rating ?? -1;
+    const rB = (b.data as { rating?: number }).rating ?? -1;
+    return rB - rA;
+  });
+  const pages = paginateItems(sorted, 40);
+  return pages.slice(1).map(({ page, items, totalPages }) => ({
+    params: { page: String(page) },
+    props: { items, currentPage: page, totalPages },
+  }));
+}
+
+const { items, currentPage, totalPages } = Astro.props;
+---
+<FilmFeed title={`Films — Page ${currentPage}`} items={items} currentPage={currentPage} totalPages={totalPages} basePath="/films/by-rating" sort="rating" />

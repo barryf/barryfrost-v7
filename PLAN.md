@@ -62,7 +62,7 @@ interface FeedItem {
 }
 ```
 
-Page size is 20. `paginateItems()` splits any array into `{ page, items, totalPages }[]`.
+Default page size is 20. `paginateItems(items, pageSize?)` splits any array into `{ page, items, totalPages }[]`. The films pages override this to 40.
 
 ## URL Structure
 
@@ -77,7 +77,8 @@ Page size is 20. `paginateItems()` splits any array into `{ page, items, totalPa
 | `/work` | CV page — career, education, projects, skills, languages from `id.sifa.profile.*` PDS records |
 | `/posts` | Bluesky posts feed |
 | `/checkins` | Checkins feed |
-| `/films` | Films feed |
+| `/films` | Films feed — two-column grid (single column on narrow viewports), sorted by watched date; 40 per page |
+| `/films/by-rating` | Films feed sorted by rating descending |
 | `/photos` | Photos feed |
 | `/books` | Books feed |
 | `/blogroll` | Curated blogs + Standard publications |
@@ -89,21 +90,28 @@ Page size is 20. `paginateItems()` splits any array into `{ page, items, totalPa
 
 Most type-specific feeds have `/page/{n}` pagination. The weeknotes index is an exception — it shows all entries on a single page with a featured latest entry. Tags come from the `tags` frontmatter array on articles/weeknotes.
 
-Type-specific feed index pages (`/posts`, `/films`, `/checkins`, `/books`) include an optional intro paragraph explaining the source service, rendered via `slot="header"` which now appears *after* the `<h1>` inside the `h-feed` element.
+Type-specific feed pages (articles, photos, checkins, books, films) suppress the left type-icon gutter via `showIcon={false}` on `Feed` (or by using `FilmFeed` directly). The mixed homepage and posts feed retain the icon. Type-specific index pages include an intro paragraph; on `FilmFeed` this is baked into the layout (shown only on page 1).
 
 ## Layouts & Components
 
 - `Base.astro` — HTML shell, `max-w-2xl mx-auto px-4`, dark mode via `prefers-color-scheme`
-- `Feed.astro` — wraps `FeedEntry` list + `Pagination`, accepts `basePath` for paginated routes. The `slot="header"` renders inside `h-feed` *after* the `<h1>`, so pages can inject intro text, maps, or subsections (e.g. a "Reading" section before the "Read" list on `/books`) that sit between the title and the feed items. The `slot="footer"` renders after `Pagination` (used by the month archive for prev/next navigation).
+- `Feed.astro` — wraps `FeedEntry` list + `Pagination`, accepts `basePath` for paginated routes and `showIcon` (default `true`) to suppress the left type-icon gutter on type-specific pages. The `slot="header"` renders inside `h-feed` *after* the `<h1>`, so pages can inject intro text, maps, or subsections (e.g. a "Reading" section before the "Read" list on `/books`) that sit between the title and the feed items. The `slot="footer"` renders after `Pagination` (used by the month archive for prev/next navigation).
+- `FilmFeed.astro` — dedicated layout for `/films` and `/films/by-rating`: renders `FilmCard` directly in a responsive two-column grid (`grid-cols-1 sm:grid-cols-2`), shows an intro paragraph on page 1, and provides a date/rating sort toggle.
 - `Post.astro` — individual article/weeknote with prose styles
-- `FeedEntry.astro` — dispatches to per-type card components by `item.type`, rendering a `TypeIcon` in a left gutter. For Bluesky reply posts (where `item.data.reply` is set) the gutter shows the Heroicons `arrow-uturn-left` icon instead of the TypeIcon.
+- `FeedEntry.astro` — dispatches to per-type card components by `item.type`, optionally rendering a `TypeIcon` in a left gutter (suppressed when `showIcon={false}`). For Bluesky reply posts (where `item.data.reply` is set) the gutter shows the Heroicons `arrow-uturn-left` icon instead of the TypeIcon.
 - `TypeIcon.astro` — inline Heroicons (outline, 24px) keyed by `FeedItem.type`
 - Card components in `src/components/posts/`: `ArticleCard`, `WeeknoteCard`, `BlueskyCard`, `CheckinCard`, `FilmCard`, `BookCard`, `PhotoCard`
-  - All external-service cards (`BlueskyCard`, `FilmCard`, `BookCard`, `CheckinCard`, `PhotoCard`) render a styled service pill next to the date that links to the item on the originating service (Bluesky, Popfeed, Bookhive, Beaconbits, Grain)
+  - All external-service cards except `FilmCard` render a styled service pill next to the date that links to the item on the originating service (Bluesky, Bookhive, Beaconbits, Grain)
   - External-service card title links include a Heroicons micro `arrow-top-right-on-square` icon (16px, filled, `inline size-3.5 ml-1 align-middle`) to signal navigation away from the site
   - `ArticleCard` shows tags as visible linked pills (linking to `/tags/{tag}`) below the title/summary, with the date rendered after the tags
   - `BlueskyCard` renders up to 4 embedded images below the post text at fixed 96px height preserving aspect ratio; each image has `mb-1` bottom margin
   - `PhotoCard` renders up to 3 gallery thumbnails in a row and the total photo count
+
+## Date Formatting
+
+`src/lib/dates.ts` exports two display formatters:
+- `formatDate(date)` — "22 April 2026" (full month name). Used only for dates displayed *under* article and weeknote titles (`ArticleCard`, `WeeknoteCard`, `Post.astro`).
+- `formatDateShort(date)` — "22 Apr 2026" (abbreviated month). Used everywhere else: card timestamps, `now.astro`, travelblog nav, weeknotes index.
 
 ## Styling
 

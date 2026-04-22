@@ -1,0 +1,50 @@
+---
+import Base from './Base.astro';
+import FilmCard from '../components/posts/FilmCard.astro';
+import Pagination from '../components/Pagination.astro';
+import type { FeedItem } from '../lib/feed';
+
+interface Props {
+  title: string;
+  description?: string;
+  items: FeedItem[];
+  currentPage: number;
+  totalPages: number;
+  basePath?: string;
+  sort?: 'date' | 'rating';
+}
+
+const { title, description, items, currentPage, totalPages, basePath, sort = 'date' } = Astro.props;
+---
+<Base title={title} description={description}>
+  <div class="h-feed">
+    <div class="h-card p-author hidden">
+      <img class="u-photo" src={new URL('/barryfrost.jpg', Astro.url).href} alt="Barry Frost" width="192" height="192" />
+      <a class="p-name u-url" href={Astro.site?.href}>Barry Frost</a>
+    </div>
+    <div class="flex items-baseline justify-between mb-4">
+      <h1 class="p-name text-2xl font-bold">{title}</h1>
+      <div class="flex gap-3 text-sm">
+        {sort === 'date' ? (
+          <span class="font-medium">By date</span>
+        ) : (
+          <a href="/films" class="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100">By date</a>
+        )}
+        {sort === 'rating' ? (
+          <span class="font-medium">By rating</span>
+        ) : (
+          <a href="/films/by-rating" class="text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100">By rating</a>
+        )}
+      </div>
+    </div>
+    {currentPage === 1 && (
+      <p class="text-neutral-600 dark:text-neutral-400 mb-6">
+        Films and TV shows I've watched and rated on <a href="https://popfeed.social" class="underline hover:text-neutral-900 dark:hover:text-neutral-100">Popfeed</a>.
+      </p>
+    )}
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      {items.map(item => <FilmCard item={item} />)}
+    </div>
+  </div>
+  <Pagination currentPage={currentPage} totalPages={totalPages} basePath={basePath} />
+</Base>

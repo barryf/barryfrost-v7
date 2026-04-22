@@ -1,10 +1,10 @@
 ---
-import Feed from '../../../layouts/Feed.astro';
+import FilmFeed from '../../../layouts/FilmFeed.astro';
 import { getUnifiedFeed, paginateItems } from '../../../lib/feed';
 
 export async function getStaticPaths() {
   const allItems = (await getUnifiedFeed()).filter(i => i.type === 'film');
-  const pages = paginateItems(allItems);
+  const pages = paginateItems(allItems, 40);
   return pages.slice(1).map(({ page, items, totalPages }) => ({
     params: { page: String(page) },
     props: { items, currentPage: page, totalPages },
@@ -13,4 +13,4 @@ export async function getStaticPaths() {
 
 const { items, currentPage, totalPages } = Astro.props;
 ---
-<Feed title={`Films — Page ${currentPage}`} items={items} currentPage={currentPage} totalPages={totalPages} basePath="/films" />
+<FilmFeed title={`Films — Page ${currentPage}`} items={items} currentPage={currentPage} totalPages={totalPages} basePath="/films" sort="date" />
