@@ -15,7 +15,22 @@ interface Props {
 const { checkins } = Astro.props;
 ---
 
-<div id="checkin-map" class="w-full rounded-lg mb-8 bg-neutral-100 dark:bg-neutral-800 overflow-hidden" style="height: 360px;"></div>
+<div id="checkin-map-container" class="relative w-full mb-8">
+  <div id="checkin-map" class="w-full rounded-lg bg-neutral-100 dark:bg-neutral-800 overflow-hidden" style="height: 360px;"></div>
+  <button
+    id="checkin-map-fullscreen-btn"
+    title="Toggle fullscreen"
+    aria-label="Toggle fullscreen"
+    style="position:absolute;top:8px;right:8px;z-index:1000;background:white;border:1px solid #ccc;border-radius:4px;padding:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;"
+  >
+    <svg id="checkin-map-expand-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+    </svg>
+    <svg id="checkin-map-collapse-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+      <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/>
+    </svg>
+  </button>
+</div>
 
 <script is:inline define:vars={{ checkins }}>
   (function () {
@@ -72,6 +87,47 @@ const { checkins } = Astro.props;
       } else {
         map.setView([51.5, -0.1], 10);
       }
+
+      var container = document.getElementById('checkin-map-container');
+      var mapEl = document.getElementById('checkin-map');
+      var btn = document.getElementById('checkin-map-fullscreen-btn');
+      var expandIcon = document.getElementById('checkin-map-expand-icon');
+      var collapseIcon = document.getElementById('checkin-map-collapse-icon');
+      var isFullscreen = false;
+
+      function enterFullscreen() {
+        isFullscreen = true;
+        container.style.cssText = 'position:fixed;inset:0;z-index:9999;margin:0;';
+        mapEl.style.height = '100dvh';
+        mapEl.style.borderRadius = '0';
+        expandIcon.style.display = 'none';
+        collapseIcon.style.display = '';
+        btn.title = 'Exit fullscreen';
+        btn.setAttribute('aria-label', 'Exit fullscreen');
+        document.body.style.overflow = 'hidden';
+        map.invalidateSize();
+      }
+
+      function exitFullscreen() {
+        isFullscreen = false;
+        container.style.cssText = '';
+        mapEl.style.height = '360px';
+        mapEl.style.borderRadius = '';
+        expandIcon.style.display = '';
+        collapseIcon.style.display = 'none';
+        btn.title = 'Toggle fullscreen';
+        btn.setAttribute('aria-label', 'Toggle fullscreen');
+        document.body.style.overflow = '';
+        map.invalidateSize();
+      }
+
+      btn.addEventListener('click', function () {
+        if (isFullscreen) exitFullscreen(); else enterFullscreen();
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && isFullscreen) exitFullscreen();
+      });
     }
 
     loadCSS('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css');
