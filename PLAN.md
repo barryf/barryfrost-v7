@@ -81,7 +81,7 @@ Page size is 20. `paginateItems()` splits any array into `{ page, items, totalPa
 | `/photos` | Photos feed |
 | `/books` | Books feed |
 | `/blogroll` | Curated blogs + Standard publications |
-| `/{year}/{month}/` | Monthly archive (all types) |
+| `/{year}/{month}/` | Monthly archive (all types) — h1 shows full month name; prev/next month nav below items |
 | `/tags/{tag}` | Tag filter |
 | `/{slug}` | Slash pages (about, colophon, etc.) |
 | `/travelblog/{num}` | Travel blog entries |
@@ -94,7 +94,7 @@ Type-specific feed index pages (`/posts`, `/films`, `/checkins`, `/books`) inclu
 ## Layouts & Components
 
 - `Base.astro` — HTML shell, `max-w-2xl mx-auto px-4`, dark mode via `prefers-color-scheme`
-- `Feed.astro` — wraps `FeedEntry` list + `Pagination`, accepts `basePath` for paginated routes. The `slot="header"` renders inside `h-feed` *after* the `<h1>`, so pages can inject intro text, maps, or subsections (e.g. a "Reading" section before the "Read" list on `/books`) that sit between the title and the feed items.
+- `Feed.astro` — wraps `FeedEntry` list + `Pagination`, accepts `basePath` for paginated routes. The `slot="header"` renders inside `h-feed` *after* the `<h1>`, so pages can inject intro text, maps, or subsections (e.g. a "Reading" section before the "Read" list on `/books`) that sit between the title and the feed items. The `slot="footer"` renders after `Pagination` (used by the month archive for prev/next navigation).
 - `Post.astro` — individual article/weeknote with prose styles
 - `FeedEntry.astro` — dispatches to per-type card components by `item.type`, rendering a `TypeIcon` in a left gutter. For Bluesky reply posts (where `item.data.reply` is set) the gutter shows the Heroicons `arrow-uturn-left` icon instead of the TypeIcon.
 - `TypeIcon.astro` — inline Heroicons (outline, 24px) keyed by `FeedItem.type`
@@ -155,7 +155,7 @@ Required secrets: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`, `PUSHOVER_TOK
 
 ## Key Conventions
 
-- **Minimal JS** — the `/checkins` page loads Leaflet + Leaflet.markercluster via dynamic `createElement` (CDN) for the cluster map; all other pages are JS-free
+- **Minimal JS** — the `/checkins` page loads Leaflet + Leaflet.markercluster via dynamic `createElement` (CDN) for the cluster map, with a fullscreen toggle button (expand/collapse icons, Escape key support); all other pages are JS-free
 - **No runtime JS elsewhere** — MF2, dark mode, and layout are pure HTML/CSS
 - **Local Markdown is canonical** — PDS documents are syndication targets, not the source of truth
 - **Images cached at build time** — blobs downloaded once to `public/images/`, persisted in CI cache
