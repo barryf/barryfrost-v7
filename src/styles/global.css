@@ -1,6 +1,8 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
+@source '../content/**/*.md';
+
 @theme {
   --color-neutral-50: #f5f2ef;
   --color-neutral-100: #ebe7e2;

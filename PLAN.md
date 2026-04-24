@@ -118,6 +118,18 @@ Type-specific feed pages (articles, photos, checkins, books, films) suppress the
 
 Tailwind v4 with a custom warm neutral palette and orange accent (`--color-accent: #f76902`) defined in `src/styles/global.css`. Unclassed `<a>` tags default to the accent colour. Dark mode is CSS-only via `prefers-color-scheme` — no JS toggle.
 
+`src/styles/global.css` includes `@source '../content/**/*.md'` so Tailwind v4 scans Markdown content files for utility class names used via the image attribute syntax below.
+
+### Markdown image classes
+
+A custom `rehypeImageAttr` plugin in `astro.config.mjs` supports `{.class1 .class2}` attribute blocks immediately after image syntax in Markdown:
+
+```md
+![alt](path/to/image.jpg){.float-right .ml-8 .rounded}
+```
+
+The plugin strips the `{...}` text node and applies the dot-prefixed tokens as CSS classes on the `<img>` element.
+
 ## Microformats 2 (MF2)
 
 Applied as static classes directly in Astro templates so IndieWeb parsers (XRay, Monocle, pin13) classify posts correctly via [Post-Type Discovery](https://indieweb.org/Post_Type_Discovery). No runtime JS required.
