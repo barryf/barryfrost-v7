@@ -32,6 +32,7 @@ export function booksLoader(): Loader {
             coverUrl,
             owned: value.owned as boolean | undefined,
             createdAt: value.createdAt as string,
+            startedAt: value.startedAt as string | undefined,
             finishedAt: value.finishedAt as string | undefined,
             isbn10: identifiers?.isbn10,
             isbn13: identifiers?.isbn13,

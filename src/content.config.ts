@@ -114,6 +114,7 @@ const books = defineCollection({
     coverUrl: z.string().optional(),
     owned: z.boolean().optional(),
     createdAt: z.string(),
+    startedAt: z.string().optional(),
     finishedAt: z.string().optional(),
     isbn10: z.string().optional(),
     isbn13: z.string().optional(),
