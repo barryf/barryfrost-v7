@@ -23,7 +23,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: public/images
-          key: images-${{ runner.os }}
+          key: images-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: |
+            images-${{ runner.os }}-
       - run: npm run build
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
