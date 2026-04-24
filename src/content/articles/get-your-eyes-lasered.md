@@ -45,11 +45,11 @@ After the consultation you get gently chased to make your decision. I didn't hav
 
 ## Pre-surgery
 
-![Fuck My Life - box containing bottle of eye drops](../../assets/fml.jpg)
-
 I initially booked my surgery for 13 November 2010 and was told to stop wearing contact lenses on 24 October to give my eyes time to breathe. I was told my eyes were quite dry during the consultation. This wasn't a surprise to me, but the optometrist insisted that the dryness would need to clear up before surgery.
 
 This meant using eye drops and returning to wearing glasses for the first time since secondary school. Few work colleagues or friends even knew I was short-sighted. I could handle putting in drops every few hours, but hated wearing glasses again. I overcame my childish vanity by reminding myself I would only have to endure glasses for a couple of weeks.
+
+![Fuck My Life - box containing bottle of eye drops](../../assets/fml.jpg){.float-right .mt-0 .ml-8 .rounded}
 
 In fact, my surgery was rescheduled three times. My eyes were just too dry to proceed and so I was given a series of new drops to try, including the fabulously-named FML (see photo, right).
 
