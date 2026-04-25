@@ -1,0 +1,81 @@
+name: New post
+
+# Creates a stub article or weeknote and opens a draft PR.
+# The PR triggers the preview workflow (preview.yml) so Cloudflare Pages
+# deploys a preview. This requires GH_PAT (a personal access token with
+# repo scope) — PRs opened with the default GITHUB_TOKEN do not fire
+# pull_request events and will not auto-deploy a preview.
+
+on:
+  workflow_dispatch:
+    inputs:
+      kind:
+        description: 'Post type'
+        type: choice
+        options:
+          - article
+          - weeknote
+        required: true
+        default: weeknote
+      title_or_topic:
+        description: 'Article title or weeknote topic word (e.g. "Sofa")'
+        required: true
+      emoji:
+        description: 'Weeknote emoji (ignored for articles)'
+        required: false
+      tags:
+        description: 'Comma-separated tags (optional)'
+        required: false
+      date:
+        description: 'Publish date YYYY-MM-DD (optional, defaults to today UTC)'
+        required: false
+
+jobs:
+  scaffold:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Create stub file
+        run: |
+          if [ "$KIND" = "article" ]; then
+            ARGS=(scripts/new-article.ts --title "$TITLE" --no-git)
+          else
+            ARGS=(scripts/new-weeknote.ts --topic "$TITLE" --no-git)
+          fi
+          [ -n "$EMOJI" ] && ARGS+=(--emoji "$EMOJI")
+          [ -n "$TAGS" ]  && ARGS+=(--tags "$TAGS")
+          [ -n "$DATE" ]  && ARGS+=(--date "$DATE")
+          npx tsx "${ARGS[@]}"
+        env:
+          KIND:  ${{ inputs.kind }}
+          TITLE: ${{ inputs.title_or_topic }}
+          EMOJI: ${{ inputs.emoji }}
+          TAGS:  ${{ inputs.tags }}
+          DATE:  ${{ inputs.date }}
+
+      - name: Open draft PR
+        uses: peter-evans/create-pull-request@v6
+        with:
+          # Use GH_PAT so the PR triggers the preview.yml workflow_dispatch.
+          # Without a PAT, the PR is still created but no preview deploys.
+          token: ${{ secrets.GH_PAT || github.token }}
+          branch: content/scaffold-${{ github.run_id }}
+          commit-message: "content: scaffold ${{ inputs.kind }} \"${{ inputs.title_or_topic }}\""
+          title: "content: ${{ inputs.kind }} — ${{ inputs.title_or_topic }}"
+          body: |
+            Scaffolded via workflow_dispatch (`${{ inputs.kind }}`).
+
+            Edit the body below the frontmatter, then merge when ready.
+          draft: true
+          delete-branch: false
