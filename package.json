@@ -6,7 +6,9 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "new:article": "tsx scripts/new-article.ts",
+    "new:weeknote": "tsx scripts/new-weeknote.ts"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.18",
@@ -18,6 +20,7 @@
     "unist-util-visit": "^5.1.0"
   },
   "devDependencies": {
-    "@types/node": "^25.5.0"
+    "@types/node": "^25.5.0",
+    "tsx": "^4.19.4"
   }
 }

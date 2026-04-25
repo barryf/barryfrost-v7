@@ -177,7 +177,10 @@ Runs every 15 minutes via cron. For each monitored collection, fetches the lates
 
 Monitored collections: `app.bsky.feed.post`, `app.beaconbits.beacon`, `social.popfeed.feed.review`, `buzz.bookhive.book`, `site.standard.document`, `site.standard.graph.subscription`, `social.grain.gallery`, `social.grain.gallery.item`, `social.grain.photo`
 
-Required secrets: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`, `PUSHOVER_TOKEN`, `PUSHOVER_USER`
+### `scaffold.yml`
+Manual `workflow_dispatch` form for creating a new article or weeknote stub from any device. Inputs: `kind` (article/weeknote), `title_or_topic`, `emoji`, `tags`, `date`. Runs `scripts/new-article.ts` or `scripts/new-weeknote.ts --no-git`, then uses `peter-evans/create-pull-request` to open a draft PR. The PR triggers `preview.yml` for a Cloudflare preview (requires `GH_PAT` secret — a PAT with `repo` scope — since PRs created with `GITHUB_TOKEN` do not fire `pull_request` events).
+
+Required secrets: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`, `PUSHOVER_TOKEN`, `PUSHOVER_USER`, `GH_PAT` (for scaffold.yml preview trigger)
 
 ## Key Conventions
 
@@ -188,6 +191,36 @@ Required secrets: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`, `PUSHOVER_TOK
 - **`visibility: unlisted`** frontmatter hides articles/weeknotes from feeds (but pages still generate)
 - **`build.format: 'file'`** — generates `about.html` not `about/index.html`
 - **`compressHTML: false`** — keeps HTML readable
+
+## Authoring New Content
+
+Scaffolding scripts create a correctly-formatted stub, branch, commit, and draft PR in one step.
+
+### Local CLI
+
+```sh
+npm run new:article -- --title "Some Title" [--tags "foo,bar"] [--date YYYY-MM-DD]
+npm run new:weeknote -- --topic "Sofa" [--emoji "🛋️"] [--tags "foo,bar"] [--date YYYY-MM-DD]
+```
+
+Both commands: verify the working tree is clean on `main`, create a `content/...` branch, write the stub, commit, push, and open a draft PR via `gh`. The existing `preview.yml` then deploys a Cloudflare preview.
+
+### Shared implementation
+
+| Module | Responsibility |
+|---|---|
+| `scripts/lib/scaffold.ts` | Pure helpers: `slugify`, `escapeYaml`, `nextWeekNumber`, frontmatter renderers, `writeStub` |
+| `scripts/new-article.ts` | Article CLI — slug from title, writes `src/content/articles/{slug}.md` |
+| `scripts/new-weeknote.ts` | Weeknote CLI — week = `max(existing) + 1`, writes `src/content/weeknotes/{N}-{slug}.md` |
+
+Both CLIs accept `--no-git` (or detect `CI=true`) to skip all git/gh operations — used by `scaffold.yml`.
+
+### Weeknote conventions
+
+- Week numbers are sequential integers starting at 1 (not ISO weeks).
+- Filename: `{N}-{slugified-topic}.md` — e.g. `244-sofa.md`.
+- Required frontmatter: `title`, `date`, `week` (unquoted integer). `emoji` is optional but conventional.
+- Title format: `"Week {N} - {Topic}"` (en-dash hyphen with surrounding spaces).
 
 ## Adding a New PDS Content Type
 
