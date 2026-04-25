@@ -169,7 +169,7 @@ Triggers on: push to `main`, `workflow_dispatch`, `repository_dispatch` (type: `
 1. `npm ci`
 2. Cache `public/images/` between runs (avoids re-downloading blobs)
 3. `npm run build`
-4. `wrangler pages deploy dist --project-name barryfrost-v7`
+4. `npx wrangler pages deploy dist --project-name barryfrost-v7`
 5. Pushover notification — normal-priority on success, high-priority on failure, linking to the workflow run
 
 ### `poll-pds.yml`
