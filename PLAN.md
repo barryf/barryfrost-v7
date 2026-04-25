@@ -82,7 +82,7 @@ Default page size is 20. `paginateItems(items, pageSize?)` splits any array into
 | `/photos` | Photos feed |
 | `/books` | Books feed |
 | `/blogroll` | Curated blogs + Standard publications |
-| `/{year}/{month}/` | Monthly archive (all types) — h1 shows full month name; prev/next month nav below items |
+| `/archives/{year}/{month}/` | Monthly archive (all types) — h1 shows full month name; prev/next month nav below items |
 | `/tags/{tag}` | Tag filter |
 | `/{slug}` | Slash pages (about, colophon, etc.) |
 | `/travelblog/{num}` | Travel blog entries |
