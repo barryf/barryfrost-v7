@@ -1,0 +1,52 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getUnifiedFeed, getMonths, getTags } from '../../lib/feed';
+
+const allItems = await getUnifiedFeed();
+const months = getMonths(allItems);
+const tags = getTags(allItems);
+
+const byYear = new Map<string, string[]>();
+for (const { year, month } of months) {
+  if (!byYear.has(year)) byYear.set(year, []);
+  byYear.get(year)!.push(month);
+}
+const years = [...byYear.keys()].sort();
+for (const year of years) {
+  byYear.get(year)!.sort();
+}
+---
+<Base title="Archives" description="Monthly archives and tags">
+  <h1 class="text-2xl font-bold mb-8">Archives</h1>
+
+  <section class="mb-8">
+    <h2 class="text-lg font-semibold mb-4 pb-2 border-b border-neutral-200 dark:border-neutral-700">Months</h2>
+    <ul class="space-y-1 font-mono text-sm tracking-wide leading-relaxed">
+      {years.map(year => (
+        <li>
+          <span class="text-neutral-500 dark:text-neutral-400">{year} /</span>
+          {byYear.get(year)!.map((month, i) => (
+            <Fragment>
+              {i > 0 && ' '}
+              <a href={`/archives/${year}/${month}`}>{month}</a>
+            </Fragment>
+          ))}
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  {tags.length > 0 && (
+    <section>
+      <h2 class="text-lg font-semibold mb-4 pb-2 border-b border-neutral-200 dark:border-neutral-700">Tags</h2>
+      <p class="text-sm text-neutral-500 dark:text-neutral-400 leading-loose">
+        {tags.map((tag, i) => (
+          <Fragment>
+            {i > 0 && ' • '}
+            <a href={`/tags/${tag}`}>{tag}</a>
+          </Fragment>
+        ))}
+      </p>
+    </section>
+  )}
+</Base>
