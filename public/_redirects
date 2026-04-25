@@ -5,6 +5,7 @@
 
 # RSS alias
 /rss /feed.xml 301
+/feed /feed.xml 301
 
 # Travelblog
 /categories/travelblog /travelblog 301
@@ -287,34 +288,8 @@
 
 # WILDCARD REDIRECTS
 
-# Redirect archived barryfrost.com posts (2000–Mar 2026) to archive.barryfrost.com
-/2000/* https://archive.barryfrost.com/2000/:splat 301
-/2001/* https://archive.barryfrost.com/2001/:splat 301
-/2004/* https://archive.barryfrost.com/2004/:splat 301
-/2005/* https://archive.barryfrost.com/2005/:splat 301
-/2006/* https://archive.barryfrost.com/2006/:splat 301
-/2007/* https://archive.barryfrost.com/2007/:splat 301
-/2008/* https://archive.barryfrost.com/2008/:splat 301
-/2009/* https://archive.barryfrost.com/2009/:splat 301
-/2010/* https://archive.barryfrost.com/2010/:splat 301
-/2011/* https://archive.barryfrost.com/2011/:splat 301
-/2012/* https://archive.barryfrost.com/2012/:splat 301
-/2013/* https://archive.barryfrost.com/2013/:splat 301
-/2014/* https://archive.barryfrost.com/2014/:splat 301
-/2015/* https://archive.barryfrost.com/2015/:splat 301
-/2016/* https://archive.barryfrost.com/2016/:splat 301
-/2017/* https://archive.barryfrost.com/2017/:splat 301
-/2018/* https://archive.barryfrost.com/2018/:splat 301
-/2019/* https://archive.barryfrost.com/2019/:splat 301
-/2020/* https://archive.barryfrost.com/2020/:splat 301
-/2021/* https://archive.barryfrost.com/2021/:splat 301
-/2022/* https://archive.barryfrost.com/2022/:splat 301
-/2023/* https://archive.barryfrost.com/2023/:splat 301
-/2024/* https://archive.barryfrost.com/2024/:splat 301
-/2025/* https://archive.barryfrost.com/2025/:splat 301
-/2026/01/* https://archive.barryfrost.com/2026/01/:splat 301
-/2026/02/* https://archive.barryfrost.com/2026/02/:splat 301
-/2026/03/* https://archive.barryfrost.com/2026/03/:splat 301
+# Redirect archived barryfrost.com posts to archive.barryfrost.com
+/20* https://archive.barryfrost.com/20:splat 301
 
 # Categories renamed to tags
 /categories/* /tags/:splat 301
