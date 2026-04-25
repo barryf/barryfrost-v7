@@ -107,7 +107,7 @@ Type-specific feed pages (articles, photos, checkins, books, films) suppress the
   - `ArticleCard` shows tags as visible linked pills (linking to `/tags/{tag}`) below the title/summary, with the date rendered after the tags in `text-xs`
   - All card timestamp/metadata rows use `text-xs`
   - `BlueskyCard` renders up to 4 embedded images below the post text at fixed 96px height preserving aspect ratio; each image has `mb-1` bottom margin
-  - `PhotoCard` renders up to 3 gallery thumbnails in a row and the total photo count
+  - `PhotoCard` — single-photo galleries use a side-by-side layout on `sm`+ (120px square thumbnail left, title/description/date right); stacked on narrow viewports. Multi-photo galleries render up to 4 thumbnails in a flex row above the title. `description` (from `social.grain.gallery`) renders as `p-summary` below the title when present.
 
 ## Date Formatting
 
@@ -233,8 +233,15 @@ Both CLIs accept `--no-git` (or detect `CI=true`) to skip all git/gh operations 
 7. Add an entry to `src/components/TypeIcon.astro` (label + Heroicon path) for the left-gutter icon
 8. Add collection NSID to the `poll-pds.yml` monitored list
 
+## One-off Import Scripts
+
+| Script | Purpose |
+|---|---|
+| `scripts/backfill.ts` | Convert v6 JSON posts (articles/weeknotes) → local Markdown |
+| `scripts/import-checkins.ts` | Convert v6 checkin posts → `src/data/historical-checkins.json` |
+| `scripts/import-grain-photos.ts` | Import v6 `post-type: photo` posts to grain.social as PDS records (`social.grain.gallery` + `.photo` + `.gallery.item`). Downloads from original URLs (Cloudinary, S3, etc.), re-encodes JPEG under grain's 1 MB blob limit. Reads `BSKY_HANDLE` + `BSKY_APP_PASSWORD` from env. Tracks progress in `scripts/imported-grain-photos.json` (gitignored) for idempotent re-runs. `--dry-run`, `--limit N`, `--slug YYYY/MM/slug` flags. Run via `npm run import:grain`. |
+
 ## Ideas / Backlog
 
 - `/uses`, `/defaults`, `/pay`, `/contact` slash pages
 - Gigs attended
-- Script to backfill historical checkins/films/notes as PDS records (or /data/*.json)

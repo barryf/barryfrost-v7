@@ -4,6 +4,7 @@ import { downloadImage } from '../download-image';
 
 interface GalleryRecord {
   title?: string;
+  description?: string;
   address?: { name?: string; locality?: string; region?: string; country?: string };
   createdAt?: string;
 }
@@ -30,7 +31,7 @@ export function photosLoader(): Loader {
       store.clear();
 
       // Collect all galleries
-      const galleries = new Map<string, { rkey: string; title: string; address?: string; createdAt: string; cid: string }>();
+      const galleries = new Map<string, { rkey: string; title: string; description?: string; address?: string; createdAt: string; cid: string }>();
       for await (const record of fetchAllRecords('social.grain.gallery', DID, PDS_HOST)) {
         const value = record.value as GalleryRecord;
         const rkey = rkeyFromUri(record.uri);
@@ -38,6 +39,7 @@ export function photosLoader(): Loader {
         galleries.set(record.uri, {
           rkey,
           title: value.title ?? 'Gallery',
+          description: value.description,
           address,
           createdAt: value.createdAt ?? new Date().toISOString(),
           cid: record.cid,
@@ -65,7 +67,7 @@ export function photosLoader(): Loader {
         const photoCount = items.length;
 
         const thumbnailUrls: string[] = [];
-        for (const [index, item] of items.slice(0, 3).entries()) {
+        for (const [index, item] of items.slice(0, 4).entries()) {
           const photo = photos.get(item.photoUri);
           if (photo?.photo?.ref?.$link) {
             const blobUrl = `https://${PDS_HOST}/xrpc/com.atproto.sync.getBlob?did=${DID}&cid=${photo.photo.ref.$link}`;
@@ -78,6 +80,7 @@ export function photosLoader(): Loader {
           id: gallery.rkey,
           data: {
             title: gallery.title,
+            description: gallery.description,
             address: gallery.address,
             thumbnailUrls,
             photoCount,
