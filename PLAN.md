@@ -87,6 +87,7 @@ Default page size is 20. `paginateItems(items, pageSize?)` splits any array into
 | `/{slug}` | Slash pages (about, colophon, etc.) |
 | `/travelblog/{num}` | Travel blog entries |
 | `/feed.xml` | RSS feed (articles + weeknotes, latest 10, full content) |
+| `/feed.json` | JSON Feed v1.1 (same content as RSS) |
 
 Most type-specific feeds have `/page/{n}` pagination. The weeknotes index is an exception — it shows all entries on a single page with a featured latest entry. Tags come from the `tags` frontmatter array on articles/weeknotes.
 
@@ -145,9 +146,13 @@ Applied as static classes directly in Astro templates so IndieWeb parsers (XRay,
 
 Image `src` attributes use `new URL(path, Astro.url).href` — `Astro.url` reflects the current host, so images resolve against `localhost` in dev and `https://new.barryfrost.com` in production builds. Non-image absolute URLs (canonical, og:url, h-card `u-url`, RSS) use `Astro.site` / `context.site`.
 
-## RSS Feed
+## Feeds
 
-`/feed.xml` — articles + weeknotes only, latest 10, full HTML content rendered via `AstroContainer`. `trailingSlash: false` is passed to `@astrojs/rss` so item `<link>` / `<guid>` URLs match the site's no-trailing-slash convention.
+`/feed.xml` — RSS feed; articles + weeknotes only, latest 10, full HTML content rendered via `AstroContainer`. `trailingSlash: false` is passed to `@astrojs/rss` so item `<link>` / `<guid>` URLs match the site's no-trailing-slash convention.
+
+`/feed.json` — JSON Feed v1.1; same content and query as RSS. Top-level `authors` block includes name, URL, and avatar. Items include `id`, `url`, `title`, `content_html`, `date_published` (RFC 3339), and `summary` when present. Served with `Content-Type: application/feed+json`.
+
+Both feeds are advertised via `<link rel="alternate">` in `BaseHead.astro`.
 
 ## Canonical URLs
 
