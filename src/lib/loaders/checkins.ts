@@ -1,6 +1,19 @@
 import type { Loader } from 'astro/loaders';
 import { fetchAllRecords, rkeyFromUri, DID, PDS_HOST } from '../pds';
-import historicalCheckins from '../../data/historical-checkins.json';
+
+const DID_SHORT = DID.replace('did:plc:', '');
+import { downloadImage } from '../download-image';
+
+interface FsqLocation {
+  fsq_place_id?: string;
+  name?: string;
+  latitude?: string;
+  longitude?: string;
+}
+
+interface CheckinPhoto {
+  image?: { ref?: { $link?: string } };
+}
 
 export function checkinsLoader(): Loader {
   return {
@@ -26,27 +39,43 @@ export function checkinsLoader(): Loader {
             rating: value.rating as number | undefined,
             createdAt: value.createdAt as string,
             uri: record.uri,
+            sourceUrl: `https://www.beaconbits.app/beacons/${DID_SHORT}/${rkey}`,
             source: 'beaconbits' as const,
           },
           digest: generateDigest(record.cid),
         });
       }
 
-      logger.info(`Loading ${historicalCheckins.length} historical checkins`);
-      for (const entry of historicalCheckins) {
+      for await (const record of fetchAllRecords('com.barryfrost.checkin', DID, PDS_HOST)) {
+        const value = record.value as Record<string, unknown>;
+        const rkey = rkeyFromUri(record.uri);
+        const location = value.location as FsqLocation | undefined;
+        const photos = (value.photos as CheckinPhoto[] | undefined) ?? [];
+
+        const photoUrls: string[] = [];
+        for (const [i, photo] of photos.entries()) {
+          const link = photo.image?.ref?.['$link'];
+          if (!link) continue;
+          const blobUrl = `https://${PDS_HOST}/xrpc/com.atproto.sync.getBlob?did=${DID}&cid=${link}`;
+          const url = await downloadImage(blobUrl, 'checkins', `${rkey}-${i}.jpg`, 800, 800, 'cover');
+          if (url) photoUrls.push(url);
+        }
+
         store.set({
-          id: `v6-${entry.id}`,
+          id: rkey,
           data: {
-            venueName: entry.venueName,
-            venueAddress: entry.venueAddress,
-            venueUri: entry.venueUri,
-            swarmUrl: entry.swarmUrl,
-            latitude: entry.latitude,
-            longitude: entry.longitude,
-            createdAt: entry.createdAt,
+            venueName: location?.name ?? '',
+            venueCategory: value.category as string | undefined,
+            venueAddress: value.address as string | undefined,
+            fsqPlaceId: location?.fsq_place_id,
+            latitude: location?.latitude,
+            longitude: location?.longitude,
+            createdAt: value.createdAt as string,
+            uri: record.uri,
+            photoUrls: photoUrls.length > 0 ? photoUrls : undefined,
             source: 'foursquare' as const,
           },
-          digest: generateDigest(entry.createdAt + entry.venueName),
+          digest: generateDigest(record.cid),
         });
       }
     },
