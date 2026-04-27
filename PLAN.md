@@ -27,7 +27,7 @@ Fetched at build time from `bsky.social` for DID `did:plc:j5ksi3y4tdtbp7vpsxsfya
 | Collection | Loader | Feed type |
 |---|---|---|
 | `app.bsky.feed.post` | `bluesky.ts` | `bluesky` |
-| `app.beaconbits.beacon` | `checkins.ts` | `checkin` |
+| `app.beaconbits.beacon` + `com.barryfrost.checkin` | `checkins.ts` | `checkin` |
 | `social.popfeed.feed.review` | `films.ts` | `film` |
 | `buzz.bookhive.book` | `books.ts` | `book` |
 | `social.grain.gallery` + `.gallery.item` + `.photo` | `photos.ts` | `photo` |
@@ -102,7 +102,7 @@ Type-specific feed pages (articles, photos, checkins, books, films) suppress the
 - `FeedEntry.astro` — dispatches to per-type card components by `item.type`, optionally rendering a `TypeIcon` in a left gutter (suppressed when `showIcon={false}`). For Bluesky reply posts (where `item.data.reply` is set) the gutter shows the Heroicons `arrow-uturn-left` icon instead of the TypeIcon.
 - `TypeIcon.astro` — inline Heroicons (outline, 24px) keyed by `FeedItem.type`
 - Card components in `src/components/posts/`: `ArticleCard`, `WeeknoteCard`, `BlueskyCard`, `CheckinCard`, `FilmCard`, `BookCard`, `PhotoCard`
-  - All external-service cards except `FilmCard` render a styled service pill next to the date that links to the item on the originating service (Bluesky, Bookhive, Beaconbits, Grain)
+  - All external-service cards except `FilmCard` render a styled service pill next to the date that links to the item on the originating service (Bluesky, Bookhive, Beaconbits, Grain). `CheckinCard` shows the Beaconbits pill only for `beaconbits`-source entries; Foursquare/Swarm entries sourced via `com.barryfrost.checkin` have no pill.
   - External-service card title links include a Heroicons micro `arrow-top-right-on-square` icon (16px, filled, `inline size-3.5 ml-1 align-middle`) to signal navigation away from the site
   - `ArticleCard` shows tags as visible linked pills (linking to `/tags/{tag}`) below the title/summary, with the date rendered after the tags in `text-xs`
   - All card timestamp/metadata rows use `text-xs`
@@ -139,7 +139,7 @@ Applied as static classes directly in Astro templates so IndieWeb parsers (XRay,
 - **All cards**: `h-entry` with `dt-published`, `u-url`, optional `p-category` entries from `categories` frontmatter
 - **ArticleCard / WeeknoteCard**: `p-name`, `p-summary`; article tags are emitted as `p-category` on visible `<a>` elements (text content = tag value); weeknotes also emit an implicit `p-category="weeknotes"`
 - **BlueskyCard**: `e-content` for rich text, `u-in-reply-to` on reply link, `u-photo` on each embedded image
-- **CheckinCard**: nested `p-checkin h-card` with `p-name`, `p-latitude`, `p-longitude`, `p-street-address`; `p-rating` (hidden) when present; hidden `u-url` as a direct child of `h-entry` (visible click target is the venue name) so parsers attribute the Beaconbits URL to the entry rather than the venue h-card
+- **CheckinCard**: nested `p-checkin h-card` with `p-name`, `p-latitude`, `p-longitude`, `p-street-address`; `p-rating` (hidden) when present; hidden `u-url` as a direct child of `h-entry` (visible click target is the venue name) so parsers attribute the OSM URL to the entry rather than the venue h-card. Optional inline photo grid (`u-photo`) below the address for `com.barryfrost.checkin` records with photo blobs.
 - **FilmCard**: nested `p-item h-cite` with `u-photo` (poster) and hidden `p-name u-url`; numeric `p-rating` exposed via `<data value=...>` alongside star glyphs
 - **BookCard**: nested `p-read-of h-cite` with `u-photo` (cover), hidden `p-name u-url`, `p-author`
 - **PhotoCard**: `u-photo` on each gallery thumbnail, `p-location` on address, `p-name u-url` on title
@@ -175,7 +175,7 @@ Triggers on: push to `main`, `workflow_dispatch`, `repository_dispatch` (type: `
 ### `poll-pds.yml`
 Runs every 15 minutes via cron. For each monitored collection, fetches the latest record CID and compares to `.github/last-seen-cids.json`. If any CID changed, commits the updated JSON and fires a `repository_dispatch` to trigger a rebuild.
 
-Monitored collections: `app.bsky.feed.post`, `app.beaconbits.beacon`, `social.popfeed.feed.review`, `buzz.bookhive.book`, `site.standard.document`, `site.standard.graph.subscription`, `social.grain.gallery`, `social.grain.gallery.item`, `social.grain.photo`
+Monitored collections: `app.bsky.feed.post`, `app.beaconbits.beacon`, `com.barryfrost.checkin`, `social.popfeed.feed.review`, `buzz.bookhive.book`, `site.standard.document`, `site.standard.graph.subscription`, `social.grain.gallery`, `social.grain.gallery.item`, `social.grain.photo`
 
 ### `scaffold.yml`
 Manual `workflow_dispatch` form for creating a new article or weeknote stub from any device. Inputs: `kind` (article/weeknote), `title_or_topic`, `emoji`, `tags`, `date`. Runs `scripts/new-article.ts` or `scripts/new-weeknote.ts --no-git`, then uses `peter-evans/create-pull-request` to open a draft PR. The PR triggers `preview.yml` for a Cloudflare preview (requires `GH_PAT` secret — a PAT with `repo` scope — since PRs created with `GITHUB_TOKEN` do not fire `pull_request` events).
@@ -238,7 +238,6 @@ Both CLIs accept `--no-git` (or detect `CI=true`) to skip all git/gh operations 
 | Script | Purpose |
 |---|---|
 | `scripts/backfill.ts` | Convert v6 JSON posts (articles/weeknotes) → local Markdown |
-| `scripts/import-checkins.ts` | Convert v6 checkin posts → `src/data/historical-checkins.json` |
 | `scripts/import-grain-photos.ts` | Import v6 `post-type: photo` posts to grain.social as PDS records (`social.grain.gallery` + `.photo` + `.gallery.item`). Downloads from original URLs (Cloudinary, S3, etc.), re-encodes JPEG under grain's 1 MB blob limit. Reads `BSKY_HANDLE` + `BSKY_APP_PASSWORD` from env. Tracks progress in `scripts/imported-grain-photos.json` (gitignored) for idempotent re-runs. `--dry-run`, `--limit N`, `--slug YYYY/MM/slug` flags. Run via `npm run import:grain`. |
 
 ## Ideas / Backlog
