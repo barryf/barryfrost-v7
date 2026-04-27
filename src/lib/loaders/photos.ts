@@ -71,7 +71,7 @@ export function photosLoader(): Loader {
           const photo = photos.get(item.photoUri);
           if (photo?.photo?.ref?.$link) {
             const blobUrl = `https://${PDS_HOST}/xrpc/com.atproto.sync.getBlob?did=${DID}&cid=${photo.photo.ref.$link}`;
-            const url = await downloadImage(blobUrl, 'photos', `${gallery.rkey}-${index}.jpg`, 300, 300);
+            const url = await downloadImage(blobUrl, 'photos', `${gallery.rkey}-${index}.jpg`, 120, 120);
             if (url) thumbnailUrls.push(url);
           }
         }

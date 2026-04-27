@@ -27,7 +27,7 @@ async function extractImages(embed: BlueskyEmbed | undefined, rkey: string): Pro
     const link = img.image?.ref?.$link;
     if (!link) continue;
     const blobUrl = `https://${PDS_HOST}/xrpc/com.atproto.sync.getBlob?did=${DID}&cid=${link}`;
-    const url = await downloadImage(blobUrl, 'bluesky', `${rkey}-${index}.jpg`, 400, 400, 'inside');
+    const url = await downloadImage(blobUrl, 'bluesky', `${rkey}-${index}.jpg`, 96, 96, 'inside');
     if (url) {
       urls.push(url);
       alts.push(img.alt ?? '');
