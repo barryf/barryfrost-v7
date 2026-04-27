@@ -80,6 +80,7 @@ const checkins = defineCollection({
     uri: z.string().optional(),
     sourceUrl: z.string().optional(),
     photoUrls: z.array(z.string()).optional(),
+    photoFullUrls: z.array(z.string()).optional(),
     source: z.enum(['beaconbits', 'foursquare']).default('beaconbits'),
   }),
 });

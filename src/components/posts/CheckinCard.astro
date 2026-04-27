@@ -7,33 +7,45 @@ interface Props {
 }
 
 const { item } = Astro.props;
-const data = item.data as { venueName: string; venueCategory?: string; venueAddress?: string; latitude?: string; longitude?: string; rating?: number; source?: string; sourceUrl?: string; photoUrls?: string[] };
+const data = item.data as { venueName: string; venueCategory?: string; venueAddress?: string; latitude?: string; longitude?: string; rating?: number; source?: string; sourceUrl?: string; photoUrls?: string[]; photoFullUrls?: string[] };
+const photos = data.photoUrls ?? [];
+const fullUrls = data.photoFullUrls ?? [];
+const single = photos.length === 1;
 ---
 <article class="h-entry">
   {item.url && <a class="u-url hidden" href={item.url} rel="noopener noreferrer" aria-hidden="true" tabindex="-1"></a>}
-  <div class="p-checkin h-card">
-    {item.url ? (
-      <a href={item.url} rel="noopener noreferrer">
-        <span class="p-name font-semibold">{data.venueName}</span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="inline size-3.5 ml-1 align-middle" aria-hidden="true"><path d="M6.22 8.72a.75.75 0 0 0 1.06 1.06l5.22-5.22v1.69a.75.75 0 0 0 1.5 0v-3.5a.75.75 0 0 0-.75-.75h-3.5a.75.75 0 0 0 0 1.5h1.69L6.22 8.72Z" /><path d="M3.5 6.75c0-.69.56-1.25 1.25-1.25H7A.75.75 0 0 0 7 4H4.75A2.75 2.75 0 0 0 2 6.75v4.5A2.75 2.75 0 0 0 4.75 14h4.5A2.75 2.75 0 0 0 12 11.25V9a.75.75 0 0 0-1.5 0v2.25c0 .69-.56 1.25-1.25 1.25h-4.5c-.69 0-1.25-.56-1.25-1.25v-4.5Z" /></svg>
+  {photos.length > 1 && (
+    <div class="grid grid-cols-2 gap-1 mb-2">
+      {photos.map((url, i) => (
+        <a href={fullUrls[i] ?? url} rel="noopener noreferrer">
+          <img src={url} width="96" height="96" alt="" loading="lazy" decoding="async" class="u-photo w-full aspect-square object-cover rounded h-24" />
+        </a>
+      ))}
+    </div>
+  )}
+  <div class:list={["p-checkin h-card", single && "min-[320px]:flex min-[320px]:gap-3 min-[320px]:items-start"]}>
+    {single && (
+      <a href={fullUrls[0] ?? photos[0]} rel="noopener noreferrer">
+        <img src={photos[0]} width="96" height="96" alt="" loading="lazy" decoding="async" class="u-photo w-24 shrink-0 aspect-square object-cover rounded mb-2 min-[320px]:mb-0" />
       </a>
-    ) : (
-      <span class="p-name font-semibold">{data.venueName}</span>
     )}
-    {data.venueCategory && <span class="text-sm text-neutral-500 dark:text-neutral-400"> · {data.venueCategory}</span>}
-    {data.venueAddress && <p class="p-street-address text-sm text-neutral-600 dark:text-neutral-400 mt-0.5">{data.venueAddress}</p>}
-    {data.latitude && <data class="p-latitude" value={data.latitude} />}
-    {data.longitude && <data class="p-longitude" value={data.longitude} />}
-    {data.photoUrls && data.photoUrls.length > 0 && (
-      <div class={`mt-2 grid gap-1 ${data.photoUrls.length === 1 ? 'grid-cols-1' : 'grid-cols-2'}`}>
-        {data.photoUrls.map(url => (
-          <img src={url} alt="" loading="lazy" decoding="async" class="u-photo w-full aspect-square object-cover rounded max-h-48" />
-        ))}
+    <div>
+      {item.url ? (
+        <a href={item.url} rel="noopener noreferrer">
+          <span class="p-name font-semibold">{data.venueName}</span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="inline size-3.5 ml-1 align-middle" aria-hidden="true"><path d="M6.22 8.72a.75.75 0 0 0 1.06 1.06l5.22-5.22v1.69a.75.75 0 0 0 1.5 0v-3.5a.75.75 0 0 0-.75-.75h-3.5a.75.75 0 0 0 0 1.5h1.69L6.22 8.72Z" /><path d="M3.5 6.75c0-.69.56-1.25 1.25-1.25H7A.75.75 0 0 0 7 4H4.75A2.75 2.75 0 0 0 2 6.75v4.5A2.75 2.75 0 0 0 4.75 14h4.5A2.75 2.75 0 0 0 12 11.25V9a.75.75 0 0 0-1.5 0v2.25c0 .69-.56 1.25-1.25 1.25h-4.5c-.69 0-1.25-.56-1.25-1.25v-4.5Z" /></svg>
+        </a>
+      ) : (
+        <span class="p-name font-semibold">{data.venueName}</span>
+      )}
+      {data.venueCategory && <span class="text-sm text-neutral-500 dark:text-neutral-400"> · {data.venueCategory}</span>}
+      {data.venueAddress && <p class="p-street-address text-sm text-neutral-600 dark:text-neutral-400 mt-0.5">{data.venueAddress}</p>}
+      {data.latitude && <data class="p-latitude" value={data.latitude} />}
+      {data.longitude && <data class="p-longitude" value={data.longitude} />}
+      {data.rating !== undefined && <data class="p-rating hidden" value={data.rating} />}
+      <div class="mt-1 flex items-center gap-3 text-xs text-neutral-500 dark:text-neutral-400">
+        <time class="dt-published" datetime={toISODate(item.date)}>{formatDateShort(item.date)}</time>
+        {data.sourceUrl && <a href={data.sourceUrl} class="px-2 py-0.5 bg-neutral-100 dark:bg-neutral-800 rounded hover:text-neutral-700 dark:hover:text-neutral-300" rel="noopener noreferrer">Beaconbits</a>}
       </div>
-    )}
-  </div>
-  {data.rating !== undefined && <data class="p-rating hidden" value={data.rating} />}
-  <div class="mt-1 flex items-center gap-3 text-xs text-neutral-500 dark:text-neutral-400">
-    <time class="dt-published" datetime={toISODate(item.date)}>{formatDateShort(item.date)}</time>
-    {data.sourceUrl && <a href={data.sourceUrl} class="px-2 py-0.5 bg-neutral-100 dark:bg-neutral-800 rounded hover:text-neutral-700 dark:hover:text-neutral-300" rel="noopener noreferrer">Beaconbits</a>}
+    </div>
   </div>
 </article>

@@ -53,12 +53,17 @@ export function checkinsLoader(): Loader {
         const photos = (value.photos as CheckinPhoto[] | undefined) ?? [];
 
         const photoUrls: string[] = [];
+        const photoFullUrls: string[] = [];
         for (const [i, photo] of photos.entries()) {
           const link = photo.image?.ref?.['$link'];
           if (!link) continue;
           const blobUrl = `https://${PDS_HOST}/xrpc/com.atproto.sync.getBlob?did=${DID}&cid=${link}`;
-          const url = await downloadImage(blobUrl, 'checkins', `${rkey}-${i}.jpg`, 800, 800, 'cover');
-          if (url) photoUrls.push(url);
+          const thumb = await downloadImage(blobUrl, 'checkins', `${rkey}-${i}.jpg`, 96, 96, 'cover');
+          const full = await downloadImage(blobUrl, 'checkins', `${rkey}-${i}-full.jpg`, 360, 360, 'cover');
+          if (thumb && full) {
+            photoUrls.push(thumb);
+            photoFullUrls.push(full);
+          }
         }
 
         store.set({
@@ -73,6 +78,7 @@ export function checkinsLoader(): Loader {
             createdAt: value.createdAt as string,
             uri: record.uri,
             photoUrls: photoUrls.length > 0 ? photoUrls : undefined,
+            photoFullUrls: photoFullUrls.length > 0 ? photoFullUrls : undefined,
             source: 'foursquare' as const,
           },
           digest: generateDigest(record.cid),
