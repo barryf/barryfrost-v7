@@ -42,7 +42,7 @@ Blogroll blogs come from `src/data/blogroll.json` (static JSON).
 Each PDS loader implements `Loader` from `astro/loaders`:
 - `store.clear()` at the start (full refresh each build)
 - Iterates `fetchAllRecords(collection, DID, PDS_HOST)` from `src/lib/pds.ts`
-- Downloads and caches image blobs via `downloadImage()` from `src/lib/download-image.ts` — saves to `public/images/{subdir}/`, skips if already exists, converts to WebP at 2× dimensions. Accepts an optional `fit` parameter (`'cover'` default, or `'inside'` to preserve aspect ratio — used by the Bluesky loader for embedded images)
+- Downloads and caches image blobs via `downloadImage()` from `src/lib/download-image.ts` — saves to `public/images/{subdir}/`, skips if already exists, converts to WebP. Internally stores at 2× the supplied dimensions, so pass the CSS display size (e.g. `96` for `h-24`) to land at the correct 2× retina resolution. Accepts an optional `fit` parameter (`'cover'` default, or `'inside'` to preserve aspect ratio — used by the Bluesky loader for embedded images)
 - Stores entries with `generateDigest(record.cid)` for change detection
 
 ## Unified Feed
@@ -139,7 +139,7 @@ Applied as static classes directly in Astro templates so IndieWeb parsers (XRay,
 - **All cards**: `h-entry` with `dt-published`, `u-url`, optional `p-category` entries from `categories` frontmatter
 - **ArticleCard / WeeknoteCard**: `p-name`, `p-summary`; article tags are emitted as `p-category` on visible `<a>` elements (text content = tag value); weeknotes also emit an implicit `p-category="weeknotes"`
 - **BlueskyCard**: `e-content` for rich text, `u-in-reply-to` on reply link, `u-photo` on each embedded image
-- **CheckinCard**: nested `p-checkin h-card` with `p-name`, `p-latitude`, `p-longitude`, `p-street-address`; `p-rating` (hidden) when present; hidden `u-url` as a direct child of `h-entry` (visible click target is the venue name) so parsers attribute the OSM URL to the entry rather than the venue h-card. Optional inline photo grid (`u-photo`) below the address for `com.barryfrost.checkin` records with photo blobs.
+- **CheckinCard**: nested `p-checkin h-card` with `p-name`, `p-latitude`, `p-longitude`, `p-street-address`; `p-rating` (hidden) when present; hidden `u-url` as a direct child of `h-entry` so parsers attribute the OSM URL to the entry rather than the venue h-card. For `com.barryfrost.checkin` records with photos: a single photo uses a side-by-side layout (photo left, text right, mirrors PhotoCard) with a link to the full-size 720×720 WebP; multiple photos render as a 2-column grid above the text, each also linked to their full-size image.
 - **FilmCard**: nested `p-item h-cite` with `u-photo` (poster) and hidden `p-name u-url`; numeric `p-rating` exposed via `<data value=...>` alongside star glyphs
 - **BookCard**: nested `p-read-of h-cite` with `u-photo` (cover), hidden `p-name u-url`, `p-author`
 - **PhotoCard**: `u-photo` on each gallery thumbnail, `p-location` on address, `p-name u-url` on title
