@@ -12,4 +12,3 @@ tags:
 - The sunny weather returned at the weekend and so we all went outside to enjoy the sunshine in the garden. However, our neighbours decided to fire up their circular saw, while others left their dog outside to bark constantly. I retreated indoors.
 - I did however step outside to tire out one son in the park playing football, before taking the other son to his cricket session. I spend a happy hour-and-a-quarter each week sitting on a bench at the boundary, listening to music on my AirPods while he bats, bowls and fields. I particularly enjoyed his late cut with the bat.
 - Arsenal beat Newcastle to return top. We watched the nervy 1-0 through fingers/behind the sofa. It's still on.
-- 
