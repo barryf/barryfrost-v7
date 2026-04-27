@@ -2,7 +2,6 @@ import { getCollection } from 'astro:content';
 import { yearMonth } from './dates';
 import { DID } from './pds';
 
-const DID_SHORT = DID.replace('did:plc:', '');
 
 export interface FeedItem {
   type: 'article' | 'weeknote' | 'bluesky' | 'checkin' | 'film' | 'book' | 'photo';
@@ -68,9 +67,9 @@ export async function getUnifiedFeed(): Promise<FeedItem[]> {
 
   for (const entry of checkinEntries) {
     const data = entry.data;
-    const url = data.source === 'foursquare'
-      ? (data.latitude && data.longitude ? `https://maps.google.com/maps?q=${data.latitude},${data.longitude}` : '')
-      : `https://www.beaconbits.app/beacons/${DID_SHORT}/${entry.id}`;
+    const url = data.latitude && data.longitude
+      ? `https://www.openstreetmap.org/?mlat=${data.latitude}&mlon=${data.longitude}&zoom=17`
+      : '';
     items.push({
       type: 'checkin',
       date: new Date(data.createdAt),

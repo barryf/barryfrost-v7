@@ -7,7 +7,7 @@ interface Props {
 }
 
 const { item } = Astro.props;
-const data = item.data as { venueName: string; venueCategory?: string; venueAddress?: string; latitude?: string; longitude?: string; rating?: number; source?: string };
+const data = item.data as { venueName: string; venueCategory?: string; venueAddress?: string; latitude?: string; longitude?: string; rating?: number; source?: string; sourceUrl?: string; photoUrls?: string[] };
 ---
 <article class="h-entry">
   {item.url && <a class="u-url hidden" href={item.url} rel="noopener noreferrer" aria-hidden="true" tabindex="-1"></a>}
@@ -23,10 +23,17 @@ const data = item.data as { venueName: string; venueCategory?: string; venueAddr
     {data.venueAddress && <p class="p-street-address text-sm text-neutral-600 dark:text-neutral-400 mt-0.5">{data.venueAddress}</p>}
     {data.latitude && <data class="p-latitude" value={data.latitude} />}
     {data.longitude && <data class="p-longitude" value={data.longitude} />}
+    {data.photoUrls && data.photoUrls.length > 0 && (
+      <div class={`mt-2 grid gap-1 ${data.photoUrls.length === 1 ? 'grid-cols-1' : 'grid-cols-2'}`}>
+        {data.photoUrls.map(url => (
+          <img src={url} alt="" loading="lazy" decoding="async" class="u-photo w-full aspect-square object-cover rounded max-h-48" />
+        ))}
+      </div>
+    )}
   </div>
   {data.rating !== undefined && <data class="p-rating hidden" value={data.rating} />}
   <div class="mt-1 flex items-center gap-3 text-xs text-neutral-500 dark:text-neutral-400">
     <time class="dt-published" datetime={toISODate(item.date)}>{formatDateShort(item.date)}</time>
-    {data.source !== 'foursquare' && item.url && <a href={item.url} class="px-2 py-0.5 bg-neutral-100 dark:bg-neutral-800 rounded hover:text-neutral-700 dark:hover:text-neutral-300" rel="noopener noreferrer">Beaconbits</a>}
+    {data.sourceUrl && <a href={data.sourceUrl} class="px-2 py-0.5 bg-neutral-100 dark:bg-neutral-800 rounded hover:text-neutral-700 dark:hover:text-neutral-300" rel="noopener noreferrer">Beaconbits</a>}
   </div>
 </article>

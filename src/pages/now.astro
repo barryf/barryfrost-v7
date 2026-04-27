@@ -6,10 +6,7 @@ import Base from '../layouts/Base.astro';
 import { formatDateShort, toISODate } from '../lib/dates';
 import { getCurrentPosition, getSelf, formatLocation } from '../lib/sifa';
 import { getUnifiedFeed } from '../lib/feed';
-import { DID } from '../lib/pds';
 import TypeIcon from '../components/TypeIcon.astro';
-
-const DID_SHORT = DID.replace('did:plc:', '');
 
 const nowEntry = await getEntry('pages', 'now');
 if (!nowEntry) throw new Error('src/content/pages/now.md not found');
@@ -60,7 +57,6 @@ interface Source {
 }
 const sifaSource: Source = { label: 'Sifa', url: 'https://sifa.id' };
 const bookhiveSource: Source = { label: 'Bookhive', url: 'https://bookhive.buzz' };
-const beaconbitsSource: Source = { label: 'Beaconbits', url: 'https://www.beaconbits.app' };
 const popfeedSource: Source = { label: 'Popfeed', url: 'https://popfeed.social' };
 ---
 <Base title="Now" description={nowEntry.data.description}>
@@ -136,28 +132,38 @@ const popfeedSource: Source = { label: 'Popfeed', url: 'https://popfeed.social' 
       </section>
     )}
 
-    {checkinToday && (
-      <section class="mb-6">
-        <h2 class="text-lg font-semibold mb-2 pb-2 border-b border-neutral-200 dark:border-neutral-700">Checked in today</h2>
-        <div class="flex items-start gap-3">
-          <TypeIcon type="checkin" class="size-5 shrink-0 mt-0.5 text-neutral-400 dark:text-neutral-500" />
-          <div>
-            <p>
-              <a href={`https://www.beaconbits.app/beacons/${DID_SHORT}/${checkinToday.id}`} class="font-medium hover:underline">
-                {checkinToday.data.venueName}
-              </a>
-              {checkinToday.data.venueCategory && (
-                <span class="text-sm text-neutral-600 dark:text-neutral-400"> · {checkinToday.data.venueCategory}</span>
-              )}
-            </p>
-            <div class="mt-0.5 flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-500">
-              <time datetime={toISODate(new Date(checkinToday.data.createdAt))}>{formatDateShort(new Date(checkinToday.data.createdAt))}</time>
-              <a href={beaconbitsSource.url} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded hover:text-neutral-700 dark:hover:text-neutral-300">{beaconbitsSource.label}</a>
+    {checkinToday && (() => {
+      const td = checkinToday.data as { venueName: string; venueCategory?: string; createdAt: string; latitude?: string; longitude?: string; sourceUrl?: string };
+      const checkinUrl = td.latitude && td.longitude
+        ? `https://www.openstreetmap.org/?mlat=${td.latitude}&mlon=${td.longitude}&zoom=17`
+        : '';
+      return (
+        <section class="mb-6">
+          <h2 class="text-lg font-semibold mb-2 pb-2 border-b border-neutral-200 dark:border-neutral-700">Checked in today</h2>
+          <div class="flex items-start gap-3">
+            <TypeIcon type="checkin" class="size-5 shrink-0 mt-0.5 text-neutral-400 dark:text-neutral-500" />
+            <div>
+              <p>
+                {checkinUrl ? (
+                  <a href={checkinUrl} class="font-medium hover:underline" rel="noopener noreferrer">
+                    {td.venueName}
+                  </a>
+                ) : (
+                  <span class="font-medium">{td.venueName}</span>
+                )}
+                {td.venueCategory && (
+                  <span class="text-sm text-neutral-600 dark:text-neutral-400"> · {td.venueCategory}</span>
+                )}
+              </p>
+              <div class="mt-0.5 flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-500">
+                <time datetime={toISODate(new Date(td.createdAt))}>{formatDateShort(new Date(td.createdAt))}</time>
+                {td.sourceUrl && <a href={td.sourceUrl} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded hover:text-neutral-700 dark:hover:text-neutral-300" rel="noopener noreferrer">Beaconbits</a>}
+              </div>
             </div>
           </div>
-        </div>
-      </section>
-    )}
+        </section>
+      );
+    })()}
 
     {latestWeeknote && (
       <section class="mb-6">
