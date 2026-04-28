@@ -107,7 +107,7 @@ Type-specific feed pages (articles, photos, checkins, books, films) suppress the
   - `ArticleCard` shows tags as visible linked pills (linking to `/tags/{tag}`) below the title/summary, with the date rendered after the tags in `text-xs`
   - All card timestamp/metadata rows use `text-xs`
   - `BlueskyCard` renders up to 4 embedded images below the post text at fixed 96px height preserving aspect ratio; each image has `mb-1` bottom margin
-  - `PhotoCard` — single-photo galleries use a side-by-side layout on `sm`+ (120px square thumbnail left, title/description/date right); stacked on narrow viewports. Multi-photo galleries render up to 4 thumbnails in a flex row above the title. `description` (from `social.grain.gallery`) renders as `p-summary` below the title when present.
+  - `PhotoCard` — single-photo galleries use a side-by-side layout on `sm`+ (120px square thumbnail left, title/description/date right); stacked on narrow viewports. Multi-photo galleries render up to 4 thumbnails in a flex row above the title. Each thumbnail links to a locally hosted full-size WebP (max 2000×2000, `inside` fit, preserving aspect ratio). `description` (from `social.grain.gallery`) renders as `p-summary` below the title when present.
 
 ## Date Formatting
 
@@ -142,7 +142,7 @@ Applied as static classes directly in Astro templates so IndieWeb parsers (XRay,
 - **CheckinCard**: nested `p-checkin h-card` with `p-name`, `p-latitude`, `p-longitude`, `p-street-address`; `p-rating` (hidden) when present; hidden `u-url` as a direct child of `h-entry` so parsers attribute the OSM URL to the entry rather than the venue h-card. For `com.barryfrost.checkin` records with photos: a single photo uses a side-by-side layout (photo left, text right, mirrors PhotoCard) with a link to the full-size 720×720 WebP; multiple photos render as a 2-column grid above the text, each also linked to their full-size image.
 - **FilmCard**: nested `p-item h-cite` with `u-photo` (poster) and hidden `p-name u-url`; numeric `p-rating` exposed via `<data value=...>` alongside star glyphs
 - **BookCard**: nested `p-read-of h-cite` with `u-photo` (cover), hidden `p-name u-url`, `p-author`
-- **PhotoCard**: `u-photo` on each gallery thumbnail, `p-location` on address, `p-name u-url` on title
+- **PhotoCard**: `u-photo` on each gallery thumbnail (each wrapped in an `<a>` linking to the full-size image), `p-location` on address, `p-name u-url` on title
 
 Image `src` attributes use `new URL(path, Astro.url).href` — `Astro.url` reflects the current host, so images resolve against `localhost` in dev and `https://new.barryfrost.com` in production builds. Non-image absolute URLs (canonical, og:url, h-card `u-url`, RSS) use `Astro.site` / `context.site`.
 
