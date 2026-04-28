@@ -67,12 +67,17 @@ export function photosLoader(): Loader {
         const photoCount = items.length;
 
         const thumbnailUrls: string[] = [];
+        const thumbnailFullUrls: string[] = [];
         for (const [index, item] of items.slice(0, 4).entries()) {
           const photo = photos.get(item.photoUri);
           if (photo?.photo?.ref?.$link) {
             const blobUrl = `https://${PDS_HOST}/xrpc/com.atproto.sync.getBlob?did=${DID}&cid=${photo.photo.ref.$link}`;
-            const url = await downloadImage(blobUrl, 'photos', `${gallery.rkey}-${index}.jpg`, 120, 120);
-            if (url) thumbnailUrls.push(url);
+            const thumb = await downloadImage(blobUrl, 'photos', `${gallery.rkey}-${index}.jpg`, 120, 120);
+            const full = await downloadImage(blobUrl, 'photos', `${gallery.rkey}-${index}-full.jpg`, 1000, 1000, 'inside');
+            if (thumb && full) {
+              thumbnailUrls.push(thumb);
+              thumbnailFullUrls.push(full);
+            }
           }
         }
 
@@ -83,6 +88,7 @@ export function photosLoader(): Loader {
             description: gallery.description,
             address: gallery.address,
             thumbnailUrls,
+            thumbnailFullUrls,
             photoCount,
             createdAt: gallery.createdAt,
             galleryRkey: gallery.rkey,

@@ -7,34 +7,39 @@ interface Props {
 }
 
 const { item } = Astro.props;
-const data = item.data as { title: string; description?: string; address?: string; thumbnailUrls: string[]; photoCount: number };
+const data = item.data as { title: string; description?: string; address?: string; thumbnailUrls: string[]; thumbnailFullUrls?: string[]; photoCount: number };
 const thumbs = data.thumbnailUrls ?? [];
+const fullUrls = data.thumbnailFullUrls ?? [];
 const single = thumbs.length === 1;
 ---
 <article class="h-entry">
   <div class:list={[single && "min-[320px]:flex min-[320px]:gap-3 min-[320px]:items-start"]}>
     {single ? (
-      <img
-        src={new URL(thumbs[0], Astro.url).href}
-        alt={data.title}
-        width="120"
-        height="120"
-        class="u-photo w-30 shrink-0 aspect-square object-cover rounded mb-2 min-[320px]:mb-0"
-        loading="lazy"
-        decoding="async"
-      />
+      <a href={fullUrls[0] ?? thumbs[0]} rel="noopener noreferrer" class="block shrink-0 w-30 mb-2 min-[320px]:mb-0">
+        <img
+          src={new URL(thumbs[0], Astro.url).href}
+          alt={data.title}
+          width="120"
+          height="120"
+          class="u-photo w-30 aspect-square object-cover rounded"
+          loading="lazy"
+          decoding="async"
+        />
+      </a>
     ) : thumbs.length > 0 && (
       <div class="flex gap-2 mb-2">
-        {thumbs.slice(0, 4).map((url) => (
-          <img
-            src={new URL(url, Astro.url).href}
-            alt={data.title}
-            width="80"
-            height="80"
-            class="u-photo flex-1 min-w-0 max-w-30 aspect-square object-cover rounded"
-            loading="lazy"
-            decoding="async"
-          />
+        {thumbs.slice(0, 4).map((url, i) => (
+          <a href={fullUrls[i] ?? url} rel="noopener noreferrer" class="flex-1 min-w-0 max-w-30">
+            <img
+              src={new URL(url, Astro.url).href}
+              alt={data.title}
+              width="80"
+              height="80"
+              class="u-photo w-full aspect-square object-cover rounded"
+              loading="lazy"
+              decoding="async"
+            />
+          </a>
         ))}
       </div>
     )}
