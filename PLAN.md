@@ -112,12 +112,12 @@ Type-specific feed pages (articles, photos, checkins, books, films) suppress the
 ## Date Formatting
 
 `src/lib/dates.ts` exports two display formatters:
-- `formatDate(date)` — "22 April 2026" (full month name). Used only for dates displayed *under* weeknote titles (`WeeknoteCard`, `Post.astro`).
+- `formatDate(date)` — "22 April 2026" (full month name). Used for dates displayed *under* weeknote titles (`WeeknoteCard`, `Post.astro`) and travelblog entry dates (`[num].astro`).
 - `formatDateShort(date)` — "22 Apr 2026" (abbreviated month). Used everywhere else: all card timestamps (including `ArticleCard`), `now.astro`, travelblog nav, weeknotes index.
 
 ## Styling
 
-Tailwind v4 with a custom warm neutral palette and orange accent (`--color-accent: #f76902`) defined in `src/styles/global.css`. Unclassed `<a>` tags default to the accent colour. Dark mode is CSS-only via `prefers-color-scheme` — no JS toggle.
+Tailwind v4 with default palette. `src/styles/global.css` imports `@tailwindcss/typography` and sources `../content/**/*.md` so Tailwind scans Markdown for utility classes. Dark mode is CSS-only via `prefers-color-scheme` — no JS toggle. Custom colour theme and accent link styles have been removed pending a redesign.
 
 `src/styles/global.css` includes `@source '../content/**/*.md'` so Tailwind v4 scans Markdown content files for utility class names used via the image attribute syntax below.
 
