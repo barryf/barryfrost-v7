@@ -239,6 +239,9 @@ Both CLIs accept `--no-git` (or detect `CI=true`) to skip all git/gh operations 
 |---|---|
 | `scripts/backfill.ts` | Convert v6 JSON posts (articles/weeknotes) → local Markdown |
 | `scripts/import-grain-photos.ts` | Import v6 `post-type: photo` posts to grain.social as PDS records (`social.grain.gallery` + `.photo` + `.gallery.item`). Downloads from original URLs (Cloudinary, S3, etc.), re-encodes JPEG under grain's 1 MB blob limit. Reads `BSKY_HANDLE` + `BSKY_APP_PASSWORD` from env. Tracks progress in `scripts/imported-grain-photos.json` (gitignored) for idempotent re-runs. `--dry-run`, `--limit N`, `--slug YYYY/MM/slug` flags. Run via `npm run import:grain`. |
+| `scripts/export-notes-csv.ts` | Export all v6 `post-type: note` records (~1,637) to `scripts/notes-to-import.csv` for manual review before Bluesky import. Status column: `Y` (import), `N` (skip — already on Bluesky, deleted/private/draft, or embeds a tweet URL), `?` (needs review — has photo or >300 graphemes). Also includes a `length` column (grapheme count of rendered text). Run: `npx tsx scripts/export-notes-csv.ts`. |
+| `scripts/import-notes-bsky.ts` | Import approved notes from `notes-to-import.csv` (rows with `status=Y`) to PDS as `app.bsky.feed.post` records. Uses `putRecord` with a TID rkey derived from the original `published` date so posts appear in the correct position on the Bluesky profile timeline. Builds richtext facets for markdown links and bare URLs (`#link`) and hashtags (`#tag`); @-mentions left as plain text. Decodes HTML entities from the mf2 source. Tracks progress in `scripts/imported-notes-bsky.json` (gitignored). `--dry-run`, `--limit N`, `--csv path` flags. |
+| `scripts/delete-imported-notes-bsky.ts` | Delete all records previously imported by `import-notes-bsky.ts`, then clear `imported-notes-bsky.json` so the importer can re-run from scratch. Used to fix posts imported with wrong (current-time) TIDs. `--dry-run` flag. |
 
 ## Ideas / Backlog
 

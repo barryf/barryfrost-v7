@@ -29,5 +29,6 @@ pnpm-debug.log*
 # Downloaded images (build artifacts)
 public/images/
 
-# Grain import progress tracker (local state)
+# Import progress trackers (local state)
 scripts/imported-grain-photos.json
+scripts/imported-notes-bsky.json
