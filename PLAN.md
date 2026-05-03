@@ -154,6 +154,21 @@ Image `src` attributes use `new URL(path, Astro.url).href` — `Astro.url` refle
 
 Both feeds are advertised via `<link rel="alternate">` in `BaseHead.astro`.
 
+## Favicon & Icons
+
+All icon files in `public/` are derived from `public/barryfrost.jpg` (192×192 portrait):
+
+| File | Size | Purpose |
+|---|---|---|
+| `favicon.ico` | 32×32 | Legacy browsers |
+| `favicon.svg` | — | Modern browsers (SVG wrapper around 32×32 PNG) |
+| `apple-touch-icon.png` | 180×180 | iOS home screen |
+| `icon-192.png` | 192×192 | Android / PWA |
+| `icon-512.png` | 512×512 | Android PWA splash (upscaled) |
+| `site.webmanifest` | — | PWA metadata (name, icons, theme colour) |
+
+`BaseHead.astro` links all four via `<link rel="icon">`, `<link rel="apple-touch-icon">`, and `<link rel="manifest">`.
+
 ## Canonical URLs
 
 `BaseHead.astro` normalises `Astro.url.pathname` before building the canonical/og:url: `/index.html` → `/`, and strips the `.html` suffix on other paths (required because `build.format: 'file'`).
