@@ -1,6 +1,6 @@
 import type { Loader } from 'astro/loaders';
 import { fetchAllRecords, rkeyFromUri, resolveHandle, didFromUri, DID, PDS_HOST } from '../pds';
-import { downloadImage } from '../download-image';
+import { transformImage } from '../image-url';
 
 interface DidDocument {
   service?: { id: string; type: string; serviceEndpoint: string }[];
@@ -65,7 +65,7 @@ export function subscriptionsLoader(): Loader {
           ? `https://${pdsHost}/xrpc/com.atproto.sync.getBlob?did=${encodeURIComponent(subjectDid)}&cid=${pub.icon.ref.$link}`
           : undefined;
         const iconUrl = rawIconUrl
-          ? await downloadImage(rawIconUrl, 'subscriptions', `${rkey}.jpg`, 48, 48)
+          ? transformImage(rawIconUrl, { width: 96, height: 96, fit: 'cover' })
           : undefined;
 
         const handle = await resolveHandle(subjectDid, pdsHost);

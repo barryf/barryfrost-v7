@@ -1,6 +1,6 @@
 import type { Loader } from 'astro/loaders';
 import { fetchAllRecords, rkeyFromUri, DID, PDS_HOST } from '../pds';
-import { downloadImage } from '../download-image';
+import { transformImage } from '../image-url';
 
 export function booksLoader(): Loader {
   return {
@@ -18,7 +18,7 @@ export function booksLoader(): Loader {
           ? `https://${PDS_HOST}/xrpc/com.atproto.sync.getBlob?did=${DID}&cid=${cover.ref.$link}`
           : undefined;
         const coverUrl = rawCoverUrl
-          ? await downloadImage(rawCoverUrl, 'books', `${rkey}.jpg`, 48, 72)
+          ? transformImage(rawCoverUrl, { width: 96, height: 144, fit: 'cover' })
           : undefined;
 
         store.set({

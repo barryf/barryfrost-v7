@@ -1,0 +1,10 @@
+name = "pds-poller"
+main = "src/index.ts"
+compatibility_date = "2026-05-01"
+
+[triggers]
+crons = ["*/15 * * * *"]
+
+[[kv_namespaces]]
+binding = "CIDS"
+id = "REPLACE_WITH_KV_NAMESPACE_ID"

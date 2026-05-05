@@ -1,6 +1,6 @@
 import type { Loader } from 'astro/loaders';
 import { fetchAllRecords, rkeyFromUri, DID, PDS_HOST } from '../pds';
-import { downloadImage } from '../download-image';
+import { transformImage } from '../image-url';
 
 export function filmsLoader(): Loader {
   return {
@@ -16,7 +16,7 @@ export function filmsLoader(): Loader {
 
         const rawPosterUrl = value.posterUrl as string | undefined;
         const posterUrl = rawPosterUrl
-          ? await downloadImage(rawPosterUrl, 'films', `${rkey}.jpg`, 48, 72)
+          ? transformImage(rawPosterUrl, { width: 96, height: 144, fit: 'cover' })
           : undefined;
 
         store.set({

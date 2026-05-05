@@ -1,6 +1,6 @@
 import type { Loader } from 'astro/loaders';
 import { fetchAllRecords, rkeyFromUri, resolveHandle, DID, PDS_HOST } from '../pds';
-import { downloadImage } from '../download-image';
+import { transformImage } from '../image-url';
 
 interface BlueskyImage {
   alt?: string;
@@ -13,7 +13,7 @@ interface BlueskyEmbed {
   media?: { $type?: string; images?: BlueskyImage[] };
 }
 
-async function extractImages(embed: BlueskyEmbed | undefined, rkey: string): Promise<{ urls: string[]; alts: string[] }> {
+function extractImages(embed: BlueskyEmbed | undefined): { urls: string[]; alts: string[] } {
   const urls: string[] = [];
   const alts: string[] = [];
   if (!embed) return { urls, alts };
@@ -23,15 +23,12 @@ async function extractImages(embed: BlueskyEmbed | undefined, rkey: string): Pro
       ? embed.media.images
       : undefined;
   if (!images) return { urls, alts };
-  for (const [index, img] of images.entries()) {
+  for (const img of images) {
     const link = img.image?.ref?.$link;
     if (!link) continue;
     const blobUrl = `https://${PDS_HOST}/xrpc/com.atproto.sync.getBlob?did=${DID}&cid=${link}`;
-    const url = await downloadImage(blobUrl, 'bluesky', `${rkey}-${index}.jpg`, 96, 96, 'inside');
-    if (url) {
-      urls.push(url);
-      alts.push(img.alt ?? '');
-    }
+    urls.push(transformImage(blobUrl, { width: 192, height: 192, fit: 'contain' }));
+    alts.push(img.alt ?? '');
   }
   return { urls, alts };
 }
@@ -70,7 +67,7 @@ export function blueskyLoader(): Loader {
 
         if (/^Week \d+/i.test(value.text as string)) continue;
 
-        const { urls: imageUrls, alts: imageAlts } = await extractImages(value.embed as BlueskyEmbed | undefined, rkey);
+        const { urls: imageUrls, alts: imageAlts } = extractImages(value.embed as BlueskyEmbed | undefined);
 
         store.set({
           id: rkey,

@@ -1,0 +1,6 @@
+name = "barryfrost-v7"
+compatibility_date = "2026-05-01"
+
+[assets]
+directory = "./dist"
+not_found_handling = "404-page"
