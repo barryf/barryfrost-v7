@@ -42,7 +42,7 @@ Blogroll blogs come from `src/data/blogroll.json` (static JSON).
 Each PDS loader implements `Loader` from `astro/loaders`:
 - `store.clear()` at the start (full refresh each build)
 - Iterates `fetchAllRecords(collection, DID, PDS_HOST)` from `src/lib/pds.ts`
-- Downloads and caches image blobs via `downloadImage()` from `src/lib/download-image.ts` — saves to `public/images/{subdir}/`, skips if already exists, converts to WebP. Internally stores at 2× the supplied dimensions, so pass the CSS display size (e.g. `96` for `h-24`) to land at the correct 2× retina resolution. Accepts an optional `fit` parameter (`'cover'` default, or `'inside'` to preserve aspect ratio — used by the Bluesky loader for embedded images)
+- Builds image URLs via `transformImage(sourceUrl, opts)` from `src/lib/image-url.ts` — returns a Cloudflare Image Transformations URL (`https://new.barryfrost.com/cdn-cgi/image/{params}/{sourceUrl}`). Source blobs stay in the PDS; CF fetches, transforms, and edge-caches on first request. Pass dimensions at 2× the CSS display size for retina (e.g. `width: 192` for a 96px display slot). Accepts `fit: 'cover'` (default) or `fit: 'contain'` to preserve aspect ratio. Blogroll favicons bypass this and use the Google Favicons API URL directly.
 - Stores entries with `generateDigest(record.cid)` for change detection
 
 ## Unified Feed
@@ -175,34 +175,47 @@ All icon files in `public/` are derived from `public/barryfrost.jpg` (192×192 p
 
 ## Deployment
 
-**GitHub Actions → Cloudflare Pages**
+**Cloudflare Workers Static Assets + Workers Builds**
 
-Two workflows:
+The site is a Cloudflare Worker serving static assets (`wrangler.toml` at repo root, `[assets] directory = "./dist"`). Builds and deploys are handled by Cloudflare Workers Builds (connected to the GitHub repo), replacing the old GitHub Actions workflows.
 
-### `deploy.yml`
-Triggers on: push to `main`, `workflow_dispatch`, `repository_dispatch` (type: `pds-update`)
-1. `npm ci`
-2. Cache `public/images/` between runs (avoids re-downloading blobs)
-3. `npm run build`
-4. `npx wrangler pages deploy dist --project-name barryfrost-v7`
-5. Pushover notification — normal-priority on success, high-priority on failure, linking to the workflow run
+### Build
+Workers Builds triggers on push to `main` and on PRs (auto-generates preview URLs and posts them as PR comments). Build command: `npm run build`. Deploy command: `npx wrangler deploy`.
 
-### `poll-pds.yml`
-Runs every 15 minutes via cron. For each monitored collection, fetches the latest record CID and compares to `.github/last-seen-cids.json`. If any CID changed, commits the updated JSON and fires a `repository_dispatch` to trigger a rebuild.
+`npm run build` runs `astro build` followed by `scripts/notify-pushover.ts` — a short script that POSTs a success notification to the Pushover API. It exits silently if `PUSHOVER_TOKEN`/`PUSHOVER_USER` are not set, so local builds are unaffected.
+
+Required build environment variables (set as encrypted vars in CF Workers Builds settings): `PUSHOVER_TOKEN`, `PUSHOVER_USER`
+
+### PDS polling — `cloudflare/pds-poller`
+A Cloudflare Worker (`name: pds-poller`) with a cron trigger (`*/15 * * * *`) that reliably fires every 15 minutes. For each monitored collection it fetches the latest record CID from the PDS and compares it against the previously seen CID stored in Workers KV (`binding: CIDS`). If any CID changed, it updates KV and POSTs to the Workers Builds deploy hook to trigger a rebuild.
 
 Monitored collections: `app.bsky.feed.post`, `app.beaconbits.beacon`, `com.barryfrost.checkin`, `social.popfeed.feed.review`, `buzz.bookhive.book`, `site.standard.document`, `site.standard.graph.subscription`, `social.grain.gallery`, `social.grain.gallery.item`, `social.grain.photo`
 
-### `scaffold.yml`
-Manual `workflow_dispatch` form for creating a new article or weeknote stub from any device. Inputs: `kind` (article/weeknote), `title_or_topic`, `emoji`, `tags`, `date`. Runs `scripts/new-article.ts` or `scripts/new-weeknote.ts --no-git`, then uses `peter-evans/create-pull-request` to open a draft PR. The PR triggers `preview.yml` for a Cloudflare preview (requires `GH_PAT` secret — a PAT with `repo` scope — since PRs created with `GITHUB_TOKEN` do not fire `pull_request` events).
+Required secrets (set via `wrangler secret put`): `DEPLOY_HOOK`
 
-Required secrets: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`, `PUSHOVER_TOKEN`, `PUSHOVER_USER`, `GH_PAT` (for scaffold.yml preview trigger)
+### `scaffold.yml`
+Manual `workflow_dispatch` form for creating a new article or weeknote stub from any device. Inputs: `kind` (article/weeknote), `title_or_topic`, `emoji`, `tags`, `date`. Runs `scripts/new-article.ts` or `scripts/new-weeknote.ts --no-git`, then uses `peter-evans/create-pull-request` to open a draft PR. The PR triggers a Workers Builds preview deployment automatically.
+
+Required secrets: `GH_PAT` (PAT with `repo` scope — PRs created with `GITHUB_TOKEN` do not fire `pull_request` events)
+
+### Image Transformations
+Cloudflare Image Transformations is enabled on the zone. Allowed source origins:
+
+| Origin | Path prefix |
+|---|---|
+| `bsky.social` | `/xrpc/com.atproto.sync.getBlob` |
+| `cdn.bsky.app` | `/img/` |
+| `*.host.bsky.network` | `/xrpc/com.atproto.sync.getBlob` |
+| `image.tmdb.org` | _(none)_ |
+
+Blogroll favicons (`www.google.com/s2/favicons`) are served directly and do not go through CF Image Transformations.
 
 ## Key Conventions
 
 - **Minimal JS** — the `/checkins` page loads Leaflet + Leaflet.markercluster via dynamic `createElement` (CDN) for the cluster map, with a fullscreen toggle button (expand/collapse icons, Escape key support); all other pages are JS-free
 - **No runtime JS elsewhere** — MF2, dark mode, and layout are pure HTML/CSS
 - **Local Markdown is canonical** — PDS documents are syndication targets, not the source of truth
-- **Images cached at build time** — blobs downloaded once to `public/images/`, persisted in CI cache
+- **Images served on demand** — source blobs stay in the PDS; Cloudflare Image Transformations fetches, resizes, converts to WebP, and edge-caches on first request. No `public/images/` directory; build time is ~15s rather than ~90s
 - **`visibility: unlisted`** frontmatter hides articles/weeknotes from feeds (but pages still generate)
 - **`build.format: 'file'`** — generates `about.html` not `about/index.html`
 - **`compressHTML: false`** — keeps HTML readable
@@ -239,14 +252,14 @@ Both CLIs accept `--no-git` (or detect `CI=true`) to skip all git/gh operations 
 
 ## Adding a New PDS Content Type
 
-1. Create `src/lib/loaders/{type}.ts` — implement `Loader`, use `fetchAllRecords`, optionally `downloadImage`
+1. Create `src/lib/loaders/{type}.ts` — implement `Loader`, use `fetchAllRecords`, build image URLs with `transformImage()` from `src/lib/image-url.ts`
 2. Add collection to `src/content.config.ts` with a Zod schema
 3. Add `'{type}'` to `FeedItem.type` union in `src/lib/feed.ts`
 4. Fetch collection in `getUnifiedFeed()` and map to `FeedItem`
 5. Create `src/components/posts/{Type}Card.astro`
 6. Register in `src/components/FeedEntry.astro` components map (and add a service pill to the card's date row)
 7. Add an entry to `src/components/TypeIcon.astro` (label + Heroicon path) for the left-gutter icon
-8. Add collection NSID to the `poll-pds.yml` monitored list
+8. Add collection NSID to the `COLLECTIONS` array in `cloudflare/pds-poller/src/index.ts` and the `PRETTY` label map
 
 ## One-off Import Scripts
 
