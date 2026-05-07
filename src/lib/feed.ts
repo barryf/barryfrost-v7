@@ -14,7 +14,7 @@ export interface FeedItem {
   data: Record<string, unknown>;
 }
 
-export const PAGE_SIZE = 20;
+export const PAGE_SIZE = 50;
 
 export async function getUnifiedFeed(): Promise<FeedItem[]> {
   const [articles, weeknotes, blueskyPosts, checkinEntries, filmEntries, bookEntries, photoEntries] = await Promise.all([
