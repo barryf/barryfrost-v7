@@ -26,7 +26,7 @@ const single = photos.length === 1;
   <div class:list={["p-checkin h-card", single && "min-[320px]:flex min-[320px]:gap-3 min-[320px]:items-start"]}>
     {single && (
       <a href={fullUrls[0] ?? photos[0]} rel="noopener noreferrer">
-        <img src={photos[0]} width="96" height="96" alt="" loading="lazy" decoding="async" class="u-photo w-24 shrink-0 aspect-square object-cover rounded mb-2 min-[320px]:mb-0" />
+        <img src={photos[0]} width="96" height="96" alt={data.venueName} loading="lazy" decoding="async" class="u-photo w-24 shrink-0 aspect-square object-cover rounded mb-2 min-[320px]:mb-0" />
       </a>
     )}
     <div>
