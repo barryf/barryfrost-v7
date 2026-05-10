@@ -1,7 +1,8 @@
 ---
-import Feed from '../../../../layouts/Feed.astro';
-import { getUnifiedFeed, filterByMonth, getMonths } from '../../../../lib/feed';
-import { formatMonthYear } from '../../../../lib/dates';
+import Feed from '@/layouts/Feed.astro';
+import CheckinMap from '@/components/CheckinMap.astro';
+import { getUnifiedFeed, filterByMonth, getMonths } from '@/lib/feed';
+import { formatMonthYear } from '@/lib/dates';
 
 export async function getStaticPaths() {
   const allItems = await getUnifiedFeed();
@@ -24,11 +25,23 @@ export async function getStaticPaths() {
 const { items, year, month, prev, next } = Astro.props;
 const displayDate = formatMonthYear(new Date(Number(year), Number(month) - 1));
 
+const mapCheckins = items
+  .filter(i => i.type === 'checkin' && i.data.latitude && i.data.longitude)
+  .map(i => ({
+    venueName: i.data.venueName as string,
+    latitude: i.data.latitude as string,
+    longitude: i.data.longitude as string,
+    venueCategory: i.data.venueCategory as string | undefined,
+    createdAt: i.data.createdAt as string,
+    url: i.url,
+  }));
+
 function monthLabel(m: { year: string; month: string }) {
   return formatMonthYear(new Date(Number(m.year), Number(m.month) - 1));
 }
 ---
 <Feed title={displayDate} items={items} currentPage={1} totalPages={1}>
+  {mapCheckins.length > 0 && <CheckinMap slot="header" checkins={mapCheckins} />}
   <nav slot="footer" class="flex justify-between mt-6 text-sm">
     <div>
       {prev && (
