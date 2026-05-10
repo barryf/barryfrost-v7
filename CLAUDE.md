@@ -16,3 +16,6 @@ Live staging URL: `https://new.barryfrost.com` (v6 still serves `barryfrost.com`
 - Light/dark mode via `prefers-color-scheme` only — no JS toggle
 - Images downloaded at build time to `public/images/`, cached in CI
 - No SSR — rebuilds trigger via GitHub Actions `repository_dispatch` when PDS changes
+
+## Script conventions
+When writing Python scripts for one-off tasks, always create them in `scripts/` rather than /tmp. Name them descriptively. This keeps them reviewable and version-controlled.

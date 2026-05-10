@@ -82,7 +82,7 @@ Default page size is 20. `paginateItems(items, pageSize?)` splits any array into
 | `/photos` | Photos feed |
 | `/books` | Books feed |
 | `/blogroll` | Curated blogs + Standard publications |
-| `/archives/{year}/{month}/` | Monthly archive (all types) — h1 shows full month name; prev/next month nav below items |
+| `/archives/{year}/{month}/` | Monthly archive (all types) — h1 shows full month name; checkins map (if month has checkins with coordinates) below title; prev/next month nav below items |
 | `/tags/{tag}` | Tag filter |
 | `/{slug}` | Slash pages (about, colophon, etc.) |
 | `/travelblog/{num}` | Travel blog entries |
@@ -212,10 +212,11 @@ Blogroll favicons (`www.google.com/s2/favicons`) are served directly and do not 
 
 ## Key Conventions
 
-- **Minimal JS** — the `/checkins` page loads Leaflet + Leaflet.markercluster via dynamic `createElement` (CDN) for the cluster map, with a fullscreen toggle button (expand/collapse icons, Escape key support); all other pages are JS-free
+- **Minimal JS** — the `/checkins` page and monthly archive pages (when the month contains checkins with coordinates) load Leaflet + Leaflet.markercluster via dynamic `createElement` (CDN) for the cluster map, with a fullscreen toggle button (expand/collapse icons, Escape key support); all other pages are JS-free
 - **No runtime JS elsewhere** — MF2, dark mode, and layout are pure HTML/CSS
 - **Local Markdown is canonical** — PDS documents are syndication targets, not the source of truth
 - **Images served on demand** — source blobs stay in the PDS; Cloudflare Image Transformations fetches, resizes, converts to WebP, and edge-caches on first request. No `public/images/` directory; build time is ~15s rather than ~90s
+- **`@/` import alias** — `tsconfig.json` maps `@/*` → `src/*`; all internal imports use `@/layouts/...`, `@/lib/...`, etc. rather than relative `../../` paths
 - **`visibility: unlisted`** frontmatter hides articles/weeknotes from feeds (but pages still generate)
 - **`build.format: 'file'`** — generates `about.html` not `about/index.html`
 - **`compressHTML: false`** — keeps HTML readable
