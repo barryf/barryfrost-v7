@@ -1,7 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
-import Post from '../../layouts/Post.astro';
-import { plainExcerpt, weeknoteLabel } from '../../lib/weeknotes';
+import Post from '@/layouts/Post.astro';
+import { plainExcerpt, weeknoteLabel } from '@/lib/weeknotes';
 
 export async function getStaticPaths() {
   const weeknotes = await getCollection('weeknotes');

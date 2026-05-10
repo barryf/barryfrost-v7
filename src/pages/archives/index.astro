@@ -1,6 +1,6 @@
 ---
-import Base from '../../layouts/Base.astro';
-import { getUnifiedFeed, getMonths, getTags } from '../../lib/feed';
+import Base from '@/layouts/Base.astro';
+import { getUnifiedFeed, getMonths, getTags } from '@/lib/feed';
 
 const allItems = await getUnifiedFeed();
 const months = getMonths(allItems);

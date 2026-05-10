@@ -2,11 +2,11 @@
 import { statSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { getCollection, getEntry, render } from 'astro:content';
-import Base from '../layouts/Base.astro';
-import { formatDateShort, toISODate } from '../lib/dates';
-import { getCurrentPosition, getSelf, formatLocation } from '../lib/sifa';
-import { getUnifiedFeed } from '../lib/feed';
-import TypeIcon from '../components/TypeIcon.astro';
+import Base from '@/layouts/Base.astro';
+import { formatDateShort, toISODate } from '@/lib/dates';
+import { getCurrentPosition, getSelf, formatLocation } from '@/lib/sifa';
+import { getUnifiedFeed } from '@/lib/feed';
+import TypeIcon from '@/components/TypeIcon.astro';
 
 const nowEntry = await getEntry('pages', 'now');
 if (!nowEntry) throw new Error('src/content/pages/now.md not found');

@@ -1,7 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
-import Base from '../../layouts/Base.astro';
-import { formatDate, formatDateShort, toISODate } from '../../lib/dates';
+import Base from '@/layouts/Base.astro';
+import { formatDate, formatDateShort, toISODate } from '@/lib/dates';
 
 export async function getStaticPaths() {
   const entries = await getCollection('travelblog');

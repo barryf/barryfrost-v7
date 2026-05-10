@@ -1,6 +1,6 @@
 import type { Loader } from 'astro/loaders';
-import { fetchAllRecords, rkeyFromUri, resolveHandle, didFromUri, DID, PDS_HOST } from '../pds';
-import { transformImage } from '../image-url';
+import { fetchAllRecords, rkeyFromUri, resolveHandle, didFromUri, DID, PDS_HOST } from '@/lib/pds';
+import { transformImage } from '@/lib/image-url';
 
 interface DidDocument {
   service?: { id: string; type: string; serviceEndpoint: string }[];

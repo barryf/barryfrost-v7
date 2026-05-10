@@ -1,5 +1,5 @@
 import type { Loader } from 'astro/loaders';
-import blogsData from '../../data/blogroll.json';
+import blogsData from '@/data/blogroll.json';
 
 export function blogrollLoader(): Loader {
   return {

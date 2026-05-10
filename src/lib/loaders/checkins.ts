@@ -1,8 +1,8 @@
 import type { Loader } from 'astro/loaders';
-import { fetchAllRecords, rkeyFromUri, DID, PDS_HOST } from '../pds';
+import { fetchAllRecords, rkeyFromUri, DID, PDS_HOST } from '@/lib/pds';
 
 const DID_SHORT = DID.replace('did:plc:', '');
-import { transformImage } from '../image-url';
+import { transformImage } from '@/lib/image-url';
 
 interface FsqLocation {
   fsq_place_id?: string;

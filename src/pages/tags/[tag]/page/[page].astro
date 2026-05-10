@@ -1,6 +1,6 @@
 ---
-import Feed from '../../../../layouts/Feed.astro';
-import { getUnifiedFeed, filterByTag, getTags, paginateItems } from '../../../../lib/feed';
+import Feed from '@/layouts/Feed.astro';
+import { getUnifiedFeed, filterByTag, getTags, paginateItems } from '@/lib/feed';
 
 export async function getStaticPaths() {
   const allItems = await getUnifiedFeed();

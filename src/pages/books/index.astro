@@ -1,8 +1,8 @@
 ---
 import { getCollection } from 'astro:content';
-import Feed from '../../layouts/Feed.astro';
-import FeedEntry from '../../components/FeedEntry.astro';
-import { getUnifiedFeed, paginateItems, type FeedItem } from '../../lib/feed';
+import Feed from '@/layouts/Feed.astro';
+import FeedEntry from '@/components/FeedEntry.astro';
+import { getUnifiedFeed, paginateItems, type FeedItem } from '@/lib/feed';
 
 const [bookEntries, feed] = await Promise.all([
   getCollection('books'),

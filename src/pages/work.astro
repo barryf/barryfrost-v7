@@ -1,6 +1,6 @@
 ---
-import Base from '../layouts/Base.astro';
-import { formatMonthYear } from '../lib/dates';
+import Base from '@/layouts/Base.astro';
+import { formatMonthYear } from '@/lib/dates';
 import {
   getSelf,
   getPositions,
@@ -10,7 +10,7 @@ import {
   getLanguages,
   formatLocation,
   parseYM,
-} from '../lib/sifa';
+} from '@/lib/sifa';
 
 const [self, positions, education, projects, skills, languages] = await Promise.all([
   getSelf(),

@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
-import Base from '../layouts/Base.astro';
-import FollowCard from '../components/FollowCard.astro';
+import Base from '@/layouts/Base.astro';
+import FollowCard from '@/components/FollowCard.astro';
 
 const [blogsRaw, publications] = await Promise.all([
   getCollection('blogroll'),

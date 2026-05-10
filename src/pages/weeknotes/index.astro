@@ -1,7 +1,7 @@
 ---
-import Base from '../../layouts/Base.astro';
+import Base from '@/layouts/Base.astro';
 import { getCollection } from 'astro:content';
-import { formatDateShort, toISODate } from '../../lib/dates';
+import { formatDateShort, toISODate } from '@/lib/dates';
 
 const allWeeknotes = await getCollection('weeknotes');
 allWeeknotes.sort((a, b) => b.data.week - a.data.week);

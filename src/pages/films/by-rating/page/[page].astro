@@ -1,6 +1,6 @@
 ---
-import FilmFeed from '../../../../layouts/FilmFeed.astro';
-import { getUnifiedFeed, paginateItems } from '../../../../lib/feed';
+import FilmFeed from '@/layouts/FilmFeed.astro';
+import { getUnifiedFeed, paginateItems } from '@/lib/feed';
 
 export async function getStaticPaths() {
   const allItems = (await getUnifiedFeed()).filter(i => i.type === 'film');

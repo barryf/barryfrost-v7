@@ -1,7 +1,7 @@
 ---
-import Feed from '../../layouts/Feed.astro';
-import CheckinMap from '../../components/CheckinMap.astro';
-import { getUnifiedFeed, paginateItems } from '../../lib/feed';
+import Feed from '@/layouts/Feed.astro';
+import CheckinMap from '@/components/CheckinMap.astro';
+import { getUnifiedFeed, paginateItems } from '@/lib/feed';
 
 const allItems = (await getUnifiedFeed()).filter(i => i.type === 'checkin');
 const pages = paginateItems(allItems);

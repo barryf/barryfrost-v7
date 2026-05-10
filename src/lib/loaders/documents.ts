@@ -1,5 +1,5 @@
 import type { Loader } from 'astro/loaders';
-import { fetchAllRecords, rkeyFromUri, DID, PDS_HOST } from '../pds';
+import { fetchAllRecords, rkeyFromUri, DID, PDS_HOST } from '@/lib/pds';
 
 export function documentsLoader(): Loader {
   return {

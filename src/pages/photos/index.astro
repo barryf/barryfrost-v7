@@ -1,6 +1,6 @@
 ---
-import Feed from '../../layouts/Feed.astro';
-import { getUnifiedFeed, paginateItems } from '../../lib/feed';
+import Feed from '@/layouts/Feed.astro';
+import { getUnifiedFeed, paginateItems } from '@/lib/feed';
 
 const allItems = (await getUnifiedFeed()).filter(i => i.type === 'photo');
 const pages = paginateItems(allItems);
