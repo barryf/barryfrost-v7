@@ -106,7 +106,7 @@ Type-specific feed pages (articles, photos, checkins, books, films) suppress the
   - External-service card title links include a Heroicons micro `arrow-top-right-on-square` icon (16px, filled, `inline size-3.5 ml-1 align-middle`) to signal navigation away from the site
   - `ArticleCard` shows tags as visible linked pills (linking to `/tags/{tag}`) below the title/summary, with the date rendered after the tags in `text-xs`
   - All card timestamp/metadata rows use `text-xs`
-  - `BlueskyCard` renders up to 4 embedded images below the post text at fixed 96px height preserving aspect ratio; each image has `mb-1` bottom margin
+  - `BlueskyCard` renders up to 4 embedded images below the post text at fixed 96px height preserving aspect ratio; each image has `mb-1` bottom margin. Quote posts (`app.bsky.embed.record` / `app.bsky.embed.recordWithMedia`) are rendered via `BlueskyQuote.astro` — a left-bordered blockquote showing the quoted author's display name and handle, and the quoted post text with rich-text facets. Hydration calls `public.api.bsky.app/xrpc/app.bsky.feed.getPosts` at build time; unavailable/deleted quotes show a placeholder.
   - `PhotoCard` — single-photo galleries use a side-by-side layout on `sm`+ (120px square thumbnail left, title/description/date right); stacked on narrow viewports. Multi-photo galleries render up to 4 thumbnails in a flex row above the title. Each thumbnail links to a locally hosted full-size WebP (max 2000×2000, `inside` fit, preserving aspect ratio). `description` (from `social.grain.gallery`) renders as `p-summary` below the title when present.
 
 ## Date Formatting
