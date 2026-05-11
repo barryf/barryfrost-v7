@@ -198,8 +198,26 @@ Manual `workflow_dispatch` form for creating a new article or weeknote stub from
 
 Required secrets: `GH_PAT` (PAT with `repo` scope — PRs created with `GITHUB_TOKEN` do not fire `pull_request` events)
 
+### Blob proxy — `cloudflare/blob-proxy`
+A Cloudflare Worker (`name: blob-proxy`) served at `cdn.barryfrost.com` that proxies and transforms PDS image blobs. It exists because PDS blobs are served with `cache-control: private`, which prevents Cloudflare from caching transformed results through the URL-based `/cdn-cgi/image/` path.
+
+URL contract: `https://cdn.barryfrost.com/blob?cid=<cid>&w=<width>&h=<height>&fit=<fit>&q=<quality>`
+
+- Hardcoded to the main DID (`did:plc:j5ksi3y4tdtbp7vpsxsfyask`). Third-party DIDs (subscriptions) still use the `/cdn-cgi/image/` path via `transformImage()`.
+- Transforms via the `IMAGES` binding (`[images] binding = "IMAGES"` in wrangler.toml) using `env.IMAGES.input().transform().output().response()`.
+- Auto-negotiates output format from the `Accept` header (AVIF > WebP > JPEG).
+- Returns `cache-control: public, max-age=31536000, immutable` — safe because CIDs are content-addressed.
+- Uses `caches.default` (Workers Cache API) to store responses at the edge; cache hits bypass PDS fetch and image transformation entirely.
+- Passthrough mode (no `w`/`h` params): proxies the original blob with rewritten immutable headers.
+- DNS: `cdn.barryfrost.com` — a proxied Cloudflare record pointing to the worker via route `cdn.barryfrost.com/*`.
+- Deployed manually: `cd cloudflare/blob-proxy && npm run deploy`.
+
+Frontend helper: `blobImage(cid, opts)` in `src/lib/image-url.ts` generates `cdn.barryfrost.com/blob?...` URLs. Used by checkins, photos, bluesky, and books loaders. Films and subscriptions continue to use `transformImage()` (external/third-party URLs).
+
 ### Image Transformations
-Cloudflare Image Transformations is enabled on the zone. Allowed source origins:
+Cloudflare Image Transformations is enabled on the zone. Used by subscriptions (third-party DIDs via `transformImage`) and films (TMDB posters via `transformImage`). Main-DID blob images now go through the `blob-proxy` worker instead.
+
+Allowed source origins for `/cdn-cgi/image/`:
 
 | Origin | Path prefix |
 |---|---|

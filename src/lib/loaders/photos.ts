@@ -1,6 +1,6 @@
 import type { Loader } from 'astro/loaders';
 import { fetchAllRecords, rkeyFromUri, DID, PDS_HOST } from '@/lib/pds';
-import { transformImage } from '@/lib/image-url';
+import { blobImage } from '@/lib/image-url';
 
 interface GalleryRecord {
   title?: string;
@@ -71,9 +71,8 @@ export function photosLoader(): Loader {
         for (const item of items.slice(0, 4)) {
           const photo = photos.get(item.photoUri);
           if (photo?.photo?.ref?.$link) {
-            const blobUrl = `https://${PDS_HOST}/xrpc/com.atproto.sync.getBlob?did=${DID}&cid=${photo.photo.ref.$link}`;
-            thumbnailUrls.push(transformImage(blobUrl, { width: 240, height: 240, fit: 'cover' }));
-            thumbnailFullUrls.push(transformImage(blobUrl, { width: 2000, height: 2000, fit: 'contain' }));
+            thumbnailUrls.push(blobImage(photo.photo.ref.$link, { width: 240, height: 240, fit: 'cover' }));
+            thumbnailFullUrls.push(blobImage(photo.photo.ref.$link, { width: 2000, height: 2000, fit: 'contain' }));
           }
         }
 

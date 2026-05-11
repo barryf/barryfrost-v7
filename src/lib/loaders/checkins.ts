@@ -2,7 +2,7 @@ import type { Loader } from 'astro/loaders';
 import { fetchAllRecords, rkeyFromUri, DID, PDS_HOST } from '@/lib/pds';
 
 const DID_SHORT = DID.replace('did:plc:', '');
-import { transformImage } from '@/lib/image-url';
+import { blobImage } from '@/lib/image-url';
 
 interface FsqLocation {
   fsq_place_id?: string;
@@ -57,9 +57,8 @@ export function checkinsLoader(): Loader {
         for (const photo of photos) {
           const link = photo.image?.ref?.['$link'];
           if (!link) continue;
-          const blobUrl = `https://${PDS_HOST}/xrpc/com.atproto.sync.getBlob?did=${DID}&cid=${link}`;
-          photoUrls.push(transformImage(blobUrl, { width: 192, height: 192, fit: 'cover' }));
-          photoFullUrls.push(transformImage(blobUrl, { width: 720, height: 720, fit: 'cover' }));
+          photoUrls.push(blobImage(link, { width: 192, height: 192, fit: 'cover' }));
+          photoFullUrls.push(blobImage(link, { width: 720, height: 720, fit: 'cover' }));
         }
 
         store.set({

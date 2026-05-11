@@ -1,6 +1,6 @@
 import type { Loader } from 'astro/loaders';
 import { fetchAllRecords, rkeyFromUri, DID, PDS_HOST } from '@/lib/pds';
-import { transformImage } from '@/lib/image-url';
+import { blobImage } from '@/lib/image-url';
 
 export function booksLoader(): Loader {
   return {
@@ -14,11 +14,8 @@ export function booksLoader(): Loader {
         const rkey = rkeyFromUri(record.uri);
         const identifiers = value.identifiers as { isbn10?: string; isbn13?: string; goodreadsId?: string } | undefined;
         const cover = value.cover as { ref?: { $link?: string }; mimeType?: string } | undefined;
-        const rawCoverUrl = cover?.ref?.$link
-          ? `https://${PDS_HOST}/xrpc/com.atproto.sync.getBlob?did=${DID}&cid=${cover.ref.$link}`
-          : undefined;
-        const coverUrl = rawCoverUrl
-          ? transformImage(rawCoverUrl, { width: 96, height: 144, fit: 'cover' })
+        const coverUrl = cover?.ref?.$link
+          ? blobImage(cover.ref.$link, { width: 96, height: 144, fit: 'cover' })
           : undefined;
 
         store.set({

@@ -1,6 +1,6 @@
 import type { Loader } from 'astro/loaders';
 import { fetchAllRecords, rkeyFromUri, resolveHandle, DID, PDS_HOST } from '@/lib/pds';
-import { transformImage } from '@/lib/image-url';
+import { blobImage } from '@/lib/image-url';
 
 interface BlueskyImage {
   alt?: string;
@@ -49,8 +49,7 @@ function extractImages(embed: BlueskyEmbed | undefined): { urls: string[]; alts:
   for (const img of images) {
     const link = img.image?.ref?.$link;
     if (!link) continue;
-    const blobUrl = `https://${PDS_HOST}/xrpc/com.atproto.sync.getBlob?did=${DID}&cid=${link}`;
-    urls.push(transformImage(blobUrl, { width: 192, height: 192, fit: 'contain' }));
+    urls.push(blobImage(link, { width: 192, height: 192, fit: 'contain' }));
     alts.push(img.alt ?? '');
   }
   return { urls, alts };
