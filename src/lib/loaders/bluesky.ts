@@ -7,10 +7,33 @@ interface BlueskyImage {
   image?: { ref?: { $link?: string } };
 }
 
+interface BlueskyQuoteRef {
+  uri?: string;
+  cid?: string;
+}
+
 interface BlueskyEmbed {
   $type?: string;
   images?: BlueskyImage[];
   media?: { $type?: string; images?: BlueskyImage[] };
+  record?: BlueskyQuoteRef | { record?: BlueskyQuoteRef };
+}
+
+const APPVIEW_HOST = 'public.api.bsky.app';
+
+interface AppViewPostView {
+  uri: string;
+  cid: string;
+  author: { did: string; handle: string; displayName?: string };
+  record: { text: string; createdAt: string; facets?: unknown[] };
+}
+
+async function fetchPostFromAppView(uri: string): Promise<AppViewPostView | null> {
+  const params = new URLSearchParams({ uris: uri });
+  const res = await fetch(`https://${APPVIEW_HOST}/xrpc/app.bsky.feed.getPosts?${params}`);
+  if (!res.ok) return null;
+  const data = await res.json() as { posts: AppViewPostView[] };
+  return data.posts[0] ?? null;
 }
 
 function extractImages(embed: BlueskyEmbed | undefined): { urls: string[]; alts: string[] } {
@@ -31,6 +54,42 @@ function extractImages(embed: BlueskyEmbed | undefined): { urls: string[]; alts:
     alts.push(img.alt ?? '');
   }
   return { urls, alts };
+}
+
+function extractQuoteRef(embed: BlueskyEmbed | undefined): { uri: string; cid: string } | null {
+  if (!embed) return null;
+  if (embed.$type === 'app.bsky.embed.record') {
+    const ref = embed.record as BlueskyQuoteRef | undefined;
+    if (ref?.uri && ref?.cid) return { uri: ref.uri, cid: ref.cid };
+  }
+  if (embed.$type === 'app.bsky.embed.recordWithMedia') {
+    const outer = embed.record as { record?: BlueskyQuoteRef } | undefined;
+    const ref = outer?.record;
+    if (ref?.uri && ref?.cid) return { uri: ref.uri, cid: ref.cid };
+  }
+  return null;
+}
+
+async function hydrateQuotedPost(uri: string, cid: string): Promise<object> {
+  const parts = uri.replace('at://', '').split('/');
+  const authorDid = parts[0];
+  const rkey = parts[2];
+
+  const post = await fetchPostFromAppView(uri);
+  if (!post) return { available: false, uri, authorDid, rkey };
+
+  return {
+    available: true,
+    uri,
+    cid,
+    authorDid: post.author.did,
+    authorHandle: post.author.handle,
+    authorDisplayName: post.author.displayName,
+    rkey: rkeyFromUri(post.uri),
+    text: post.record.text,
+    facets: post.record.facets ?? [],
+    createdAt: post.record.createdAt,
+  };
 }
 
 export function blueskyLoader(): Loader {
@@ -67,7 +126,13 @@ export function blueskyLoader(): Loader {
 
         if (/^Week \d+/i.test(value.text as string)) continue;
 
-        const { urls: imageUrls, alts: imageAlts } = extractImages(value.embed as BlueskyEmbed | undefined);
+        const embed = value.embed as BlueskyEmbed | undefined;
+        const { urls: imageUrls, alts: imageAlts } = extractImages(embed);
+
+        const quoteRef = extractQuoteRef(embed);
+        const quotedPost = quoteRef
+          ? await hydrateQuotedPost(quoteRef.uri, quoteRef.cid)
+          : null;
 
         store.set({
           id: rkey,
@@ -79,6 +144,7 @@ export function blueskyLoader(): Loader {
             uri: record.uri,
             imageUrls,
             imageAlts,
+            quotedPost,
           },
           digest: generateDigest(record.cid),
         });

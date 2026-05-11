@@ -1,0 +1,42 @@
+---
+import { renderRichText } from '@/lib/richtext';
+import { didFromUri, rkeyFromUri } from '@/lib/pds';
+
+interface QuotedPost {
+  available: boolean;
+  uri: string;
+  authorDid?: string;
+  authorHandle?: string;
+  authorDisplayName?: string;
+  rkey?: string;
+  text?: string;
+  facets?: unknown[];
+}
+
+interface Props {
+  quotedPost: QuotedPost;
+}
+
+const { quotedPost } = Astro.props;
+
+const did = quotedPost.authorDid ?? didFromUri(quotedPost.uri);
+const rkey = quotedPost.rkey ?? rkeyFromUri(quotedPost.uri);
+const handle = quotedPost.authorHandle ?? did;
+
+const html = quotedPost.available && quotedPost.text
+  ? renderRichText(quotedPost.text, (quotedPost.facets ?? []) as any)
+  : '';
+---
+<blockquote class="border-l-4 border-neutral-300 dark:border-neutral-600 pl-3 my-2 text-sm not-italic">
+  {quotedPost.available ? (
+    <Fragment>
+      <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">
+        {quotedPost.authorDisplayName && <span>{quotedPost.authorDisplayName} </span>}
+        <a class="underline" href={`https://bsky.app/profile/${handle}`} rel="noopener noreferrer">@{handle}</a>
+      </p>
+      <div set:html={html} />
+    </Fragment>
+  ) : (
+    <p class="italic text-neutral-500 dark:text-neutral-400">Quoted post unavailable</p>
+  )}
+</blockquote>

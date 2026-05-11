@@ -62,6 +62,18 @@ const blueskyPosts = defineCollection({
     uri: z.string(),
     imageUrls: z.array(z.string()),
     imageAlts: z.array(z.string()),
+    quotedPost: z.object({
+      available: z.boolean(),
+      uri: z.string(),
+      cid: z.string().optional(),
+      authorDid: z.string().optional(),
+      authorHandle: z.string().optional(),
+      rkey: z.string().optional(),
+      text: z.string().optional(),
+      facets: z.array(z.unknown()).optional(),
+      createdAt: z.string().optional(),
+      authorDisplayName: z.string().optional(),
+    }).nullable(),
   }),
 });
 
