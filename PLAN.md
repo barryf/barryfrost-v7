@@ -204,7 +204,7 @@ A Cloudflare Worker (`name: blob-proxy`) served at `cdn.barryfrost.com` that pro
 URL contract: `https://cdn.barryfrost.com/blob?cid=<cid>&w=<width>&h=<height>&fit=<fit>&q=<quality>`
 
 - Hardcoded to the main DID (`did:plc:j5ksi3y4tdtbp7vpsxsfyask`). Third-party DIDs (subscriptions) still use the `/cdn-cgi/image/` path via `transformImage()`.
-- Transforms via the `IMAGES` binding (`[images] binding = "IMAGES"` in wrangler.toml) using `env.IMAGES.input().transform().output().response()`.
+- Transforms via `fetch(blobUrl, { cf: { image: { width, height, fit, quality, format } } })` — uses the zone's existing Cloudflare Image Transformations, no extra binding required.
 - Auto-negotiates output format from the `Accept` header (AVIF > WebP > JPEG).
 - Returns `cache-control: public, max-age=31536000, immutable` — safe because CIDs are content-addressed.
 - Uses `caches.default` (Workers Cache API) to store responses at the edge; cache hits bypass PDS fetch and image transformation entirely.
