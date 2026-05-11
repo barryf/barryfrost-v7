@@ -1,0 +1,10 @@
+name = "blob-proxy"
+main = "src/index.ts"
+compatibility_date = "2026-05-01"
+
+routes = [
+  { pattern = "cdn.barryfrost.com/*", zone_name = "barryfrost.com" }
+]
+
+[images]
+binding = "IMAGES"
