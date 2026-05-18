@@ -1,0 +1,12 @@
+---
+title: "Week 247 - City"
+date: 2026-05-18
+week: 247
+emoji: "🌃"
+---
+
+- I was in the City on Thursday evening for a tech event. I first had to navigate my way through the rabbit warren behind Liverpool Street station, where workers were already fully into their Thirsty Thursday drinks. I'd forgotten how like a scene out of [Industry](https://www.themoviedb.org/tv/90812-industry) it can be, with well-lubricated/chemicaled City boys in gilets spilling out of the pubs.
+- [Numi](https://www.wearenumi.com)'s conference was worth the journey. After many years of being uncomfortable when networking, I just get on with it, including chatting to some of the product and engineering team at The Economist, one of whom was an Altium user in an earlier electronics career.
+- The panel talks were on decision-making, strategy and (inevitably) AI. From a strong panel line-up, I enjoyed Conrad Ford's comments on reducing dependencies to scale teams, for which he later recommended me [The Geek Way](https://www.andrewmcafee.org/the-geek-way), which I've just started reading.
+- Back in leafy Hertfordshire, H is through to the final trial for the district football team, and has also been offered a place at a new club. Just \~£1,200 fees for the season 😳, including "three Adidas kits". I expect them to be made of gold and diamonds.
+- L's parents stayed over on Saturday night, meaning we could have a few post-dinner drinks in the pub while they babysat. We joined an eclectic mix of locals, including a man having a loud speakerphone conversation about the recent death of a relative, and another man who came in with his dog (normal) and cat (not normal).
