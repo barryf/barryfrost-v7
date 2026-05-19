@@ -19,7 +19,6 @@
       "Read(.env*)",
       "Bash(rm -rf *)",
       "Bash(sudo *)",
-      "Bash(curl *)",
       "Bash(ssh *)"
     ]
   }
