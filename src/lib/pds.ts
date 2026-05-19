@@ -2,7 +2,7 @@ export const DID = 'did:plc:j5ksi3y4tdtbp7vpsxsfyask';
 export const PDS_HOST = 'bsky.social';
 
 export async function resolveHandle(did: string, host: string = PDS_HOST): Promise<string> {
-  const res = await fetch(`https://${host}/xrpc/com.atproto.repo.describeRepo?repo=${did}`);
+  const res = await fetch(`https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=${did}`);
   if (!res.ok) return did;
   const data = await res.json() as { handle?: string };
   return data.handle ?? did;
