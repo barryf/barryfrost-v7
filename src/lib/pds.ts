@@ -1,4 +1,5 @@
 export const DID = 'did:plc:j5ksi3y4tdtbp7vpsxsfyask';
+export const HANDLE = 'barryfrost.com';
 export const PDS_HOST = 'bsky.social';
 
 export async function resolveHandle(did: string, host: string = PDS_HOST): Promise<string> {

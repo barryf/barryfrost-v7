@@ -1,6 +1,6 @@
 import { getCollection } from 'astro:content';
 import { yearMonth } from './dates';
-import { DID } from './pds';
+import { DID, HANDLE } from './pds';
 
 
 export interface FeedItem {
@@ -58,7 +58,7 @@ export async function getUnifiedFeed(): Promise<FeedItem[]> {
     items.push({
       type: 'bluesky',
       date: new Date(entry.data.createdAt),
-      url: `https://bsky.app/profile/${DID}/post/${entry.id}`,
+      url: `https://bsky.app/profile/${HANDLE}/post/${entry.id}`,
       summary: entry.data.text.slice(0, 200),
       id: `bluesky:${entry.id}`,
       data: entry.data as unknown as Record<string, unknown>,
