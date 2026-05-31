@@ -1,0 +1,13 @@
+---
+title: "Week 249 - Rollercoaster"
+date: 2026-05-31
+week: 249
+emoji: "🎢"
+---
+
+- We spent a wonderful half-term week at Disneyland Paris, staying in the nearby [Davy Crockett Ranch](https://www.disneylandparis.com/en-gb/hotels/disneys-davy-crockett-ranch) with my parents.
+- It was blisteringly hot all week. We decided to visit as the gates opened at 8:30am each day, heading back early afternoon when the temperature hit 30C+. Our early starts meant we avoided the extreme heat and also the obnoxiously long queues for popular rides. Even so, we were sweaty and tired by the time we got back to our air-conditioned cabin to recover.
+- We ticked off some impressive rollercoasters, several of which were in pitch black. My parents skipped the most severe, but the rest of us bravely/foolishly dived in. After the unexpected vertical drops in the [Tower of Terror](https://www.disneylandparis.com/en-gb/attractions/disney-adventure-world/twilight-zone-tower-of-terror), an ashen-faced C reasonably declared he'd had enough of scary rides.
+- The ranch had its own swimming pool, restaurant, bar and shop, and we spent quieter evenings away from the main park itself. The separation worked well. It was only a short drive back and then we could have a normal family holiday around the cabins.
+- I drove our EV to Paris and back. Charging was very easy, but our journey home on Friday took over 9.5 hours because of Eurotunnel/border incompetence and typical congestion leading up to the Dartford tunnel.
+- And then, after the euphoria of Arsenal's Premier League win last week, came the bruising defeat on penalties to PSG in the Champions League final. As a friend put it, the pain is good preparation for England's inevitable penalties exit at the World Cup knockout stages this summer.

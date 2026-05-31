@@ -1,0 +1,14 @@
+---
+title: "Week 248 - Trophy"
+date: 2026-05-24
+week: 248
+emoji: "🏆"
+---
+
+- Look, this weeknote is unapologetically dominated by Arsenal winning their first Premier League in 22 years. I completely understand it if you want to skip.
+- [It actually happened!](https://www.bbc.co.uk/sport/football/articles/c9v3jx1jmrwo)
+- After yet another nail-biting 1-0 for Arsenal on Monday at home to Burnley, Man City could only draw at Bournemouth on Tuesday meaning Arsenal had an unassailable lead in the table and were declared champions.
+- I was watching Man City's draw on TV. Both of my sons had decided to go to bed, but my guttural roar at full-time brought them back downstairs for bleary-eyed celebrations.
+- I found it hard to process. I was so relieved it was done. I could only sit dazed on the sofa, absorbing every video and post on social media of the team's celebrations and the hundreds of thousands of fans outside the Emirates.
+- Taking the boys to school the next morning in my Arsenal top, I received high-fives and smiling nods on the playground, from parents I now know to also be Gooners. The grandmother I chat to about Arsenal at C's cricket was beaming this morning. The sun is shining.
+- And now, writing this on Sunday evening (for a change), after watching the trophy being presented after the final match at Palace, it's sinking in. Arsenal is the constant passion that I trace through my adult life, back into childhood. From my first matches at Highbury in 1989 with my uncle, to taking my own family to the Emirates as a father. I love this club.
