@@ -1,5 +1,6 @@
 import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
+import { unified } from '@astrojs/markdown-remark';
 import { visit } from 'unist-util-visit';
 
 // Supports ![alt](src){.class1 .class2} syntax in Markdown
@@ -44,7 +45,7 @@ export default defineConfig({
   },
   compressHTML: false,
   markdown: {
-    rehypePlugins: [rehypeImageAttr],
+    processor: unified({ rehypePlugins: [rehypeImageAttr] }),
   },
   devToolbar: {
     enabled: false
