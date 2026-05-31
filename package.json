@@ -15,7 +15,7 @@
     "@astrojs/rss": "^4.0.18",
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.2.4",
-    "astro": "^6.1.1",
+    "astro": "^6.4.2",
     "tailwindcss": "^4.2.4",
     "unist-util-visit": "^5.1.0",
     "vite": "^7.3.3"
