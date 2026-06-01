@@ -1,6 +1,6 @@
 ---
 title: "Week 249 - Rollercoaster"
-date: 2026-05-31
+date: 2026-05-31T17:00:00Z
 week: 249
 emoji: "🎢"
 ---
