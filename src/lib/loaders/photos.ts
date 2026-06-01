@@ -68,7 +68,7 @@ export function photosLoader(): Loader {
 
         const thumbnailUrls: string[] = [];
         const thumbnailFullUrls: string[] = [];
-        for (const item of items.slice(0, 4)) {
+        for (const item of items) {
           const photo = photos.get(item.photoUri);
           if (photo?.photo?.ref?.$link) {
             thumbnailUrls.push(blobImage(photo.photo.ref.$link, { width: 240, height: 240, fit: 'cover' }));

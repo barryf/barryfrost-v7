@@ -27,20 +27,22 @@ const single = thumbs.length === 1;
         />
       </a>
     ) : thumbs.length > 0 && (
-      <div class="flex gap-2 mb-2">
-        {thumbs.slice(0, 4).map((url, i) => (
-          <a href={fullUrls[i] ?? url} rel="noopener noreferrer" class="flex-1 min-w-0 max-w-30">
-            <img
-              src={new URL(url, Astro.url).href}
-              alt={data.title}
-              width="80"
-              height="80"
-              class="u-photo w-full aspect-square object-cover rounded"
-              loading="lazy"
-              decoding="async"
-            />
-          </a>
-        ))}
+      <div class="overflow-x-auto mb-2">
+        <div class="flex gap-2">
+          {thumbs.map((url, i) => (
+            <a href={fullUrls[i] ?? url} rel="noopener noreferrer" class="flex-none">
+              <img
+                src={new URL(url, Astro.url).href}
+                alt={data.title}
+                width="120"
+                height="120"
+                class="u-photo w-30 h-30 aspect-square object-cover rounded"
+                loading="lazy"
+                decoding="async"
+              />
+            </a>
+          ))}
+        </div>
       </div>
     )}
     <div>
