@@ -41,7 +41,7 @@ const { Content } = await render(entry);
 <Post title={entry.data.title} date={entry.data.date} description={entry.data.description} tags={entry.data.tags} emoji={entry.data.emoji}>
   <Content />
   <Fragment slot="nav">
-    <nav class="mt-8 pt-6 border-t border-neutral-100 dark:border-neutral-800 flex justify-between gap-4 text-sm">
+    <nav class="mt-8 pt-6 border-t border-neutral-100 dark:border-neutral-800 flex justify-between gap-4 text-sm" data-pagefind-ignore>
       {prev ? (
         <a href={`/weeknotes/${prev.id}`} class="hover:underline">← {weeknoteLabel(prev)}</a>
       ) : <span />}
@@ -50,7 +50,7 @@ const { Content } = await render(entry);
       ) : <span />}
     </nav>
     {onThisDay.length > 0 && (
-      <aside class="mt-8 pt-8">
+      <aside class="mt-8 pt-8" data-pagefind-ignore>
         <h2 class="text-sm font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-8">Previous years</h2>
         <ul class="space-y-8">
           {onThisDay.map(e => (

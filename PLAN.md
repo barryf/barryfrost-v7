@@ -131,6 +131,16 @@ A custom `rehypeImageAttr` plugin in `astro.config.mjs` supports `{.class1 .clas
 
 The plugin strips the `{...}` text node and applies the dot-prefixed tokens as CSS classes on the `<img>` element.
 
+## Search
+
+Static search via [Pagefind](https://pagefind.app). After `astro build`, the build script runs `pagefind --site dist` which indexes the built HTML and emits a self-contained bundle into `dist/pagefind/`. The bundle ships automatically with the rest of `dist/` when Wrangler deploys.
+
+**Scope:** Only pages with `data-pagefind-body` are indexed — articles, weeknotes, travelblog entries, and slash pages (`/about`, `/work`, `/now`, etc.). Feed-only content types (notes, checkins, photos, films, books) have no individual URL and are excluded. All listing/feed/tag/archive/paginated routes are excluded by omission. Navigation elements within indexed pages (`data-pagefind-ignore`) are also excluded: the hidden MF2 author h-card, the AT Protocol syndication footer, and the weeknote prev/next nav and "Previous years" aside.
+
+**UI:** A plain `<form action="/search">` in the header (no JS) navigates to `/search?q=…`. The `/search` page (`src/pages/search.astro`) reads the query from the URL, runs Pagefind, and renders results. Typing on the search page updates the URL via `history.replaceState` so the back button restores results. Each result link appends `#:~:text=<query>` so the browser natively scrolls to and highlights the matched text on the destination page. URLs have the `.html` suffix stripped to match the site's canonical URL convention (`build.format: 'file'`).
+
+The search bundle is not present during `npm run dev` — the page shows a dev-mode message instead. Test search with `npm run build && npm run preview`.
+
 ## Microformats 2 (MF2)
 
 Applied as static classes directly in Astro templates so IndieWeb parsers (XRay, Monocle, pin13) classify posts correctly via [Post-Type Discovery](https://indieweb.org/Post_Type_Discovery). No runtime JS required.

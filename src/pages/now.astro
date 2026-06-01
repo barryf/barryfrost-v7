@@ -60,7 +60,7 @@ const bookhiveSource: Source = { label: 'Bookhive', url: 'https://bookhive.buzz'
 const popfeedSource: Source = { label: 'Popfeed', url: 'https://popfeed.social' };
 ---
 <Base title="Now" description={nowEntry.data.description}>
-  <article>
+  <article data-pagefind-body>
     <h1 class="text-2xl font-bold mb-4">Now</h1>
     <p class="text-sm text-neutral-500 dark:text-neutral-500 mb-6">
       Last updated <time datetime={toISODate(lastUpdated)}>{formatDateShort(lastUpdated)}</time>

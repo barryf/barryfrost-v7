@@ -19,13 +19,13 @@ const documents = await getCollection('documents');
 const matchingDoc = documents.find(doc => doc.data.path === currentPath);
 ---
 <Base title={title} description={description}>
-  <article class="h-entry">
+  <article class="h-entry" data-pagefind-body>
     <header class="mb-8">
       <h1 class="p-name text-2xl leading-tight font-bold">{emoji && `${emoji} `}{title}</h1>
       <time class="dt-published text-sm text-neutral-500 dark:text-neutral-400 mt-1" datetime={toISODate(date)}>
         {formatDate(date)}
       </time>
-      <a class="p-author h-card hidden" rel="author" href="https://barryfrost.com">
+      <a class="p-author h-card hidden" data-pagefind-ignore rel="author" href="https://barryfrost.com">
         <img class="u-photo" src="https://barryfrost.com/barryfrost.jpg" alt="Barry Frost" />
         <span class="p-name">Barry Frost</span>
         <span class="u-url">https://barryfrost.com</span>
@@ -42,7 +42,7 @@ const matchingDoc = documents.find(doc => doc.data.path === currentPath);
       <slot />
     </div>
     {matchingDoc && (
-      <footer class="mt-8 text-sm text-neutral-500 dark:text-neutral-400">
+      <footer class="mt-8 text-sm text-neutral-500 dark:text-neutral-400" data-pagefind-ignore>
         <a class="u-syndication" href={matchingDoc.data.uri} rel="syndication">View on AT Protocol</a>
       </footer>
     )}

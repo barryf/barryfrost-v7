@@ -16,7 +16,7 @@ const { entry, prev, next } = Astro.props;
 const { Content } = await render(entry);
 ---
 <Base title="Travelblog">
-  <article class="h-entry">
+  <article class="h-entry" data-pagefind-body>
     <header class="mb-8">
       <h1 class="p-name text-2xl font-bold">Travelblog</h1>
       <h2 class="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
