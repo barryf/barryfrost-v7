@@ -31,6 +31,7 @@ Fetched at build time from `bsky.social` for DID `did:plc:j5ksi3y4tdtbp7vpsxsfya
 | `social.popfeed.feed.review` | `films.ts` | `film` |
 | `buzz.bookhive.book` | `books.ts` | `book` |
 | `social.grain.gallery` + `.gallery.item` + `.photo` | `photos.ts` | `photo` |
+| `app.rocksky.album` | `albums.ts` | (Now page "Listening" only — not feed entries) |
 | `site.standard.document` | `documents.ts` | (enrichment only — not feed entries) |
 | `site.standard.graph.subscription` | `subscriptions.ts` | (blogroll only) |
 
@@ -235,6 +236,7 @@ Allowed source origins for `/cdn-cgi/image/`:
 | `cdn.bsky.app` | `/img/` |
 | `*.host.bsky.network` | `/xrpc/com.atproto.sync.getBlob` |
 | `image.tmdb.org` | _(none)_ |
+| `i.scdn.co` | _(none)_ — Spotify album art for Rocksky covers |
 
 Blogroll favicons (`www.google.com/s2/favicons`) are served directly and do not go through CF Image Transformations.
 

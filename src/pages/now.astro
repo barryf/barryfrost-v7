@@ -15,13 +15,14 @@ const { Content } = await render(nowEntry);
 const nowMdPath = resolve(process.cwd(), 'src/content/pages/now.md');
 const lastUpdated = statSync(nowMdPath).mtime;
 
-const [position, self, bookEntries, checkinEntries, weeknoteEntries, feed] = await Promise.all([
+const [position, self, bookEntries, checkinEntries, weeknoteEntries, feed, albumEntries] = await Promise.all([
   getCurrentPosition(),
   getSelf(),
   getCollection('books'),
   getCollection('checkins'),
   getCollection('weeknotes'),
   getUnifiedFeed(),
+  getCollection('albums'),
 ]);
 
 const locationStr = formatLocation(self);
@@ -44,6 +45,10 @@ const latestWeeknote = [...weeknoteEntries]
 
 const latestFilm = feed.find(i => i.type === 'film');
 
+const recentAlbums = [...albumEntries]
+  .sort((a, b) => new Date(b.data.createdAt).getTime() - new Date(a.data.createdAt).getTime())
+  .slice(0, 5);
+
 function toStars(rating: number): string {
   const stars = rating / 2;
   const full = Math.floor(stars);
@@ -58,6 +63,7 @@ interface Source {
 const sifaSource: Source = { label: 'Sifa', url: 'https://sifa.id' };
 const bookhiveSource: Source = { label: 'Bookhive', url: 'https://bookhive.buzz' };
 const popfeedSource: Source = { label: 'Popfeed', url: 'https://popfeed.social' };
+const rockskySource: Source = { label: 'Rocksky', url: 'https://rocksky.app/profile/barryfrost.com' };
 ---
 <Base title="Now" description={nowEntry.data.description}>
   <article data-pagefind-body>
@@ -128,6 +134,40 @@ const popfeedSource: Source = { label: 'Popfeed', url: 'https://popfeed.social' 
               </div>
             </div>
           ))}
+        </div>
+      </section>
+    )}
+
+    {recentAlbums.length > 0 && (
+      <section class="mb-6">
+        <div class="flex items-center gap-2 mb-3 pb-2 border-b border-neutral-200 dark:border-neutral-700">
+          <h2 class="text-lg font-semibold">Listening</h2>
+          {rockskySource.url ? (
+            <a href={rockskySource.url} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300" rel="noopener noreferrer">{rockskySource.label}</a>
+          ) : (
+            <span class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded text-neutral-500">{rockskySource.label}</span>
+          )}
+        </div>
+        <div class="overflow-x-auto">
+          <div class="flex gap-3">
+            {recentAlbums.map(a => (
+              <div class="flex-none w-28">
+                {a.data.coverUrl && (
+                  <img
+                    src={new URL(a.data.coverUrl, Astro.url).href}
+                    alt={`${a.data.title} by ${a.data.artist}`}
+                    width="112"
+                    height="112"
+                    class="w-28 h-28 aspect-square object-cover rounded shadow-sm"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                )}
+                <p class="mt-1 text-sm font-medium leading-tight truncate" title={a.data.title}>{a.data.title}</p>
+                <p class="text-xs text-neutral-600 dark:text-neutral-400 truncate" title={a.data.artist}>{a.data.artist}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
     )}
