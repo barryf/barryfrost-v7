@@ -191,8 +191,7 @@ const albums = defineCollection({
     title: z.string(),
     artist: z.string(),
     coverUrl: z.string().optional(),
-    rockskyUrl: z.string(),
-    createdAt: z.string(),
+createdAt: z.string(),
     uri: z.string(),
   }),
 });
