@@ -23,6 +23,7 @@ export function albumsLoader(): Loader {
             title: value.title as string,
             artist: value.artist as string,
             coverUrl,
+            rockskyUrl: `https://rocksky.app/${DID}/album/${rkey}`,
             createdAt: value.createdAt as string,
             uri: record.uri,
           },

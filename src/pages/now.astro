@@ -152,18 +152,20 @@ const rockskySource: Source = { label: 'Rocksky', url: 'https://rocksky.app/prof
           <div class="flex gap-3">
             {recentAlbums.map(a => (
               <div class="flex-none w-28">
-                {a.data.coverUrl && (
-                  <img
-                    src={new URL(a.data.coverUrl, Astro.url).href}
-                    alt={`${a.data.title} by ${a.data.artist}`}
-                    width="112"
-                    height="112"
-                    class="w-28 h-28 aspect-square object-cover rounded shadow-sm"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                )}
-                <p class="mt-1 text-sm font-medium leading-tight truncate" title={a.data.title}>{a.data.title}</p>
+                <a href={a.data.rockskyUrl} rel="noopener noreferrer">
+                  {a.data.coverUrl && (
+                    <img
+                      src={new URL(a.data.coverUrl, Astro.url).href}
+                      alt={`${a.data.title} by ${a.data.artist}`}
+                      width="112"
+                      height="112"
+                      class="w-28 h-28 aspect-square object-cover rounded shadow-sm"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  )}
+                </a>
+                <a href={a.data.rockskyUrl} class="mt-1 block text-sm font-medium leading-tight truncate hover:underline" title={a.data.title} rel="noopener noreferrer">{a.data.title}</a>
                 <p class="text-xs text-neutral-600 dark:text-neutral-400 truncate" title={a.data.artist}>{a.data.artist}</p>
               </div>
             ))}
