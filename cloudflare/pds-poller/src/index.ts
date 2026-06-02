@@ -17,6 +17,7 @@ const COLLECTIONS = [
   'social.grain.gallery',
   'social.grain.gallery.item',
   'social.grain.photo',
+  'app.rocksky.album',
 ] as const;
 
 const PRETTY: Record<string, string> = {
@@ -30,6 +31,7 @@ const PRETTY: Record<string, string> = {
   'social.grain.gallery': 'gallery',
   'social.grain.gallery.item': 'gallery item',
   'social.grain.photo': 'photo',
+  'app.rocksky.album': 'album',
 };
 
 async function fetchLatestCid(collection: string): Promise<string | null> {
