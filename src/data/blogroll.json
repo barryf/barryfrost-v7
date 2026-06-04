@@ -1,7 +1,23 @@
 [
   {
+    "name": "Aaron Parecki",
+    "url": "https://aaronparecki.com"
+  },
+  {
+    "name": "Alice Bartlett",
+    "url": "https://alicebartlett.co.uk"
+  },
+  {
     "name": "Ben Werdmuller",
     "url": "https://werd.io/"
+  },
+  {
+    "name": "Calum Ryan",
+    "url": "https://www.calumryan.com"
+  },
+  {
+    "name": "Giles Turnbull",
+    "url": "https://gilest.org"
   },
   {
     "name": "Henrique Dias",
@@ -12,7 +28,47 @@
     "url": "https://www.jvt.me/"
   },
   {
+    "name": "Jan-Lukas Else",
+    "url": "https://janlukas.blog"
+  },
+  {
     "name": "Jim Nielsen",
     "url": "https://blog.jim-nielsen.com/"
+  },
+  {
+    "name": "Jon Hicks",
+    "url": "https://hicks.design/journal/"
+  },
+  {
+    "name": "Julian Lehr",
+    "url": "https://julian.digital"
+  },
+  {
+    "name": "Manton Reece",
+    "url": "https://www.manton.org"
+  },
+  {
+    "name": "Paul Robert Lloyd",
+    "url": "https://paulrobertlloyd.com/"
+  },
+  {
+    "name": "Rowan Manning",
+    "url": "https://rowanmanning.com"
+  },
+  {
+    "name": "Simon Willison",
+    "url": "https://simonwillison.net"
+  },
+  {
+    "name": "Tantek",
+    "url": "https://tantek.com"
+  },
+  {
+    "name": "Tom MacWright",
+    "url": "https://macwright.com/"
+  },
+  {
+    "name": "Tom Stuart",
+    "url": "https://tomstu.art"
   }
 ]
