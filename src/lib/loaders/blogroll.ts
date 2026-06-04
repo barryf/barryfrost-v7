@@ -10,7 +10,9 @@ export function blogrollLoader(): Loader {
 
       for (const blog of blogsData) {
         const hostname = new URL(blog.url).hostname;
-        const avatarUrl = `https://www.google.com/s2/favicons?domain=${hostname}&sz=96`;
+        const avatarUrl = 'avatar' in blog && blog.avatar
+          ? blog.avatar
+          : `https://www.google.com/s2/favicons?domain=${hostname}&sz=96`;
 
         store.set({
           id: hostname,
