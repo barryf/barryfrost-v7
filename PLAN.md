@@ -227,6 +227,18 @@ URL contract: `https://cdn.barryfrost.com/blob?cid=<cid>&w=<width>&h=<height>&fi
 
 Frontend helper: `blobImage(cid, opts)` in `src/lib/image-url.ts` generates `cdn.barryfrost.com/blob?...` URLs. Used by checkins, photos, bluesky, and books loaders. Films and subscriptions continue to use `transformImage()` (external/third-party URLs).
 
+### Why the workers are separate
+
+Both workers live in `cloudflare/` as standalone wrangler projects rather than inside the Astro source tree. This is an architectural necessity, not a legacy convention:
+
+- The main app is `output: 'static'` with no SSR adapter. `src/pages/*.ts` endpoints are **pre-rendered to static files at build time** — there is no per-request runtime. Folding either worker into the app would require `@astrojs/cloudflare` + SSR, contradicting the "no runtime JS" principle.
+- `pds-poller` uses a `scheduled()` cron handler (`*/15 * * * *`). Cron triggers require a standalone Worker; Astro has no cron concept and a static-assets worker has no custom handler.
+- `blob-proxy` is a per-request image proxy on a **different hostname** (`cdn.barryfrost.com`). It cannot be a route inside the main site worker.
+
+The separation also gives each service an independent deploy blast radius: a content push never touches the image proxy or poller, and vice versa. Each worker is self-contained (own `package.json`, `wrangler.toml`, `tsconfig.json`) and deployed manually with `wrangler deploy`.
+
+The only coupling is a URL contract: `src/lib/image-url.ts` generates `cdn.barryfrost.com/blob?...` URLs that `blob-proxy` serves. The shared DID (`did:plc:j5ksi3y4tdtbp7vpsxsfyask`) and PDS host are intentionally duplicated — the trivial repetition is preferable to coupling a static-site build to two unrelated runtime services.
+
 ### Image Transformations
 Cloudflare Image Transformations is enabled on the zone. Used by subscriptions (third-party DIDs via `transformImage`) and films (TMDB posters via `transformImage`). Main-DID blob images now go through the `blob-proxy` worker instead.
 
@@ -303,8 +315,3 @@ Both CLIs accept `--no-git` (or detect `CI=true`) to skip all git/gh operations 
 | `scripts/export-notes-csv.ts` | Export all v6 `post-type: note` records (~1,637) to `scripts/notes-to-import.csv` for manual review before Bluesky import. Status column: `Y` (import), `N` (skip — already on Bluesky, deleted/private/draft, or embeds a tweet URL), `?` (needs review — has photo or >300 graphemes). Also includes a `length` column (grapheme count of rendered text). Run: `npx tsx scripts/export-notes-csv.ts`. |
 | `scripts/import-notes-bsky.ts` | Import approved notes from `notes-to-import.csv` (rows with `status=Y`) to PDS as `app.bsky.feed.post` records. Uses `putRecord` with a TID rkey derived from the original `published` date so posts appear in the correct position on the Bluesky profile timeline. Builds richtext facets for markdown links and bare URLs (`#link`) and hashtags (`#tag`); @-mentions left as plain text. Decodes HTML entities from the mf2 source. Tracks progress in `scripts/imported-notes-bsky.json` (gitignored). `--dry-run`, `--limit N`, `--csv path` flags. |
 | `scripts/delete-imported-notes-bsky.ts` | Delete all records previously imported by `import-notes-bsky.ts`, then clear `imported-notes-bsky.json` so the importer can re-run from scratch. Used to fix posts imported with wrong (current-time) TIDs. `--dry-run` flag. |
-
-## Ideas / Backlog
-
-- `/uses`, `/defaults`, `/pay`, `/contact` slash pages
-- Gigs attended
