@@ -28,7 +28,7 @@ const single = thumbs.length === 1;
       </a>
     ) : thumbs.length > 0 && (
       <div class="overflow-x-auto mb-2">
-        <div class="flex gap-2">
+        <div class="flex gap-1">
           {thumbs.map((url, i) => (
             <a href={fullUrls[i] ?? url} rel="noopener noreferrer" class="flex-none">
               <img
@@ -36,7 +36,10 @@ const single = thumbs.length === 1;
                 alt={data.title}
                 width="120"
                 height="120"
-                class="u-photo w-30 h-30 aspect-square object-cover rounded"
+                class:list={["u-photo w-30 h-30 aspect-square object-cover",
+                  i === 0 && "rounded-l",
+                  i === thumbs.length - 1 && "rounded-r"
+                ]}
                 loading="lazy"
                 decoding="async"
               />
