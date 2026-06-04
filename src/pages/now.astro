@@ -47,7 +47,7 @@ const latestFilm = feed.find(i => i.type === 'film');
 
 const recentAlbums = [...albumEntries]
   .sort((a, b) => new Date(b.data.createdAt).getTime() - new Date(a.data.createdAt).getTime())
-  .slice(0, 5);
+  .slice(0, 10);
 
 function toStars(rating: number): string {
   const stars = rating / 2;
@@ -207,9 +207,8 @@ const rockskySource: Source = { label: 'Rocksky', url: 'https://rocksky.app/prof
 
     {latestWeeknote && (
       <section class="mb-6">
-        <h2 class="text-lg font-semibold mb-2 pb-2 border-b border-neutral-200 dark:border-neutral-700">Latest weeknote</h2>
+        <h2 class="text-lg font-semibold mb-2 pb-2 border-b border-neutral-200 dark:border-neutral-700">Weeknoting</h2>
         <div class="flex items-start gap-3">
-          <TypeIcon type="weeknote" class="size-5 shrink-0 mt-0.5 text-neutral-400 dark:text-neutral-500" />
           <div>
             <a href={`/weeknotes/${latestWeeknote.id}`} class="font-medium hover:underline">
               {latestWeeknote.data.emoji && `${latestWeeknote.data.emoji} `}{latestWeeknote.data.title}
@@ -226,9 +225,8 @@ const rockskySource: Source = { label: 'Rocksky', url: 'https://rocksky.app/prof
       const filmData = latestFilm.data as { title: string; rating?: number; posterUrl?: string };
       return (
         <section class="mb-6">
-          <h2 class="text-lg font-semibold mb-2 pb-2 border-b border-neutral-200 dark:border-neutral-700">Last film watched</h2>
+          <h2 class="text-lg font-semibold mb-2 pb-2 border-b border-neutral-200 dark:border-neutral-700">Watching</h2>
           <div class="flex items-start gap-3">
-            <TypeIcon type="film" class="size-5 shrink-0 mt-0.5 text-neutral-400 dark:text-neutral-500" />
             <div class="flex gap-3 flex-1 min-w-0">
               {filmData.posterUrl && (
                 <img
