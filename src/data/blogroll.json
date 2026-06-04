@@ -1,7 +1,8 @@
 [
   {
     "name": "Aaron Parecki",
-    "url": "https://aaronparecki.com"
+    "url": "https://aaronparecki.com",
+    "avatar": "https://aaronparecki.com/images/profile.jpg"
   },
   {
     "name": "Alice Bartlett",
@@ -29,7 +30,8 @@
   },
   {
     "name": "Jan-Lukas Else",
-    "url": "https://janlukas.blog"
+    "url": "https://janlukas.blog",
+    "avatar": "https://janlukas.blog/profile.jpg?s=192"
   },
   {
     "name": "Jim Nielsen",
@@ -45,7 +47,8 @@
   },
   {
     "name": "Manton Reece",
-    "url": "https://www.manton.org"
+    "url": "https://www.manton.org",
+    "avatar": "https://avatars.micro.blog/avatars/2025/22/3.jpg"
   },
   {
     "name": "Paul Robert Lloyd",
