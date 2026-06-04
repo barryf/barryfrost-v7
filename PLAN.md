@@ -5,6 +5,7 @@ Personal website for Barry Frost — statically generated, IndieWeb-compliant, d
 ## Stack
 
 - **Astro 6** — static output (`output: 'static'`), `build.format: 'file'`
+- **`@astrojs/mdx`** — MDX support; `.md` and `.mdx` files coexist in all content collections
 - **Tailwind CSS v4** — via `@tailwindcss/vite` plugin, `@tailwindcss/typography` for prose
 - **`@astrojs/rss`** — RSS feed generation
 - No SSR adapter; pure static build
@@ -13,13 +14,15 @@ Personal website for Barry Frost — statically generated, IndieWeb-compliant, d
 
 Two sources are merged into a single unified feed at build time:
 
-### 1. Local Markdown (`src/content/`)
+### 1. Local Markdown/MDX (`src/content/`)
 | Collection | Path | Notes |
 |---|---|---|
-| `articles` | `src/content/articles/` | Long-form posts |
-| `weeknotes` | `src/content/weeknotes/` | Weekly notes, published Sundays |
-| `pages` | `src/content/pages/` | Slash pages (about, colophon, etc.) |
-| `travelblog` | `src/content/travelblog/` | Archived travel blog (2000–2001) |
+| `articles` | `src/content/articles/` | Long-form posts; `.md` or `.mdx` |
+| `weeknotes` | `src/content/weeknotes/` | Weekly notes, published Sundays; `.md` or `.mdx` |
+| `pages` | `src/content/pages/` | Slash pages (about, colophon, etc.); `.md` or `.mdx` |
+| `travelblog` | `src/content/travelblog/` | Archived travel blog (2000–2001); `.md` or `.mdx` |
+
+Content files are plain `.md` by default. Use `.mdx` when a file needs Astro components — e.g. `<Image />` from `astro:assets` for images that require Tailwind utility classes.
 
 ### 2. AT Protocol PDS Records
 Fetched at build time from `bsky.social` for DID `did:plc:j5ksi3y4tdtbp7vpsxsfyask` via custom Astro content loaders in `src/lib/loaders/`.
@@ -118,19 +121,18 @@ Type-specific feed pages (articles, photos, checkins, books, films) suppress the
 
 ## Styling
 
-Tailwind v4 with default palette. `src/styles/global.css` imports `@tailwindcss/typography` and sources `../content/**/*.md` so Tailwind scans Markdown for utility classes. Dark mode is CSS-only via `prefers-color-scheme` — no JS toggle. Custom colour theme and accent link styles have been removed pending a redesign.
+Tailwind v4 with default palette. `src/styles/global.css` imports `@tailwindcss/typography` and sources `../content/**/*.{md,mdx}` so Tailwind scans all content files for utility classes. Dark mode is CSS-only via `prefers-color-scheme` — no JS toggle. Custom colour theme and accent link styles have been removed pending a redesign.
 
-`src/styles/global.css` includes `@source '../content/**/*.md'` so Tailwind v4 scans Markdown content files for utility class names used via the image attribute syntax below.
+### Images in content
 
-### Markdown image classes
+Use `<Image />` from `astro:assets` in `.mdx` files to apply Tailwind classes to images — it auto-infers dimensions, converts to WebP, and adds `loading="lazy"` / `decoding="async"`:
 
-A custom `rehypeImageAttr` plugin in `astro.config.mjs` supports `{.class1 .class2}` attribute blocks immediately after image syntax in Markdown:
+```mdx
+import { Image } from 'astro:assets';
+import myPhoto from '../../assets/photo.jpg';
 
-```md
-![alt](path/to/image.jpg){.float-right .ml-8 .rounded}
+<Image src={myPhoto} alt="..." class="float-right ml-8 rounded" />
 ```
-
-The plugin strips the `{...}` text node and applies the dot-prefixed tokens as CSS classes on the `<img>` element.
 
 ## Search
 
