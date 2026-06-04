@@ -11,7 +11,7 @@ import { photosLoader } from './lib/loaders/photos';
 import { albumsLoader } from './lib/loaders/albums';
 
 const articles = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: 'src/content/articles' }),
+  loader: glob({ pattern: '**/*.{md,mdx}', base: 'src/content/articles' }),
   schema: z.object({
     title: z.string(),
     date: z.coerce.date(),
@@ -22,7 +22,7 @@ const articles = defineCollection({
 });
 
 const weeknotes = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: 'src/content/weeknotes' }),
+  loader: glob({ pattern: '**/*.{md,mdx}', base: 'src/content/weeknotes' }),
   schema: z.object({
     title: z.string(),
     date: z.coerce.date(),
@@ -35,7 +35,7 @@ const weeknotes = defineCollection({
 });
 
 const pages = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: 'src/content/pages' }),
+  loader: glob({ pattern: '**/*.{md,mdx}', base: 'src/content/pages' }),
   schema: z.object({
     title: z.string(),
     description: z.string().optional(),
@@ -43,7 +43,7 @@ const pages = defineCollection({
 });
 
 const travelblog = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: 'src/content/travelblog' }),
+  loader: glob({ pattern: '**/*.{md,mdx}', base: 'src/content/travelblog' }),
   schema: z.object({
     date: z.coerce.date(),
   }),
