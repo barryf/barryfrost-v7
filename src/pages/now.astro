@@ -104,7 +104,6 @@ const rockskySource: Source = { label: 'Rocksky', url: 'https://rocksky.app/prof
         <div class="divide-y divide-neutral-100 dark:divide-neutral-800">
           {currentlyReading.map(book => (
             <div class="py-3 flex items-start gap-3">
-              <TypeIcon type="book" class="size-5 shrink-0 mt-0.5 text-neutral-400 dark:text-neutral-500" />
               <div class="flex gap-3 flex-1 min-w-0">
                 {book.data.coverUrl && (
                   <img
