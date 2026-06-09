@@ -1,0 +1,13 @@
+---
+title: "Week 250 - Coffee"
+date: 2026-06-07T12:20:00Z
+week: 250
+emoji: "☕️"
+---
+
+- It's been a less hectic week after our Disneyland holiday. The boys had an [INSET day](https://en.wikipedia.org/wiki/Inset_day) on Friday, so L drove them to her parents' for the weekend, while I stayed behind to work (and enjoy the peace and quiet).
+- With some time to myself, I've been researching our big trip to Japan next year. Claude is helping, advising that we avoid Golden Week, and suggesting a tailored itinerary before it gets too warm or busy. Lots more work to do, but the planning has begun.
+- I streamed a couple of films while L's been away that she wouldn't have liked: [One Battle After Another](https://www.themoviedb.org/movie/1054867-one-battle-after-another) - Sean Penn is superb - and [Send Help](https://www.themoviedb.org/movie/1198994-send-help) - ditto Rachel McAdams. We're also watching plenty of TV series, all of which release their new episodes each week. At least with linear TV you knew when to watch; with streaming, release patterns are frustratingly unclear.
+- I tried the [new coffee shop](https://www.instagram.com/theredhouse_coffee) in the village for the first time. A local family bought what was an old sweet shop and have brought it back to life. Decent flat white, decent pain aux raisins. Even though I have my own nice coffee at home, I now have a good option when on the way back from a lunchtime walk.
+- As is traditional, the boys organised a family sweepstake for the upcoming World Cup. I was stitched up. They drew eight countries for me, of which no-hopers, the US, was my highest ranked team.
+- I'm getting closer to launching my new personal website. I'm 90% done, but I'm stuck on the design. While I've successfully used Claude with the back-end, I've not liked its front-end designs. I suppose that's fine: a personal website should be personal after all.
