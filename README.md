@@ -88,3 +88,7 @@ public/
   images/           # cached PDS image blobs (gitignored, populated at build)
 scripts/            # scaffolding & one-off import scripts
 ```
+
+## Licence
+
+Code is licensed under [MIT](./LICENSE). My words and original images are licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
