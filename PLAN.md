@@ -4,7 +4,7 @@ Personal website for Barry Frost — statically generated, IndieWeb-compliant, d
 
 ## Stack
 
-- **Astro 6** — static output (`output: 'static'`), `build.format: 'file'`
+- **Astro 7** — static output (`output: 'static'`), `build.format: 'file'`; Rust-based compiler (`@astrojs/compiler-rs`), Vite 8 bundler, `@astrojs/markdown-satteri` as default `.md` processor
 - **`@astrojs/mdx`** — MDX support; `.md` and `.mdx` files coexist in all content collections
 - **Tailwind CSS v4** — via `@tailwindcss/vite` plugin, `@tailwindcss/typography` for prose
 - **`@astrojs/rss`** — RSS feed generation
