@@ -1,0 +1,13 @@
+---
+title: "Week 252 - Pigeon"
+date: 2026-06-22T11:16:00Z
+week: 252
+emoji: "🐦"
+---
+
+- We paid for our very overgrown hedges to be cut back and shaped. It's not cheap, but the garden instantly looks smarter. It also means I can drive onto the street without risking scratches from bush talons.
+- I then found a pigeon chick in the back garden, just out of reach of next door's little dogs that were barking and scrambling furiously through the chain-link fence. I moved it to safety on the other side of the garden. A nest must have been disturbed by the trimming and the chick fell out. It's gone now, hopefully back to its mother, or more realistically, has met a grizzly end 😬
+- Our blocked guttering was cleared by a man with a long vacuum pole. We should now be able to avoid rain waterfalls soaking the brick wall on one side when the weather turns wet again.
+- I spent Thursday at the Oval with Andy for the second day of [England's second test against New Zealand](https://www.bbc.co.uk/sport/cricket/scorecard/e-229342). NZ were the better team (and won on day four). Watching cricket in the glorious sunshine is the best, although we were all sweaty messes by early afternoon. We stayed well-hydrated of course.
+- For Father's Day, I received a shirt, a book on Japan and some chocolate to enjoy. I took C to his cricket practice, L cooked us lunch, then we all went to a Quaker meeting house for C's piano recital with other junior musicians. He played The Bells beautifully.
+- It's getting hot.
