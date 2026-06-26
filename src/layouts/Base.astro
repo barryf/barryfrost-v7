@@ -17,7 +17,7 @@ const { title, description, showHomeNav = true } = Astro.props;
     <BaseHead title={title} description={description} />
   </head>
   <body class="mx-6 bg-white dark:bg-black text-gray-800 dark:text-gray-200 font-sans antialiased">
-    <div class="mt-4 mb-20 max-w-xl mx-auto">
+    <div class={`${showHomeNav ? 'mt-4 mb-20' : 'my-20'} mb-20 max-w-xl mx-auto`}>
       {showHomeNav && (
         <nav class="mb-12 h-4 text-center">
           <a href="/" class="underline" title="Home">&uarr;</a>

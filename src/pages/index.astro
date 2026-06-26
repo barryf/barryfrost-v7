@@ -117,7 +117,7 @@ const latestPostUrl = latestPost ? `https://bsky.app/profile/${HANDLE}/post/${la
         <a href="/posts" class="pl-2 text-xs underline">All Posts</a>
       </div>
       <div class="text-sm leading-relaxed p-3 rounded-xl border bg-gray-50 dark:bg-gray-900 border-gray-300 dark:border-gray-700">
-        <div class="e-content break-words mb-1" set:html={latestPostHtml} />
+        <div class="e-content wrap-break-word mb-1" set:html={latestPostHtml} />
         {latestPost.data.quotedPost && <BlueskyQuote quotedPost={latestPost.data.quotedPost as any} />}
         <time class="dt-published text-xs text-gray-500 dark:text-gray-500" datetime={toISODate(new Date(latestPost.data.createdAt))}>
           {formatDateShort(new Date(latestPost.data.createdAt))}
@@ -133,7 +133,7 @@ const latestPostUrl = latestPost ? `https://bsky.app/profile/${HANDLE}/post/${la
         <h2 class="inline text-lg">Featured Articles</h2>
         <a href="/articles" class="pl-2 text-xs underline">All Articles</a>
       </div>
-      <ul class="text-sm text-gray-700 dark:text-gray-300 list-disc list-outside ml-4 marker:text-gray-300 dark:marker:text-gray-600">
+      <ul class="text-sm text-gray-700 dark:text-gray-300">
         {featuredArticles.map(entry => (
           <li class="mb-4">
             <a href={`/articles/${entry.id}`} class="underline">{entry.data.title}</a>
