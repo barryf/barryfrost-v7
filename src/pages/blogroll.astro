@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Base from '@/layouts/Base.astro';
 import FollowCard from '@/components/FollowCard.astro';
+import Divider from '@/components/Divider.astro';
 
 const [blogsRaw, publications] = await Promise.all([
   getCollection('blogroll'),
@@ -12,13 +13,14 @@ const blogs = blogsRaw.slice().sort((a, b) => a.data.name.localeCompare(b.data.n
 publications.sort((a, b) => a.data.name.localeCompare(b.data.name));
 ---
 <Base title="Blogroll" description="Blogs and publications I follow">
-  <h1 class="text-2xl font-bold mb-8">Blogroll</h1>
+  <h1 class="mb-4 font-semibold text-black dark:text-white">Blogroll</h1>
 
-  <section class="mb-12">
-    <h2 class="text-lg font-semibold mb-4 pb-2 border-b border-neutral-200 dark:border-neutral-700">Blogs</h2>
+  <Divider />
+  <section class="mb-4">
+    <h2 class="mb-4 font-semibold text-black dark:text-white">Blogs</h2>
     <ul class="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
       {blogs.map(blog => (
-        <li class="py-4">
+        <li class="py-2">
           <FollowCard
             name={blog.data.name}
             description={blog.data.hostname}
@@ -32,21 +34,24 @@ publications.sort((a, b) => a.data.name.localeCompare(b.data.name));
   </section>
 
   {publications.length > 0 && (
-    <section>
-      <h2 class="text-lg font-semibold mb-4 pb-2 border-b border-neutral-200 dark:border-neutral-700">Publications</h2>
-      <ul class="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
-        {publications.map(s => (
-          <li class="py-4">
-            <FollowCard
-              name={s.data.name}
-              handle={s.data.handle}
-              avatarUrl={s.data.iconUrl}
-              profileUrl={s.data.siteUrl}
-              rounded="md"
-            />
-          </li>
-        ))}
-      </ul>
-    </section>
+    <>
+      <Divider />
+      <section class="mb-4">
+        <h2 class="mb-4 font-semibold text-black dark:text-white">Publications</h2>
+        <ul class="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
+          {publications.map(s => (
+            <li class="py-2">
+              <FollowCard
+                name={s.data.name}
+                handle={s.data.handle}
+                avatarUrl={s.data.iconUrl}
+                profileUrl={s.data.siteUrl}
+                rounded="md"
+              />
+            </li>
+          ))}
+        </ul>
+      </section>
+    </>
   )}
 </Base>

@@ -33,26 +33,26 @@ function toStars(rating: number): string {
       <img
         src={data.posterUrl}
         alt={`Poster for ${data.title}`}
-        width="40"
-        height="60"
-        class="u-photo w-10 object-cover rounded"
+        width="56"
+        height="84"
+        class="u-photo w-14 object-cover rounded"
         loading="lazy"
         decoding="async"
       />
       <a class="p-name u-url hidden" href={filmUrl} rel="noopener noreferrer">{data.title}</a>
     </div>
   )}
-  <div class="text-sm">
+  <div>
     <h2 class="leading-tight mb-1">
       <a class="u-url underline" href={filmUrl} rel="noopener noreferrer">{data.title}</a>
     </h2>
     {data.rating !== undefined && (
-      <p class="mb-0 text-xs text-gray-500 dark:text-gray-500">
+      <p class="mb-0 text-sm text-gray-500 dark:text-gray-500">
         <data class="p-rating" value={data.rating} title={`${data.rating}/10`}>{toStars(data.rating)}</data>
       </p>
     )}
-    <div class="">
-      <time class="dt-published text-xs text-gray-500 dark:text-gray-500" datetime={toISODate(date)}>{formatDateShort(date)}</time>
+    <div>
+      <time class="dt-published text-sm text-gray-500 dark:text-gray-500" datetime={toISODate(date)}>{formatDateShort(date)}</time>
     </div>
   </div>
 </article>

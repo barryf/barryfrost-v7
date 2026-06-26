@@ -1,9 +1,9 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Post from '@/layouts/Post.astro';
-import Divider from '@/components/Divider.astro';
 import { plainExcerpt, weeknoteLabel } from '@/lib/weeknotes';
 import { formatDateShort, toISODate } from '@/lib/dates';
+import Divider from '@/components/Divider.astro';
 
 export async function getStaticPaths() {
   const weeknotes = await getCollection('weeknotes');
@@ -51,17 +51,18 @@ const { Content } = await render(entry);
   <Content />
   <Fragment slot="nav">
     {prev && (
-      <div class="mb-16 text-sm text-gray-600 dark:text-gray-400" data-pagefind-ignore>
+      <div class="mb-4 text-sm text-gray-600 dark:text-gray-400" data-pagefind-ignore>
         <span class="mr-1">&larr;</span>
         <a href={`/weeknotes/${prev.id}`} class="underline">{weeknoteLabel(prev)}</a>
       </div>
     )}
+    <Divider />
     {onThisDay.length > 0 && (
-      <aside class="mb-16 text-gray-600 dark:text-gray-400" data-pagefind-ignore>
-        <h2 class="mb-4 text-center text-sm">Previously this week</h2>
-        <ul class="space-y-4 text-sm">
+      <aside class="mb-4 text-gray-600 dark:text-gray-400" data-pagefind-ignore>
+        <h2 class="mb-1 font-semibold text-black dark:text-white">Previously this week</h2>
+        <ul class="space-y-2">
           {onThisDay.map(e => (
-            <li class="flex gap-x-2 justify-center">
+            <li class="flex gap-x-2">
               <span>{e.year}</span>
               {e.emoji && <span>{e.emoji}</span>}
               <a href={`/weeknotes/${e.id}`} class="underline">{e.title}</a>

@@ -1,35 +1,21 @@
 ---
-const navLinks = [
-  { href: '/articles', label: 'Articles' },
-  { href: '/weeknotes', label: 'Weeknotes' },
-  { href: '/posts', label: 'Posts' },
-  { href: '/checkins', label: 'Checkins' },
-  { href: '/films', label: 'Films' },
-  { href: '/photos', label: 'Photos' },
-  { href: '/books', label: 'Books' },
-  { href: '/blogroll', label: 'Blogroll' },
-  { href: '/work', label: 'Work' },
+import Divider from '@/components/Divider.astro';
+
+// Footer links for homepage only.
+// Note: /follow, /contact routes don't exist yet — flagged for Barry to create.
+// Colophon lives at /articles/colophon until a top-level route is created.
+const links = [
   { href: '/about', label: 'About' },
-  { href: '/now', label: 'Now' },
+  { href: '/articles/colophon', label: 'Colophon' },
+  { href: '/blogroll', label: 'Blogroll' },
+  { href: '/follow', label: 'Follow' },
+  { href: '/contact', label: 'Contact' },
+  { href: '/search', label: 'Search' },
 ];
 ---
-<footer class="text-xs">
-  <nav class="flex flex-wrap justify-center gap-4 mb-4">
-    {navLinks.map(link => (
-      <a href={link.href} class="underline">{link.label}</a>
-    ))}
-  </nav>
-  <form action="/search" method="get" class="mx-auto w-40 mb-4">
-    <input
-      type="search"
-      name="q"
-      placeholder="Search…"
-      autocomplete="off"
-      class="w-40 rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 px-2 py-0.5 focus:outline-none focus:ring-1 focus:ring-gray-400 dark:focus:ring-gray-600"
-    />
-  </form>
-  <p class="h-card text-center text-gray-600 dark:text-gray-400">
-    <a class="p-name u-url underline" href="https://barryfrost.com" rel="me">Barry Frost</a>
-    · <span class="p-locality">Hertfordshire</span>, <span class="p-country-name">UK</span>
-  </p>
-</footer>
+<Divider />
+<div class="mb-4 text-sm flex gap-4 flex-wrap">
+  {links.map(link => (
+    <a href={link.href} class="underline">{link.label}</a>
+  ))}
+</div>

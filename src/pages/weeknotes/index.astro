@@ -1,5 +1,6 @@
 ---
 import Base from '@/layouts/Base.astro';
+import Divider from '@/components/Divider.astro';
 import { getCollection } from 'astro:content';
 
 const allWeeknotes = await getCollection('weeknotes');
@@ -10,18 +11,18 @@ function titleWord(title: string): string {
 }
 ---
 <Base title="Weeknotes">
-  <h1 class="mb-4 text-3xl text-center font-semibold">Weeknotes</h1>
-  <h2 class="mb-16 text-sm  text-gray-600 dark:text-gray-400">
+  <h1 class="mb-4 font-semibold text-black dark:text-white">Weeknotes</h1>
+  <p class="mb-4 text-gray-600 dark:text-gray-400">
     Weekly notes about what I've been up to — work, home, sport, reading, watching, and life in general.
-  </h2>
-
-  <div class="mb-16">
+  </p>
+  <Divider />
+  <div class="mb-4">
     <div class="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-1">
       {allWeeknotes.map(entry => (
         <a href={`/weeknotes/${entry.id}`} class="flex items-center gap-1 py-1.5 rounded -mx-1.5 px-1.5 group">
-          <span class="font-mono text-gray-400 dark:text-gray-600 text-xs tabular-nums w-6 text-right shrink-0">{entry.data.week}</span>
+          <span class="font-mono text-gray-500 dark:text-gray-500 text-xs tabular-nums w-6 text-right shrink-0">{entry.data.week}</span>
           <span class="text-base w-6 text-center shrink-0 leading-none">{entry.data.emoji}</span>
-          <span class="text-sm group-hover:underline truncate">{titleWord(entry.data.title)}</span>
+          <span class="group-hover:underline truncate">{titleWord(entry.data.title)}</span>
         </a>
       ))}
     </div>

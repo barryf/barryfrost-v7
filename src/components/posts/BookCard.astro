@@ -33,9 +33,9 @@ const date = new Date(dateStr);
       <img
         src={data.coverUrl}
         alt={`Cover for ${data.title}`}
-        width="40"
-        height="60"
-        class="u-photo w-10 object-cover rounded"
+        width="60"
+        height="80"
+        class="u-photo w-15 object-cover rounded"
         loading="lazy"
         decoding="async"
       />
@@ -43,18 +43,17 @@ const date = new Date(dateStr);
     {bookhiveUrl && <a class="p-name u-url hidden" href={bookhiveUrl} rel="noopener noreferrer">{data.title}</a>}
     <span class="p-author hidden">{data.authors}</span>
   </div>
-  <div class="text-sm">
-    <h2 class="font-semibold leading-tight">
+  <div class="">
+    <h2 class="leading-tight mb-1">
       {bookhiveUrl ? (
         <a href={bookhiveUrl} class="underline" rel="noopener noreferrer">{data.title}</a>
       ) : (
         <span>{data.title}</span>
       )}
     </h2>
-    <p class="text-xs text-gray-600 dark:text-gray-400">by {data.authors}</p>
-    <div class="mt-1">
-      <time class="dt-published text-xs text-gray-500 dark:text-gray-500" datetime={toISODate(date)}>{dateLabel} {formatDateShort(date)}</time>
-      {bookhiveUrl && <a href={bookhiveUrl} class="text-xs ml-2 underline" rel="noopener noreferrer">Bookhive</a>}
+    <p class="text-sm text-gray-600 dark:text-gray-400">by {data.authors}</p>
+    <div>
+      <time class="dt-published text-sm" datetime={toISODate(date)}>{dateLabel} {formatDateShort(date)}</time>
     </div>
   </div>
 </article>

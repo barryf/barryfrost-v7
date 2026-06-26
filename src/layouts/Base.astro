@@ -1,31 +1,25 @@
 ---
 import BaseHead from '@/components/BaseHead.astro';
-import Divider from '@/components/Divider.astro';
 import SiteFooter from '@/components/SiteFooter.astro';
 import '../styles/global.css';
 
 interface Props {
   title: string;
   description?: string;
-  showHomeNav?: boolean;
+  home?: boolean;
 }
 
-const { title, description, showHomeNav = true } = Astro.props;
+const { title, description, home = false } = Astro.props;
 ---
 <html lang="en-GB">
   <head>
     <BaseHead title={title} description={description} />
   </head>
-  <body class="mx-6 bg-white dark:bg-black text-gray-800 dark:text-gray-200 font-sans antialiased">
-    <div class={`${showHomeNav ? 'mt-4 mb-20' : 'my-20'} mb-20 max-w-xl mx-auto`}>
-      {showHomeNav && (
-        <nav class="mb-12 h-4 text-center">
-          <a href="/" class="underline" title="Home">&uarr;</a>
-        </nav>
-      )}
-      <slot />
-      <Divider />
-      <SiteFooter />
-    </div>
+  <body class="m-4 sm:m-8 bg-white dark:bg-black text-gray-600 dark:text-gray-400 font-sans antialiased">
+    {!home && (
+      <div class="mb-4"><a href="/" class="underline">Barry Frost</a></div>
+    )}
+    <slot />
+    {home && <SiteFooter />}
   </body>
 </html>

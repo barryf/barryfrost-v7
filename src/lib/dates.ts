@@ -31,3 +31,12 @@ export function yearMonth(date: Date): { year: string; month: string } {
     month: String(date.getMonth() + 1).padStart(2, '0'),
   };
 }
+
+export function formatRelativeDate(date: Date, now: Date = new Date()): string {
+  const diffMs = now.getTime() - date.getTime();
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  if (diffDays === 0) return 'Today';
+  if (diffDays === 1) return 'Yesterday';
+  if (diffDays < 14) return `${diffDays} days ago`;
+  return formatDateShort(date);
+}

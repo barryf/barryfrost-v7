@@ -29,7 +29,7 @@ const mapUrl = data.latitude && data.longitude
   : '';
 const date = new Date(data.createdAt);
 ---
-<article class="h-entry text-sm leading-relaxed p-3 rounded-xl border bg-gray-50 dark:bg-gray-900 border-gray-300 dark:border-gray-700">
+<article class="h-entry">
   {photos.length > 1 && (
     <div class="grid grid-cols-2 gap-1 mb-2">
       {photos.map((url, i) => (
@@ -51,14 +51,14 @@ const date = new Date(data.createdAt);
       ) : (
         <span class="p-name">{data.venueName}</span>
       )}
-      {data.venueCategory && <span class="text-xs text-gray-500 dark:text-gray-500"> · {data.venueCategory}</span>}
-      {data.venueAddress && <p class="p-street-address text-xs text-gray-600 dark:text-gray-400">{data.venueAddress}</p>}
+      {data.venueCategory && <span class="text-sm text-gray-500 dark:text-gray-500"> · {data.venueCategory}</span>}
+      {data.venueAddress && <p class="p-street-address text-sm text-gray-600 dark:text-gray-400">{data.venueAddress}</p>}
       {data.latitude && <data class="p-latitude" value={data.latitude} />}
       {data.longitude && <data class="p-longitude" value={data.longitude} />}
       {data.rating !== undefined && <data class="p-rating hidden" value={data.rating} />}
       <div class="mt-1">
-        <time class="dt-published text-xs text-gray-500 dark:text-gray-500" datetime={toISODate(date)}>{formatDateShort(date)}</time>
-        {data.sourceUrl && <a href={data.sourceUrl} class="text-xs ml-2 underline" rel="noopener noreferrer">Beaconbits</a>}
+        <time class="dt-published text-sm text-gray-500 dark:text-gray-500" datetime={toISODate(date)}>{formatDateShort(date)}</time>
+        {data.sourceUrl && <a href={data.sourceUrl} class="text-sm ml-2 underline" rel="noopener noreferrer">Beaconbits</a>}
       </div>
     </div>
   </div>

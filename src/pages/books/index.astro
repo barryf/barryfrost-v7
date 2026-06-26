@@ -2,6 +2,7 @@
 import Base from '@/layouts/Base.astro';
 import BookCard from '@/components/posts/BookCard.astro';
 import Pagination from '@/components/Pagination.astro';
+import Divider from '@/components/Divider.astro';
 import { getCollection } from 'astro:content';
 import { paginateItems } from '@/lib/feed';
 
@@ -24,20 +25,22 @@ const { items, totalPages } = pages[0] ?? { items: [], totalPages: 1 };
       <img class="u-photo" src={new URL('/barryfrost.jpg', Astro.url).href} alt="Barry Frost" width="192" height="192" />
       <a class="p-name u-url" href={Astro.site?.href}>Barry Frost</a>
     </div>
-    <h1 class="mb-4 text-3xl text-center font-semibold">Books</h1>
-    <h2 class="mb-16 text-sm text-center text-gray-600 dark:text-gray-400">
-      Books I'm currently reading and books I've finished, tracked on my <a href="https://bookhive.buzz/profile/barryfrost.com" class="underline">Bookhive profile</a>.
-    </h2>
+    <h1 class="mb-4 font-semibold text-black dark:text-white">Books</h1>
+    <p class="mb-4 text-gray-600 dark:text-gray-400">
+      What I'm currently reading and what I've finished, tracked on my <a href="https://bookhive.buzz/profile/barryfrost.com" class="underline">Bookhive profile</a>.
+    </p>
+    <Divider />
     {readingBooks.length > 0 && (
-      <div class="mb-16">
-        <h2 class="mb-4 text-lg font-semibold">Currently Reading</h2>
+      <div class="mb-4">
+        <h2 class="mb-4 font-semibold text-black dark:text-white">Reading</h2>
         <div class="flex flex-col gap-y-4">
           {readingBooks.map(entry => <BookCard entry={entry} />)}
         </div>
       </div>
     )}
-    <div class="mb-16">
-      <h2 class="mb-4 text-lg font-semibold">Read</h2>
+    <Divider />
+    <div class="mb-4">
+      <h2 class="mb-4 font-semibold text-black dark:text-white">Read</h2>
       <div class="flex flex-col gap-y-4">
         {items.map(entry => <BookCard entry={entry} />)}
       </div>
