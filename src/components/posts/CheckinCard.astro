@@ -47,9 +47,9 @@ const date = new Date(data.createdAt);
     )}
     <div>
       {mapUrl ? (
-        <a href={mapUrl} class="p-name font-semibold underline" rel="noopener noreferrer">{data.venueName}</a>
+        <a href={mapUrl} class="p-name underline" rel="noopener noreferrer">{data.venueName}</a>
       ) : (
-        <span class="p-name font-semibold">{data.venueName}</span>
+        <span class="p-name">{data.venueName}</span>
       )}
       {data.venueCategory && <span class="text-xs text-gray-500 dark:text-gray-500"> · {data.venueCategory}</span>}
       {data.venueAddress && <p class="p-street-address text-xs text-gray-600 dark:text-gray-400">{data.venueAddress}</p>}
