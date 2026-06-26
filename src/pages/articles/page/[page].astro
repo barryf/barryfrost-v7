@@ -1,10 +1,15 @@
 ---
-import Feed from '@/layouts/Feed.astro';
-import { getUnifiedFeed, paginateItems } from '@/lib/feed';
+import Base from '@/layouts/Base.astro';
+import ArticleCard from '@/components/posts/ArticleCard.astro';
+import Pagination from '@/components/Pagination.astro';
+import { getCollection } from 'astro:content';
+import { paginateItems } from '@/lib/feed';
 
 export async function getStaticPaths() {
-  const allItems = (await getUnifiedFeed()).filter(i => i.type === 'article');
-  const pages = paginateItems(allItems);
+  const allArticles = (await getCollection('articles'))
+    .filter(e => e.data.visibility !== 'unlisted')
+    .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+  const pages = paginateItems(allArticles);
   return pages.slice(1).map(({ page, items, totalPages }) => ({
     params: { page: String(page) },
     props: { items, currentPage: page, totalPages },
@@ -13,4 +18,11 @@ export async function getStaticPaths() {
 
 const { items, currentPage, totalPages } = Astro.props;
 ---
-<Feed title={`Articles — Page ${currentPage}`} items={items} currentPage={currentPage} totalPages={totalPages} basePath="/articles" showIcon={false} />
+<Base title={`Articles — Page ${currentPage}`}>
+  <h1 class="mb-4 text-3xl text-center font-semibold">Articles</h1>
+  <h2 class="mb-16 text-sm text-center text-gray-600 dark:text-gray-400">Page {currentPage}</h2>
+  <ul class="mb-16 text-sm text-gray-700 dark:text-gray-300 list-disc list-outside ml-4 marker:text-gray-300 dark:marker:text-gray-600">
+    {items.map((entry: any) => <ArticleCard entry={entry} />)}
+  </ul>
+  <Pagination currentPage={currentPage} totalPages={totalPages} basePath="/articles" />
+</Base>

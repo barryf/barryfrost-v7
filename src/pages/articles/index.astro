@@ -1,9 +1,30 @@
 ---
-import Feed from '@/layouts/Feed.astro';
-import { getUnifiedFeed, paginateItems } from '@/lib/feed';
+import Base from '@/layouts/Base.astro';
+import ArticleCard from '@/components/posts/ArticleCard.astro';
+import Pagination from '@/components/Pagination.astro';
+import { getCollection } from 'astro:content';
+import { paginateItems } from '@/lib/feed';
 
-const allItems = (await getUnifiedFeed()).filter(i => i.type === 'article');
-const pages = paginateItems(allItems);
+const allArticles = (await getCollection('articles'))
+  .filter(e => e.data.visibility !== 'unlisted')
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const pages = paginateItems(allArticles);
 const { items, totalPages } = pages[0] ?? { items: [], totalPages: 1 };
 ---
-<Feed title="Articles" items={items} currentPage={1} totalPages={totalPages} basePath="/articles" showIcon={false} />
+<Base title="Articles">
+  <div class="h-feed">
+    <div class="h-card p-author hidden">
+      <img class="u-photo" src={new URL('/barryfrost.jpg', Astro.url).href} alt="Barry Frost" width="192" height="192" />
+      <a class="p-name u-url" href={Astro.site?.href}>Barry Frost</a>
+    </div>
+    <h1 class="mb-4 text-3xl text-center font-semibold">Articles</h1>
+    <h2 class="mb-16 text-sm text-center text-gray-600 dark:text-gray-400">
+      Long-form writing on technology, leadership, and making things.
+    </h2>
+    <ul class="mb-16 text-sm text-gray-700 dark:text-gray-300 list-disc list-outside ml-4 marker:text-gray-300 dark:marker:text-gray-600">
+      {items.map(entry => <ArticleCard entry={entry} />)}
+    </ul>
+  </div>
+  <Pagination currentPage={1} totalPages={totalPages} basePath="/articles" />
+</Base>

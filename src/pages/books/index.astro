@@ -1,40 +1,47 @@
 ---
+import Base from '@/layouts/Base.astro';
+import BookCard from '@/components/posts/BookCard.astro';
+import Pagination from '@/components/Pagination.astro';
 import { getCollection } from 'astro:content';
-import Feed from '@/layouts/Feed.astro';
-import FeedEntry from '@/components/FeedEntry.astro';
-import { getUnifiedFeed, paginateItems, type FeedItem } from '@/lib/feed';
+import { paginateItems } from '@/lib/feed';
 
-const [bookEntries, feed] = await Promise.all([
-  getCollection('books'),
-  getUnifiedFeed(),
-]);
+const allBooks = await getCollection('books');
 
-const readingItems: FeedItem[] = bookEntries
+const readingBooks = allBooks
   .filter(b => b.data.status === 'buzz.bookhive.defs#reading')
-  .sort((a, b) => new Date(b.data.startedAt ?? b.data.createdAt).getTime() - new Date(a.data.startedAt ?? a.data.createdAt).getTime())
-  .map(entry => ({
-    type: 'book',
-    date: new Date(entry.data.startedAt ?? entry.data.createdAt),
-    url: `https://bookhive.buzz/books/${entry.data.hiveId}`,
-    title: entry.data.title,
-    summary: entry.data.authors,
-    id: `book:${entry.id}`,
-    data: entry.data as unknown as Record<string, unknown>,
-  }));
+  .sort((a, b) => new Date(b.data.startedAt ?? b.data.createdAt).getTime() - new Date(a.data.startedAt ?? a.data.createdAt).getTime());
 
-const allItems = feed.filter(i => i.type === 'book');
-const pages = paginateItems(allItems);
+const finishedBooks = allBooks
+  .filter(b => b.data.status === 'buzz.bookhive.defs#finished')
+  .sort((a, b) => new Date(b.data.finishedAt ?? b.data.createdAt).getTime() - new Date(a.data.finishedAt ?? a.data.createdAt).getTime());
+
+const pages = paginateItems(finishedBooks);
 const { items, totalPages } = pages[0] ?? { items: [], totalPages: 1 };
 ---
-<Feed title="Books" items={items} currentPage={1} totalPages={totalPages} basePath="/books" showIcon={false}>
-  <p slot="header" class="text-neutral-600 dark:text-neutral-400 mb-6">
-    Books I'm currently reading and books I've finished, tracked on my <a href="https://bookhive.buzz/profile/barryfrost.com">Bookhive profile</a>.
-  </p>
-  {readingItems.length > 0 && (
-    <section slot="header" class="mb-6">
-      <h2 class="text-lg font-semibold mb-2 pb-2 border-b border-neutral-200 dark:border-neutral-700">Reading</h2>
-      {readingItems.map(item => <FeedEntry item={item} showIcon={false} />)}
-    </section>
-  )}
-  <h2 slot="header" class="text-lg font-semibold mb-2 pb-2 border-b border-neutral-200 dark:border-neutral-700">Read</h2>
-</Feed>
+<Base title="Books">
+  <div class="h-feed">
+    <div class="h-card p-author hidden">
+      <img class="u-photo" src={new URL('/barryfrost.jpg', Astro.url).href} alt="Barry Frost" width="192" height="192" />
+      <a class="p-name u-url" href={Astro.site?.href}>Barry Frost</a>
+    </div>
+    <h1 class="mb-4 text-3xl text-center font-semibold">Books</h1>
+    <h2 class="mb-16 text-sm text-center text-gray-600 dark:text-gray-400">
+      Books I'm currently reading and books I've finished, tracked on my <a href="https://bookhive.buzz/profile/barryfrost.com" class="underline">Bookhive profile</a>.
+    </h2>
+    {readingBooks.length > 0 && (
+      <div class="mb-16">
+        <h2 class="mb-4 text-lg font-semibold">Currently Reading</h2>
+        <div class="flex flex-col gap-y-4">
+          {readingBooks.map(entry => <BookCard entry={entry} />)}
+        </div>
+      </div>
+    )}
+    <div class="mb-16">
+      <h2 class="mb-4 text-lg font-semibold">Read</h2>
+      <div class="flex flex-col gap-y-4">
+        {items.map(entry => <BookCard entry={entry} />)}
+      </div>
+    </div>
+  </div>
+  <Pagination currentPage={1} totalPages={totalPages} basePath="/books" />
+</Base>

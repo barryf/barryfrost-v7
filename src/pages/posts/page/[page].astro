@@ -1,10 +1,14 @@
 ---
-import Feed from '@/layouts/Feed.astro';
-import { getUnifiedFeed, paginateItems } from '@/lib/feed';
+import Base from '@/layouts/Base.astro';
+import BlueskyCard from '@/components/posts/BlueskyCard.astro';
+import Pagination from '@/components/Pagination.astro';
+import { getCollection } from 'astro:content';
+import { paginateItems } from '@/lib/feed';
 
 export async function getStaticPaths() {
-  const allItems = (await getUnifiedFeed()).filter(i => i.type === 'bluesky');
-  const pages = paginateItems(allItems);
+  const allPosts = (await getCollection('blueskyPosts'))
+    .sort((a, b) => new Date(b.data.createdAt).getTime() - new Date(a.data.createdAt).getTime());
+  const pages = paginateItems(allPosts);
   return pages.slice(1).map(({ page, items, totalPages }) => ({
     params: { page: String(page) },
     props: { items, currentPage: page, totalPages },
@@ -13,4 +17,11 @@ export async function getStaticPaths() {
 
 const { items, currentPage, totalPages } = Astro.props;
 ---
-<Feed title={`Posts — Page ${currentPage}`} items={items} currentPage={currentPage} totalPages={totalPages} basePath="/posts" />
+<Base title={`Posts — Page ${currentPage}`}>
+  <h1 class="mb-4 text-3xl text-center font-semibold">Posts</h1>
+  <h2 class="mb-16 text-sm text-center text-gray-600 dark:text-gray-400">Page {currentPage}</h2>
+  <div class="mb-16 flex flex-col gap-y-4">
+    {items.map((entry: any) => <BlueskyCard entry={entry} />)}
+  </div>
+  <Pagination currentPage={currentPage} totalPages={totalPages} basePath="/posts" />
+</Base>

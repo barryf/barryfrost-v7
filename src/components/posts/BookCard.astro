@@ -1,39 +1,60 @@
 ---
 import { formatDateShort, toISODate } from '@/lib/dates';
-import type { FeedItem } from '@/lib/feed';
 
 interface Props {
-  item: FeedItem;
+  entry: {
+    id: string;
+    data: {
+      title: string;
+      authors: string;
+      coverUrl?: string;
+      status: string;
+      hiveId?: string;
+      startedAt?: string;
+      finishedAt?: string;
+      createdAt: string;
+    }
+  }
 }
 
-const { item } = Astro.props;
-const data = item.data as { title: string; authors: string; coverUrl?: string; status?: string };
-const dateLabel = data.status === 'buzz.bookhive.defs#reading' ? 'Started' : 'Finished';
+const { entry } = Astro.props;
+const { data } = entry;
+const bookhiveUrl = data.hiveId ? `https://bookhive.buzz/books/${data.hiveId}` : '';
+const isReading = data.status === 'buzz.bookhive.defs#reading';
+const dateLabel = isReading ? 'Started' : 'Finished';
+const dateStr = isReading
+  ? (data.startedAt ?? data.createdAt)
+  : (data.finishedAt ?? data.createdAt);
+const date = new Date(dateStr);
 ---
-<article class="h-entry flex gap-4">
+<article class="h-entry flex gap-3">
   <div class="p-read-of h-cite shrink-0">
     {data.coverUrl && (
       <img
-        src={new URL(data.coverUrl, Astro.url).href}
+        src={data.coverUrl}
         alt={`Cover for ${data.title}`}
-        width="48"
-        height="72"
-        class="u-photo w-12 object-cover rounded"
+        width="40"
+        height="60"
+        class="u-photo w-10 object-cover rounded"
         loading="lazy"
         decoding="async"
       />
     )}
-    <a class="p-name u-url hidden" href={item.url} rel="noopener noreferrer">{data.title}</a>
+    {bookhiveUrl && <a class="p-name u-url hidden" href={bookhiveUrl} rel="noopener noreferrer">{data.title}</a>}
     <span class="p-author hidden">{data.authors}</span>
   </div>
-  <div>
-    <h2 class="font-semibold">
-      <a href={item.url} rel="noopener noreferrer">{data.title}<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="inline size-3.5 ml-1 align-middle" aria-hidden="true"><path d="M6.22 8.72a.75.75 0 0 0 1.06 1.06l5.22-5.22v1.69a.75.75 0 0 0 1.5 0v-3.5a.75.75 0 0 0-.75-.75h-3.5a.75.75 0 0 0 0 1.5h1.69L6.22 8.72Z" /><path d="M3.5 6.75c0-.69.56-1.25 1.25-1.25H7A.75.75 0 0 0 7 4H4.75A2.75 2.75 0 0 0 2 6.75v4.5A2.75 2.75 0 0 0 4.75 14h4.5A2.75 2.75 0 0 0 12 11.25V9a.75.75 0 0 0-1.5 0v2.25c0 .69-.56 1.25-1.25 1.25h-4.5c-.69 0-1.25-.56-1.25-1.25v-4.5Z" /></svg></a>
+  <div class="text-sm">
+    <h2 class="font-semibold leading-tight">
+      {bookhiveUrl ? (
+        <a href={bookhiveUrl} class="underline" rel="noopener noreferrer">{data.title}</a>
+      ) : (
+        <span>{data.title}</span>
+      )}
     </h2>
-    <p class="text-sm text-neutral-600 dark:text-neutral-400">by {data.authors}</p>
-    <div class="mt-1 flex items-center gap-3 text-xs text-neutral-500 dark:text-neutral-400">
-      <time class="dt-published" datetime={toISODate(item.date)}>{dateLabel} {formatDateShort(item.date)}</time>
-      <a href={item.url} class="px-2 py-0.5 bg-neutral-100 dark:bg-neutral-800 rounded hover:text-neutral-700 dark:hover:text-neutral-300" rel="noopener noreferrer">Bookhive</a>
+    <p class="text-xs text-gray-600 dark:text-gray-400">by {data.authors}</p>
+    <div class="mt-1">
+      <time class="dt-published text-xs text-gray-500 dark:text-gray-500" datetime={toISODate(date)}>{dateLabel} {formatDateShort(date)}</time>
+      {bookhiveUrl && <a href={bookhiveUrl} class="text-xs ml-2 underline" rel="noopener noreferrer">Bookhive</a>}
     </div>
   </div>
 </article>

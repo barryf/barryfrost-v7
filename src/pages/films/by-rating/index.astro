@@ -1,14 +1,12 @@
 ---
 import FilmFeed from '@/layouts/FilmFeed.astro';
-import { getUnifiedFeed, paginateItems } from '@/lib/feed';
+import { getCollection } from 'astro:content';
+import { paginateItems } from '@/lib/feed';
 
-const allItems = (await getUnifiedFeed()).filter(i => i.type === 'film');
-const sorted = [...allItems].sort((a, b) => {
-  const rA = (a.data as { rating?: number }).rating ?? -1;
-  const rB = (b.data as { rating?: number }).rating ?? -1;
-  return rB - rA;
-});
-const pages = paginateItems(sorted, 40);
+const allFilms = (await getCollection('films'))
+  .sort((a, b) => (b.data.rating ?? -1) - (a.data.rating ?? -1));
+
+const pages = paginateItems(allFilms, 40);
 const { items, totalPages } = pages[0] ?? { items: [], totalPages: 1 };
 ---
-<FilmFeed title="Films" items={items} currentPage={1} totalPages={totalPages} basePath="/films/by-rating" sort="rating" />
+<FilmFeed title="Films by Rating" items={items} currentPage={1} totalPages={totalPages} basePath="/films/by-rating" sort="rating" />

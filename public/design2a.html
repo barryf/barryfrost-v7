@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design experiments 2 - article</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style type="text/tailwindcss">
+    @theme {
+      --font-sans: 'IBM Plex Sans', sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+    }
+    html {
+      font-size: 16px;
+      line-height: 27px;
+    }
+    @media (min-width: 640px) {
+      html {
+        font-size: 18px;
+        line-height: 30px;
+      }
+    }
+    .underline {
+      text-underline-offset: 15%;
+    }
+    .underline:hover {
+      @apply text-amber-500;
+    }
+  </style>
+</head>
+<body class="mx-6 bg-white dark:bg-black text-gray-800 dark:text-gray-200 font-sans antialiased">
+  <div class="mt-4 mb-20 max-w-xl mx-auto">
+
+    <nav class="mb-12 h-4 text-center">
+      <a href="#" class="underline" title="Home">&uarr;</a>
+    </nav>
+
+    <h1 class="mb-4 text-3xl text-center font-semibold">🐦 Week 252 - Pigeon</h1>
+
+    <h2 class="mb-16 text-sm text-center text-gray-600 dark:text-gray-400">
+      Posted by <a href="#" class="underline">Barry Frost</a>
+      in <a href="#" class="underline">Weeknotes</a>
+      on 21 June 2026
+    </h2>
+
+
+
+    <div class="mb-16">
+      <ul>
+        <li class="pb-4">We paid for our very overgrown hedges to be cut back and shaped. It’s not cheap, but the garden instantly looks smarter. It also means I can drive onto the street without risking scratches from bush talons.</li>
+        <li class="pb-4">I then found a pigeon chick in the back garden, just out of reach of next door’s little dogs that were barking and scrambling furiously through the chain-link fence. I moved it to safety on the other side of the garden. A nest must have been disturbed by the trimming and the chick fell out. It’s gone now, hopefully back to its mother, or more realistically, has met a grizzly end 😬</li>
+        <li class="pb-4">Our blocked guttering was cleared by a man with a long vacuum pole. We should now be able to avoid rain waterfalls soaking the brick wall on one side when the weather turns wet again.</li>
+        <li class="pb-4">I spent Thursday at the Oval with Andy for the second day of <a href="https://www.bbc.co.uk/sport/cricket/scorecard/e-229342" class="underline font-semibold">England’s second test against New Zealand</a>. NZ were the better team (and won on day four). Watching cricket in the glorious sunshine is the best, although we were all sweaty messes by early afternoon. We stayed well-hydrated of course.</li>
+        <li class="pb-4">For Father’s Day, I received a shirt, a book on Japan and some chocolate to enjoy. I took C to his cricket practice, L cooked us lunch, then we all went to a Quaker meeting house for C’s piano recital with other junior musicians. He played The Bells beautifully.</li>
+        <li class="pb-4">It’s getting hot.</li>
+      </ul>
+    </div>
+
+    <div class="mb-16 text-center text-lg tracking-widest">❉ ❉ ❉</div>
+
+    <div class="mb-16 text-sm text-gray-600 dark:text-gray-400">
+      <span class="mr-1">&larr;</span>
+      <span class="mr-1">🐦</span>
+      <a href="/weeknotes/251-ping-pong" class="underline">Week 251 - Ping-pong</a>
+    </div>
+
+    <aside class="mb-16 text-gray-600 dark:text-gray-400">
+      <h2 class="mb-4 text-center">Previously this week</h2>
+      <ul class="space-y-4 text-sm">
+        <li class="flex gap-x-2 justify-center">
+            <span>2025</span>
+            <span>🔫</span>
+            <a href="/weeknotes/200-super-soaker" class="underline">Week 200 - Super-soaker</a>
+        </li>
+        <li class="flex gap-x-2 justify-center">
+          <span>2024</span>
+          <span>💪</span>
+          <a href="/weeknotes/148-healthy" class="underline">Week 148 - Healthy</a>
+        </li>
+        <li class="flex gap-x-2 justify-center">
+          <span>2023</span>
+          <span>🎸</span>
+          <a href="/weeknotes/96-festival" class="underline">Week 96 - Festival</a>
+        </li>
+        <li class="flex gap-x-2 justify-center">
+          <span>2022</span>
+          <span>🇪🇸</span>
+          <a href="/weeknotes/44-spain" class="underline">Week 44: Spain</a>
+        </li>
+      </ul>
+    </aside>
+
+    <div class="mb-16 text-center text-lg tracking-widest">❉ ❉ ❉</div>
+
+    <div class="text-xs">
+      <nav class="flex flex-wrap justify-center gap-4 underline mb-4">
+        <a href="#">Articles</a>
+        <a href="#">Weeknotes</a>
+        <a href="#">Posts</a>
+        <a href="#">Checkins</a>
+        <a href="#">Films</a>
+        <a href="#">Photos</a>
+        <a href="#">Books</a>
+        <a href="#">Blogroll</a>
+        <a href="#">Work</a>
+        <a href="#">About</a>
+        <a href="#">Now</a>
+      </nav>
+      <form action="/search" method="get" class="mx-auto w-40 mb-4">
+        <input type="search" name="q" placeholder="Search…" autocomplete="off" class="w-40 rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 px-2 py-0.5 focus:outline-none focus:ring-1 focus:ring-gray-400 dark:focus:ring-gray-600">
+      </form>
+      <p class="text-center text-gray-600 dark:text-gray-400">
+        <a href="/" class="underline">Barry Frost</a>
+      </p>
+    </div>
+
+    <hr class="absolute left-0 right-0 h-px bg-gray-300 border-0 hidden">
+  </div>
+</body>
+</html>

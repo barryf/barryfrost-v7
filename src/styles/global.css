@@ -2,3 +2,28 @@
 @plugin '@tailwindcss/typography';
 
 @source '../content/**/*.{md,mdx}';
+
+@theme {
+  --font-sans: 'IBM Plex Sans', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+}
+
+html {
+  font-size: 16px;
+  line-height: 27px;
+}
+
+@media (min-width: 640px) {
+  html {
+    font-size: 18px;
+    line-height: 30px;
+  }
+}
+
+.underline {
+  text-underline-offset: 15%;
+}
+
+.underline:hover {
+  @apply text-amber-600;
+}

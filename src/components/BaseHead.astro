@@ -9,6 +9,9 @@ const cleanPath = Astro.url.pathname.replace(/\/index\.html$/, '/').replace(/\.h
 const canonicalURL = new URL(cleanPath, Astro.site);
 ---
 <meta charset="utf-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="canonical" href={canonicalURL} />
 <meta name="generator" content={Astro.generator} />
@@ -22,5 +25,7 @@ const canonicalURL = new URL(cleanPath, Astro.site);
 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <link rel="manifest" href="/site.webmanifest" />
-<link rel="alternate" type="application/rss+xml" title="Barry Frost (RSS)" href="/feed.xml" />
-<link rel="alternate" type="application/feed+json" title="Barry Frost (JSON Feed)" href="/feed.json" />
+<link rel="alternate" type="application/rss+xml" title="Barry Frost — Articles (RSS)" href="/articles/feed.xml" />
+<link rel="alternate" type="application/feed+json" title="Barry Frost — Articles (JSON Feed)" href="/articles/feed.json" />
+<link rel="alternate" type="application/rss+xml" title="Barry Frost — Weeknotes (RSS)" href="/weeknotes/feed.xml" />
+<link rel="alternate" type="application/feed+json" title="Barry Frost — Weeknotes (JSON Feed)" href="/weeknotes/feed.json" />

@@ -1,7 +1,9 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Post from '@/layouts/Post.astro';
+import Divider from '@/components/Divider.astro';
 import { plainExcerpt, weeknoteLabel } from '@/lib/weeknotes';
+import { formatDateShort, toISODate } from '@/lib/dates';
 
 export async function getStaticPaths() {
   const weeknotes = await getCollection('weeknotes');
@@ -38,26 +40,32 @@ export async function getStaticPaths() {
 const { entry, prev, next, onThisDay } = Astro.props;
 const { Content } = await render(entry);
 ---
-<Post title={entry.data.title} date={entry.data.date} description={entry.data.description} tags={entry.data.tags} emoji={entry.data.emoji}>
+<Post
+  title={entry.data.title}
+  date={entry.data.date}
+  description={entry.data.description}
+  emoji={entry.data.emoji}
+  section="Weeknotes"
+  sectionHref="/weeknotes"
+>
   <Content />
   <Fragment slot="nav">
-    <nav class="mt-8 pt-6 border-t border-neutral-100 dark:border-neutral-800 flex justify-between gap-4 text-sm" data-pagefind-ignore>
-      {prev ? (
-        <a href={`/weeknotes/${prev.id}`} class="hover:underline">← {weeknoteLabel(prev)}</a>
-      ) : <span />}
-      {next ? (
-        <a href={`/weeknotes/${next.id}`} class="hover:underline text-right">{weeknoteLabel(next)} →</a>
-      ) : <span />}
-    </nav>
+    {prev && (
+      <div class="mb-16 text-sm text-gray-600 dark:text-gray-400" data-pagefind-ignore>
+        <span class="mr-1">&larr;</span>
+        {prev.data.emoji && <span class="mr-1">{prev.data.emoji}</span>}
+        <a href={`/weeknotes/${prev.id}`} class="underline">{weeknoteLabel(prev)}</a>
+      </div>
+    )}
     {onThisDay.length > 0 && (
-      <aside class="mt-8 pt-8" data-pagefind-ignore>
-        <h2 class="text-sm font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-8">Previous years</h2>
-        <ul class="space-y-8">
+      <aside class="mb-16 text-gray-600 dark:text-gray-400" data-pagefind-ignore>
+        <h2 class="mb-4 text-center text-sm">Previously this week</h2>
+        <ul class="space-y-4 text-sm">
           {onThisDay.map(e => (
-            <li>
-              <span class="mr-1">{e.year}</span>
-              <a href={`/weeknotes/${e.id}`} class="font-semibold hover:underline">{e.emoji && `${e.emoji} `}{e.title}</a>
-              {e.excerpt && <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1">{e.excerpt}</p>}
+            <li class="flex gap-x-2 justify-center">
+              <span>{e.year}</span>
+              {e.emoji && <span>{e.emoji}</span>}
+              <a href={`/weeknotes/${e.id}`} class="underline">{e.title}</a>
             </li>
           ))}
         </ul>
