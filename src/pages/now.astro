@@ -5,8 +5,7 @@ import { getCollection, getEntry, render } from 'astro:content';
 import Base from '@/layouts/Base.astro';
 import { formatDateShort, toISODate } from '@/lib/dates';
 import { getCurrentPosition, getSelf, formatLocation } from '@/lib/sifa';
-import { getUnifiedFeed } from '@/lib/feed';
-import TypeIcon from '@/components/TypeIcon.astro';
+import { DID } from '@/lib/pds';
 
 const nowEntry = await getEntry('pages', 'now');
 if (!nowEntry) throw new Error('src/content/pages/now.md not found');
@@ -15,13 +14,13 @@ const { Content } = await render(nowEntry);
 const nowMdPath = resolve(process.cwd(), 'src/content/pages/now.md');
 const lastUpdated = statSync(nowMdPath).mtime;
 
-const [position, self, bookEntries, checkinEntries, weeknoteEntries, feed, albumEntries] = await Promise.all([
+const [position, self, bookEntries, checkinEntries, weeknoteEntries, filmEntries, albumEntries] = await Promise.all([
   getCurrentPosition(),
   getSelf(),
   getCollection('books'),
   getCollection('checkins'),
   getCollection('weeknotes'),
-  getUnifiedFeed(),
+  getCollection('films'),
   getCollection('albums'),
 ]);
 
@@ -43,7 +42,14 @@ const latestWeeknote = [...weeknoteEntries]
   .filter(e => e.data.visibility !== 'unlisted')
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())[0];
 
-const latestFilm = feed.find(i => i.type === 'film');
+const latestFilmEntry = filmEntries.sort(
+  (a, b) => new Date(b.data.createdAt).getTime() - new Date(a.data.createdAt).getTime()
+)[0];
+const latestFilm = latestFilmEntry ? {
+  url: `https://popfeed.social/review/at:/${DID}/social.popfeed.feed.review/${latestFilmEntry.id}`,
+  date: new Date(latestFilmEntry.data.createdAt),
+  data: latestFilmEntry.data,
+} : undefined;
 
 const recentAlbums = [...albumEntries]
   .sort((a, b) => new Date(b.data.createdAt).getTime() - new Date(a.data.createdAt).getTime())
@@ -180,7 +186,6 @@ const rockskySource: Source = { label: 'Rocksky', url: 'https://rocksky.app/prof
         <section class="mb-6">
           <h2 class="text-lg font-semibold mb-2 pb-2 border-b border-neutral-200 dark:border-neutral-700">Checked in today</h2>
           <div class="flex items-start gap-3">
-            <TypeIcon type="checkin" class="size-5 shrink-0 mt-0.5 text-neutral-400 dark:text-neutral-500" />
             <div>
               <p>
                 {checkinUrl ? (

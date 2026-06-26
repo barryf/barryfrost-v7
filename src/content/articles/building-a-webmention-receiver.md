@@ -1,4 +1,5 @@
 ---
+featured: true
 title: "Building a webmention receiver"
 date: 2021-05-15
 tags:

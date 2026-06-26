@@ -1,17 +1,19 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from './Base.astro';
+import Divider from '@/components/Divider.astro';
 import { formatDate, toISODate } from '@/lib/dates';
 
 interface Props {
   title: string;
   date: Date;
   description?: string;
-  tags?: string[];
   emoji?: string;
+  section?: string;
+  sectionHref?: string;
 }
 
-const { title, date, description, tags, emoji } = Astro.props;
+const { title, date, description, emoji, section, sectionHref } = Astro.props;
 
 // Find matching document in PDS for syndication link
 const currentPath = Astro.url.pathname.replace(/\/$/, '');
@@ -20,31 +22,26 @@ const matchingDoc = documents.find(doc => doc.data.path === currentPath);
 ---
 <Base title={title} description={description}>
   <article class="h-entry" data-pagefind-body>
-    <header class="mb-8">
-      <h1 class="p-name text-2xl leading-tight font-bold">{emoji && `${emoji} `}{title}</h1>
-      <time class="dt-published text-sm text-neutral-500 dark:text-neutral-400 mt-1" datetime={toISODate(date)}>
-        {formatDate(date)}
-      </time>
-      <a class="p-author h-card hidden" data-pagefind-ignore rel="author" href="https://barryfrost.com">
-        <img class="u-photo" src="https://barryfrost.com/barryfrost.jpg" alt="Barry Frost" />
-        <span class="p-name">Barry Frost</span>
-        <span class="u-url">https://barryfrost.com</span>
-      </a>
-      {tags && tags.length > 0 && (
-        <div class="mt-2 flex flex-wrap gap-2">
-          {tags.map(tag => (
-            <a href={`/tags/${tag}`} class="p-category text-xs px-2 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-700">{tag}</a>
-          ))}
-        </div>
+    <h1 class="p-name mb-4 text-3xl text-center font-semibold">{emoji && `${emoji} `}{title}</h1>
+    <h2 class="mb-16 text-sm text-center text-gray-600 dark:text-gray-400">
+      Posted by <a href="https://barryfrost.com" class="underline">Barry Frost</a>
+      {section && sectionHref && (
+        <Fragment> in <a href={sectionHref} class="underline">{section}</a></Fragment>
       )}
-    </header>
-    <div class="e-content prose dark:prose-invert max-w-none">
+      {' '}on <time class="dt-published" datetime={toISODate(date)}>{formatDate(date)}</time>
+    </h2>
+    <a class="p-author h-card hidden" data-pagefind-ignore rel="author" href="https://barryfrost.com">
+      <img class="u-photo" src="https://barryfrost.com/barryfrost.jpg" alt="Barry Frost" />
+      <span class="p-name">Barry Frost</span>
+      <span class="u-url">https://barryfrost.com</span>
+    </a>
+    <div class="e-content prose dark:prose-invert max-w-none mb-16">
       <slot />
     </div>
     {matchingDoc && (
-      <footer class="mt-8 text-sm text-neutral-500 dark:text-neutral-400" data-pagefind-ignore>
-        <a class="u-syndication" href={matchingDoc.data.uri} rel="syndication">View on AT Protocol</a>
-      </footer>
+      <div class="mb-16 text-sm text-gray-500 dark:text-gray-500" data-pagefind-ignore>
+        <a class="u-syndication underline" href={matchingDoc.data.uri} rel="syndication">View on AT Protocol</a>
+      </div>
     )}
     <slot name="nav" />
   </article>

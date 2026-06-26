@@ -1,13 +1,148 @@
 ---
-import Feed from '@/layouts/Feed.astro';
-import { getUnifiedFeed, paginateItems } from '@/lib/feed';
+import Base from '@/layouts/Base.astro';
+import Divider from '@/components/Divider.astro';
+import { getCollection } from 'astro:content';
+import { formatDateShort, toISODate } from '@/lib/dates';
+import { truncateBody } from '@/lib/weeknotes';
+import { renderRichText } from '@/lib/richtext';
+import { HANDLE } from '@/lib/pds';
+import BlueskyQuote from '@/components/posts/BlueskyQuote.astro';
 
-const allItems = await getUnifiedFeed();
-const pages = paginateItems(allItems);
-const { items, totalPages } = pages[0] ?? { items: [], totalPages: 1 };
+const [weeknotes, photos, blueskyPosts, articles] = await Promise.all([
+  getCollection('weeknotes'),
+  getCollection('photos'),
+  getCollection('blueskyPosts'),
+  getCollection('articles'),
+]);
+
+// Latest weeknote
+const latestWeeknote = weeknotes
+  .filter(e => e.data.visibility !== 'unlisted')
+  .sort((a, b) => b.data.week - a.data.week)[0];
+
+// Recent photos (6 most recent)
+const recentPhotos = photos
+  .sort((a, b) => new Date(b.data.createdAt).getTime() - new Date(a.data.createdAt).getTime())
+  .slice(0, 6);
+
+// Latest post (not a reply)
+const latestPost = blueskyPosts
+  .filter(p => !p.data.reply)
+  .sort((a, b) => new Date(b.data.createdAt).getTime() - new Date(a.data.createdAt).getTime())[0];
+
+// Featured articles
+const featuredArticles = articles
+  .filter(e => e.data.featured && e.data.visibility !== 'unlisted')
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const latestPostHtml = latestPost ? renderRichText(latestPost.data.text, latestPost.data.facets as any) : '';
+const latestPostUrl = latestPost ? `https://bsky.app/profile/${HANDLE}/post/${latestPost.id}` : '';
 ---
-<Feed title="Barry Frost" items={items} currentPage={1} totalPages={totalPages}>
-  <div slot="header" class="mb-8">
-    <p class="text-lg">Software engineer based in Hertfordshire, UK. Building web things.</p>
+<Base title="Barry Frost" showHomeNav={false}>
+  <h1 class="mb-16 text-3xl text-center font-semibold">Barry Frost</h1>
+
+  <div class="mb-16">
+    <p class="mb-4">
+      I'm a part-time software engineer and full-time technology leader with experience building teams, websites and apps.
+      I live in a village in Hertfordshire, UK, with my wife and two sons.
+    </p>
+    <p class="mb-4">
+      On this website, I track the <a href="/books" class="underline font-semibold">books</a> I'm reading,
+      the <a href="/films" class="underline font-semibold">films</a> I watch,
+      and the places I've <a href="/checkins" class="underline font-semibold">checked-in</a> at.
+      You can also see accounts I follow on my <a href="/blogroll" class="underline font-semibold">blogroll</a>.
+    </p>
+    {/* TODO: live status indicator, slash-page links (colophon, uses, defaults) */}
   </div>
-</Feed>
+
+  <Divider />
+
+  {latestWeeknote && (
+    <div class="mb-16">
+      <div class="mb-4">
+        <h2 class="inline text-lg">Latest Weeknote</h2>
+        <a href="/weeknotes" class="ml-2 text-xs underline">All Weeknotes</a>
+      </div>
+      <div class="text-sm leading-relaxed p-3 rounded-xl border bg-gray-50 dark:bg-gray-900 border-gray-300 dark:border-gray-700">
+        <a href={`/weeknotes/${latestWeeknote.id}`} class="underline mr-1">
+          {latestWeeknote.data.emoji && `${latestWeeknote.data.emoji} `}{latestWeeknote.data.title}
+        </a>
+        {latestWeeknote.body && (
+          <p class="text-gray-700 dark:text-gray-300 inline">
+            {truncateBody(latestWeeknote.body)}
+          </p>
+        )}
+      </div>
+    </div>
+  )}
+
+  {recentPhotos.length > 0 && (
+    <div class="mb-16">
+      <div class="mb-4">
+        <h2 class="inline text-lg">Recent Photos</h2>
+        <a href="/photos" class="pl-2 text-xs underline">All Photos</a>
+      </div>
+      <div class="overflow-x-auto">
+        <div class="flex gap-1">
+          {recentPhotos.map((entry, i) => {
+            const firstThumb = entry.data.thumbnailUrls[0];
+            if (!firstThumb) return null;
+            return (
+              <a href={`https://grain.social/profile/did:plc:j5ksi3y4tdtbp7vpsxsfyask/gallery/${entry.data.galleryRkey}`} rel="noopener noreferrer" class="flex-none">
+                <img
+                  src={firstThumb}
+                  alt={entry.data.title}
+                  width="120"
+                  height="120"
+                  class:list={[
+                    "u-photo w-30 h-30 aspect-square object-cover",
+                    i === 0 && "rounded-l-xl",
+                    i === recentPhotos.length - 1 && "rounded-r-xl"
+                  ]}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  )}
+
+  {latestPost && (
+    <div class="mb-16">
+      <div class="mb-4">
+        <h2 class="inline text-lg">Latest Post</h2>
+        <a href="/posts" class="pl-2 text-xs underline">All Posts</a>
+      </div>
+      <div class="text-sm leading-relaxed p-3 rounded-xl border bg-gray-50 dark:bg-gray-900 border-gray-300 dark:border-gray-700">
+        <div class="e-content break-words mb-1" set:html={latestPostHtml} />
+        {latestPost.data.quotedPost && <BlueskyQuote quotedPost={latestPost.data.quotedPost as any} />}
+        <time class="dt-published text-xs text-gray-500 dark:text-gray-500" datetime={toISODate(new Date(latestPost.data.createdAt))}>
+          {formatDateShort(new Date(latestPost.data.createdAt))}
+        </time>
+        <a href={latestPostUrl} class="text-xs ml-2 underline" rel="noopener noreferrer">View on Bluesky</a>
+      </div>
+    </div>
+  )}
+
+  {featuredArticles.length > 0 && (
+    <div class="mb-16">
+      <div class="mb-4">
+        <h2 class="inline text-lg">Featured Articles</h2>
+        <a href="/articles" class="pl-2 text-xs underline">All Articles</a>
+      </div>
+      <ul class="text-sm text-gray-700 dark:text-gray-300 list-disc list-outside ml-4 marker:text-gray-300 dark:marker:text-gray-600">
+        {featuredArticles.map(entry => (
+          <li class="mb-4">
+            <a href={`/articles/${entry.id}`} class="underline">{entry.data.title}</a>
+            <span class="text-xs text-gray-500 dark:text-gray-500 ml-2">
+              {formatDateShort(entry.data.date)}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
+</Base>

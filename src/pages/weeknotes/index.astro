@@ -2,6 +2,7 @@
 import Base from '@/layouts/Base.astro';
 import { getCollection } from 'astro:content';
 import { formatDateShort, toISODate } from '@/lib/dates';
+import { truncateBody } from '@/lib/weeknotes';
 
 const allWeeknotes = await getCollection('weeknotes');
 allWeeknotes.sort((a, b) => b.data.week - a.data.week);
@@ -10,60 +11,46 @@ const [latestWeeknote, ...restWeeknotes] = allWeeknotes;
 function titleWord(title: string): string {
   return title.replace(/^Week \d+\s*[-:]\s*/i, '');
 }
-
-function truncateBody(body: string, maxLen = 280): string {
-  const text = body
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-    .replace(/\*\*([^*]+)\*\*/g, '$1')
-    .replace(/^\s*[-*]\s+/gm, '')
-    .replace(/\n+/g, ' ')
-    .trim();
-  return text.length > maxLen ? text.slice(0, maxLen).trimEnd() + '…' : text;
-}
 ---
 <Base title="Weeknotes">
-  <h1 class="text-2xl font-bold mb-4">Weeknotes</h1>
-  <p class="text-neutral-600 dark:text-neutral-400 mb-8">
+  <h1 class="mb-4 text-3xl text-center font-semibold">Weeknotes</h1>
+  <h2 class="mb-16 text-sm text-center text-gray-600 dark:text-gray-400">
     Weekly notes about what I've been up to — work, home, sport, reading, watching, and life in general.
-  </p>
+  </h2>
 
   {latestWeeknote && (
-    <div class="mb-8">
-      <p class="text-xs font-semibold uppercase tracking-wide text-neutral-400 dark:text-neutral-500 mb-2">Latest</p>
-      <div class="flex items-center gap-2 mb-1">
-        {latestWeeknote.data.emoji && <span class="text-2xl leading-none">{latestWeeknote.data.emoji}</span>}
-        <h2 class="text-xl font-bold">
-          <a href={`/weeknotes/${latestWeeknote.id}`} class="hover:underline">{latestWeeknote.data.title}</a>
-        </h2>
+    <div class="mb-16">
+      <div class="mb-4">
+        <h2 class="inline text-lg">Latest</h2>
       </div>
-      <p class="text-sm text-neutral-500 dark:text-neutral-500 mb-2">
-        <time datetime={toISODate(latestWeeknote.data.date)}>{formatDateShort(latestWeeknote.data.date)}</time>
-      </p>
-      {latestWeeknote.body && (
-        <p class="text-sm text-neutral-700 dark:text-neutral-300 mb-2 leading-relaxed">
-          {truncateBody(latestWeeknote.body)}
-        </p>
-      )}
-      {latestWeeknote.data.tags && latestWeeknote.data.tags.length > 0 && (
-        <div class="flex flex-wrap gap-1">
-          {latestWeeknote.data.tags.map(tag => (
-            <a href={`/tags/${tag}`} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300">{tag}</a>
-          ))}
+      <div class="text-sm leading-relaxed p-3 rounded-xl border bg-gray-50 dark:bg-gray-900 border-gray-300 dark:border-gray-700">
+        <a href={`/weeknotes/${latestWeeknote.id}`} class="underline mr-1">
+          {latestWeeknote.data.emoji && `${latestWeeknote.data.emoji} `}{latestWeeknote.data.title}
+        </a>
+        {latestWeeknote.body && (
+          <p class="text-gray-700 dark:text-gray-300 inline">
+            {truncateBody(latestWeeknote.body)}
+          </p>
+        )}
+        <div class="mt-2">
+          <time class="dt-published text-xs text-gray-500 dark:text-gray-500" datetime={toISODate(latestWeeknote.data.date)}>
+            {formatDateShort(latestWeeknote.data.date)}
+          </time>
         </div>
-      )}
+      </div>
     </div>
   )}
 
-<h2 class="text-xs font-semibold uppercase tracking-wide text-neutral-400 dark:text-neutral-500 mb-2">Archive</h2>
-<div class="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-1">
-    {restWeeknotes.map(entry => (
-      <a href={`/weeknotes/${entry.id}`} class="flex items-center gap-1 py-1.5 hover:bg-neutral-100 dark:hover:bg-neutral-900 rounded -mx-1.5 px-1.5 transition-colors group">
-        <span class="font-mono text-neutral-400 dark:text-neutral-600 text-xs tabular-nums w-6 text-right shrink-0">{entry.data.week}</span>
-        <span class="text-base w-6 text-center shrink-0 leading-none">{entry.data.emoji}</span>
-        <span class="text-sm font-medium group-hover:underline truncate">{titleWord(entry.data.title)}</span>
-      </a>
-    ))}
+  <div class="mb-16">
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-1">
+      {restWeeknotes.map(entry => (
+        <a href={`/weeknotes/${entry.id}`} class="flex items-center gap-1 py-1.5 rounded -mx-1.5 px-1.5 group">
+          <span class="font-mono text-gray-400 dark:text-gray-600 text-xs tabular-nums w-6 text-right shrink-0">{entry.data.week}</span>
+          <span class="text-base w-6 text-center shrink-0 leading-none">{entry.data.emoji}</span>
+          <span class="text-sm group-hover:underline truncate">{titleWord(entry.data.title)}</span>
+        </a>
+      ))}
+    </div>
+    <p class="text-xs text-gray-400 dark:text-gray-600 mt-8">{allWeeknotes.length} weeknotes</p>
   </div>
-
-  <p class="text-sm text-neutral-400 dark:text-neutral-600 mt-8">{allWeeknotes.length} weeknotes</p>
 </Base>

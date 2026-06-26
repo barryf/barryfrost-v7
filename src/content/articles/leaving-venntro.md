@@ -1,4 +1,5 @@
 ---
+featured: true
 title: "Leaving Venntro"
 date: 2018-04-03
 tags:

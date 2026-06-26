@@ -1,13 +1,29 @@
 ---
-import Feed from '@/layouts/Feed.astro';
-import { getUnifiedFeed, paginateItems } from '@/lib/feed';
+import Base from '@/layouts/Base.astro';
+import BlueskyCard from '@/components/posts/BlueskyCard.astro';
+import Pagination from '@/components/Pagination.astro';
+import { getCollection } from 'astro:content';
+import { paginateItems } from '@/lib/feed';
 
-const allItems = (await getUnifiedFeed()).filter(i => i.type === 'bluesky');
-const pages = paginateItems(allItems);
+const allPosts = (await getCollection('blueskyPosts'))
+  .sort((a, b) => new Date(b.data.createdAt).getTime() - new Date(a.data.createdAt).getTime());
+
+const pages = paginateItems(allPosts);
 const { items, totalPages } = pages[0] ?? { items: [], totalPages: 1 };
 ---
-<Feed title="Posts" items={items} currentPage={1} totalPages={totalPages} basePath="/posts">
-  <p slot="header" class="text-neutral-600 dark:text-neutral-400 mb-6">
-    Short posts from my <a href="https://bsky.app/profile/barryfrost.com" class="underline hover:text-neutral-900 dark:hover:text-neutral-100">Bluesky profile</a>.
-  </p>
-</Feed>
+<Base title="Posts">
+  <div class="h-feed">
+    <div class="h-card p-author hidden">
+      <img class="u-photo" src={new URL('/barryfrost.jpg', Astro.url).href} alt="Barry Frost" width="192" height="192" />
+      <a class="p-name u-url" href={Astro.site?.href}>Barry Frost</a>
+    </div>
+    <h1 class="mb-4 text-3xl text-center font-semibold">Posts</h1>
+    <h2 class="mb-16 text-sm text-center text-gray-600 dark:text-gray-400">
+      Short posts from my <a href="https://bsky.app/profile/barryfrost.com" class="underline">Bluesky profile</a>.
+    </h2>
+    <div class="mb-16 flex flex-col gap-y-4">
+      {items.map(entry => <BlueskyCard entry={entry} />)}
+    </div>
+  </div>
+  <Pagination currentPage={1} totalPages={totalPages} basePath="/posts" />
+</Base>

@@ -18,6 +18,7 @@ const articles = defineCollection({
     description: z.string().optional(),
     tags: z.array(z.string()).optional(),
     visibility: z.string().optional(),
+    featured: z.boolean().optional(),
   }),
 });
 

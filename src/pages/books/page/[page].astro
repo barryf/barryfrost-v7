@@ -1,10 +1,15 @@
 ---
-import Feed from '@/layouts/Feed.astro';
-import { getUnifiedFeed, paginateItems } from '@/lib/feed';
+import Base from '@/layouts/Base.astro';
+import BookCard from '@/components/posts/BookCard.astro';
+import Pagination from '@/components/Pagination.astro';
+import { getCollection } from 'astro:content';
+import { paginateItems } from '@/lib/feed';
 
 export async function getStaticPaths() {
-  const allItems = (await getUnifiedFeed()).filter(i => i.type === 'book');
-  const pages = paginateItems(allItems);
+  const finishedBooks = (await getCollection('books'))
+    .filter(b => b.data.status === 'buzz.bookhive.defs#finished')
+    .sort((a, b) => new Date(b.data.finishedAt ?? b.data.createdAt).getTime() - new Date(a.data.finishedAt ?? a.data.createdAt).getTime());
+  const pages = paginateItems(finishedBooks);
   return pages.slice(1).map(({ page, items, totalPages }) => ({
     params: { page: String(page) },
     props: { items, currentPage: page, totalPages },
@@ -13,10 +18,11 @@ export async function getStaticPaths() {
 
 const { items, currentPage, totalPages } = Astro.props;
 ---
-<Feed title={`Books — Page ${currentPage}`} items={items} currentPage={currentPage} totalPages={totalPages} basePath="/books" showIcon={false}>
-  <h1 slot="header" class="text-2xl font-bold mb-4">Books</h1>
-  <p slot="header" class="text-neutral-600 dark:text-neutral-400 mb-6">
-    Books I'm currently reading and books I've finished, tracked on my <a href="https://bookhive.buzz/profile/barryfrost.com">Bookhive profile</a>.
-  </p>
-  <h2 slot="header" class="text-lg font-semibold mb-2 pb-2 border-b border-neutral-200 dark:border-neutral-700">Read</h2>
-</Feed>
+<Base title={`Books — Page ${currentPage}`}>
+  <h1 class="mb-4 text-3xl text-center font-semibold">Books</h1>
+  <h2 class="mb-8 text-sm text-center text-gray-600 dark:text-gray-400">Read — Page {currentPage}</h2>
+  <div class="mb-16 flex flex-col gap-y-4">
+    {items.map((entry: any) => <BookCard entry={entry} />)}
+  </div>
+  <Pagination currentPage={currentPage} totalPages={totalPages} basePath="/books" />
+</Base>

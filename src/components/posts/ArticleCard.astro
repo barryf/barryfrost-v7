@@ -1,27 +1,22 @@
 ---
 import { formatDateShort, toISODate } from '@/lib/dates';
-import type { FeedItem } from '@/lib/feed';
 
 interface Props {
-  item: FeedItem;
+  entry: {
+    id: string;
+    data: {
+      title: string;
+      date: Date;
+      description?: string;
+    }
+  }
 }
 
-const { item } = Astro.props;
-const tags = (item.data.tags as string[] | undefined) ?? [];
+const { entry } = Astro.props;
+const { data } = entry;
+const url = `/articles/${entry.id}`;
 ---
-<article class="h-entry">
-  <h2 class="text-xl font-semibold leading-tight">
-    <a class="p-name u-url" href={item.url}>{item.title}</a>
-  </h2>
-  {item.summary && <p class="p-summary mt-1 text-neutral-700 dark:text-neutral-300">{item.summary}</p>}
-  {tags.length > 0 && (
-    <div class="mt-2 flex flex-wrap gap-1">
-      {tags.map(t => (
-        <a href={`/tags/${t}`} class="p-category px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300">{t}</a>
-      ))}
-    </div>
-  )}
-  <time class="dt-published block mt-1.5 text-xs text-neutral-500 dark:text-neutral-400" datetime={toISODate(item.date)}>
-    {formatDateShort(item.date)}
-  </time>
-</article>
+<li class="mb-4">
+  <a class="p-name u-url underline" href={url}>{data.title}</a>
+  <time class="dt-published text-xs text-gray-500 dark:text-gray-500 ml-2" datetime={toISODate(data.date)}>{formatDateShort(data.date)}</time>
+</li>
