@@ -18,5 +18,5 @@ const url = `/articles/${entry.id}`;
 ---
 <li class="mb-4">
   <a class="p-name u-url underline" href={url}>{data.title}</a>
-  <time class="dt-published text-xs text-gray-500 dark:text-gray-500 ml-2" datetime={toISODate(data.date)}>{formatDateShort(data.date)}</time>
+  <time class="dt-published text-sm text-gray-500 dark:text-gray-500 ml-2" datetime={toISODate(data.date)}>{formatDateShort(data.date)}</time>
 </li>

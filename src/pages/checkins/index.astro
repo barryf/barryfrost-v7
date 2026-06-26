@@ -3,6 +3,7 @@ import Base from '@/layouts/Base.astro';
 import CheckinCard from '@/components/posts/CheckinCard.astro';
 import CheckinMap from '@/components/CheckinMap.astro';
 import Pagination from '@/components/Pagination.astro';
+import Divider from '@/components/Divider.astro';
 import { getCollection } from 'astro:content';
 import { paginateItems } from '@/lib/feed';
 
@@ -29,16 +30,17 @@ const mapCheckins = allCheckins
       <img class="u-photo" src={new URL('/barryfrost.jpg', Astro.url).href} alt="Barry Frost" width="192" height="192" />
       <a class="p-name u-url" href={Astro.site?.href}>Barry Frost</a>
     </div>
-    <h1 class="mb-4 text-3xl text-center font-semibold">Checkins</h1>
-    <h2 class="mb-8 text-sm text-center text-gray-600 dark:text-gray-400">
+    <h1 class="mb-4 font-semibold text-black dark:text-white">Checkins</h1>
+    <p class="mb-4 text-gray-600 dark:text-gray-400">
       Places I've checked in to, via <a href="https://foursquare.com" class="underline">Foursquare</a> and <a href="https://www.beaconbits.app/passport/barryfrost.com" class="underline">Beaconbits</a>.
-    </h2>
+    </p>
+    <Divider />
     {mapCheckins.length > 0 && (
-      <div class="mb-8">
+      <div class="mb-4">
         <CheckinMap checkins={mapCheckins} />
       </div>
     )}
-    <div class="mb-16 flex flex-col gap-y-4">
+    <div class="mb-4 flex flex-col gap-y-4">
       {items.map(entry => <CheckinCard entry={entry} />)}
     </div>
   </div>

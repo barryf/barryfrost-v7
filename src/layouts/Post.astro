@@ -1,7 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from './Base.astro';
-import Divider from '@/components/Divider.astro';
 import { formatDate, toISODate } from '@/lib/dates';
 
 interface Props {
@@ -22,24 +21,29 @@ const matchingDoc = documents.find(doc => doc.data.path === currentPath);
 ---
 <Base title={title} description={description}>
   <article class="h-entry" data-pagefind-body>
-    <h1 class="p-name mb-4 text-3xl text-center font-semibold">{emoji && `${emoji} `}{title}</h1>
-    <h2 class="mb-16 text-sm text-center text-gray-600 dark:text-gray-400">
-      Posted by <a href="https://barryfrost.com" class="underline">Barry Frost</a>
-      {section && sectionHref && (
-        <Fragment> in <a href={sectionHref} class="underline">{section}</a></Fragment>
-      )}
-      {' '}on <time class="dt-published" datetime={toISODate(date)}>{formatDate(date)}</time>
-    </h2>
+    <h1 class="p-name mb-4 text-black dark:text-white font-semibold">{emoji && `${emoji} `}{title}</h1>
     <a class="p-author h-card hidden" data-pagefind-ignore rel="author" href="https://barryfrost.com">
       <img class="u-photo" src="https://barryfrost.com/barryfrost.jpg" alt="Barry Frost" />
       <span class="p-name">Barry Frost</span>
       <span class="u-url">https://barryfrost.com</span>
     </a>
-    <div class="e-content prose dark:prose-invert max-w-none mb-16">
+    <div class="e-content prose dark:prose-invert max-w-none mb-4">
       <slot />
     </div>
+    <div class="mb-4 text-sm">
+      {section && sectionHref ? (
+        <Fragment>
+          Posted in <a href={sectionHref} class="underline">{section}</a>
+          {' '}on <time class="dt-published" datetime={toISODate(date)}>{formatDate(date)}</time>.
+        </Fragment>
+      ) : (
+        <Fragment>
+          Posted on <time class="dt-published" datetime={toISODate(date)}>{formatDate(date)}</time>.
+        </Fragment>
+      )}
+    </div>
     {matchingDoc && (
-      <div class="mb-16 text-sm text-gray-500 dark:text-gray-500" data-pagefind-ignore>
+      <div class="mb-4 text-gray-500 dark:text-gray-500" data-pagefind-ignore>
         <a class="u-syndication underline" href={matchingDoc.data.uri} rel="syndication">View on AT Protocol</a>
       </div>
     )}

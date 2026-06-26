@@ -2,17 +2,18 @@
 import Base from '@/layouts/Base.astro';
 import Divider from '@/components/Divider.astro';
 import { getCollection } from 'astro:content';
-import { formatDateShort, toISODate } from '@/lib/dates';
+import { formatDateShort, formatRelativeDate, toISODate } from '@/lib/dates';
 import { truncateBody } from '@/lib/weeknotes';
 import { renderRichText } from '@/lib/richtext';
 import { HANDLE } from '@/lib/pds';
 import BlueskyQuote from '@/components/posts/BlueskyQuote.astro';
 
-const [weeknotes, photos, blueskyPosts, articles] = await Promise.all([
+const [weeknotes, photos, blueskyPosts, articles, checkins] = await Promise.all([
   getCollection('weeknotes'),
   getCollection('photos'),
   getCollection('blueskyPosts'),
   getCollection('articles'),
+  getCollection('checkins'),
 ]);
 
 // Latest weeknote
@@ -35,54 +36,48 @@ const featuredArticles = articles
   .filter(e => e.data.featured && e.data.visibility !== 'unlisted')
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
+// Recent check-ins (5 most recent)
+const recentCheckins = checkins
+  .sort((a, b) => new Date(b.data.createdAt).getTime() - new Date(a.data.createdAt).getTime())
+  .slice(0, 5);
+
 const latestPostHtml = latestPost ? renderRichText(latestPost.data.text, latestPost.data.facets as any) : '';
 const latestPostUrl = latestPost ? `https://bsky.app/profile/${HANDLE}/post/${latestPost.id}` : '';
----
-<Base title="Barry Frost" showHomeNav={false}>
-  <h1 class="mb-16 text-3xl text-center font-semibold">Barry Frost</h1>
 
-  <div class="mb-16">
-    <p class="mb-4">
-      I'm a part-time software engineer and full-time technology leader with experience building teams, websites and apps.
-      I live in a village in Hertfordshire, UK, with my wife and two sons.
-    </p>
-    <p class="mb-4">
-      On this website, I track the <a href="/books" class="underline font-semibold">books</a> I'm reading,
-      the <a href="/films" class="underline font-semibold">films</a> I watch,
-      and the places I've <a href="/checkins" class="underline font-semibold">checked-in</a> at.
-      You can also see accounts I follow on my <a href="/blogroll" class="underline font-semibold">blogroll</a>.
-    </p>
-    {/* TODO: live status indicator, slash-page links (colophon, uses, defaults) */}
+const now = new Date();
+---
+<Base title="Barry Frost" home={true}>
+  <div class="h-card mb-4">
+    <h1 class="mb-4 font-semibold text-black dark:text-white">
+      <a class="u-url hidden" href="https://barryfrost.com" rel="me"></a>
+      <span class="p-name">Barry Frost</span>
+    </h1>
+    <span class="p-locality hidden">Hertfordshire</span>
+    <span class="p-country-name hidden">UK</span>
+    <p class="mb-4">I'm a part-time software engineer and full-time technology leader with experience building teams, websites and apps. I live in a village in Hertfordshire, UK, with my wife and two sons.</p>
   </div>
 
-  <Divider />
-
   {latestWeeknote && (
-    <div class="mb-16">
-      <div class="mb-4">
-        <h2 class="inline text-lg">Latest Weeknote</h2>
-        <a href="/weeknotes" class="ml-2 text-xs underline">All Weeknotes</a>
-      </div>
-      <div class="text-sm leading-relaxed p-3 rounded-xl border bg-gray-50 dark:bg-gray-900 border-gray-300 dark:border-gray-700">
-        <a href={`/weeknotes/${latestWeeknote.id}`} class="underline mr-1">
+    <>
+      <Divider />
+      <h2 class="font-semibold text-black dark:text-white">Latest Weeknote</h2>
+      <p class="mb-1">
+        <a href={`/weeknotes/${latestWeeknote.id}`} class="underline">
           {latestWeeknote.data.emoji && `${latestWeeknote.data.emoji} `}{latestWeeknote.data.title}
         </a>
         {latestWeeknote.body && (
-          <p class="text-gray-700 dark:text-gray-300 inline">
-            {truncateBody(latestWeeknote.body)}
-          </p>
+          <Fragment> &ldquo;{truncateBody(latestWeeknote.body)}&rdquo;</Fragment>
         )}
-      </div>
-    </div>
+      </p>
+      <div class="mb-4 text-sm"><a href="/weeknotes" class="underline">All Weeknotes</a></div>
+    </>
   )}
 
   {recentPhotos.length > 0 && (
-    <div class="mb-16">
-      <div class="mb-4">
-        <h2 class="inline text-lg">Recent Photos</h2>
-        <a href="/photos" class="pl-2 text-xs underline">All Photos</a>
-      </div>
-      <div class="overflow-x-auto">
+    <>
+      <Divider />
+      <h2 class="mb-1 font-semibold text-black dark:text-white">Recent Photos</h2>
+      <div class="mb-1 overflow-x-auto">
         <div class="flex gap-1">
           {recentPhotos.map((entry, i) => {
             const firstThumb = entry.data.thumbnailUrls[0];
@@ -95,7 +90,7 @@ const latestPostUrl = latestPost ? `https://bsky.app/profile/${HANDLE}/post/${la
                   width="120"
                   height="120"
                   class:list={[
-                    "u-photo w-30 h-30 aspect-square object-cover",
+                    "u-photo w-30 h-30 aspect-square object-cover grayscale hover:grayscale-0 transition delay-0 duration-500 ease-in-out",
                     i === 0 && "rounded-l-xl",
                     i === recentPhotos.length - 1 && "rounded-r-xl"
                   ]}
@@ -107,42 +102,67 @@ const latestPostUrl = latestPost ? `https://bsky.app/profile/${HANDLE}/post/${la
           })}
         </div>
       </div>
-    </div>
+      <div class="mb-4 text-sm"><a href="/photos" class="underline">All Photos</a></div>
+    </>
   )}
 
   {latestPost && (
-    <div class="mb-16">
-      <div class="mb-4">
-        <h2 class="inline text-lg">Latest Post</h2>
-        <a href="/posts" class="pl-2 text-xs underline">All Posts</a>
-      </div>
-      <div class="text-sm leading-relaxed p-3 rounded-xl border bg-gray-50 dark:bg-gray-900 border-gray-300 dark:border-gray-700">
-        <div class="e-content wrap-break-word mb-1" set:html={latestPostHtml} />
+    <>
+      <Divider />
+      <h2 class="font-semibold text-black dark:text-white">Latest Post</h2>
+      <p class="mb-1">
+        <span class="e-content wrap-break-word" set:html={`“${latestPostHtml}”`} />
         {latestPost.data.quotedPost && <BlueskyQuote quotedPost={latestPost.data.quotedPost as any} />}
-        <time class="dt-published text-xs text-gray-500 dark:text-gray-500" datetime={toISODate(new Date(latestPost.data.createdAt))}>
-          {formatDateShort(new Date(latestPost.data.createdAt))}
-        </time>
-        <a href={latestPostUrl} class="text-xs ml-2 underline" rel="noopener noreferrer">View on Bluesky</a>
-      </div>
-    </div>
+        <a href={latestPostUrl} class="underline text-sm ml-1" rel="noopener noreferrer">Bluesky</a>
+      </p>
+      <div class="mb-4 text-sm"><a href="/posts" class="underline">All Posts</a></div>
+    </>
   )}
 
   {featuredArticles.length > 0 && (
-    <div class="mb-16">
-      <div class="mb-4">
-        <h2 class="inline text-lg">Featured Articles</h2>
-        <a href="/articles" class="pl-2 text-xs underline">All Articles</a>
-      </div>
-      <ul class="text-sm text-gray-700 dark:text-gray-300">
+    <>
+      <Divider />
+      <h2 class="mb-1 font-semibold text-black dark:text-white">Featured Articles</h2>
+      <ul class="mb-2 flex flex-col gap-2 leading-tight">
         {featuredArticles.map(entry => (
-          <li class="mb-4">
-            <a href={`/articles/${entry.id}`} class="underline">{entry.data.title}</a>
-            <span class="text-xs text-gray-500 dark:text-gray-500 ml-2">
-              {formatDateShort(entry.data.date)}
-            </span>
-          </li>
+          <li><a href={`/articles/${entry.id}`} class="underline">{entry.data.title}</a></li>
         ))}
       </ul>
-    </div>
+      <div class="mb-4 text-sm"><a href="/articles" class="underline">All Articles</a></div>
+    </>
   )}
+
+  {recentCheckins.length > 0 && (
+    <>
+      <Divider />
+      <h2 class="mb-1 font-semibold text-black dark:text-white">Recent Check-ins</h2>
+      <ul class="mb-2 flex flex-col gap-2 leading-tight">
+        {recentCheckins.map(entry => {
+          const venueUrl = entry.data.venueUri
+            ?? (entry.data.latitude && entry.data.longitude
+              ? `https://www.openstreetmap.org/?mlat=${entry.data.latitude}&mlon=${entry.data.longitude}&zoom=17`
+              : null);
+          const date = new Date(entry.data.createdAt);
+          return (
+            <li>
+              {venueUrl
+                ? <a href={venueUrl} class="underline" rel="noopener noreferrer">{entry.data.venueName}</a>
+                : <span>{entry.data.venueName}</span>
+              }
+              <span class="text-sm"> {formatRelativeDate(date, now)}</span>
+            </li>
+          );
+        })}
+      </ul>
+      <div class="mb-4 text-sm"><a href="/checkins" class="underline">All Check-ins</a></div>
+    </>
+  )}
+
+  <Divider />
+  <h2 class="font-semibold text-black dark:text-white">Recent Media</h2>
+  <p class="mb-4">
+    View the <a href="/books" class="underline">books</a> I'm reading
+    and the <a href="/films" class="underline">films</a> I've watched and reviewed.
+    {/* TODO: add /albums route when available */}
+  </p>
 </Base>

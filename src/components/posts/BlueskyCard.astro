@@ -27,13 +27,13 @@ const alts = data.imageAlts ?? [];
 const blueskyUrl = `https://bsky.app/profile/${HANDLE}/post/${entry.id}`;
 const date = new Date(data.createdAt);
 ---
-<article class="h-entry text-sm leading-relaxed p-3 rounded-xl border bg-gray-50 dark:bg-gray-900 border-gray-300 dark:border-gray-700">
+<article class="h-entry">
   {data.reply && (
     <p class="text-xs text-gray-500 dark:text-gray-500 mb-1">
       In reply to <a class="u-in-reply-to underline" href={`https://bsky.app/profile/${data.reply.parentHandle}/post/${data.reply.parentRkey}`} rel="noopener noreferrer">@{data.reply.parentHandle}</a>
     </p>
   )}
-  <div class="e-content break-words mb-1" set:html={html} />
+  <p class="e-content mb-1 break-words" set:html={html} />
   {data.quotedPost && <BlueskyQuote quotedPost={data.quotedPost as any} />}
   {images.length > 0 && (
     <div class="flex flex-wrap gap-2 mt-2 mb-1">
@@ -48,6 +48,9 @@ const date = new Date(data.createdAt);
       ))}
     </div>
   )}
-  <time class="dt-published text-xs text-gray-500 dark:text-gray-500" datetime={toISODate(date)}>{formatDateShort(date)}</time>
-  <a class="u-url text-xs ml-2 underline" href={blueskyUrl} rel="noopener noreferrer">View on Bluesky</a>
+  <div class="mb-4 text-sm">
+    <time class="dt-published text-gray-500 dark:text-gray-500" datetime={toISODate(date)}>{formatDateShort(date)}</time>
+    {' '}·{' '}
+    <a class="u-url underline" href={blueskyUrl} rel="noopener noreferrer">Bluesky</a>
+  </div>
 </article>

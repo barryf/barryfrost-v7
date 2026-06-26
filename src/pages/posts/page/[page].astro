@@ -18,10 +18,15 @@ export async function getStaticPaths() {
 const { items, currentPage, totalPages } = Astro.props;
 ---
 <Base title={`Posts — Page ${currentPage}`}>
-  <h1 class="mb-4 text-3xl text-center font-semibold">Posts</h1>
-  <h2 class="mb-16 text-sm text-center text-gray-600 dark:text-gray-400">Page {currentPage}</h2>
-  <div class="mb-16 flex flex-col gap-y-4">
-    {items.map((entry: any) => <BlueskyCard entry={entry} />)}
+  <h1 class="mb-4 font-semibold text-black dark:text-white">Posts</h1>
+  <p class="mb-4 text-gray-600 dark:text-gray-400">Page {currentPage}</p>
+  <div class="mb-4">
+    {(items as any[]).map((entry, i) => (
+      <>
+        <BlueskyCard entry={entry} />
+        {i < items.length - 1 && <div class="mb-4">—</div>}
+      </>
+    ))}
   </div>
   <Pagination currentPage={currentPage} totalPages={totalPages} basePath="/posts" />
 </Base>

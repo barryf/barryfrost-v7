@@ -45,12 +45,10 @@ const date = new Date(data.createdAt);
       </div>
     </div>
   )}
-  <div class="text-sm">
-    <a class="p-name u-url font-semibold underline" href={grainUrl} rel="noopener noreferrer">{data.title}</a>
-    {data.address && <span class="text-xs text-gray-500 dark:text-gray-500 ml-2">{data.address}</span>}
-    <div class="mt-1">
-      <time class="dt-published text-xs text-gray-500 dark:text-gray-500" datetime={toISODate(date)}>{formatDateShort(date)}</time>
-      <a href={grainUrl} class="text-xs ml-2 underline" rel="noopener noreferrer">Grain</a>
+  <div>
+    <a class="p-name u-url underline" href={grainUrl} rel="noopener noreferrer">{data.title}</a>
+    <div class="mt-0">
+      <time class="dt-published text-sm" datetime={toISODate(date)}>{formatDateShort(date)}</time>
     </div>
   </div>
 </article>

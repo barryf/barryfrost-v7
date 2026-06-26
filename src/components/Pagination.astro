@@ -19,9 +19,9 @@ if (end - start < windowSize - 1) start = Math.max(1, end - windowSize + 1);
 const pages = Array.from({ length: end - start + 1 }, (_, i) => start + i);
 ---
 {totalPages > 1 && (
-  <nav class="flex items-center justify-center gap-4 py-8 text-sm" aria-label="Pagination">
+  <nav class="flex gap-4" aria-label="Pagination">
     {currentPage > 1 && (
-      <a href={pageUrl(currentPage - 1)} class="underline">← Prev</a>
+      <a href={pageUrl(currentPage - 1)} class="underline">Prev</a>
     )}
     {pages.map(page => (
       page === currentPage ? (
@@ -31,7 +31,7 @@ const pages = Array.from({ length: end - start + 1 }, (_, i) => start + i);
       )
     ))}
     {currentPage < totalPages && (
-      <a href={pageUrl(currentPage + 1)} class="underline">Next →</a>
+      <a href={pageUrl(currentPage + 1)} class="underline">Next</a>
     )}
   </nav>
 )}
