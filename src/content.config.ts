@@ -1,7 +1,7 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { blueskyLoader } from './lib/loaders/bluesky';
-import { checkinsLoader } from './lib/loaders/checkins';
+import { checkInsLoader } from './lib/loaders/check-ins';
 import { filmsLoader } from './lib/loaders/films';
 import { documentsLoader } from './lib/loaders/documents';
 import { booksLoader } from './lib/loaders/books';
@@ -79,8 +79,8 @@ const blueskyPosts = defineCollection({
   }),
 });
 
-const checkins = defineCollection({
-  loader: checkinsLoader(),
+const checkIns = defineCollection({
+  loader: checkInsLoader(),
   schema: z.object({
     venueName: z.string(),
     venueCategory: z.string().optional(),
@@ -203,7 +203,7 @@ export const collections = {
   pages,
   travelblog,
   blueskyPosts,
-  checkins,
+  'check-ins': checkIns,
   films,
   books,
   documents,

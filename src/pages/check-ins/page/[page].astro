@@ -1,14 +1,14 @@
 ---
 import Base from '@/layouts/Base.astro';
-import CheckinCard from '@/components/posts/CheckinCard.astro';
+import CheckInCard from '@/components/posts/CheckInCard.astro';
 import Pagination from '@/components/Pagination.astro';
 import { getCollection } from 'astro:content';
 import { paginateItems } from '@/lib/feed';
 
 export async function getStaticPaths() {
-  const allCheckins = (await getCollection('checkins'))
+  const allCheckIns = (await getCollection('check-ins'))
     .sort((a, b) => new Date(b.data.createdAt).getTime() - new Date(a.data.createdAt).getTime());
-  const pages = paginateItems(allCheckins);
+  const pages = paginateItems(allCheckIns);
   return pages.slice(1).map(({ page, items, totalPages }) => ({
     params: { page: String(page) },
     props: { items, currentPage: page, totalPages },
@@ -17,12 +17,12 @@ export async function getStaticPaths() {
 
 const { items, currentPage, totalPages } = Astro.props;
 ---
-<Base title={`Checkins (Page ${currentPage})`}>
+<Base title={`Check-ins (Page ${currentPage})`}>
   <h1 class="mb-8 font-semibold text-black dark:text-white">
-    Checkins <span class="font-normal">(Page {currentPage})</span>
+    Check-ins <span class="font-normal">(Page {currentPage})</span>
   </h1>
   <div class="mb-4 flex flex-col gap-y-4">
-    {items.map((entry: any) => <CheckinCard entry={entry} />)}
+    {items.map((entry: any) => <CheckInCard entry={entry} />)}
   </div>
-  <Pagination currentPage={currentPage} totalPages={totalPages} basePath="/checkins" />
+  <Pagination currentPage={currentPage} totalPages={totalPages} basePath="/check-ins" />
 </Base>

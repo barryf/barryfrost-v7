@@ -11,15 +11,15 @@ interface FsqLocation {
   longitude?: string;
 }
 
-interface CheckinPhoto {
+interface CheckInPhoto {
   image?: { ref?: { $link?: string } };
 }
 
-export function checkinsLoader(): Loader {
+export function checkInsLoader(): Loader {
   return {
-    name: 'checkins-loader',
+    name: 'check-ins-loader',
     async load({ store, logger, generateDigest }) {
-      logger.info('Fetching checkins');
+      logger.info('Fetching check-ins');
       store.clear();
 
       for await (const record of fetchAllRecords('app.beaconbits.beacon', DID, PDS_HOST)) {
@@ -50,7 +50,7 @@ export function checkinsLoader(): Loader {
         const value = record.value as Record<string, unknown>;
         const rkey = rkeyFromUri(record.uri);
         const location = value.location as FsqLocation | undefined;
-        const photos = (value.photos as CheckinPhoto[] | undefined) ?? [];
+        const photos = (value.photos as CheckInPhoto[] | undefined) ?? [];
 
         const photoUrls: string[] = [];
         const photoFullUrls: string[] = [];

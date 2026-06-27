@@ -23,7 +23,7 @@ const COLLECTIONS = [
 const PRETTY: Record<string, string> = {
   'app.bsky.feed.post': 'post',
   'app.beaconbits.beacon': 'beacon',
-  'com.barryfrost.checkin': 'checkin',
+  'com.barryfrost.checkin': 'check-in',
   'social.popfeed.feed.review': 'review',
   'buzz.bookhive.book': 'book',
   'site.standard.document': 'document',

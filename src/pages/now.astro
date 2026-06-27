@@ -14,11 +14,11 @@ const { Content } = await render(nowEntry);
 const nowMdPath = resolve(process.cwd(), 'src/content/pages/now.md');
 const lastUpdated = statSync(nowMdPath).mtime;
 
-const [position, self, bookEntries, checkinEntries, weeknoteEntries, filmEntries, albumEntries] = await Promise.all([
+const [position, self, bookEntries, checkInEntries, weeknoteEntries, filmEntries, albumEntries] = await Promise.all([
   getCurrentPosition(),
   getSelf(),
   getCollection('books'),
-  getCollection('checkins'),
+  getCollection('check-ins'),
   getCollection('weeknotes'),
   getCollection('films'),
   getCollection('albums'),
@@ -30,12 +30,12 @@ const currentlyReading = bookEntries
   .filter(b => b.data.status === 'buzz.bookhive.defs#reading')
   .sort((a, b) => new Date(b.data.createdAt).getTime() - new Date(a.data.createdAt).getTime());
 
-const latestCheckin = [...checkinEntries].sort(
+const latestCheckIn = [...checkInEntries].sort(
   (a, b) => new Date(b.data.createdAt).getTime() - new Date(a.data.createdAt).getTime(),
 )[0];
 const todayKey = new Date().toDateString();
-const checkinToday = latestCheckin && new Date(latestCheckin.data.createdAt).toDateString() === todayKey
-  ? latestCheckin
+const checkInToday = latestCheckIn && new Date(latestCheckIn.data.createdAt).toDateString() === todayKey
+  ? latestCheckIn
   : undefined;
 
 const latestWeeknote = [...weeknoteEntries]
@@ -177,9 +177,9 @@ const rockskySource: Source = { label: 'Rocksky', url: 'https://rocksky.app/prof
       </section>
     )}
 
-    {checkinToday && (() => {
-      const td = checkinToday.data as { venueName: string; venueCategory?: string; createdAt: string; latitude?: string; longitude?: string; sourceUrl?: string };
-      const checkinUrl = td.latitude && td.longitude
+    {checkInToday && (() => {
+      const td = checkInToday.data as { venueName: string; venueCategory?: string; createdAt: string; latitude?: string; longitude?: string; sourceUrl?: string };
+      const checkInUrl = td.latitude && td.longitude
         ? `https://www.openstreetmap.org/?mlat=${td.latitude}&mlon=${td.longitude}&zoom=17`
         : '';
       return (
@@ -188,8 +188,8 @@ const rockskySource: Source = { label: 'Rocksky', url: 'https://rocksky.app/prof
           <div class="flex items-start gap-3">
             <div>
               <p>
-                {checkinUrl ? (
-                  <a href={checkinUrl} class="font-medium hover:underline" rel="noopener noreferrer">
+                {checkInUrl ? (
+                  <a href={checkInUrl} class="font-medium hover:underline" rel="noopener noreferrer">
                     {td.venueName}
                   </a>
                 ) : (

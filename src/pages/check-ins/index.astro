@@ -1,18 +1,18 @@
 ---
 import Base from '@/layouts/Base.astro';
-import CheckinCard from '@/components/posts/CheckinCard.astro';
-import CheckinMap from '@/components/CheckinMap.astro';
+import CheckInCard from '@/components/posts/CheckInCard.astro';
+import CheckInMap from '@/components/CheckInMap.astro';
 import Pagination from '@/components/Pagination.astro';
 import { getCollection } from 'astro:content';
 import { paginateItems } from '@/lib/feed';
 
-const allCheckins = (await getCollection('checkins'))
+const allCheckIns = (await getCollection('check-ins'))
   .sort((a, b) => new Date(b.data.createdAt).getTime() - new Date(a.data.createdAt).getTime());
 
-const pages = paginateItems(allCheckins);
+const pages = paginateItems(allCheckIns);
 const { items, totalPages } = pages[0] ?? { items: [], totalPages: 1 };
 
-const mapCheckins = allCheckins
+const mapCheckIns = allCheckIns
   .filter(c => c.data.latitude && c.data.longitude)
   .map(c => ({
     venueName: c.data.venueName,
@@ -23,24 +23,24 @@ const mapCheckins = allCheckins
     url: `https://www.openstreetmap.org/?mlat=${c.data.latitude}&mlon=${c.data.longitude}&zoom=17`,
   }));
 ---
-<Base title="Checkins">
+<Base title="Check-ins">
   <div class="h-feed">
     <div class="h-card p-author hidden">
       <img class="u-photo" src={new URL('/barryfrost.jpg', Astro.url).href} alt="Barry Frost" width="192" height="192" />
       <a class="p-name u-url" href={Astro.site?.href}>Barry Frost</a>
     </div>
-    <h1 class="mb-4 font-semibold text-black dark:text-white">Checkins</h1>
+    <h1 class="mb-4 font-semibold text-black dark:text-white">Check-ins</h1>
     <p class="mb-8 text-gray-600 dark:text-gray-400">
       Places I've checked in to, via <a href="https://foursquare.com" class="underline">Foursquare</a> and <a href="https://www.beaconbits.app/passport/barryfrost.com" class="underline">Beaconbits</a>.
     </p>
-    {mapCheckins.length > 0 && (
+    {mapCheckIns.length > 0 && (
       <div class="mb-8 -ml-4 -mr-4 sm:-ml-8 sm:-mr-8">
-        <CheckinMap checkins={mapCheckins} />
+        <CheckInMap checkIns={mapCheckIns} />
       </div>
     )}
     <div class="flex flex-col gap-y-4">
-      {items.map(entry => <CheckinCard entry={entry} />)}
+      {items.map(entry => <CheckInCard entry={entry} />)}
     </div>
   </div>
-  <Pagination currentPage={1} totalPages={totalPages} basePath="/checkins" />
+  <Pagination currentPage={1} totalPages={totalPages} basePath="/check-ins" />
 </Base>

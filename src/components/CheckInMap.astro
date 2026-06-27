@@ -1,5 +1,5 @@
 ---
-interface CheckinPoint {
+interface CheckInPoint {
   venueName: string;
   latitude: string;
   longitude: string;
@@ -9,30 +9,30 @@ interface CheckinPoint {
 }
 
 interface Props {
-  checkins: CheckinPoint[];
+  checkIns: CheckInPoint[];
 }
 
-const { checkins } = Astro.props;
+const { checkIns } = Astro.props;
 ---
 
-<div id="checkin-map-container" class="relative w-full mb-4">
-  <div id="checkin-map" class="w-full bg-neutral-100 dark:bg-neutral-800 overflow-hidden" style="height: 360px;"></div>
+<div id="check-in-map-container" class="relative w-full mb-4">
+  <div id="check-in-map" class="w-full bg-neutral-100 dark:bg-neutral-800 overflow-hidden" style="height: 360px;"></div>
   <button
-    id="checkin-map-fullscreen-btn"
+    id="check-in-map-fullscreen-btn"
     title="Toggle fullscreen"
     aria-label="Toggle fullscreen"
     style="position:absolute;top:8px;right:8px;z-index:1000;background:white;border:1px solid #ccc;border-radius:4px;padding:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#374151;"
   >
-    <svg id="checkin-map-expand-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <svg id="check-in-map-expand-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
     </svg>
-    <svg id="checkin-map-collapse-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+    <svg id="check-in-map-collapse-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
       <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/>
     </svg>
   </button>
 </div>
 
-<script is:inline define:vars={{ checkins }}>
+<script is:inline define:vars={{ checkIns }}>
   (function () {
     function loadCSS(href) {
       const el = document.createElement('link');
@@ -54,7 +54,7 @@ const { checkins } = Astro.props;
         ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
         : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
 
-      const map = L.map('checkin-map');
+      const map = L.map('check-in-map');
       L.tileLayer(tileUrl, {
         attribution:
           '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors ' +
@@ -65,7 +65,7 @@ const { checkins } = Astro.props;
 
       const cluster = L.markerClusterGroup();
 
-      for (const c of checkins) {
+      for (const c of checkIns) {
         const marker = L.marker([parseFloat(c.latitude), parseFloat(c.longitude)]);
         const date = new Date(c.createdAt).toLocaleDateString('en-GB', {
           day: 'numeric',
@@ -82,17 +82,17 @@ const { checkins } = Astro.props;
 
       map.addLayer(cluster);
 
-      if (checkins.length > 0) {
+      if (checkIns.length > 0) {
         map.fitBounds(cluster.getBounds(), { padding: [30, 30] });
       } else {
         map.setView([51.5, -0.1], 10);
       }
 
-      var container = document.getElementById('checkin-map-container');
-      var mapEl = document.getElementById('checkin-map');
-      var btn = document.getElementById('checkin-map-fullscreen-btn');
-      var expandIcon = document.getElementById('checkin-map-expand-icon');
-      var collapseIcon = document.getElementById('checkin-map-collapse-icon');
+      var container = document.getElementById('check-in-map-container');
+      var mapEl = document.getElementById('check-in-map');
+      var btn = document.getElementById('check-in-map-fullscreen-btn');
+      var expandIcon = document.getElementById('check-in-map-expand-icon');
+      var collapseIcon = document.getElementById('check-in-map-collapse-icon');
       var isFullscreen = false;
 
       function enterFullscreen() {
