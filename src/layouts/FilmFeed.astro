@@ -46,16 +46,18 @@ const { title, description, items, currentPage, totalPages, basePath, sort = 'da
       <a href="/films/by-rating" class="underline">By rating</a>
     )}
   </div>
+  <div class="mb-4">—</div>
   <div class="h-feed mb-4">
     <div class="h-card p-author hidden">
       <img class="u-photo" src={new URL('/barryfrost.jpg', Astro.url).href} alt="Barry Frost" width="192" height="192" />
       <a class="p-name u-url" href={Astro.site?.href}>Barry Frost</a>
     </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-6">
       {items.map(entry => (
         <FilmCard entry={entry} />
       ))}
     </div>
   </div>
+  <div class="mb-4">—</div>
   <Pagination currentPage={currentPage} totalPages={totalPages} basePath={basePath} />
 </Base>
