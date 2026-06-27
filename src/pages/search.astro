@@ -10,7 +10,7 @@ const isDev = import.meta.env.DEV;
     name="q"
     placeholder="Search…"
     autocomplete="off"
-    class="w-full text-sm rounded border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-gray-900 dark:text-gray-100 placeholder-neutral-400 dark:placeholder-neutral-500 px-3 py-1.5 mb-6 focus:outline-none focus:ring-1 focus:ring-neutral-400 dark:focus:ring-neutral-600"
+    class="w-full rounded border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 px-3 py-1.5 mb-6 focus:outline-none focus:ring-1 focus:ring-gray-400 dark:focus:ring-gray-600"
   />
   <div id="search-results"></div>
 </Base>
@@ -51,14 +51,14 @@ const isDev = import.meta.env.DEV;
       }
       var hits = await Promise.all(search.results.map(function (r) { return r.data(); }));
       var fragment = '#:~:text=' + encodeURIComponent(query);
-      var html = '<p class="text-xs text-gray-400 dark:text-gray-500 mb-4">' + hits.length + ' result' + (hits.length === 1 ? '' : 's') + '</p>';
+      var html = '<p class="text-sm text-gray-500 dark:text-gray-500 mb-8">' + hits.length + ' result' + (hits.length === 1 ? '' : 's') + '</p>';
       html += hits.map(function (hit) {
         var url = hit.url.replace(/\.html$/, '');
         var title = (hit.meta && hit.meta.title) ? hit.meta.title : url;
-        return '<article class="mb-6 pb-6 border-b border-neutral-100 dark:border-neutral-800 last:border-0">'
-          + '<a href="' + url + fragment + '" class="font-medium hover:underline text-gray-900 dark:text-gray-100">' + title + '</a>'
-          + (hit.excerpt ? '<p class="text-sm text-gray-600 dark:text-gray-400 mt-1">' + hit.excerpt + '</p>' : '')
-          + '<p class="text-xs text-gray-400 dark:text-gray-500 mt-1">' + url + '</p>'
+        return '<article class="mb-8">'
+          + '<a href="' + url + fragment + '" class="underline">' + title + '</a>'
+          + (hit.excerpt ? '<p class="text-gray-600 dark:text-gray-400 mt-1">' + hit.excerpt + '</p>' : '')
+          + '<p class="text-sm text-gray-500 dark:text-gray-500 mt-1">' + url + '</p>'
           + '</article>';
       }).join('');
       resultsEl.innerHTML = html;
