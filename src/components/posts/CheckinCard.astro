@@ -39,10 +39,10 @@ const date = new Date(data.createdAt);
       ))}
     </div>
   )}
-  <div class:list={["p-checkin h-card", single && "flex gap-3 items-start"]}>
+  <div class:list={["p-checkin h-card mb-4", single && "flex gap-3 items-start"]}>
     {single && (
       <a href={fullUrls[0] ?? photos[0]} rel="noopener noreferrer">
-        <img src={photos[0]} width="72" height="72" alt={data.venueName} loading="lazy" decoding="async" class="u-photo w-18 aspect-square object-cover rounded" />
+        <img src={photos[0]} width="72" height="72" alt={data.venueName} loading="lazy" decoding="async" class="u-photo min-w-24 aspect-square object-cover rounded" />
       </a>
     )}
     <div>
@@ -51,12 +51,12 @@ const date = new Date(data.createdAt);
       ) : (
         <span class="p-name">{data.venueName}</span>
       )}
-      {data.venueCategory && <span class="text-sm text-gray-500 dark:text-gray-500"> · {data.venueCategory}</span>}
-      {data.venueAddress && <p class="p-street-address text-sm text-gray-600 dark:text-gray-400">{data.venueAddress}</p>}
+      {data.venueCategory && <div class="text-sm text-gray-500 dark:text-gray-500">{data.venueCategory}</div>}
+      {data.venueAddress && <p class="p-street-address text-sm text-gray-500 dark:text-gray-500">{data.venueAddress}</p>}
       {data.latitude && <data class="p-latitude" value={data.latitude} />}
       {data.longitude && <data class="p-longitude" value={data.longitude} />}
       {data.rating !== undefined && <data class="p-rating hidden" value={data.rating} />}
-      <div class="mt-1">
+      <div class="">
         <time class="dt-published text-sm text-gray-500 dark:text-gray-500" datetime={toISODate(date)} title={formatDate(date)}>{formatRelativeDate(date)}</time>
         {data.sourceUrl && <a href={data.sourceUrl} class="text-sm ml-2 underline" rel="noopener noreferrer">Beaconbits</a>}
       </div>
