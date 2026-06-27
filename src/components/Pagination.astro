@@ -12,26 +12,17 @@ function pageUrl(page: number): string {
   return basePath ? `${basePath}/page/${page}` : `/page/${page}`;
 }
 
-const windowSize = 5;
-let start = Math.max(1, currentPage - Math.floor(windowSize / 2));
-let end = Math.min(totalPages, start + windowSize - 1);
-if (end - start < windowSize - 1) start = Math.max(1, end - windowSize + 1);
-const pages = Array.from({ length: end - start + 1 }, (_, i) => start + i);
+const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+const pad = (n: number) => String(n).padStart(2, '0');
 ---
 {totalPages > 1 && (
-  <nav class="flex gap-4" aria-label="Pagination">
-    {currentPage > 1 && (
-      <a href={pageUrl(currentPage - 1)} class="underline">Prev</a>
-    )}
+  <nav class="mt-8 flex gap-x-4 gap-y-2 flex-wrap font-mono tabular-nums" aria-label="Pagination">
     {pages.map(page => (
       page === currentPage ? (
-        <span class="font-semibold">{page}</span>
+        <span class="font-semibold">{pad(page)}</span>
       ) : (
-        <a href={pageUrl(page)} class="underline">{page}</a>
+        <a href={pageUrl(page)} class="underline">{pad(page)}</a>
       )
     ))}
-    {currentPage < totalPages && (
-      <a href={pageUrl(currentPage + 1)} class="underline">Next</a>
-    )}
   </nav>
 )}
