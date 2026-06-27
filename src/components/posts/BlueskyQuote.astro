@@ -30,13 +30,13 @@ const html = quotedPost.available && quotedPost.text
 <blockquote class="border-l-4 border-neutral-300 dark:border-neutral-600 pl-3 my-2 text-sm not-italic">
   {quotedPost.available ? (
     <Fragment>
-      <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">
+      <p class="text-sm text-gray-500 dark:text-gray-400">
         {quotedPost.authorDisplayName && <span>{quotedPost.authorDisplayName} </span>}
         <a class="underline" href={`https://bsky.app/profile/${handle}`} rel="noopener noreferrer">@{handle}</a>
       </p>
       <div set:html={html} />
     </Fragment>
   ) : (
-    <p class="italic text-neutral-500 dark:text-neutral-400">Quoted post unavailable</p>
+    <p class="italic text-gray-500 dark:text-gray-400">Quoted post unavailable</p>
   )}
 </blockquote>

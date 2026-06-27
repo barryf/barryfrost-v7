@@ -49,7 +49,7 @@ const proficiencyLabel: Record<string, string> = {
   <h1 class="mb-4 font-semibold text-black dark:text-white">Work</h1>
 
   {(headline || locationStr) && (
-    <div class="mb-10 text-neutral-600 dark:text-neutral-400">
+    <div class="mb-10 text-gray-600 dark:text-gray-400">
       {headline && <p class="text-lg">{headline}</p>}
       {locationStr && <p class="text-sm mt-1">{locationStr}</p>}
     </div>
@@ -63,14 +63,14 @@ const proficiencyLabel: Record<string, string> = {
           <div class="flex flex-wrap justify-between items-baseline gap-x-4 gap-y-1">
             <div>
               <span class="font-semibold">{pos.title}</span>
-              <span class="text-neutral-600 dark:text-neutral-400"> · {pos.company}</span>
+              <span class="text-gray-600 dark:text-gray-400"> · {pos.company}</span>
             </div>
-            <span class="text-sm text-neutral-500 dark:text-neutral-500 whitespace-nowrap">
+            <span class="text-sm text-gray-500 dark:text-gray-500 whitespace-nowrap">
               {formatMonthYear(parseYM(pos.startedAt))}–{pos.endedAt ? formatMonthYear(parseYM(pos.endedAt)) : 'Present'}
             </span>
           </div>
           {pos.description && (
-            <p class="mt-2 text-sm text-neutral-700 dark:text-neutral-300 whitespace-pre-wrap">{pos.description.trim()}</p>
+            <p class="mt-2 text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{pos.description.trim()}</p>
           )}
         </li>
       ))}
@@ -86,12 +86,12 @@ const proficiencyLabel: Record<string, string> = {
             <div class="flex flex-wrap justify-between items-baseline gap-x-4 gap-y-1">
               <span class="font-semibold">{edu.institution}</span>
               {edu.endedAt && (
-                <span class="text-sm text-neutral-500 dark:text-neutral-500 whitespace-nowrap">
+                <span class="text-sm text-gray-500 dark:text-gray-500 whitespace-nowrap">
                   {formatMonthYear(parseYM(edu.endedAt))}
                 </span>
               )}
             </div>
-            <p class="text-sm text-neutral-700 dark:text-neutral-300 mt-0.5">
+            <p class="text-sm text-gray-700 dark:text-gray-300 mt-0.5">
               {edu.degree}{edu.fieldOfStudy ? `, ${edu.fieldOfStudy}` : ''}
             </p>
           </li>
@@ -112,7 +112,7 @@ const proficiencyLabel: Record<string, string> = {
               <span class="font-semibold">{proj.name}</span>
             )}
             {proj.description && (
-              <p class="text-sm text-neutral-700 dark:text-neutral-300 mt-1">{proj.description.trim()}</p>
+              <p class="text-sm text-gray-700 dark:text-gray-300 mt-1">{proj.description.trim()}</p>
             )}
           </li>
         ))}
@@ -126,7 +126,7 @@ const proficiencyLabel: Record<string, string> = {
       <div class="space-y-4">
         {skillsByCategory.technical.length > 0 && (
           <div>
-            <h3 class="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-500 mb-2">Technical</h3>
+            <h3 class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-500 mb-2">Technical</h3>
             <div class="flex flex-wrap gap-2">
               {skillsByCategory.technical.map(name => (
                 <span class="px-2 py-0.5 text-sm bg-neutral-100 dark:bg-neutral-800 rounded">{name}</span>
@@ -136,7 +136,7 @@ const proficiencyLabel: Record<string, string> = {
         )}
         {skillsByCategory.business.length > 0 && (
           <div>
-            <h3 class="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-500 mb-2">Business</h3>
+            <h3 class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-500 mb-2">Business</h3>
             <div class="flex flex-wrap gap-2">
               {skillsByCategory.business.map(name => (
                 <span class="px-2 py-0.5 text-sm bg-neutral-100 dark:bg-neutral-800 rounded">{name}</span>
@@ -146,7 +146,7 @@ const proficiencyLabel: Record<string, string> = {
         )}
         {skillsByCategory.interpersonal.length > 0 && (
           <div>
-            <h3 class="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-500 mb-2">Interpersonal</h3>
+            <h3 class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-500 mb-2">Interpersonal</h3>
             <div class="flex flex-wrap gap-2">
               {skillsByCategory.interpersonal.map(name => (
                 <span class="px-2 py-0.5 text-sm bg-neutral-100 dark:bg-neutral-800 rounded">{name}</span>
@@ -165,7 +165,7 @@ const proficiencyLabel: Record<string, string> = {
         {languages.map(lang => (
           <li class="flex justify-between text-sm">
             <span class="font-medium">{lang.name}</span>
-            <span class="text-neutral-500 dark:text-neutral-500">{proficiencyLabel[lang.proficiency] ?? lang.proficiency}</span>
+            <span class="text-gray-500 dark:text-gray-500">{proficiencyLabel[lang.proficiency] ?? lang.proficiency}</span>
           </li>
         ))}
       </ul>
