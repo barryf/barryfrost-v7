@@ -112,10 +112,9 @@ const now = new Date();
       <h2 class="font-semibold text-black dark:text-white">Latest Post</h2>
       <p class="e-content mb-1 wrap-break-word" set:html={latestPostHtml} />
       {latestPost.data.quotedPost && <BlueskyQuote quotedPost={latestPost.data.quotedPost as any} />}
-      <div class="mb-1 text-sm">
-        <time class="text-gray-500 dark:text-gray-500" datetime={toISODate(new Date(latestPost.data.createdAt))} title={formatDate(new Date(latestPost.data.createdAt))}>{formatRelativeDate(new Date(latestPost.data.createdAt))}</time>
-        {' '}·{' '}
-        <a href={latestPostUrl} rel="noopener noreferrer" aria-label="View on Bluesky"><BlueskyIcon /></a>
+      <div class="mb-1 text-sm text-gray-500 dark:text-gray-500">
+        <time class="mr-1" datetime={toISODate(new Date(latestPost.data.createdAt))} title={formatDate(new Date(latestPost.data.createdAt))}>{formatRelativeDate(new Date(latestPost.data.createdAt))}</time>
+        <a href={latestPostUrl} class="underline" rel="noopener noreferrer" aria-label="View on Bluesky"><BlueskyIcon /></a>
       </div>
       <div class="mb-4 text-sm">
         <a href="/posts" class="underline">All Posts</a>
