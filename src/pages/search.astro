@@ -41,7 +41,7 @@ const isDev = import.meta.env.DEV;
       }
       await loadPagefind();
       if (!pagefind) {
-        resultsEl.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400">Search is not available in dev mode. Use <code>npm run build &amp;&amp; npm run preview</code> to test.</p>';
+        resultsEl.innerHTML = '<div class="text-sm text-gray-500 dark:text-gray-400">Search is not available in dev mode. Use <code>npm run build &amp;&amp; npm run preview</code> to test.</div>';
         return;
       }
       var search = await pagefind.search(query);
