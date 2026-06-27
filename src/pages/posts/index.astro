@@ -27,7 +27,7 @@ const { items, totalPages } = pages[0] ?? { items: [], totalPages: 1 };
       {items.map((entry, i) => (
         <>
           <BlueskyCard entry={entry} />
-          {i < items.length - 1 && <div class="mb-4">—</div>}
+          {i < items.length - 1 && <Divider />}
         </>
       ))}
     </div>
