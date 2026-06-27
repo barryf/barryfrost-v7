@@ -1,5 +1,5 @@
 ---
-import { formatDateShort, toISODate } from '@/lib/dates';
+import { formatRelativeDate, formatDate, toISODate } from '@/lib/dates';
 import { DID } from '@/lib/pds';
 
 interface Props {
@@ -52,7 +52,7 @@ function toStars(rating: number): string {
       </p>
     )}
     <div>
-      <time class="dt-published text-sm text-gray-500 dark:text-gray-500" datetime={toISODate(date)}>{formatDateShort(date)}</time>
+      <time class="dt-published text-sm text-gray-500 dark:text-gray-500" datetime={toISODate(date)} title={formatDate(date)}>{formatRelativeDate(date)}</time>
     </div>
   </div>
 </article>

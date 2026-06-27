@@ -1,5 +1,5 @@
 ---
-import { formatDateShort, toISODate } from '@/lib/dates';
+import { formatRelativeDate, formatDate, toISODate } from '@/lib/dates';
 import { DID } from '@/lib/pds';
 
 interface Props {
@@ -48,7 +48,7 @@ const date = new Date(data.createdAt);
   <div>
     <a class="p-name u-url underline" href={grainUrl} rel="noopener noreferrer">{data.title}</a>
     <div class="mt-0">
-      <time class="dt-published text-sm" datetime={toISODate(date)}>{formatDateShort(date)}</time>
+      <time class="dt-published text-sm" datetime={toISODate(date)} title={formatDate(date)}>{formatRelativeDate(date)}</time>
     </div>
   </div>
 </article>
