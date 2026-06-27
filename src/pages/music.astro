@@ -1,0 +1,171 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '@/layouts/Base.astro';
+import Divider from '@/components/Divider.astro';
+import { formatRelativeDate, formatDate, toISODate } from '@/lib/dates';
+
+const scrobbleEntries = await getCollection('scrobbles');
+
+// Recently played — most recent 25 unique plays
+const recentlyPlayed = [...scrobbleEntries]
+  .sort((a, b) => new Date(b.data.createdAt).getTime() - new Date(a.data.createdAt).getTime())
+  .slice(0, 25);
+
+// Top artists — aggregate play counts
+const artistCounts = new Map<string, number>();
+for (const s of scrobbleEntries) {
+  const name = s.data.artist;
+  artistCounts.set(name, (artistCounts.get(name) ?? 0) + 1);
+}
+const topArtists = [...artistCounts.entries()]
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 10);
+const maxArtistCount = topArtists[0]?.[1] ?? 1;
+
+// Top albums — aggregate by album+albumArtist key
+type AlbumEntry = { title: string; artist: string; coverUrl?: string; count: number };
+const albumMap = new Map<string, AlbumEntry>();
+for (const s of scrobbleEntries) {
+  const album = s.data.album;
+  const albumArtist = s.data.albumArtist ?? s.data.artist;
+  if (!album) continue;
+  const key = `${album}||${albumArtist}`;
+  const existing = albumMap.get(key);
+  if (existing) {
+    existing.count++;
+    // Prefer a coverUrl if we don't have one yet
+    if (!existing.coverUrl && s.data.coverUrl) existing.coverUrl = s.data.coverUrl;
+  } else {
+    albumMap.set(key, {
+      title: album,
+      artist: albumArtist,
+      coverUrl: s.data.coverUrl,
+      count: 1,
+    });
+  }
+}
+const topAlbums = [...albumMap.values()]
+  .sort((a, b) => b.count - a.count)
+  .slice(0, 10);
+
+const rockskyUrl = 'https://rocksky.app/profile/barryfrost.com';
+---
+<Base title="Music" description="Top albums, top artists, and recently played tracks from my Rocksky profile.">
+  <article data-pagefind-body>
+    <h1 class="mb-4 font-semibold text-black dark:text-white">Music</h1>
+
+    <p class="mb-8 text-gray-600 dark:text-gray-400 text-sm">
+      All-time charts since I started scrobbling on my
+      <a href={rockskyUrl} class="underline">Rocksky profile</a>,
+      and recently played tracks.
+    </p>
+
+    {topAlbums.length > 0 && (
+      <section class="mb-4">
+        <h2 class="font-semibold mb-4 text-black dark:text-white">
+          Top Albums
+        </h2>
+        <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-4">
+          {topAlbums.map((album, i) => (
+            <div class="flex flex-col">
+              <div class="relative">
+                {album.coverUrl ? (
+                  <img
+                    src={new URL(album.coverUrl, Astro.url).href}
+                    alt={`${album.title} by ${album.artist}`}
+                    width="240"
+                    height="240"
+                    class="w-full aspect-square object-cover rounded shadow-sm"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                ) : (
+                  <div class="w-full aspect-square bg-neutral-100 dark:bg-neutral-800 rounded shadow-sm" />
+                )}
+                <span class="absolute top-1.5 left-1.5 px-1.5 py-0.5 text-xs font-mono tabular-nums bg-black/60 text-white rounded leading-none">
+                  {i + 1}
+                </span>
+              </div>
+              <p class="mt-1.5 text-sm font-medium leading-tight truncate" title={album.title}>{album.title}</p>
+              <p class="text-xs text-gray-600 dark:text-gray-400 truncate" title={album.artist}>{album.artist}</p>
+              <p class="text-xs text-gray-500 dark:text-gray-500 font-mono tabular-nums mt-0.5">
+                {album.count} {album.count === 1 ? 'play' : 'plays'}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <Divider />
+
+    {topArtists.length > 0 && (
+      <section class="mb-4">
+        <h2 class="font-semibold mb-4 text-black dark:text-white">
+          Top Artists
+        </h2>
+        <ol class="flex flex-col gap-2">
+          {topArtists.map(([name, count], i) => (
+            <li class="flex flex-col">
+              <div class="flex items-baseline gap-2 mb-1">
+                <span class="text-sm font-mono tabular-nums text-gray-500 dark:text-gray-500 w-5 shrink-0">
+                  {i + 1}
+                </span>
+                <span class="truncate flex-1 min-w-0">{name}</span>
+                <span class="text-xs text-gray-500 dark:text-gray-500 font-mono tabular-nums shrink-0">
+                  {count} {count == 1 ? 'play' : 'plays'}
+                </span>
+              </div>
+              <div class="h-1 rounded-full bg-neutral-100 dark:bg-neutral-800 overflow-hidden">
+                <div
+                  class="h-full rounded-full bg-gray-400 dark:bg-gray-500"
+                  style={`width: ${Math.round((count / maxArtistCount) * 100)}%`}
+                />
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+    )}
+
+    <Divider />
+
+    {recentlyPlayed.length > 0 && (
+      <section class="mb-4">
+        <h2 class="font-semibold mb-2 text-black dark:text-white">
+          Recently Played
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6">
+          {recentlyPlayed.map(s => (
+            <div class="py-2 flex items-center gap-2">
+              {s.data.coverUrl ? (
+                <img
+                  src={new URL(s.data.coverUrl, Astro.url).href}
+                  alt={s.data.album ?? s.data.title}
+                  width="60"
+                  height="60"
+                  class="w-15 h-15 aspect-square object-cover rounded shrink-0"
+                  loading="lazy"
+                  decoding="async"
+                />
+              ) : (
+                <div class="w-10 h-10 bg-gray-100 dark:bg-gray-800 rounded shrink-0" />
+              )}
+              <div class="flex-1 min-w-0">
+                <div class="truncate">{s.data.title}</div>
+                <div class="text-sm text-gray-600 dark:text-gray-400 truncate">{s.data.artist}</div>
+                <time
+                  class="text-sm text-gray-500 dark:text-gray-500 tabular-nums"
+                  datetime={toISODate(new Date(s.data.createdAt))}
+                  title={formatDate(new Date(s.data.createdAt))}
+                >
+                  {formatRelativeDate(new Date(s.data.createdAt))}
+                </time>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+  </article>
+</Base>
