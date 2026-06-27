@@ -2,7 +2,6 @@
 import Base from '@/layouts/Base.astro';
 import PhotoCard from '@/components/posts/PhotoCard.astro';
 import Pagination from '@/components/Pagination.astro';
-import Divider from '@/components/Divider.astro';
 import { getCollection } from 'astro:content';
 import { paginateItems } from '@/lib/feed';
 
@@ -19,10 +18,9 @@ const { items, totalPages } = pages[0] ?? { items: [], totalPages: 1 };
       <a class="p-name u-url" href={Astro.site?.href}>Barry Frost</a>
     </div>
     <h1 class="mb-4 font-semibold text-black dark:text-white">Photos</h1>
-    <p class="mb-4 text-gray-600 dark:text-gray-400">
+    <p class="mb-8 text-gray-600 dark:text-gray-400">
       Photo galleries I've posted on <a href="https://grain.social" class="underline">Grain</a>.
     </p>
-    <Divider />
     <div class="mb-4 flex flex-col gap-y-8">
       {items.map(entry => <PhotoCard entry={entry} />)}
     </div>
