@@ -1,21 +1,26 @@
 ---
 import Divider from '@/components/Divider.astro';
 
-// Footer links for homepage only.
-// Note: /follow, /contact routes don't exist yet — flagged for Barry to create.
-// Colophon lives at /articles/colophon until a top-level route is created.
 const links = [
   { href: '/about', label: 'About' },
-  { href: '/articles/colophon', label: 'Colophon' },
+  { href: '/colophon', label: 'Colophon' },
   { href: '/blogroll', label: 'Blogroll' },
   { href: '/follow', label: 'Follow' },
   { href: '/contact', label: 'Contact' },
-  { href: '/search', label: 'Search' },
 ];
 ---
 <Divider />
-<div class="mb-4 text-sm flex gap-4 flex-wrap">
+<div class="mb-4 text-sm flex gap-4 flex-wrap items-center">
   {links.map(link => (
     <a href={link.href} class="underline">{link.label}</a>
   ))}
+  <form action="/search" method="get">
+    <input
+      type="search"
+      name="q"
+      placeholder="Search…"
+      autocomplete="off"
+      class="w-30 sm:w-40 text-sm rounded border border-gray-400 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-600 dark:placeholder-gray-400 px-2 py-0.5 focus:outline-none focus:ring-1 focus:ring-gray-400 dark:focus:ring-gray-600"
+    />
+  </form>
 </div>
