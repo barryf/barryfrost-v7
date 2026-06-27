@@ -2,6 +2,7 @@
 import Base from '@/layouts/Base.astro';
 import BlueskyCard from '@/components/posts/BlueskyCard.astro';
 import Pagination from '@/components/Pagination.astro';
+import Divider from '@/components/Divider.astro';
 import { getCollection } from 'astro:content';
 import { paginateItems } from '@/lib/feed';
 
@@ -26,7 +27,7 @@ const { items, currentPage, totalPages } = Astro.props;
     {(items as any[]).map((entry, i) => (
       <>
         <BlueskyCard entry={entry} />
-        {i < items.length - 1 && <div class="mb-4">—</div>}
+        {i < items.length - 1 && <Divider />}
       </>
     ))}
   </div>
