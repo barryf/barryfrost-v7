@@ -34,7 +34,7 @@ const date = new Date(data.createdAt);
       In reply to <a class="u-in-reply-to underline" href={`https://bsky.app/profile/${data.reply.parentHandle}/post/${data.reply.parentRkey}`} rel="noopener noreferrer">@{data.reply.parentHandle}</a>
     </p>
   )}
-  <p class="e-content mb-1 break-words" set:html={html} />
+  <p class="e-content mb-1 wrap-break-word" set:html={html} />
   {data.quotedPost && <BlueskyQuote quotedPost={data.quotedPost as any} />}
   {images.length > 0 && (
     <div class="flex flex-wrap gap-2 mt-2 mb-1">
@@ -49,8 +49,8 @@ const date = new Date(data.createdAt);
       ))}
     </div>
   )}
-  <div class="mb-4 text-sm">
-    <time class="dt-published text-gray-500 dark:text-gray-500 mr-1" datetime={toISODate(date)} title={formatDate(date)}>{formatRelativeDate(date)}</time>
+  <div class="mb-4 text-sm text-gray-500 dark:text-gray-500">
+    <time class="dt-published mr-1" datetime={toISODate(date)} title={formatDate(date)}>{formatRelativeDate(date)}</time>
     <a class="u-url underline" href={blueskyUrl} rel="noopener noreferrer" aria-label="View on Bluesky"><BlueskyIcon /></a>
   </div>
 </article>
