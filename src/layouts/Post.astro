@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Base from './Base.astro';
 import { formatDate, formatDateShort, formatRelativeDate, toISODate } from '@/lib/dates';
+import Divider from '@/components/Divider.astro'
 
 interface Props {
   title: string;
@@ -32,7 +33,7 @@ const matchingDoc = documents.find(doc => doc.data.path === currentPath);
     <div class="e-content prose dark:prose-invert max-w-none mb-4">
       <slot />
     </div>
-    <div class="mb-4">—</div>
+    <Divider />
     <div class="mb-4 text-sm">
       {section && sectionHref ? (
         <Fragment>
