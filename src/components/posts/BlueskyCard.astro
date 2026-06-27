@@ -1,8 +1,9 @@
 ---
-import { formatDateShort, toISODate } from '@/lib/dates';
+import { formatRelativeDate, formatDate, toISODate } from '@/lib/dates';
 import { renderRichText } from '@/lib/richtext';
 import { HANDLE } from '@/lib/pds';
 import BlueskyQuote from '@/components/posts/BlueskyQuote.astro';
+import BlueskyIcon from '@/components/BlueskyIcon.astro';
 
 interface Props {
   entry: {
@@ -29,7 +30,7 @@ const date = new Date(data.createdAt);
 ---
 <article class="h-entry">
   {data.reply && (
-    <p class="text-xs text-gray-500 dark:text-gray-500 mb-1">
+    <p class="text-sm text-gray-500 dark:text-gray-500 mb-1">
       In reply to <a class="u-in-reply-to underline" href={`https://bsky.app/profile/${data.reply.parentHandle}/post/${data.reply.parentRkey}`} rel="noopener noreferrer">@{data.reply.parentHandle}</a>
     </p>
   )}
@@ -49,8 +50,7 @@ const date = new Date(data.createdAt);
     </div>
   )}
   <div class="mb-4 text-sm">
-    <time class="dt-published text-gray-500 dark:text-gray-500" datetime={toISODate(date)}>{formatDateShort(date)}</time>
-    {' '}·{' '}
-    <a class="u-url underline" href={blueskyUrl} rel="noopener noreferrer">Bluesky</a>
+    <time class="dt-published text-gray-500 dark:text-gray-500 mr-1" datetime={toISODate(date)} title={formatDate(date)}>{formatRelativeDate(date)}</time>
+    <a class="u-url underline" href={blueskyUrl} rel="noopener noreferrer" aria-label="View on Bluesky"><BlueskyIcon /></a>
   </div>
 </article>
