@@ -33,6 +33,7 @@ Fetched at build time from `bsky.social` for DID `did:plc:j5ksi3y4tdtbp7vpsxsfya
 | `buzz.bookhive.book` | `books.ts` | `/books` |
 | `social.grain.gallery` + `.gallery.item` + `.photo` | `photos.ts` | `/photos`, homepage recent photos |
 | `app.rocksky.album` | `albums.ts` | `/now` page "Listening" section only |
+| `app.rocksky.scrobble` | `scrobbles.ts` | `/music` — Top Albums, Top Artists, Recently Played |
 | `site.standard.document` | `documents.ts` | Enrichment only — adds AT Protocol syndication links to articles/weeknotes |
 | `site.standard.graph.subscription` | `subscriptions.ts` | `/blogroll` only |
 
@@ -59,7 +60,7 @@ The homepage (`src/pages/index.astro`) is a curated view, not a unified feed. Se
 4. **Latest Post** — most recent non-reply Bluesky post with text, relative date, Bluesky icon link
 5. **Featured Articles** — articles with `featured: true` frontmatter, sorted by date
 6. **Recent Check-ins** — 5 most recent check-ins as a compact list
-7. **Recent Media** — links to `/books` and `/films`
+7. **Recent Media** — links to `/books`, `/films`, and `/music`
 
 Each section is separated by the `Divider` component (`❉ ❉ ❉`). Sections are omitted if no data is available.
 
@@ -88,6 +89,7 @@ Paginated pages show `Title (Page N)` in both the h1 and the browser window titl
 | `/films/by-rating` | Films grid sorted by rating descending |
 | `/photos` | Photo galleries list |
 | `/books` | Books — "Reading" and "Read" sections; two-column at lg |
+| `/music` | Music — Top Albums grid, Top Artists ranked list with bars, Recently Played tracks; all aggregated at build time from scrobbles |
 | `/now` | Now page |
 | `/work` | CV — career, education, projects, skills from PDS records |
 | `/blogroll` | Curated blogs + Standard publications |

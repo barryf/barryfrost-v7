@@ -9,6 +9,7 @@ import { subscriptionsLoader } from './lib/loaders/subscriptions';
 import { blogrollLoader } from './lib/loaders/blogroll';
 import { photosLoader } from './lib/loaders/photos';
 import { albumsLoader } from './lib/loaders/albums';
+import { scrobblesLoader } from './lib/loaders/scrobbles';
 
 const articles = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: 'src/content/articles' }),
@@ -192,7 +193,21 @@ const albums = defineCollection({
     title: z.string(),
     artist: z.string(),
     coverUrl: z.string().optional(),
-createdAt: z.string(),
+    createdAt: z.string(),
+    uri: z.string(),
+  }),
+});
+
+const scrobbles = defineCollection({
+  loader: scrobblesLoader(),
+  schema: z.object({
+    title: z.string(),
+    artist: z.string(),
+    album: z.string().optional(),
+    albumArtist: z.string().optional(),
+    coverUrl: z.string().optional(),
+    spotifyLink: z.string().optional(),
+    createdAt: z.string(),
     uri: z.string(),
   }),
 });
@@ -211,4 +226,5 @@ export const collections = {
   standardSubscriptions,
   photos,
   albums,
+  scrobbles,
 };
