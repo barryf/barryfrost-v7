@@ -8,7 +8,7 @@ See `PLAN.md` for the full architecture reference.
 
 ## What this is
 
-A personal website that brings together several streams of content — long-form articles, weeknotes, Bluesky posts, checkins, films watched, books read, and photo galleries. The homepage is a curated view with dedicated list pages for each content type. Everything is rendered to static HTML at build time and served from the edge.
+A personal website that brings together several streams of content — long-form articles, weeknotes, Bluesky posts, check-ins, films watched, books read, and photo galleries. The homepage is a curated view with dedicated list pages for each content type. Everything is rendered to static HTML at build time and served from the edge.
 
 There is no database, no CMS, and no server-side rendering. Rebuilds are triggered automatically when changes are detected on an [AT Protocol](https://atproto.com) PDS, or on push to `main`.
 
@@ -20,7 +20,7 @@ Articles, weeknotes, slash pages, and the archived 2000–2001 travelblog all li
 
 ### PDS records as syndication targets
 
-Other content types — Bluesky posts, checkins, films, books, photos — are authored on third-party services that store records on an [AT Protocol PDS](https://atproto.com/guides/glossary#personal-data-server-pds). At build time, custom Astro content loaders in `src/lib/loaders/` fetch these records and populate the site's content collections.
+Other content types — Bluesky posts, check-ins, films, books, photos — are authored on third-party services that store records on an [AT Protocol PDS](https://atproto.com/guides/glossary#personal-data-server-pds). At build time, custom Astro content loaders in `src/lib/loaders/` fetch these records and populate the site's content collections.
 
 This inverts the usual POSSE model: rather than the site publishing out to silos, it pulls in from open, user-owned data stores. The PDS becomes the system of record for content that originates elsewhere; the site becomes a unified, owned view of it.
 
@@ -34,7 +34,7 @@ Every page is marked up with [Microformats 2](https://microformats.org/wiki/micr
 
 ### Minimal JavaScript
 
-The only page that ships JS is `/checkins`, which dynamically loads Leaflet and Leaflet.markercluster from a CDN to render a clustered map. Every other page is pure HTML and CSS, including dark mode (`prefers-color-scheme` only — no toggle, no flash).
+The only page that ships JS is `/check-ins`, which dynamically loads Leaflet and Leaflet.markercluster from a CDN to render a clustered map. Every other page is pure HTML and CSS, including dark mode (`prefers-color-scheme` only — no toggle, no flash).
 
 ### Build-time images via Cloudflare
 

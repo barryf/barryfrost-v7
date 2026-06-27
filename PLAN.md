@@ -28,7 +28,7 @@ Fetched at build time from `bsky.social` for DID `did:plc:j5ksi3y4tdtbp7vpsxsfya
 | Collection | Loader | Used in |
 |---|---|---|
 | `app.bsky.feed.post` | `bluesky.ts` | `/posts`, homepage latest post |
-| `app.beaconbits.beacon` + `com.barryfrost.checkin` | `checkins.ts` | `/checkins`, homepage recent check-ins |
+| `app.beaconbits.beacon` + `com.barryfrost.checkin` | `check-ins.ts` | `/check-ins`, homepage recent check-ins |
 | `social.popfeed.feed.review` | `films.ts` | `/films` |
 | `buzz.bookhive.book` | `books.ts` | `/books` |
 | `social.grain.gallery` + `.gallery.item` + `.photo` | `photos.ts` | `/photos`, homepage recent photos |
@@ -81,7 +81,7 @@ Paginated pages show `Title (Page N)` in both the h1 and the browser window titl
 | `/weeknotes/feed.xml` | RSS feed (weeknotes, latest 10, full content) |
 | `/weeknotes/feed.json` | JSON Feed v1.1 (same as RSS) |
 | `/posts` | Bluesky posts list |
-| `/checkins` | Check-ins list with Leaflet cluster map |
+| `/check-ins` | Check-ins list with Leaflet cluster map |
 | `/films` | Films grid, sorted by watched date; 40 per page |
 | `/films/by-rating` | Films grid sorted by rating descending |
 | `/photos` | Photo galleries list |
@@ -109,7 +109,7 @@ Removed from v6: `/page/{n}` (unified feed), `/archives/`, `/tags/`, `/feed.xml`
 Card components in `src/components/posts/`:
 - `ArticleCard` — title link, relative date with `title` attr
 - `BlueskyCard` — rich text, embedded images, quote posts via `BlueskyQuote`, relative date, Bluesky icon link
-- `CheckinCard` — venue name/category/address, optional photo(s), relative date, Beaconbits link
+- `CheckInCard` — venue name/category/address, optional photo(s), relative date, Beaconbits link
 - `FilmCard` — poster, title, star rating, relative date
 - `BookCard` — cover, title, authors, "Started/Finished [relative date]"
 - `PhotoCard` — horizontally scrollable thumbnails (multi) or side-by-side (single), title, relative date
@@ -166,7 +166,7 @@ Applied as static classes directly in Astro templates. No runtime JS required.
 - **All cards**: `h-entry` with `dt-published`, `u-url`
 - **ArticleCard**: `p-name`, `p-summary`; tags as `p-category`
 - **BlueskyCard**: `e-content` for rich text, `u-in-reply-to` on reply link, `u-photo` on embedded images
-- **CheckinCard**: nested `p-checkin h-card` with `p-name`, `p-latitude`, `p-longitude`, `p-street-address`; `p-rating` (hidden) when present
+- **CheckInCard**: nested `p-checkin h-card` with `p-name`, `p-latitude`, `p-longitude`, `p-street-address`; `p-rating` (hidden) when present
 - **FilmCard**: nested `p-item h-cite` with `u-photo` (poster) and hidden `p-name u-url`; numeric `p-rating` via `<data value=...>`
 - **BookCard**: nested `p-read-of h-cite` with `u-photo` (cover), hidden `p-name u-url`, `p-author`
 - **PhotoCard**: `u-photo` on each thumbnail, `p-name u-url` on title
@@ -241,7 +241,7 @@ Both workers live in `cloudflare/` as standalone wrangler projects. The main app
 
 ## Key Conventions
 
-- **Minimal JS** — `/checkins` loads Leaflet + Leaflet.markercluster (CDN) for the cluster map with fullscreen toggle; all other pages are JS-free
+- **Minimal JS** — `/check-ins` loads Leaflet + Leaflet.markercluster (CDN) for the cluster map with fullscreen toggle; all other pages are JS-free
 - **No runtime JS elsewhere** — MF2, dark mode, and layout are pure HTML/CSS
 - **Local Markdown is canonical** — PDS documents are syndication targets, not source of truth
 - **Images served on demand** — source blobs stay in the PDS; Cloudflare Image Transformations fetches, resizes, converts to WebP, and edge-caches on first request

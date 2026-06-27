@@ -12,7 +12,7 @@ Live staging URL: `https://new.barryfrost.com` (v6 still serves `barryfrost.com`
 
 ## Key Conventions
 - Local Markdown is canonical; PDS records are syndication targets
-- MF2 classes applied directly in Astro templates — no runtime JS except `/checkins` (Leaflet map)
+- MF2 classes applied directly in Astro templates — no runtime JS except `/check-ins` (Leaflet map)
 - Light/dark mode via `prefers-color-scheme` only — no JS toggle
 - Images downloaded at build time to `public/images/`, cached in CI
 - No SSR — rebuilds trigger via GitHub Actions `repository_dispatch` when PDS changes
