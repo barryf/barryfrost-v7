@@ -3,7 +3,6 @@ import Base from '@/layouts/Base.astro';
 import CheckinCard from '@/components/posts/CheckinCard.astro';
 import CheckinMap from '@/components/CheckinMap.astro';
 import Pagination from '@/components/Pagination.astro';
-import Divider from '@/components/Divider.astro';
 import { getCollection } from 'astro:content';
 import { paginateItems } from '@/lib/feed';
 
@@ -31,16 +30,15 @@ const mapCheckins = allCheckins
       <a class="p-name u-url" href={Astro.site?.href}>Barry Frost</a>
     </div>
     <h1 class="mb-4 font-semibold text-black dark:text-white">Checkins</h1>
-    <p class="mb-4 text-gray-600 dark:text-gray-400">
+    <p class="mb-8 text-gray-600 dark:text-gray-400">
       Places I've checked in to, via <a href="https://foursquare.com" class="underline">Foursquare</a> and <a href="https://www.beaconbits.app/passport/barryfrost.com" class="underline">Beaconbits</a>.
     </p>
-    <Divider />
     {mapCheckins.length > 0 && (
-      <div class="mb-4">
+      <div class="mb-8 -ml-4 -mr-4 sm:-ml-8 sm:-mr-8">
         <CheckinMap checkins={mapCheckins} />
       </div>
     )}
-    <div class="mb-4 flex flex-col gap-y-4">
+    <div class="flex flex-col gap-y-4">
       {items.map(entry => <CheckinCard entry={entry} />)}
     </div>
   </div>
