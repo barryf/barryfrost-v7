@@ -18,9 +18,10 @@ export async function getStaticPaths() {
 
 const { items, currentPage, totalPages } = Astro.props;
 ---
-<Base title={`Books — Page ${currentPage}`}>
-  <h1 class="mb-4 font-semibold text-black dark:text-white">Books</h1>
-  <p class="mb-4 text-sm text-gray-600 dark:text-gray-400">Read — Page {currentPage}</p>
+<Base title={`Books (Page ${currentPage})`}>
+  <h1 class="mb-8 font-semibold text-black dark:text-white">
+    Books <span class="font-normal">(Page {currentPage})</span>
+  </h1>
   <div class="mb-4 flex flex-col gap-y-4">
     {items.map((entry: any) => <BookCard entry={entry} />)}
   </div>
