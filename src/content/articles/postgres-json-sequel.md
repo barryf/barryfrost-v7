@@ -1,5 +1,4 @@
 ---
-featured: true
 title: "Using JSON in Postgres with Ruby and Sequel"
 date: 2017-10-10
 tags:

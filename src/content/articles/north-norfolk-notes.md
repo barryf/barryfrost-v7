@@ -1,6 +1,7 @@
 ---
 title: "North Norfolk Notes"
 date: 2016-09-23
+featured: true
 tags:
   - holiday
   - norfolk
@@ -14,7 +15,7 @@ Earlier this week I returned from a very enjoyable holiday in a surprisingly sun
 
 - [Snettisham Park][snettisham]: working farm with calves, piglets, lambs, goats, rabbits and other pettable animals you can also feed, plus a deer safari. Cafe, good toilets, etc.
 - [Holkham Hall][holkham]: large country estate with excellent facilities for visitors. Good for a long fully-paved walk, cake and tea.
-- [Sea Life, Hunstanton][sealife]: Perfect for the one wet day we had. Plenty of wide-eyed, wide-mouthed reactions from Henry to the fish, sharks, alligators, seals and penguins. 
+- [Sea Life, Hunstanton][sealife]: Perfect for the one wet day we had. Plenty of wide-eyed, wide-mouthed reactions from Henry to the fish, sharks, alligators, seals and penguins.
 
 **Beaches**
 
@@ -23,7 +24,7 @@ Earlier this week I returned from a very enjoyable holiday in a surprisingly sun
 
 **Eating**
 
-- [Lifeboat Inn][lifeboat]: Tucked away near the historic Coal Barn, the Inn has superb seafood and a sunny courtyard. 
+- [Lifeboat Inn][lifeboat]: Tucked away near the historic Coal Barn, the Inn has superb seafood and a sunny courtyard.
 - [Chequers]: Friendly, recently-renovated pub with [interesting pizzas][pizza]. I enjoyed the devilled Wells crab with salt and pepper.
 - [Eric's Fish and Chips][erics]: smart restaurant/takeway with excellent haddock and chips.
 

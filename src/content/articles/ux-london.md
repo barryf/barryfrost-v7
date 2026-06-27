@@ -1,6 +1,7 @@
 ---
 title: "UX London: Products, People and Platforms"
 date: 2014-06-04
+featured: true
 ---
 
 The [2014 UX London conference][uxlondon] was held at the end of last week in Greenwich, promising three days of "inspiration, education and skills development for user experience designers" focused around products, people and platforms. Here are my highlights of the talks and workshops I attended.
@@ -16,7 +17,7 @@ The [2014 UX London conference][uxlondon] was held at the end of last week in Gr
 ## People
 
 - [Rory Sutherland][rory]'s psychophysics talk was my conference highlight, exploring the link between psychology and technology and how the best designers have exploited this. It's worth watching his entertaining [video][monkey] of a capuchin monkey angrily rejecting cucumber pieces because his neighbour received grapes for the same task.
-- [Sebastian Deterding][sebastian] was thought-provoking in his talk on the ethics of UX, asking us to reflect on the moral and ethical basis of our work. 
+- [Sebastian Deterding][sebastian] was thought-provoking in his talk on the ethics of UX, asking us to reflect on the moral and ethical basis of our work.
 - The enigmatic [Peter Smart][peter] illustrated his talk about how UX designers create innovation with his redesigned [airline boarding pass][ticket], borne through personal frustration with confusing and unwieldy tickets.
 - [MailChimp][]'s director of UX, [Aaron Walter][aaron], walked us through the ground-up redesign of his much-loved product, how they managed user concerns and touching on the contents of his afternoon workship on emotional design. MailChimp has a clear and deliberate personality, but it's a constant effort to ensure this is maintained. Their [Voice and Tone][vat] site and [pattern library][patterns] helps designers and other staff continue to be consistent to the brand voice.
 
@@ -25,11 +26,11 @@ The [2014 UX London conference][uxlondon] was held at the end of last week in Gr
 - The final day began with [Scott Jenson][scott] asking us to rethink the increasingly closed nature of the Internet of Things to ensure its future is more open -- Apple singled out for criticism. Rather than being app-centric devices should focus on providing a URL accessible to any device and web browsers.
 - [Stephanie Rieger][stephanie] continued Scott's thread, underlining that we're some way short of a vision of seamless web and device interoperability.
 - [Ben Sauer][ben] from [Clearleft][] and [Dennis Publishing][dennis]'s [Rob Boynes][rob] gave an honest talk on [EVO magazine][evo]'s attempts to move from print to online. Challenges including getting editorial staff and its readership to rethink their relationship with the title, plus technical hurdles that caused a loss of the back catalogue.
-- [Carla Diana][carla] returned to the Internet of Things with case studies on the wide range of devices, including some of her own research projects. Some of the simplest were the best: I loved the idea of little connected lights to help remote teams feel together and communicate presence. 
+- [Carla Diana][carla] returned to the Internet of Things with case studies on the wide range of devices, including some of her own research projects. Some of the simplest were the best: I loved the idea of little connected lights to help remote teams feel together and communicate presence.
 - Futurist [Dan Hill][dan]'s talk took us to the macro level with smart cities and urban projects that hint at how the dynamics of the internet are shaping the environment around us. His pop-up street-food case study in Helsinki showed how the internet helped local people bypass anachronistic food laws for one day.
 - [Luke Wroblewski][luke]'s workshop finished off the conference well for me, covering a wide range of topics about mobile input from his epic 700+ slide deck. He included useful lessons about not slavishly copying others' use of patterns like the [hamburger icon][hamburger] and side menus and the importance of paying attention to [international address formats][address]. Mobile input matters so we should be spending a little extra time to bring up the keyboard and turn off auto-capitalisation and auto-complete where appropriate.
 
-Thanks to [Clearleft][] for putting on such a polished event. Excellent organisation, food, coffee and venue. 
+Thanks to [Clearleft][] for putting on such a polished event. Excellent organisation, food, coffee and venue.
 
 *[This article first appeared on globaldev.co.uk][globaldev]*.
 
