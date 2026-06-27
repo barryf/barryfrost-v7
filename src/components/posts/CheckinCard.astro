@@ -1,5 +1,5 @@
 ---
-import { formatDateShort, toISODate } from '@/lib/dates';
+import { formatRelativeDate, formatDate, toISODate } from '@/lib/dates';
 
 interface Props {
   entry: {
@@ -57,7 +57,7 @@ const date = new Date(data.createdAt);
       {data.longitude && <data class="p-longitude" value={data.longitude} />}
       {data.rating !== undefined && <data class="p-rating hidden" value={data.rating} />}
       <div class="mt-1">
-        <time class="dt-published text-sm text-gray-500 dark:text-gray-500" datetime={toISODate(date)}>{formatDateShort(date)}</time>
+        <time class="dt-published text-sm text-gray-500 dark:text-gray-500" datetime={toISODate(date)} title={formatDate(date)}>{formatRelativeDate(date)}</time>
         {data.sourceUrl && <a href={data.sourceUrl} class="text-sm ml-2 underline" rel="noopener noreferrer">Beaconbits</a>}
       </div>
     </div>

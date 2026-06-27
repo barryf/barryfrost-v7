@@ -1,5 +1,5 @@
 ---
-import { formatDateShort, toISODate } from '@/lib/dates';
+import { formatRelativeDate, formatDate, toISODate } from '@/lib/dates';
 
 interface Props {
   entry: {
@@ -53,7 +53,7 @@ const date = new Date(dateStr);
     </h2>
     <p class="text-sm text-gray-600 dark:text-gray-400">by {data.authors}</p>
     <div>
-      <time class="dt-published text-sm" datetime={toISODate(date)}>{dateLabel} {formatDateShort(date)}</time>
+      <time class="dt-published text-sm" datetime={toISODate(date)} title={formatDate(date)}>{dateLabel} {formatRelativeDate(date)}</time>
     </div>
   </div>
 </article>

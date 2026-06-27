@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from './Base.astro';
-import { formatDate, toISODate } from '@/lib/dates';
+import { formatDate, formatDateShort, formatRelativeDate, toISODate } from '@/lib/dates';
 
 interface Props {
   title: string;
@@ -13,6 +13,8 @@ interface Props {
 }
 
 const { title, date, description, emoji, section, sectionHref } = Astro.props;
+const relativeDate = formatRelativeDate(date);
+const datePreposition = relativeDate === formatDateShort(date) ? ' on ' : '';
 
 // Find matching document in PDS for syndication link
 const currentPath = Astro.url.pathname.replace(/\/$/, '');
@@ -30,15 +32,16 @@ const matchingDoc = documents.find(doc => doc.data.path === currentPath);
     <div class="e-content prose dark:prose-invert max-w-none mb-4">
       <slot />
     </div>
+    <div class="mb-4">—</div>
     <div class="mb-4 text-sm">
       {section && sectionHref ? (
         <Fragment>
           Posted in <a href={sectionHref} class="underline">{section}</a>
-          {' '}on <time class="dt-published" datetime={toISODate(date)}>{formatDate(date)}</time>.
+          {datePreposition} <time class="dt-published" datetime={toISODate(date)} title={formatDate(date)}>{relativeDate}</time>
         </Fragment>
       ) : (
         <Fragment>
-          Posted on <time class="dt-published" datetime={toISODate(date)}>{formatDate(date)}</time>.
+          Posted{datePreposition} <time class="dt-published" datetime={toISODate(date)} title={formatDate(date)}>{relativeDate}</time>
         </Fragment>
       )}
     </div>

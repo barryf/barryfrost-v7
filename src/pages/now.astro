@@ -3,7 +3,7 @@ import { statSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { getCollection, getEntry, render } from 'astro:content';
 import Base from '@/layouts/Base.astro';
-import { formatDateShort, toISODate } from '@/lib/dates';
+import { formatRelativeDate, formatDate, toISODate } from '@/lib/dates';
 import { getCurrentPosition, getSelf, formatLocation } from '@/lib/sifa';
 import { DID } from '@/lib/pds';
 
@@ -74,8 +74,8 @@ const rockskySource: Source = { label: 'Rocksky', url: 'https://rocksky.app/prof
 <Base title="Now" description={nowEntry.data.description}>
   <article data-pagefind-body>
     <h1 class="mb-4 font-semibold text-black dark:text-white">Now</h1>
-    <p class="text-sm text-neutral-500 dark:text-neutral-500 mb-6">
-      Last updated <time datetime={toISODate(lastUpdated)}>{formatDateShort(lastUpdated)}</time>
+    <p class="text-sm text-gray-500 dark:text-gray-500 mb-6">
+      Last updated <time datetime={toISODate(lastUpdated)} title={formatDate(lastUpdated)}>{formatRelativeDate(lastUpdated)}</time>
     </p>
 
     <div class="prose dark:prose-invert max-w-none mb-10">
@@ -87,19 +87,19 @@ const rockskySource: Source = { label: 'Rocksky', url: 'https://rocksky.app/prof
         <div class="flex items-center gap-2 mb-2 pb-2 border-b border-neutral-200 dark:border-neutral-700">
           <h2 class="text-lg font-semibold">Working</h2>
           {sifaSource.url ? (
-            <a href={sifaSource.url} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300">{sifaSource.label}</a>
+            <a href={sifaSource.url} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">{sifaSource.label}</a>
           ) : (
-            <span class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded text-neutral-500">{sifaSource.label}</span>
+            <span class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded text-gray-500">{sifaSource.label}</span>
           )}
         </div>
         {position && (
           <p>
             <span class="font-medium">{position.title}</span>
-            <span class="text-neutral-600 dark:text-neutral-400"> at {position.company}</span>
+            <span class="text-gray-600 dark:text-gray-400"> at {position.company}</span>
           </p>
         )}
         {locationStr && (
-          <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-1">Based in {locationStr}</p>
+          <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Based in {locationStr}</p>
         )}
       </section>
     )}
@@ -128,11 +128,11 @@ const rockskySource: Source = { label: 'Rocksky', url: 'https://rocksky.app/prof
                   ) : (
                     <span class="font-medium">{book.data.title}</span>
                   )}
-                  <p class="text-sm text-neutral-600 dark:text-neutral-400">by {book.data.authors}</p>
-                  <div class="mt-0.5 flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-500">
-                    <time datetime={toISODate(new Date(book.data.createdAt))}>Started {formatDateShort(new Date(book.data.createdAt))}</time>
+                  <p class="text-sm text-gray-600 dark:text-gray-400">by {book.data.authors}</p>
+                  <div class="mt-0.5 flex items-center gap-3 text-sm text-gray-500 dark:text-gray-500">
+                    <time datetime={toISODate(new Date(book.data.createdAt))} title={formatDate(new Date(book.data.createdAt))}>Started {formatRelativeDate(new Date(book.data.createdAt))}</time>
                     {book.data.hiveId && (
-                      <a href={`https://bookhive.buzz/books/${book.data.hiveId}`} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded hover:text-neutral-700 dark:hover:text-neutral-300">Bookhive</a>
+                      <a href={`https://bookhive.buzz/books/${book.data.hiveId}`} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded hover:text-gray-700 dark:hover:text-gray-300">Bookhive</a>
                     )}
                   </div>
                 </div>
@@ -148,9 +148,9 @@ const rockskySource: Source = { label: 'Rocksky', url: 'https://rocksky.app/prof
         <div class="flex items-center gap-2 mb-3 pb-2 border-b border-neutral-200 dark:border-neutral-700">
           <h2 class="text-lg font-semibold">Listening</h2>
           {rockskySource.url ? (
-            <a href={rockskySource.url} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300" rel="noopener noreferrer">{rockskySource.label}</a>
+            <a href={rockskySource.url} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded text-gray-500 hover:text-gray-700 dark:hover:text-gray-300" rel="noopener noreferrer">{rockskySource.label}</a>
           ) : (
-            <span class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded text-neutral-500">{rockskySource.label}</span>
+            <span class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded text-gray-500">{rockskySource.label}</span>
           )}
         </div>
         <div class="overflow-x-auto">
@@ -169,7 +169,7 @@ const rockskySource: Source = { label: 'Rocksky', url: 'https://rocksky.app/prof
                   />
                 )}
                 <p class="mt-1 text-sm font-medium leading-tight truncate" title={a.data.title}>{a.data.title}</p>
-                <p class="text-xs text-neutral-600 dark:text-neutral-400 truncate" title={a.data.artist}>{a.data.artist}</p>
+                <p class="text-xs text-gray-600 dark:text-gray-400 truncate" title={a.data.artist}>{a.data.artist}</p>
               </div>
             ))}
           </div>
@@ -196,12 +196,12 @@ const rockskySource: Source = { label: 'Rocksky', url: 'https://rocksky.app/prof
                   <span class="font-medium">{td.venueName}</span>
                 )}
                 {td.venueCategory && (
-                  <span class="text-sm text-neutral-600 dark:text-neutral-400"> · {td.venueCategory}</span>
+                  <span class="text-sm text-gray-600 dark:text-gray-400"> · {td.venueCategory}</span>
                 )}
               </p>
-              <div class="mt-0.5 flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-500">
-                <time datetime={toISODate(new Date(td.createdAt))}>{formatDateShort(new Date(td.createdAt))}</time>
-                {td.sourceUrl && <a href={td.sourceUrl} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded hover:text-neutral-700 dark:hover:text-neutral-300" rel="noopener noreferrer">Beaconbits</a>}
+              <div class="mt-0.5 flex items-center gap-3 text-sm text-gray-500 dark:text-gray-500">
+                <time datetime={toISODate(new Date(td.createdAt))} title={formatDate(new Date(td.createdAt))}>{formatRelativeDate(new Date(td.createdAt))}</time>
+                {td.sourceUrl && <a href={td.sourceUrl} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded hover:text-gray-700 dark:hover:text-gray-300" rel="noopener noreferrer">Beaconbits</a>}
               </div>
             </div>
           </div>
@@ -217,8 +217,8 @@ const rockskySource: Source = { label: 'Rocksky', url: 'https://rocksky.app/prof
             <a href={`/weeknotes/${latestWeeknote.id}`} class="font-medium hover:underline">
               {latestWeeknote.data.emoji && `${latestWeeknote.data.emoji} `}{latestWeeknote.data.title}
             </a>
-            <div class="mt-0.5 text-sm text-neutral-500 dark:text-neutral-500">
-              <time datetime={toISODate(latestWeeknote.data.date)}>{formatDateShort(latestWeeknote.data.date)}</time>
+            <div class="mt-0.5 text-sm text-gray-500 dark:text-gray-500">
+              <time datetime={toISODate(latestWeeknote.data.date)} title={formatDate(latestWeeknote.data.date)}>{formatRelativeDate(latestWeeknote.data.date)}</time>
             </div>
           </div>
         </div>
@@ -248,13 +248,13 @@ const rockskySource: Source = { label: 'Rocksky', url: 'https://rocksky.app/prof
                   {filmData.title}
                 </a>
                 {filmData.rating !== undefined && (
-                  <p class="text-sm text-neutral-600 dark:text-neutral-400 mt-0.5" title={`${filmData.rating}/10`}>
+                  <p class="text-sm text-gray-600 dark:text-gray-400 mt-0.5" title={`${filmData.rating}/10`}>
                     {toStars(filmData.rating)}
                   </p>
                 )}
-                <div class="mt-0.5 flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-500">
-                  <time datetime={toISODate(latestFilm.date)}>{formatDateShort(latestFilm.date)}</time>
-                  <a href={popfeedSource.url} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded hover:text-neutral-700 dark:hover:text-neutral-300">{popfeedSource.label}</a>
+                <div class="mt-0.5 flex items-center gap-3 text-sm text-gray-500 dark:text-gray-500">
+                  <time datetime={toISODate(latestFilm.date)} title={formatDate(latestFilm.date)}>{formatRelativeDate(latestFilm.date)}</time>
+                  <a href={popfeedSource.url} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded hover:text-gray-700 dark:hover:text-gray-300">{popfeedSource.label}</a>
                 </div>
               </div>
             </div>
