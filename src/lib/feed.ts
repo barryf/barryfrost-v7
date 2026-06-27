@@ -1,4 +1,4 @@
-export const PAGE_SIZE = 50;
+export const PAGE_SIZE = 20;
 
 export function paginateItems<T>(items: T[], pageSize: number = PAGE_SIZE) {
   const pageCount = Math.max(1, Math.ceil(items.length / pageSize));
