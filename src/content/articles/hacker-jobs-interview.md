@@ -1,6 +1,7 @@
 ---
 title: "Hacker Jobs interview"
 date: 2013-02-27
+featured: true
 tags:
   - interview
   - recruitment
@@ -31,7 +32,7 @@ Do your research on us. Visit our sites and read a few blog posts and tweets. Fi
 
 ## 5. How much value do you place in a developer’s personal projects such as GitHub and demo sites when they apply for a job with your company?
 
-It’s a definite advantage if I can see code first. We love to see developers who enjoy scratching an itch and want to contribute to open source projects outside work. Also I like to thoroughly research applicants before I interview them. If I can’t find any personal projects on GitHub or blog posts then it makes establishing technical skills a little more difficult. 
+It’s a definite advantage if I can see code first. We love to see developers who enjoy scratching an itch and want to contribute to open source projects outside work. Also I like to thoroughly research applicants before I interview them. If I can’t find any personal projects on GitHub or blog posts then it makes establishing technical skills a little more difficult.
 
 ## 6. Big Debate: What is the optimal length for a CV?
 

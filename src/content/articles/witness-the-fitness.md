@@ -1,6 +1,7 @@
 ---
 title: "Witness the fitness"
 date: 2011-06-19
+featured: true
 ---
 
 I'm 32, unfit and getting a bit tubby. I drive to work, sit at a computer for most of the day and eat/drink what I like. This lifestyle has got me through my twenties intact, but it's time to change. I'd like to lose a bit of the flab that I've gained and generally feel fitter and healthier.
@@ -37,7 +38,7 @@ I'm not calorie counting, I'm just eating less and choosing foods that are more 
 - **Reduce carbohydrates and eat more veg**. This is a bit more tricky. What's left?! I've started with cutting out crisps, chips and large quantities of pasta.
 - **Not eating when I'm hungry**. I just drink some water.
 
-And a key for me: I plan on having one naughty/reward day a week. I'm not going to avoid a meal out or pizza with my girlfriend, I'll just fit the good days around it. 
+And a key for me: I plan on having one naughty/reward day a week. I'm not going to avoid a meal out or pizza with my girlfriend, I'll just fit the good days around it.
 
 ## Weighing myself
 
@@ -50,7 +51,7 @@ And here's the fun part. Inspired by [Garrett Murray's Nerdy Adventures in Weigh
 
 Part of my new routine when I wake up is to weigh myself and because the scales send the data wirelessly there's no danger of me forgetting to record my weight. The Withings software can also Tweet your weight every day, but no one wants to see that.
 
-Finding a way of tracking my progress satisfies both my geeky interest in stats, plus keeps me focused on the target. Any slip-ups will stick out and ruin my lovely downward chart. 
+Finding a way of tracking my progress satisfies both my geeky interest in stats, plus keeps me focused on the target. Any slip-ups will stick out and ruin my lovely downward chart.
 
 ## Next
 

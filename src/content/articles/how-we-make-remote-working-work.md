@@ -142,19 +142,19 @@ in-office benefits."
 When chatting to our remote people I finished by asking them for their own tips
 and advice for making a success of working remotely. Here are their suggestions:
 
-> "Work out a routine ahead of time and stick to it. Don’t work near a TV. And
+> Work out a routine ahead of time and stick to it. Don’t work near a TV. And
 > you need a good chair. Also remember to take a lunch break away from the
-> computer."
+> computer.
 
-> "It's important to have a quiet space free from distractions. Especially if
+> It's important to have a quiet space free from distractions. Especially if
 > you have children. And having the right equipment helps too (e.g. big
-> monitor)."
+> monitor).
 
-> "I think getting out of the house before or after work or at lunch time for
-> some exercise is important."
+> I think getting out of the house before or after work or at lunch time for
+> some exercise is important.
 
-> "I tend to take small breaks from the screen to grab a drink and talk to the
-> guinea pigs. So maybe all remoters should have guinea pigs."
+> I tend to take small breaks from the screen to grab a drink and talk to the
+> guinea pigs. So maybe all remoters should have guinea pigs.
 
 [owl]: https://www.owllabs.com/state-of-remote-work
 [slack]: https://slack.com

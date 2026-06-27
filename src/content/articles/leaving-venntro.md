@@ -1,5 +1,4 @@
 ---
-featured: true
 title: "Leaving Venntro"
 date: 2018-04-03
 tags:
@@ -11,7 +10,7 @@ syndication:
   - https://www.linkedin.com/feed/update/urn:li:activity:6386909799560413184
 ---
 
-After ten happy, successful and highly educational years, I've decided to leave my role as [Chief Technology Officer](https://www.linkedin.com/in/barryfrost) at [Venntro](https://venntro.com) this month. After so long with the company I felt the need to shake myself out of my comfort zone and look for a fresh challenge. 
+After ten happy, successful and highly educational years, I've decided to leave my role as [Chief Technology Officer](https://www.linkedin.com/in/barryfrost) at [Venntro](https://venntro.com) this month. After so long with the company I felt the need to shake myself out of my comfort zone and look for a fresh challenge.
 
 I'm very excited about joining a new company where I can use my experiences creating high performance development teams, building a large B2C subscription platform and leading technology for an award-winning and profitable fast-growth business.
 

@@ -1,5 +1,4 @@
 ---
-featured: true
 title: "Micropublish: IndieAuth updates and supported properties feature"
 date: 2020-12-14
 tags:

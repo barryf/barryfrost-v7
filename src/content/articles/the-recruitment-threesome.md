@@ -1,6 +1,7 @@
 ---
 title: "The recruitment threesome"
 date: 2011-05-25
+featured: true
 ---
 
 An employer, a candidate and a recruiter. Sometimes recruitment is direct, but often it involves each of the three parties jumping into bed together. Despite early enthusiasm the end result can frequently be disappointing and unsatisfying. It doesn't have to be this way.
@@ -74,7 +75,7 @@ How can you stand out from a pile of CVs and impress in an interview? Here are m
 
 ## Employers
 
-I slot in recruitment alongside my other work, but even though it can easily consume hours, I want to spend the time researching, testing and interviewing candidates thoroughly. A bad hire can be disastrous to team harmony and motivation. 
+I slot in recruitment alongside my other work, but even though it can easily consume hours, I want to spend the time researching, testing and interviewing candidates thoroughly. A bad hire can be disastrous to team harmony and motivation.
 
 Here's my side of the bargain:
 
