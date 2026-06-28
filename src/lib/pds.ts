@@ -53,3 +53,7 @@ export async function* fetchAllRecords(
 export function rkeyFromUri(uri: string): string {
   return uri.split('/').pop()!;
 }
+
+export function pdslsUrl(atUri: string): string {
+  return `https://pdsls.dev/${atUri}`;
+}

@@ -1,6 +1,7 @@
 ---
 import { formatRelativeDate, formatDate, toISODate } from '@/lib/dates';
-import { DID } from '@/lib/pds';
+import { DID, pdslsUrl } from '@/lib/pds';
+import PdslsIcon from '@/components/PdslsIcon.astro';
 
 interface Props {
   entry: {
@@ -48,7 +49,8 @@ const date = new Date(data.createdAt);
   <div>
     <a class="p-name u-url underline" href={grainUrl} rel="noopener noreferrer">{data.title}</a>
     <div class="mt-0">
-      <time class="dt-published text-sm" datetime={toISODate(date)} title={formatDate(date)}>{formatRelativeDate(date)}</time>
+      <time class="dt-published text-sm mr-1" datetime={toISODate(date)} title={formatDate(date)}>{formatRelativeDate(date)}</time>
+      <a class="underline" href={pdslsUrl(`at://${DID}/social.grain.gallery/${data.galleryRkey}`)} rel="noopener noreferrer" aria-label="View on PDSls"><PdslsIcon /></a>
     </div>
   </div>
 </article>

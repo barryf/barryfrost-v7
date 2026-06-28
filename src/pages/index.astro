@@ -5,9 +5,10 @@ import { getCollection } from 'astro:content';
 import { formatRelativeDate, formatDate, toISODate } from '@/lib/dates';
 import { truncateBody } from '@/lib/weeknotes';
 import { renderRichText } from '@/lib/richtext';
-import { HANDLE } from '@/lib/pds';
+import { HANDLE, pdslsUrl } from '@/lib/pds';
 import BlueskyQuote from '@/components/posts/BlueskyQuote.astro';
 import BlueskyIcon from '@/components/BlueskyIcon.astro';
+import PdslsIcon from '@/components/PdslsIcon.astro';
 
 const [weeknotes, photos, blueskyPosts, articles, checkIns] = await Promise.all([
   getCollection('weeknotes'),
@@ -115,6 +116,7 @@ const now = new Date();
       <div class="mb-1 text-sm text-gray-500 dark:text-gray-500">
         <time class="mr-1" datetime={toISODate(new Date(latestPost.data.createdAt))} title={formatDate(new Date(latestPost.data.createdAt))}>{formatRelativeDate(new Date(latestPost.data.createdAt))}</time>
         <a href={latestPostUrl} class="underline" rel="noopener noreferrer" aria-label="View on Bluesky"><BlueskyIcon /></a>
+        <a class="ml-1 underline" href={pdslsUrl(latestPost.data.uri)} rel="noopener noreferrer" aria-label="View on PDSls"><PdslsIcon /></a>
       </div>
       <div class="mb-4 text-sm">
         <a href="/posts" class="underline">All Posts</a>

@@ -57,7 +57,7 @@ The homepage (`src/pages/index.astro`) is a curated view, not a unified feed. Se
 1. **Intro** — h-card with name, location, short bio
 2. **Latest Weeknote** — title + emoji, truncated excerpt, link to all weeknotes
 3. **Recent Photos** — 6 most recent photo galleries in a scrollable flex row
-4. **Latest Post** — most recent non-reply Bluesky post with text, relative date, Bluesky icon link
+4. **Latest Post** — most recent non-reply Bluesky post with text, relative date, Bluesky icon link, pdsls icon link
 5. **Featured Articles** — articles with `featured: true` frontmatter, sorted by date
 6. **Recent Check-ins** — 5 most recent check-ins as a compact list
 7. **Recent Media** — links to `/books`, `/films`, and `/music`
@@ -109,14 +109,15 @@ Removed from v6: `/page/{n}` (unified feed), `/archives/`, `/tags/`, `/feed.xml`
 - `Divider.astro` — `❉ ❉ ❉` separator, `mb-4`
 - `SiteFooter.astro` — footer nav (About, Colophon, Blogroll, Follow, Contact) + inline search form that submits to `/search`
 - `BlueskyIcon.astro` — monochrome Bluesky butterfly SVG, `currentColor`, `-translate-y-px` to align with text baseline
+- `PdslsIcon.astro` — pdsls.dev graph SVG, same conventions as `BlueskyIcon`; links to the underlying PDS record on pdsls.dev
 
 Card components in `src/components/posts/`:
 - `ArticleCard` — title link, relative date with `title` attr
-- `BlueskyCard` — rich text, embedded images, quote posts via `BlueskyQuote`, relative date, Bluesky icon link
-- `CheckInCard` — venue name/category/address, optional photo(s), relative date, Beaconbits link
-- `FilmCard` — poster, title, star rating, relative date
-- `BookCard` — cover, title, authors, "Started/Finished [relative date]"
-- `PhotoCard` — horizontally scrollable thumbnails (multi) or side-by-side (single), title, relative date
+- `BlueskyCard` — rich text, embedded images, quote posts via `BlueskyQuote`, relative date, Bluesky icon link, pdsls icon link
+- `CheckInCard` — venue name/category/address, optional photo(s), relative date, pdsls icon link, optional Beaconbits link
+- `FilmCard` — poster, title, star rating, relative date, pdsls icon link
+- `BookCard` — cover, title, authors, "Started/Finished [relative date]", pdsls icon link
+- `PhotoCard` — horizontally scrollable thumbnails (multi) or side-by-side (single), title, relative date, pdsls icon link
 
 All `<time>` elements use `formatRelativeDate` for display (e.g. "3 days ago", "Yesterday") with `title={formatDate(date)}` for the full date on hover and `datetime={toISODate(date)}` for machine readability.
 

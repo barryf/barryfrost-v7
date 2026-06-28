@@ -1,5 +1,7 @@
 ---
 import { formatRelativeDate, formatDate, toISODate } from '@/lib/dates';
+import { pdslsUrl } from '@/lib/pds';
+import PdslsIcon from '@/components/PdslsIcon.astro';
 
 interface Props {
   entry: {
@@ -13,6 +15,7 @@ interface Props {
       startedAt?: string;
       finishedAt?: string;
       createdAt: string;
+      uri: string;
     }
   }
 }
@@ -53,7 +56,8 @@ const date = new Date(dateStr);
     </h2>
     <p class="text-sm text-gray-600 dark:text-gray-400">by {data.authors}</p>
     <div>
-      <time class="dt-published text-sm" datetime={toISODate(date)} title={formatDate(date)}>{dateLabel} {formatRelativeDate(date)}</time>
+      <time class="dt-published text-sm mr-1" datetime={toISODate(date)} title={formatDate(date)}>{dateLabel} {formatRelativeDate(date)}</time>
+        <a class="underline" href={pdslsUrl(data.uri)} rel="noopener noreferrer" aria-label="View on PDSls"><PdslsIcon /></a>
     </div>
   </div>
 </article>
