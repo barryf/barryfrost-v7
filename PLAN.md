@@ -160,7 +160,15 @@ import myPhoto from '../../assets/photo.jpg';
 
 Static search via [Pagefind](https://pagefind.app). After `astro build`, `pagefind --site dist` indexes the built HTML and emits a self-contained bundle into `dist/pagefind/`.
 
-**Scope:** Only pages with `data-pagefind-body` — articles, weeknotes, travelblog entries, and slash pages. Feed-only content types and all listing/paginated routes are excluded by omission.
+**Scope:** Only pages with `data-pagefind-body`. Indexed content types:
+- Articles (`/articles/{slug}`) — individual pages via `Post.astro`
+- Weeknotes (`/weeknotes/{slug}`) — individual pages via `Post.astro`
+- Travelblog entries (`/travelblog/{num}`)
+- Slash pages (about, colophon, etc.) via `[...slug].astro`
+- Static pages: `/now`, `/work`, `/music`
+- Bluesky posts and photo galleries — indexed per card on feed/paginated pages (`data-pagefind-body` on each `BlueskyCard`/`PhotoCard` `<article>`); search results link to the feed page
+
+Listing/paginated routes without card-level `data-pagefind-body` (books, films, check-ins) are excluded by omission.
 
 **UI:** A compact `<form action="/search" method="get">` in `SiteFooter.astro` submits to `/search?q=…`. The `/search` page reads the query from the URL on load, runs Pagefind, and renders results. Each result link appends `#:~:text=<query>` for native browser text highlighting.
 

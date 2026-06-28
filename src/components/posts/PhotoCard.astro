@@ -24,7 +24,7 @@ const thumbs = data.thumbnailUrls ?? [];
 const grainUrl = `https://grain.social/profile/${DID}/gallery/${data.galleryRkey}`;
 const date = new Date(data.createdAt);
 ---
-<article class="h-entry">
+<article class="h-entry" data-pagefind-body>
   {thumbs.length > 0 && (
     <div class="overflow-x-auto mb-2">
       <div class="flex gap-1">
