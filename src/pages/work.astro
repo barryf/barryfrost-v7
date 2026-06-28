@@ -1,5 +1,6 @@
 ---
 import Base from '@/layouts/Base.astro';
+import Divider from '@/components/Divider.astro';
 import { formatMonthYear } from '@/lib/dates';
 import {
   getSelf,
@@ -49,14 +50,16 @@ const proficiencyLabel: Record<string, string> = {
   <h1 class="mb-4 font-semibold text-black dark:text-white">Work</h1>
 
   {(headline || locationStr) && (
-    <div class="mb-10 text-gray-600 dark:text-gray-400">
-      {headline && <p class="text-lg">{headline}</p>}
+    <div class="mb-8 text-gray-600 dark:text-gray-400">
+      {headline && <p>{headline}</p>}
       {locationStr && <p class="text-sm mt-1">{locationStr}</p>}
     </div>
   )}
 
-  <section class="mb-10">
-    <h2 class="text-lg font-semibold mb-4 pb-2 border-b border-neutral-200 dark:border-neutral-700">Career</h2>
+  <Divider />
+
+  <section class="mb-4">
+    <h2 class="font-semibold mb-4 text-black dark:text-white">Career</h2>
     <ul class="space-y-8">
       {positions.map(pos => (
         <li>
@@ -78,98 +81,110 @@ const proficiencyLabel: Record<string, string> = {
   </section>
 
   {education.length > 0 && (
-    <section class="mb-10">
-      <h2 class="text-lg font-semibold mb-4 pb-2 border-b border-neutral-200 dark:border-neutral-700">Education</h2>
-      <ul class="space-y-4">
-        {education.map(edu => (
-          <li>
-            <div class="flex flex-wrap justify-between items-baseline gap-x-4 gap-y-1">
-              <span class="font-semibold">{edu.institution}</span>
-              {edu.endedAt && (
-                <span class="text-sm text-gray-500 dark:text-gray-500 whitespace-nowrap">
-                  {formatMonthYear(parseYM(edu.endedAt))}
-                </span>
-              )}
-            </div>
-            <p class="text-sm text-gray-700 dark:text-gray-300 mt-0.5">
-              {edu.degree}{edu.fieldOfStudy ? `, ${edu.fieldOfStudy}` : ''}
-            </p>
-          </li>
-        ))}
-      </ul>
-    </section>
+    <>
+      <Divider />
+      <section class="mb-4">
+        <h2 class="font-semibold mb-4 text-black dark:text-white">Education</h2>
+        <ul class="space-y-4">
+          {education.map(edu => (
+            <li>
+              <div class="flex flex-wrap justify-between items-baseline gap-x-4 gap-y-1">
+                <span class="font-semibold">{edu.institution}</span>
+                {edu.endedAt && (
+                  <span class="text-sm text-gray-500 dark:text-gray-500 whitespace-nowrap">
+                    {formatMonthYear(parseYM(edu.endedAt))}
+                  </span>
+                )}
+              </div>
+              <p class="text-sm text-gray-700 dark:text-gray-300 mt-0.5">
+                {edu.degree}{edu.fieldOfStudy ? `, ${edu.fieldOfStudy}` : ''}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </section>
+    </>
   )}
 
   {projects.length > 0 && (
-    <section class="mb-10">
-      <h2 class="text-lg font-semibold mb-4 pb-2 border-b border-neutral-200 dark:border-neutral-700">Projects</h2>
-      <ul class="space-y-4">
-        {projects.map(proj => (
-          <li>
-            {proj.url ? (
-              <a href={proj.url} class="font-semibold hover:underline">{proj.name}</a>
-            ) : (
-              <span class="font-semibold">{proj.name}</span>
-            )}
-            {proj.description && (
-              <p class="text-sm text-gray-700 dark:text-gray-300 mt-1">{proj.description.trim()}</p>
-            )}
-          </li>
-        ))}
-      </ul>
-    </section>
+    <>
+      <Divider />
+      <section class="mb-4">
+        <h2 class="font-semibold mb-4 text-black dark:text-white">Projects</h2>
+        <ul class="space-y-4">
+          {projects.map(proj => (
+            <li>
+              {proj.url ? (
+                <a href={proj.url} class="font-semibold hover:underline">{proj.name}</a>
+              ) : (
+                <span class="font-semibold">{proj.name}</span>
+              )}
+              {proj.description && (
+                <p class="text-sm text-gray-700 dark:text-gray-300 mt-1">{proj.description.trim()}</p>
+              )}
+            </li>
+          ))}
+        </ul>
+      </section>
+    </>
   )}
 
   {(skillsByCategory.technical.length > 0 || skillsByCategory.business.length > 0 || skillsByCategory.interpersonal.length > 0) && (
-    <section class="mb-10">
-      <h2 class="text-lg font-semibold mb-4 pb-2 border-b border-neutral-200 dark:border-neutral-700">Skills</h2>
-      <div class="space-y-4">
-        {skillsByCategory.technical.length > 0 && (
-          <div>
-            <h3 class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-500 mb-2">Technical</h3>
-            <div class="flex flex-wrap gap-2">
-              {skillsByCategory.technical.map(name => (
-                <span class="px-2 py-0.5 text-sm bg-neutral-100 dark:bg-neutral-800 rounded">{name}</span>
-              ))}
+    <>
+      <Divider />
+      <section class="mb-4">
+        <h2 class="font-semibold mb-4 text-black dark:text-white">Skills</h2>
+        <div class="space-y-4">
+          {skillsByCategory.technical.length > 0 && (
+            <div>
+              <h3 class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-500 mb-2">Technical</h3>
+              <div class="flex flex-wrap gap-2">
+                {skillsByCategory.technical.map(name => (
+                  <span class="px-2 py-0.5 text-sm bg-neutral-100 dark:bg-neutral-800 rounded">{name}</span>
+                ))}
+              </div>
             </div>
-          </div>
-        )}
-        {skillsByCategory.business.length > 0 && (
-          <div>
-            <h3 class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-500 mb-2">Business</h3>
-            <div class="flex flex-wrap gap-2">
-              {skillsByCategory.business.map(name => (
-                <span class="px-2 py-0.5 text-sm bg-neutral-100 dark:bg-neutral-800 rounded">{name}</span>
-              ))}
+          )}
+          {skillsByCategory.business.length > 0 && (
+            <div>
+              <h3 class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-500 mb-2">Business</h3>
+              <div class="flex flex-wrap gap-2">
+                {skillsByCategory.business.map(name => (
+                  <span class="px-2 py-0.5 text-sm bg-neutral-100 dark:bg-neutral-800 rounded">{name}</span>
+                ))}
+              </div>
             </div>
-          </div>
-        )}
-        {skillsByCategory.interpersonal.length > 0 && (
-          <div>
-            <h3 class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-500 mb-2">Interpersonal</h3>
-            <div class="flex flex-wrap gap-2">
-              {skillsByCategory.interpersonal.map(name => (
-                <span class="px-2 py-0.5 text-sm bg-neutral-100 dark:bg-neutral-800 rounded">{name}</span>
-              ))}
+          )}
+          {skillsByCategory.interpersonal.length > 0 && (
+            <div>
+              <h3 class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-500 mb-2">Interpersonal</h3>
+              <div class="flex flex-wrap gap-2">
+                {skillsByCategory.interpersonal.map(name => (
+                  <span class="px-2 py-0.5 text-sm bg-neutral-100 dark:bg-neutral-800 rounded">{name}</span>
+                ))}
+              </div>
             </div>
-          </div>
-        )}
-      </div>
-    </section>
+          )}
+        </div>
+      </section>
+    </>
   )}
 
   {languages.length > 0 && (
-    <section class="mb-10">
-      <h2 class="text-lg font-semibold mb-4 pb-2 border-b border-neutral-200 dark:border-neutral-700">Languages</h2>
-      <ul class="space-y-2">
-        {languages.map(lang => (
-          <li class="flex justify-between text-sm">
-            <span class="font-medium">{lang.name}</span>
-            <span class="text-gray-500 dark:text-gray-500">{proficiencyLabel[lang.proficiency] ?? lang.proficiency}</span>
-          </li>
-        ))}
-      </ul>
-    </section>
+    <>
+      <Divider />
+      <section class="mb-4">
+        <h2 class="font-semibold mb-4 text-black dark:text-white">Languages</h2>
+        <ul class="space-y-2">
+          {languages.map(lang => (
+            <li class="flex justify-between text-sm">
+              <span class="font-medium">{lang.name}</span>
+              <span class="text-gray-500 dark:text-gray-500">{proficiencyLabel[lang.proficiency] ?? lang.proficiency}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    </>
   )}
   </div>
 </Base>
