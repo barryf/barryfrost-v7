@@ -15,10 +15,8 @@ publications.sort((a, b) => a.data.name.localeCompare(b.data.name));
 <Base title="Blogroll" description="Blogs and publications I follow">
   <h1 class="mb-4 font-semibold text-black dark:text-white">Blogroll</h1>
 
-  <Divider />
   <section class="mb-4">
-    <h2 class="mb-4 font-semibold text-black dark:text-white">Blogs</h2>
-    <ul class="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
+    <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8">
       {blogs.map(blog => (
         <li class="py-2">
           <FollowCard
