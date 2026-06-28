@@ -130,9 +130,9 @@ All `<time>` elements use `formatRelativeDate` for display (e.g. "3 days ago", "
 
 ## Styling
 
-Tailwind v4 with default palette. Work Sans as the primary font (via Google Fonts, declared in `@theme`). `src/styles/global.css`:
+Tailwind v4 with default palette. Work Sans as the primary font, self-hosted via Astro's Fonts API (downloaded from Google at build time; no runtime CDN request). `src/styles/global.css`:
 - Imports `@tailwindcss/typography` and sources `../content/**/*.{md,mdx}`
-- Sets `--font-sans` to Work Sans
+- Sets `--font-sans` to `var(--font-work-sans)` (the CSS variable injected by `<Font cssVariable="--font-work-sans" />` from `astro:assets`)
 - Base `font-size: 16px` / `line-height: 26px`; `sm:` bumps to `18px` / `28px`
 - `p`, `blockquote`, `.prose` capped at `max-w-140`
 - `.prose a` / `.underline` — `text-underline-offset: 15%`; hover colour `text-amber-600`
