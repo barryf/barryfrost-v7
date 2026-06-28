@@ -1,14 +1,10 @@
 ---
-import Base from '@/layouts/Base.astro';
+import Feed from '@/layouts/Feed.astro';
 import PhotoCard from '@/components/posts/PhotoCard.astro';
-import Pagination from '@/components/Pagination.astro';
-import { getCollection } from 'astro:content';
-import { paginateItems } from '@/lib/feed';
+import { getFeedPages } from '@/lib/feed';
 
 export async function getStaticPaths() {
-  const allPhotos = (await getCollection('photos'))
-    .sort((a, b) => new Date(b.data.createdAt).getTime() - new Date(a.data.createdAt).getTime());
-  const pages = paginateItems(allPhotos);
+  const pages = await getFeedPages('photos');
   return pages.slice(1).map(({ page, items, totalPages }) => ({
     params: { page: String(page) },
     props: { items, currentPage: page, totalPages },
@@ -17,12 +13,8 @@ export async function getStaticPaths() {
 
 const { items, currentPage, totalPages } = Astro.props;
 ---
-<Base title={`Photos (Page ${currentPage})`}>
-  <h1 class="mb-8 font-semibold text-black dark:text-white">
-    Photos <span class="font-normal">(Page {currentPage})</span>
-  </h1>
+<Feed title="Photos" currentPage={currentPage} totalPages={totalPages} basePath="/photos">
   <div class="mb-4 flex flex-col gap-y-8">
     {items.map((entry: any) => <PhotoCard entry={entry} />)}
   </div>
-  <Pagination currentPage={currentPage} totalPages={totalPages} basePath="/photos" />
-</Base>
+</Feed>

@@ -1,12 +1,12 @@
 ---
 import FilmFeed from '@/layouts/FilmFeed.astro';
-import { getCollection } from 'astro:content';
-import { paginateItems } from '@/lib/feed';
+import { getFeedPages } from '@/lib/feed';
 
 export async function getStaticPaths() {
-  const allFilms = (await getCollection('films'))
-    .sort((a, b) => (b.data.rating ?? -1) - (a.data.rating ?? -1));
-  const pages = paginateItems(allFilms, 40);
+  const pages = await getFeedPages('films', {
+    sort: (a, b) => (b.data.rating ?? -1) - (a.data.rating ?? -1),
+    pageSize: 40,
+  });
   return pages.slice(1).map(({ page, items, totalPages }) => ({
     params: { page: String(page) },
     props: { items, currentPage: page, totalPages },
@@ -15,4 +15,4 @@ export async function getStaticPaths() {
 
 const { items, currentPage, totalPages } = Astro.props;
 ---
-<FilmFeed title={`Films (Page ${currentPage})`} items={items} currentPage={currentPage} totalPages={totalPages} basePath="/films/by-rating" sort="rating" />
+<FilmFeed items={items} currentPage={currentPage} totalPages={totalPages} basePath="/films/by-rating" sort="rating" />

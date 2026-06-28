@@ -1,29 +1,16 @@
 ---
-import Base from '@/layouts/Base.astro';
+import Feed from '@/layouts/Feed.astro';
 import PhotoCard from '@/components/posts/PhotoCard.astro';
-import Pagination from '@/components/Pagination.astro';
-import { getCollection } from 'astro:content';
-import { paginateItems } from '@/lib/feed';
+import { getFeedPages } from '@/lib/feed';
 
-const allPhotos = (await getCollection('photos'))
-  .sort((a, b) => new Date(b.data.createdAt).getTime() - new Date(a.data.createdAt).getTime());
-
-const pages = paginateItems(allPhotos);
+const pages = await getFeedPages('photos');
 const { items, totalPages } = pages[0] ?? { items: [], totalPages: 1 };
 ---
-<Base title="Photos">
-  <div class="h-feed">
-    <div class="h-card p-author hidden">
-      <img class="u-photo" src={new URL('/barryfrost.jpg', Astro.url).href} alt="Barry Frost" width="192" height="192" />
-      <a class="p-name u-url" href={Astro.site?.href}>Barry Frost</a>
-    </div>
-    <h1 class="mb-4 font-semibold text-black dark:text-white">Photos</h1>
-    <p class="mb-8 text-gray-600 dark:text-gray-400">
-      Photo galleries I've posted on <a href="https://grain.social" class="underline">Grain</a>.
-    </p>
-    <div class="mb-4 flex flex-col gap-y-8">
-      {items.map(entry => <PhotoCard entry={entry} />)}
-    </div>
+<Feed title="Photos" totalPages={totalPages} basePath="/photos">
+  <Fragment slot="description">
+    Photo galleries I've posted on <a href="https://grain.social" class="underline">Grain</a>.
+  </Fragment>
+  <div class="mb-4 flex flex-col gap-y-8">
+    {items.map(entry => <PhotoCard entry={entry} />)}
   </div>
-  <Pagination currentPage={1} totalPages={totalPages} basePath="/photos" />
-</Base>
+</Feed>

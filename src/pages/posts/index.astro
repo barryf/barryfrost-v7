@@ -1,36 +1,22 @@
 ---
-import Base from '@/layouts/Base.astro';
+import Feed from '@/layouts/Feed.astro';
 import BlueskyCard from '@/components/posts/BlueskyCard.astro';
-import Pagination from '@/components/Pagination.astro';
 import Divider from '@/components/Divider.astro';
-import { getCollection } from 'astro:content';
-import { paginateItems } from '@/lib/feed';
+import { getFeedPages } from '@/lib/feed';
 
-const allPosts = (await getCollection('blueskyPosts'))
-  .sort((a, b) => new Date(b.data.createdAt).getTime() - new Date(a.data.createdAt).getTime());
-
-const pages = paginateItems(allPosts);
+const pages = await getFeedPages('blueskyPosts');
 const { items, totalPages } = pages[0] ?? { items: [], totalPages: 1 };
 ---
-<Base title="Posts">
-  <div class="h-feed">
-    <div class="h-card p-author hidden">
-      <img class="u-photo" src={new URL('/barryfrost.jpg', Astro.url).href} alt="Barry Frost" width="192" height="192" />
-      <a class="p-name u-url" href={Astro.site?.href}>Barry Frost</a>
-    </div>
-    <h1 class="mb-4 font-semibold text-black dark:text-white">Posts</h1>
-    <p class="mb-4 text-gray-600 dark:text-gray-400">
-      Short posts from my <a href="https://bsky.app/profile/barryfrost.com" class="underline">Bluesky profile</a>.
-    </p>
-    <Divider />
-    <div class="mb-8">
-      {items.map((entry, i) => (
-        <>
-          <BlueskyCard entry={entry} />
-          {i < items.length - 1 && <Divider />}
-        </>
-      ))}
-    </div>
+<Feed title="Posts" totalPages={totalPages} basePath="/posts">
+  <Fragment slot="description">
+    Short posts from my <a href="https://bsky.app/profile/barryfrost.com" class="underline">Bluesky profile</a>.
+  </Fragment>
+  <div class="mb-8">
+    {items.map((entry, i) => (
+      <>
+        <BlueskyCard entry={entry} />
+        {i < items.length - 1 && <Divider />}
+      </>
+    ))}
   </div>
-  <Pagination currentPage={1} totalPages={totalPages} basePath="/posts" />
-</Base>
+</Feed>

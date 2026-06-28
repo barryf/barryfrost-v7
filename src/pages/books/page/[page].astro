@@ -1,15 +1,13 @@
 ---
-import Base from '@/layouts/Base.astro';
+import Feed from '@/layouts/Feed.astro';
 import BookCard from '@/components/posts/BookCard.astro';
-import Pagination from '@/components/Pagination.astro';
-import { getCollection } from 'astro:content';
-import { paginateItems } from '@/lib/feed';
+import { getFeedPages } from '@/lib/feed';
 
 export async function getStaticPaths() {
-  const finishedBooks = (await getCollection('books'))
-    .filter(b => b.data.status === 'buzz.bookhive.defs#finished')
-    .sort((a, b) => new Date(b.data.finishedAt ?? b.data.createdAt).getTime() - new Date(a.data.finishedAt ?? a.data.createdAt).getTime());
-  const pages = paginateItems(finishedBooks);
+  const pages = await getFeedPages('books', {
+    filter: b => b.data.status === 'buzz.bookhive.defs#finished',
+    sort: (a, b) => new Date(b.data.finishedAt ?? b.data.createdAt).getTime() - new Date(a.data.finishedAt ?? a.data.createdAt).getTime(),
+  });
   return pages.slice(1).map(({ page, items, totalPages }) => ({
     params: { page: String(page) },
     props: { items, currentPage: page, totalPages },
@@ -18,12 +16,8 @@ export async function getStaticPaths() {
 
 const { items, currentPage, totalPages } = Astro.props;
 ---
-<Base title={`Books (Page ${currentPage})`}>
-  <h1 class="mb-8 font-semibold text-black dark:text-white">
-    Books <span class="font-normal">(Page {currentPage})</span>
-  </h1>
+<Feed title="Books" currentPage={currentPage} totalPages={totalPages} basePath="/books">
   <div class="mb-4 flex flex-col gap-y-4">
     {items.map((entry: any) => <BookCard entry={entry} />)}
   </div>
-  <Pagination currentPage={currentPage} totalPages={totalPages} basePath="/books" />
-</Base>
+</Feed>
