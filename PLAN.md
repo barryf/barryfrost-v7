@@ -66,7 +66,9 @@ Each section is separated by the `Divider` component (`❉ ❉ ❉`). Sections a
 
 ## Pagination
 
-`src/lib/feed.ts` exports `paginateItems(items, pageSize?)` which splits any array into `{ page, items, totalPages }[]`. Default page size is 20; films pages override to 40.
+`src/lib/feed.ts` exports:
+- `paginateItems(items, pageSize?)` — splits any array into `{ page, items, totalPages }[]`. Default page size is 20; films pages override to 40.
+- `getFeedPages(collection, opts?)` — fetches a collection, optionally filters and sorts (default: `createdAt` desc), then paginates. Shared by all feed index and paginated routes.
 
 Paginated pages show `Title (Page N)` in both the h1 and the browser window title. The `Pagination` component shows all page numbers (no window/cap).
 
@@ -104,7 +106,8 @@ Removed from v6: `/page/{n}` (unified feed), `/archives/`, `/tags/`, `/feed.xml`
 ## Layouts & Components
 
 - `Base.astro` — HTML shell, `max-w-2xl mx-auto px-4`, dark mode via `prefers-color-scheme`
-- `FilmFeed.astro` — dedicated layout for `/films` and `/films/by-rating`: renders `FilmCard` in a responsive grid (`grid-cols-1 sm:grid-cols-2 lg:grid-cols-3`), shows intro paragraph on page 1, date/rating sort toggle, dividers around the feed
+- `Feed.astro` — shared feed layout used by all list/paginated pages. Renders the `h-feed` wrapper, hidden `h-card p-author` MF2 author block, heading (with `(Page N)` suffix), optional named `description` slot, default slot for item content, and `<Pagination>` (suppressed via `paginate={false}` for books). Props: `title`, `currentPage?`, `totalPages`, `basePath`, `paginate?`.
+- `FilmFeed.astro` — extends `Feed.astro` for `/films` and `/films/by-rating`: adds date/rating sort toggle and renders `FilmCard` in a responsive grid (`grid-cols-1 sm:grid-cols-2 lg:grid-cols-3`)
 - `Post.astro` — individual article/weeknote with prose styles; "Posted in [Section] [relative date]" footer (omits "on" when displaying relative text); uses `Divider` above footer
 - `Divider.astro` — `❉ ❉ ❉` separator, `mb-4`
 - `SiteFooter.astro` — footer nav (About, Colophon, Blogroll, Follow, Contact) + inline search form that submits to `/search`
@@ -289,7 +292,7 @@ Both CLIs accept `--no-git` (or `CI=true`) to skip git/gh operations — used by
 1. Create `src/lib/loaders/{type}.ts` — implement `Loader`, use `fetchAllRecords`, build image URLs with `blobImage()` or `transformImage()` from `src/lib/image-url.ts`
 2. Add collection to `src/content.config.ts` with a Zod schema
 3. Create `src/components/posts/{Type}Card.astro`
-4. Add an index page (`src/pages/{type}/index.astro`) and paginated page (`src/pages/{type}/page/[page].astro`) using `paginateItems`
+4. Add an index page (`src/pages/{type}/index.astro`) and paginated page (`src/pages/{type}/page/[page].astro`) using `getFeedPages` and the `Feed.astro` layout
 5. Add collection NSID to the `COLLECTIONS` array in `cloudflare/pds-poller/src/index.ts` and the `PRETTY` label map
 6. Link from the homepage or footer as appropriate
 

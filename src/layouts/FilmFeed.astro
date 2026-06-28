@@ -1,8 +1,6 @@
 ---
-import Base from './Base.astro';
+import Feed from './Feed.astro';
 import FilmCard from '@/components/posts/FilmCard.astro';
-import Pagination from '@/components/Pagination.astro';
-import Divider from '@/components/Divider.astro';
 
 interface FilmEntry {
   id: string;
@@ -16,8 +14,6 @@ interface FilmEntry {
 }
 
 interface Props {
-  title: string;
-  description?: string;
   items: FilmEntry[];
   currentPage: number;
   totalPages: number;
@@ -25,17 +21,14 @@ interface Props {
   sort?: 'date' | 'rating';
 }
 
-const { title, description, items, currentPage, totalPages, basePath, sort = 'date' } = Astro.props;
+const { items, currentPage, totalPages, basePath = '/films', sort = 'date' } = Astro.props;
 ---
-<Base title={title} description={description}>
-  <h1 class="mb-4 font-semibold text-black dark:text-white">
-    Films{currentPage > 1 && <span class="font-normal"> (Page {currentPage})</span>}
-  </h1>
-  <p class="mb-8 text-gray-600 dark:text-gray-400">
+<Feed title="Films" currentPage={currentPage} totalPages={totalPages} basePath={basePath}>
+  <Fragment slot="description">
     Films and TV shows I've watched and rated on
     <a href="https://popfeed.social/profile/did:plc:j5ksi3y4tdtbp7vpsxsfyask" class="underline" rel="noopener noreferrer">Popfeed</a>.
-  </p>
-    <div class="mb-8 flex gap-4 text-sm">
+  </Fragment>
+  <div class="mb-8 flex gap-4 text-sm">
     {sort === 'date' ? (
       <span class="font-semibold">By date</span>
     ) : (
@@ -47,16 +40,7 @@ const { title, description, items, currentPage, totalPages, basePath, sort = 'da
       <a href="/films/by-rating" class="underline">By rating</a>
     )}
   </div>
-  <div class="h-feed mb-8">
-    <div class="h-card p-author hidden">
-      <img class="u-photo" src={new URL('/barryfrost.jpg', Astro.url).href} alt="Barry Frost" width="192" height="192" />
-      <a class="p-name u-url" href={Astro.site?.href}>Barry Frost</a>
-    </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-6">
-      {items.map(entry => (
-        <FilmCard entry={entry} />
-      ))}
-    </div>
+  <div class="mb-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-6">
+    {items.map(entry => <FilmCard entry={entry} />)}
   </div>
-  <Pagination currentPage={currentPage} totalPages={totalPages} basePath={basePath} />
-</Base>
+</Feed>
