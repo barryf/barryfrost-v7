@@ -179,6 +179,7 @@ const photos = defineCollection({
   loader: photosLoader(),
   schema: z.object({
     title: z.string(),
+    description: z.string().optional(),
     address: z.string().optional(),
     thumbnailUrls: z.array(z.string()),
     photoCount: z.number(),

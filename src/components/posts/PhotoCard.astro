@@ -8,6 +8,7 @@ interface Props {
     id: string;
     data: {
       title: string;
+      description?: string;
       address?: string;
       thumbnailUrls: string[];
       photoCount: number;
@@ -48,6 +49,7 @@ const date = new Date(data.createdAt);
   )}
   <div>
     <a class="p-name u-url underline" href={grainUrl} rel="noopener noreferrer">{data.title}</a>
+    {data.description && <p class="text-sm text-gray-600 dark:text-gray-400 mt-0.5">{data.description}</p>}
     <div class="mt-0">
       <time class="dt-published text-sm mr-1" datetime={toISODate(date)} title={formatDate(date)}>{formatRelativeDate(date)}</time>
       <a class="underline" href={pdslsUrl(`at://${DID}/social.grain.gallery/${data.galleryRkey}`)} rel="noopener noreferrer" aria-label="View on PDSls"><PdslsIcon /></a>
