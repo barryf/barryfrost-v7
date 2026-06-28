@@ -6,6 +6,7 @@ import { formatRelativeDate, formatDate, toISODate } from '@/lib/dates';
 import { truncateBody } from '@/lib/weeknotes';
 import { renderRichText } from '@/lib/richtext';
 import { HANDLE, pdslsUrl } from '@/lib/pds';
+import { blobImage } from '@/lib/image-url';
 import BlueskyQuote from '@/components/posts/BlueskyQuote.astro';
 import BlueskyIcon from '@/components/BlueskyIcon.astro';
 import PdslsIcon from '@/components/PdslsIcon.astro';
@@ -83,8 +84,10 @@ const now = new Date();
           {recentPhotos.map((entry, i) => {
             const firstThumb = entry.data.thumbnailUrls[0];
             if (!firstThumb) return null;
+            const cid = new URL(firstThumb).searchParams.get('cid') ?? '';
+            const fullUrl = blobImage(cid, { width: 1000, height: 1000, fit: 'contain' });
             return (
-              <a href={`https://grain.social/profile/did:plc:j5ksi3y4tdtbp7vpsxsfyask/gallery/${entry.data.galleryRkey}`} rel="noopener noreferrer" class="flex-none">
+              <a href={fullUrl} rel="noopener noreferrer" class="flex-none">
                 <img
                   src={firstThumb}
                   alt={entry.data.title}

@@ -1,6 +1,7 @@
 ---
 import { formatRelativeDate, formatDate, toISODate } from '@/lib/dates';
 import { DID, pdslsUrl } from '@/lib/pds';
+import { blobImage } from '@/lib/image-url';
 import PdslsIcon from '@/components/PdslsIcon.astro';
 
 interface Props {
@@ -21,6 +22,10 @@ interface Props {
 const { entry } = Astro.props;
 const { data } = entry;
 const thumbs = data.thumbnailUrls ?? [];
+const fullUrls = thumbs.map(url => {
+  const cid = new URL(url).searchParams.get('cid') ?? '';
+  return blobImage(cid, { width: 1000, height: 1000, fit: 'contain' });
+});
 const grainUrl = `https://grain.social/profile/${DID}/gallery/${data.galleryRkey}`;
 const date = new Date(data.createdAt);
 ---
@@ -29,13 +34,13 @@ const date = new Date(data.createdAt);
     <div class="overflow-x-auto mb-2">
       <div class="flex gap-1">
         {thumbs.map((url, i) => (
-          <a href={grainUrl} rel="noopener noreferrer" class="flex-none">
+          <a href={fullUrls[i]} rel="noopener noreferrer" class="flex-none">
             <img
               src={url}
               alt={data.title}
               width="120"
               height="120"
-              class:list={["u-photo w-30 h-30 aspect-square object-cover",
+              class:list={["u-photo w-30 h-30 aspect-square object-cover grayscale hover:grayscale-0 transition delay-0 duration-500 ease-in-out",
                 i === 0 && "rounded-l-xl",
                 i === thumbs.length - 1 && "rounded-r-xl"
               ]}
