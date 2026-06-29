@@ -8,8 +8,12 @@ import { renderRichText } from '@/lib/richtext';
 import { HANDLE, pdslsUrl } from '@/lib/pds';
 import { blobImage } from '@/lib/image-url';
 import BlueskyQuote from '@/components/posts/BlueskyQuote.astro';
-import BlueskyIcon from '@/components/BlueskyIcon.astro';
-import PdslsIcon from '@/components/PdslsIcon.astro';
+import BlueskyIcon from '@/components/icons/BlueskyIcon.astro';
+import PdslsIcon from '@/components/icons/PdslsIcon.astro';
+import BookHiveIcon from '@/components/icons/BookHiveIcon.astro';
+import PopfeedIcon from '@/components/icons/PopfeedIcon.astro';
+import RockskyIcon from '@/components/icons/RockskyIcon.astro';
+import CheckInIcon from '@/components/icons/CheckInIcon.astro';
 
 const [weeknotes, photos, blueskyPosts, articles, checkIns] = await Promise.all([
   getCollection('weeknotes'),
@@ -153,6 +157,7 @@ const now = new Date();
           const date = new Date(entry.data.createdAt);
           return (
             <li>
+              <CheckInIcon class="inline w-4 h-4 align-text-bottom" />
               {venueUrl
                 ? <a href={venueUrl} class="underline" rel="noopener noreferrer">{entry.data.venueName}</a>
                 : <span>{entry.data.venueName}</span>
@@ -169,8 +174,8 @@ const now = new Date();
   <Divider />
   <h2 class="font-semibold text-black dark:text-white">Recent Media</h2>
   <p class="mb-4">
-    View the <a href="/books" class="underline">books</a> I'm reading,
-    the <a href="/films" class="underline">films</a> I've watched and reviewed,
-    and the <a href="/music" class="underline">music</a> I've been listening to.
+    View the <a href="/books" class="underline"><BookHiveIcon class="inline w-4 h-4 align-text-bottom mr-0.5" />books</a> I'm reading,
+    the <a href="/films" class="underline"><PopfeedIcon class="inline w-4 h-4 align-text-bottom mr-0.5" />films</a> I've watched and reviewed,
+    and the <a href="/music" class="underline"><RockskyIcon class="inline w-4 h-4 align-text-bottom mr-0.5" />music</a> I've been listening to.
   </p>
 </Base>

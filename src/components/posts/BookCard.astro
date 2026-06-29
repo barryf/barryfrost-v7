@@ -1,7 +1,8 @@
 ---
 import { formatRelativeDate, formatDate, toISODate } from '@/lib/dates';
 import { pdslsUrl } from '@/lib/pds';
-import PdslsIcon from '@/components/PdslsIcon.astro';
+import PdslsIcon from '@/components/icons/PdslsIcon.astro';
+import BookHiveIcon from '@/components/icons/BookHiveIcon.astro';
 
 interface Props {
   entry: {
@@ -46,10 +47,13 @@ const date = new Date(dateStr);
     {bookhiveUrl && <a class="p-name u-url hidden" href={bookhiveUrl} rel="noopener noreferrer">{data.title}</a>}
     <span class="p-author hidden">{data.authors}</span>
   </div>
-  <div class="">
+  <div>
     <h2 class="leading-tight mb-1">
       {bookhiveUrl ? (
-        <a href={bookhiveUrl} class="underline" rel="noopener noreferrer">{data.title}</a>
+        <a href={bookhiveUrl} class="underline inline-flex items-start gap-1" rel="noopener noreferrer">
+          <BookHiveIcon />
+          {data.title}
+        </a>
       ) : (
         <span>{data.title}</span>
       )}

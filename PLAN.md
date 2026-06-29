@@ -111,16 +111,24 @@ Removed from v6: `/page/{n}` (unified feed), `/archives/`, `/tags/`, `/feed.xml`
 - `Post.astro` — individual article/weeknote with prose styles; "Posted in [Section] [relative date]" footer (omits "on" when displaying relative text); uses `Divider` above footer
 - `Divider.astro` — `❉ ❉ ❉` separator, `mb-4`
 - `SiteFooter.astro` — footer nav (About, Colophon, Blogroll, Follow, Contact) + inline search form that submits to `/search`
+Icon components in `src/components/icons/`:
 - `BlueskyIcon.astro` — monochrome Bluesky butterfly SVG, `currentColor`, `-translate-y-px` to align with text baseline
-- `PdslsIcon.astro` — pdsls.dev graph SVG, same conventions as `BlueskyIcon`; links to the underlying PDS record on pdsls.dev
+- `PdslsIcon.astro` — pdsls.dev graph SVG; links to the underlying PDS record on pdsls.dev
+- `GrainIcon.astro` — grain.social logo; used in `PhotoCard` and wherever grain.social links appear
+- `BookHiveIcon.astro` — bookhive.buzz logo; used in `BookCard` and the homepage Recent Media link
+- `PopfeedIcon.astro` — popfeed.social logo; used in `FilmCard` and the homepage Recent Media link
+- `RockskyIcon.astro` — rocksky music note icon; used in the homepage Recent Media link
+- `CheckInIcon.astro` — map pin icon; used in `CheckInCard` and the homepage Recent Check-ins list
+
+All icons accept an optional `class` prop to override the default sizing/alignment.
 
 Card components in `src/components/posts/`:
 - `ArticleCard` — title link, relative date with `title` attr
 - `BlueskyCard` — rich text, embedded images, quote posts via `BlueskyQuote`, relative date, Bluesky icon link, pdsls icon link
-- `CheckInCard` — venue name/category/address, optional photo(s), relative date, pdsls icon link, optional Beaconbits link
-- `FilmCard` — poster, title, star rating, relative date, pdsls icon link
-- `BookCard` — cover, title, authors, "Started/Finished [relative date]", pdsls icon link
-- `PhotoCard` — horizontally scrollable thumbnails (multi) or side-by-side (single), title, relative date, pdsls icon link
+- `CheckInCard` — map pin icon + venue name/category/address, optional photo(s), relative date, pdsls icon link, optional Beaconbits link
+- `FilmCard` — poster, Popfeed icon + title, star rating, relative date, pdsls icon link
+- `BookCard` — cover, BookHive icon + title, authors, "Started/Finished [relative date]", pdsls icon link
+- `PhotoCard` — horizontally scrollable thumbnails (multi) or side-by-side (single), Grain icon + title, relative date, pdsls icon link
 
 All `<time>` elements use `formatRelativeDate` for display (e.g. "3 days ago", "Yesterday") with `title={formatDate(date)}` for the full date on hover and `datetime={toISODate(date)}` for machine readability.
 

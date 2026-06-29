@@ -2,7 +2,8 @@
 import { formatRelativeDate, formatDate, toISODate } from '@/lib/dates';
 import { DID, pdslsUrl } from '@/lib/pds';
 import { blobImage } from '@/lib/image-url';
-import PdslsIcon from '@/components/PdslsIcon.astro';
+import PdslsIcon from '@/components/icons/PdslsIcon.astro';
+import GrainIcon from '@/components/icons/GrainIcon.astro';
 
 interface Props {
   entry: {
@@ -53,7 +54,10 @@ const date = new Date(data.createdAt);
     </div>
   )}
   <div>
-    <a class="p-name u-url underline" href={grainUrl} rel="noopener noreferrer">{data.title}</a>
+    <a class="p-name u-url underline inline-flex items-center gap-1" href={grainUrl} rel="noopener noreferrer">
+      <GrainIcon />
+      {data.title}
+    </a>
     {data.description && <p class="text-sm text-gray-600 dark:text-gray-400 mt-0.5">{data.description}</p>}
     <div class="mt-0">
       <time class="dt-published text-sm mr-1" datetime={toISODate(date)} title={formatDate(date)}>{formatRelativeDate(date)}</time>

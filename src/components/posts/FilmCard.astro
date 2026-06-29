@@ -1,7 +1,8 @@
 ---
 import { formatRelativeDate, formatDate, toISODate } from '@/lib/dates';
 import { DID, pdslsUrl } from '@/lib/pds';
-import PdslsIcon from '@/components/PdslsIcon.astro';
+import PdslsIcon from '@/components/icons/PdslsIcon.astro';
+import PopfeedIcon from '@/components/icons/PopfeedIcon.astro';
 
 interface Props {
   entry: {
@@ -46,7 +47,10 @@ function toStars(rating: number): string {
   )}
   <div>
     <h2 class="leading-tight mb-1">
-      <a class="u-url underline" href={filmUrl} rel="noopener noreferrer">{data.title}</a>
+      <a class="u-url underline inline-flex items-start gap-1" href={filmUrl} rel="noopener noreferrer">
+        <PopfeedIcon />
+        {data.title}
+      </a>
     </h2>
     {data.rating !== undefined && (
       <p class="mb-0 text-sm text-gray-500 dark:text-gray-500">
