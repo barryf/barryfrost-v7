@@ -44,7 +44,7 @@ Blogroll blogs come from `src/data/blogroll.json` (static JSON).
 Each PDS loader implements `Loader` from `astro/loaders`:
 - `store.clear()` at the start (full refresh each build)
 - Iterates `fetchAllRecords(collection, DID, PDS_HOST)` from `src/lib/pds.ts`
-- Builds image URLs via `transformImage(sourceUrl, opts)` from `src/lib/image-url.ts` — returns a Cloudflare Image Transformations URL (`https://new.barryfrost.com/cdn-cgi/image/{params}/{sourceUrl}`). Source blobs stay in the PDS; CF fetches, transforms, and edge-caches on first request. Pass dimensions at 2× the CSS display size for retina (e.g. `width: 192` for a 96px display slot). Accepts `fit: 'cover'` (default) or `fit: 'contain'` to preserve aspect ratio.
+- Materialises images at build time via `pdsImage(cid, opts)` / `remoteImage(url, opts)` from `src/lib/image-store.ts` — fetches the source directly (PDS `getBlob` or remote URL), resizes with `sharp`, and stores as webp in R2. Returns an `images.barryfrost.com` URL on success, or the direct source URL on error/dev. Pass dimensions at 2× the CSS display size for retina (e.g. `width: 192` for a 96px display slot). Accepts `fit: 'cover'` (default) or `fit: 'contain'` to preserve aspect ratio.
 - Stores entries with `generateDigest(record.cid)` for change detection
 
 ## Homepage
@@ -232,7 +232,7 @@ Build command: `npm run build`. Deploy command: `npx wrangler deploy`.
 
 `npm run build` runs `astro build` followed by `scripts/notify-pushover.ts` — POSTs a success notification to Pushover. Exits silently if tokens are not set.
 
-Required build env vars (set in CF Workers Builds): `PUSHOVER_TOKEN`, `PUSHOVER_USER`
+Required build env vars (set in CF Workers Builds): `PUSHOVER_TOKEN`, `PUSHOVER_USER`, `R2_ACCOUNT_ID`, `R2_BUCKET`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `IMAGES_BASE_URL`
 
 ### PDS polling — `cloudflare/pds-poller`
 A Cloudflare Worker with a cron trigger (`*/15 * * * *`). Three-tier polling strategy:
@@ -254,15 +254,25 @@ Manual `workflow_dispatch` for creating article/weeknote stubs. Inputs: `kind`, 
 
 Required secrets: `GH_PAT`
 
+### Image pipeline — R2 + sharp
+
+Images are pre-generated **at build time** and served from an R2 bucket at `images.barryfrost.com`. No runtime resizing occurs.
+
+`src/lib/image-store.ts` exposes two async helpers used by all loaders:
+- `pdsImage(cid, opts)` — fetches blob from `bsky.social` via `com.atproto.sync.getBlob`
+- `remoteImage(url, opts)` — fetches from the URL directly
+
+Both functions:
+1. Compute a content-addressed R2 key: `blob/{cid}/{w}x{h}-{fit}-q{q}` or `ext/{sha256(url)[0:16]}/{w}x{h}-{fit}-q{q}`
+2. HEAD-check R2 — return `images.barryfrost.com/{key}` immediately if present (incrementality)
+3. Otherwise fetch source → resize with `sharp` → encode as webp → PUT to R2 → return URL
+4. On error or in dev (no R2 creds): return the direct source URL
+
+R2 bucket `barryfrost-images` with custom domain `images.barryfrost.com`. `sharp@0.34.5` is available as Astro's transitive optional dependency and must **not** be added as a direct dep (macOS-generated lockfiles omit Linux platform binaries, breaking `npm ci` on CF's build runners).
+
 ### Blob proxy — `cloudflare/blob-proxy`
-A Cloudflare Worker at `cdn.barryfrost.com` that proxies and transforms PDS image blobs (PDS blobs are `cache-control: private`, preventing CF from caching via `/cdn-cgi/image/`).
 
-URL contract: `https://cdn.barryfrost.com/blob?cid=<cid>&w=<width>&h=<height>&fit=<fit>&q=<quality>`
-
-- Transforms via `fetch(blobUrl, { cf: { image: {...} } })`
-- Returns `cache-control: public, max-age=31536000, immutable`
-- Uses `caches.default` for edge caching
-- Frontend helper: `blobImage(cid, opts)` in `src/lib/image-url.ts`
+A Cloudflare Worker at `cdn.barryfrost.com` that was the previous runtime image resizer for PDS blobs. Now superseded by the build-time R2 pipeline. **Pending retirement** — can be deleted once production is confirmed to serve all images from `images.barryfrost.com`.
 
 ### Why the workers are separate
 
@@ -273,7 +283,7 @@ Both workers live in `cloudflare/` as standalone wrangler projects. The main app
 - **Minimal JS** — `/check-ins` loads Leaflet + Leaflet.markercluster (CDN) for the cluster map with fullscreen toggle; all other pages are JS-free
 - **No runtime JS elsewhere** — MF2, dark mode, and layout are pure HTML/CSS
 - **Local Markdown is canonical** — PDS documents are syndication targets, not source of truth
-- **Images served on demand** — source blobs stay in the PDS; Cloudflare Image Transformations fetches, resizes, converts to WebP, and edge-caches on first request
+- **Images pre-generated at build time** — fetched from source (PDS `getBlob` / remote URL), resized with `sharp`, stored as webp in R2 (`images.barryfrost.com`); served statically with no runtime resizing. Dev/error fallback uses direct source URLs.
 - **`@/` import alias** — `tsconfig.json` maps `@/*` → `src/*`
 - **`visibility: unlisted`** frontmatter hides articles/weeknotes from feeds (pages still generate)
 - **`build.format: 'file'`** — generates `about.html` not `about/index.html`
@@ -310,7 +320,7 @@ Both CLIs accept `--no-git` (or `CI=true`) to skip git/gh operations — used by
 
 ## Adding a New PDS Content Type
 
-1. Create `src/lib/loaders/{type}.ts` — implement `Loader`, use `fetchAllRecords`, build image URLs with `blobImage()` or `transformImage()` from `src/lib/image-url.ts`
+1. Create `src/lib/loaders/{type}.ts` — implement `Loader`, use `fetchAllRecords`, materialise images with `pdsImage(cid, opts)` or `remoteImage(url, opts)` from `src/lib/image-store.ts`
 2. Add collection to `src/content.config.ts` with a Zod schema
 3. Create `src/components/posts/{Type}Card.astro`
 4. Add an index page (`src/pages/{type}/index.astro`) and paginated page (`src/pages/{type}/page/[page].astro`) using `getFeedPages` and the `Feed.astro` layout
