@@ -26,10 +26,8 @@
     "@emnapi/runtime": "^1.10.0"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.9",
     "@types/node": "^25.5.0",
     "pagefind": "^1.3.0",
-    "tsx": "^4.19.4",
-    "typescript": "^6.0.3"
+    "tsx": "^4.19.4"
   }
 }
