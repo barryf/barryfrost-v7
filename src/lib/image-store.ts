@@ -118,15 +118,20 @@ async function r2Put(
 
 // ── core materialise function ────────────────────────────────────────────────
 
-async function materialise(key: string, cfUrl: string): Promise<string> {
+async function materialise(key: string, cfUrl: string, directUrl?: string): Promise<string> {
   await acquireSlot();
   try {
     const aws = await getAwsClient();
     if (await r2Exists(aws, key)) {
       return `${IMAGES_BASE_URL}/${key}`;
     }
-    // Fetch from the CF endpoint which handles resizing; request webp explicitly.
-    const res = await fetch(cfUrl, { headers: { Accept: 'image/webp,image/*' } });
+    // Try CF endpoint first (handles resize + webp conversion).
+    let res = await fetch(cfUrl, { headers: { Accept: 'image/webp,image/*' } });
+    // If CF endpoint fails (e.g. source domain not on Image Resizing allowlist),
+    // fall back to fetching the source URL directly — no resize, but still R2-cached.
+    if (!res.ok && directUrl) {
+      res = await fetch(directUrl);
+    }
     if (!res.ok) {
       console.warn(`[image-store] fetch failed ${res.status}, falling back to CF URL: ${cfUrl}`);
       return cfUrl;
@@ -162,5 +167,7 @@ export async function pdsImage(cid: string, opts: ImageOpts = {}): Promise<strin
 export async function remoteImage(url: string, opts: ImageOpts = {}): Promise<string> {
   const cfUrl = transformImage(url, opts);
   if (!IS_PROD || !R2_CONFIGURED) return cfUrl;
-  return materialise(remoteKey(url, opts), cfUrl);
+  // Pass url as direct fallback: if cdn-cgi/image returns 403 (source domain not
+  // on CF Image Resizing allowlist), we fetch the original and store it unresized.
+  return materialise(remoteKey(url, opts), cfUrl, url);
 }
