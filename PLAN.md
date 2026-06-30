@@ -106,25 +106,24 @@ Removed from v6: `/page/{n}` (unified feed), `/archives/`, `/tags/`, `/feed.xml`
 - `Feed.astro` — shared feed layout used by all list/paginated pages. Renders the `h-feed` wrapper, hidden `h-card p-author` MF2 author block, heading (with `(Page N)` suffix), optional named `description` slot, default slot for item content, and `<Pagination>` (suppressed via `paginate={false}` for books). Props: `title`, `currentPage?`, `totalPages`, `basePath`, `paginate?`.
 - `FilmFeed.astro` — extends `Feed.astro` for `/films` and `/films/by-rating`: adds date/rating sort toggle and renders `FilmCard` in a responsive grid (`grid-cols-1 sm:grid-cols-2 lg:grid-cols-3`)
 - `Post.astro` — individual article/weeknote with prose styles; "Posted in [Section] [relative date]" footer (omits "on" when displaying relative text); uses `Divider` above footer
-- `Divider.astro` — `❉ ❉ ❉` separator, `mb-4`
+- `Divider.astro` — `⁂` separator; `my-8 text-xl`
 - `SiteFooter.astro` — footer nav (About, Colophon, Blogroll, Follow) + inline search form that submits to `/search`
 Icon components in `src/components/icons/`:
 - `BlueskyIcon.astro` — monochrome Bluesky butterfly SVG, `currentColor`, `-translate-y-px` to align with text baseline
 - `PdslsIcon.astro` — pdsls.dev graph SVG; links to the underlying PDS record on pdsls.dev
 - `GrainIcon.astro` — grain.social logo; used in `PhotoCard` and wherever grain.social links appear
-- `BookHiveIcon.astro` — bookhive.buzz logo; used in `BookCard` and the homepage Recent Media link
-- `PopfeedIcon.astro` — popfeed.social logo; used in `FilmCard` and the homepage Recent Media link
+- `BookHiveIcon.astro` — bookhive.buzz logo; used in the `/books` feed description and homepage Recent Media link
+- `PopfeedIcon.astro` — popfeed.social logo; used in the `/films` feed description and homepage Recent Media link
 - `RockskyIcon.astro` — rocksky music note icon; used in the homepage Recent Media link
-- `CheckInIcon.astro` — map pin icon; used in `CheckInCard` and the homepage Recent Check-ins list
 
 All icons accept an optional `class` prop to override the default sizing/alignment.
 
 Card components in `src/components/posts/`:
 - `ArticleCard` — title link, relative date with `title` attr
 - `BlueskyCard` — rich text, embedded images, quote posts via `BlueskyQuote`, relative date, Bluesky icon link, pdsls icon link
-- `CheckInCard` — map pin icon + venue name/category/address, optional photo(s), relative date, pdsls icon link, optional Beaconbits link
-- `FilmCard` — poster, Popfeed icon + title, star rating, relative date, pdsls icon link
-- `BookCard` — cover, BookHive icon + title, authors, "Started/Finished [relative date]", pdsls icon link
+- `CheckInCard` — venue name/category/address (name links to OpenStreetMap when lat/lon available), optional photo(s), relative date, pdsls icon link, optional Beaconbits link
+- `FilmCard` — clickable poster linking to Popfeed, title, star rating, relative date, pdsls icon link
+- `BookCard` — clickable cover linking to BookHive, title, authors, "Started/Finished [relative date]", pdsls icon link
 - `PhotoCard` — horizontally scrollable thumbnails (multi) or side-by-side (single), Grain icon + title, relative date, pdsls icon link
 
 All `<time>` elements use `formatRelativeDate` for display with `title={formatDateTitle(date)}` for the full date on hover and `datetime={toISODate(date)}` for machine readability.
