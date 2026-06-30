@@ -1,7 +1,7 @@
 ---
 import Feed from '@/layouts/Feed.astro';
 import BlueskyCard from '@/components/posts/BlueskyCard.astro';
-import Divider from '@/components/Divider.astro';
+import BlueskyIcon from '@/components/icons/BlueskyIcon.astro';
 import { getFeedPages } from '@/lib/feed';
 
 const pages = await getFeedPages('blueskyPosts');
@@ -9,14 +9,9 @@ const { items, totalPages } = pages[0] ?? { items: [], totalPages: 1 };
 ---
 <Feed title="Posts" totalPages={totalPages} basePath="/posts">
   <Fragment slot="description">
-    Short posts from my <a href="https://bsky.app/profile/barryfrost.com" class="underline">Bluesky profile</a>.
+    Short posts from my <a href="https://bsky.app/profile/barryfrost.com" class="underline"><BlueskyIcon class="inline w-4 h-4 align-text-bottom mr-1" />Bluesky</a> profile.
   </Fragment>
-  <div class="mb-8">
-    {items.map((entry, i) => (
-      <>
-        <BlueskyCard entry={entry} />
-        {i < items.length - 1 && <Divider />}
-      </>
-    ))}
+  <div class="my-12 flex flex-col gap-y-8">
+    {items.map((entry) => <BlueskyCard entry={entry} />)}
   </div>
 </Feed>

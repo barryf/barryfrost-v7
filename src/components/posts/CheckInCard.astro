@@ -2,7 +2,6 @@
 import { formatRelativeDate, formatDateTitle, toISODate } from '@/lib/dates';
 import { pdslsUrl } from '@/lib/pds';
 import PdslsIcon from '@/components/icons/PdslsIcon.astro';
-import CheckInIcon from '@/components/icons/CheckInIcon.astro';
 
 interface Props {
   entry: {
@@ -51,9 +50,9 @@ const date = new Date(data.createdAt);
     )}
     <div>
       {mapUrl ? (
-        <a href={mapUrl} class="p-name underline inline-flex items-center gap-1" rel="noopener noreferrer"><CheckInIcon />{data.venueName}</a>
+        <a href={mapUrl} class="p-name underline" rel="noopener noreferrer">{data.venueName}</a>
       ) : (
-        <span class="p-name inline-flex items-center gap-1"><CheckInIcon />{data.venueName}</span>
+        <span class="p-name">{data.venueName}</span>
       )}
       {data.venueCategory && <div class="text-sm text-gray-500 dark:text-gray-500">{data.venueCategory}</div>}
       {data.venueAddress && <p class="p-street-address text-sm text-gray-500 dark:text-gray-500">{data.venueAddress}</p>}

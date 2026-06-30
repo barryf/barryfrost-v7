@@ -1,6 +1,7 @@
 ---
 import Feed from './Feed.astro';
 import FilmCard from '@/components/posts/FilmCard.astro';
+import PopfeedIcon from '@/components/icons/PopfeedIcon.astro';
 
 interface FilmEntry {
   id: string;
@@ -25,8 +26,8 @@ const { items, currentPage, totalPages, basePath = '/films', sort = 'date' } = A
 ---
 <Feed title="Films" currentPage={currentPage} totalPages={totalPages} basePath={basePath}>
   <Fragment slot="description">
-    Films and TV shows I've watched and rated on
-    <a href="https://popfeed.social/profile/did:plc:j5ksi3y4tdtbp7vpsxsfyask" class="underline" rel="noopener noreferrer">Popfeed</a>.
+    Films I've watched and rated on
+    <a href="https://popfeed.social/profile/did:plc:j5ksi3y4tdtbp7vpsxsfyask" class="underline" rel="noopener noreferrer"><PopfeedIcon class="inline w-4 h-4 align-text-bottom mr-0.5" />Popfeed</a>.
   </Fragment>
   <div class="mb-8 flex gap-4 text-sm">
     {sort === 'date' ? (

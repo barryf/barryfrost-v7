@@ -13,7 +13,6 @@ import PdslsIcon from '@/components/icons/PdslsIcon.astro';
 import BookHiveIcon from '@/components/icons/BookHiveIcon.astro';
 import PopfeedIcon from '@/components/icons/PopfeedIcon.astro';
 import RockskyIcon from '@/components/icons/RockskyIcon.astro';
-import CheckInIcon from '@/components/icons/CheckInIcon.astro';
 
 const [weeknotes, photos, blueskyPosts, articles, checkIns] = await Promise.all([
   getCollection('weeknotes'),
@@ -67,9 +66,11 @@ const latestPostUrl = latestPost ? `https://bsky.app/profile/${HANDLE}/post/${la
     <>
       <Divider />
       <h2 class="font-semibold text-black dark:text-white">Latest Weeknote</h2>
-      <p class="mb-1">
+      <h3>
         <a href={`/weeknotes/${latestWeeknote.id}`} class="underline">
           {latestWeeknote.data.emoji && `${latestWeeknote.data.emoji} `}{latestWeeknote.data.title}</a>
+      </h3>
+      <p class="mb-1">
         {latestWeeknote.body && (
           <Fragment>{truncateBody(latestWeeknote.body)}</Fragment>
         )}
@@ -97,7 +98,7 @@ const latestPostUrl = latestPost ? `https://bsky.app/profile/${HANDLE}/post/${la
                   width="120"
                   height="120"
                   class:list={[
-                    "u-photo w-30 h-30 aspect-square object-cover grayscale hover:grayscale-0 transition delay-0 duration-500 ease-in-out",
+                    "u-photo w-30 h-30 aspect-square object-cover",
                     i === 0 && "rounded-l-xl",
                     i === recentPhotos.length - 1 && "rounded-r-xl"
                   ]}
@@ -156,7 +157,6 @@ const latestPostUrl = latestPost ? `https://bsky.app/profile/${HANDLE}/post/${la
           const date = new Date(entry.data.createdAt);
           return (
             <li>
-              <CheckInIcon class="inline w-4 h-4 align-text-bottom" />
               {venueUrl
                 ? <a href={venueUrl} class="underline" rel="noopener noreferrer">{entry.data.venueName}</a>
                 : <span>{entry.data.venueName}</span>

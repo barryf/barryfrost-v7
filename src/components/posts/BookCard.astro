@@ -34,15 +34,29 @@ const date = new Date(dateStr);
 <article class="h-entry flex gap-3">
   <div class="p-read-of h-cite shrink-0">
     {data.coverUrl && (
-      <img
-        src={data.coverUrl}
-        alt={`Cover for ${data.title}`}
-        width="60"
-        height="80"
-        class="u-photo w-15 object-cover rounded"
-        loading="lazy"
-        decoding="async"
-      />
+      bookhiveUrl ? (
+        <a href={bookhiveUrl} rel="noopener noreferrer" aria-label={`${data.title} on BookHive`}>
+          <img
+            src={data.coverUrl}
+            alt={`Cover for ${data.title}`}
+            width="60"
+            height="80"
+            class="u-photo w-15 object-cover rounded"
+            loading="lazy"
+            decoding="async"
+          />
+        </a>
+      ) : (
+        <img
+          src={data.coverUrl}
+          alt={`Cover for ${data.title}`}
+          width="60"
+          height="80"
+          class="u-photo w-15 object-cover rounded"
+          loading="lazy"
+          decoding="async"
+        />
+      )
     )}
     {bookhiveUrl && <a class="p-name u-url hidden" href={bookhiveUrl} rel="noopener noreferrer">{data.title}</a>}
     <span class="p-author hidden">{data.authors}</span>
@@ -50,8 +64,7 @@ const date = new Date(dateStr);
   <div>
     <h2 class="leading-tight mb-1">
       {bookhiveUrl ? (
-        <a href={bookhiveUrl} class="underline inline-flex items-start gap-1" rel="noopener noreferrer">
-          <BookHiveIcon />
+        <a href={bookhiveUrl} class="underline" rel="noopener noreferrer">
           {data.title}
         </a>
       ) : (
