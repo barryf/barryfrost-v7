@@ -34,10 +34,7 @@ Fetched at build time from `bsky.social` for DID `did:plc:j5ksi3y4tdtbp7vpsxsfya
 | `social.grain.gallery` + `.gallery.item` + `.photo` | `photos.ts` | `/photos`, homepage recent photos |
 | `app.rocksky.album` | `albums.ts` | `/now` page "Listening" section only |
 | `app.rocksky.scrobble` | `scrobbles.ts` | `/music` — Top Albums, Top Artists, Recently Played |
-| `site.standard.document` | `documents.ts` | Enrichment only — adds AT Protocol syndication links to articles/weeknotes |
 | `site.standard.graph.subscription` | `subscriptions.ts` | `/blogroll` only |
-
-The `documents` collection maps AT URIs to local articles/weeknotes for MF2 syndication links — it does not produce duplicate feed entries.
 
 > **Note on `com.barryfrost.checkin`:** The site route and code use `check-in` (hyphenated), but the AT Protocol NSID cannot follow suit — the spec only allows `[a-zA-Z0-9]` in NSID name segments (no hyphens). The NSID is therefore intentionally kept as `com.barryfrost.checkin`.
 
@@ -110,7 +107,7 @@ Removed from v6: `/page/{n}` (unified feed), `/archives/`, `/tags/`, `/feed.xml`
 - `FilmFeed.astro` — extends `Feed.astro` for `/films` and `/films/by-rating`: adds date/rating sort toggle and renders `FilmCard` in a responsive grid (`grid-cols-1 sm:grid-cols-2 lg:grid-cols-3`)
 - `Post.astro` — individual article/weeknote with prose styles; "Posted in [Section] [relative date]" footer (omits "on" when displaying relative text); uses `Divider` above footer
 - `Divider.astro` — `❉ ❉ ❉` separator, `mb-4`
-- `SiteFooter.astro` — footer nav (About, Colophon, Blogroll, Follow, Contact) + inline search form that submits to `/search`
+- `SiteFooter.astro` — footer nav (About, Colophon, Blogroll, Follow) + inline search form that submits to `/search`
 Icon components in `src/components/icons/`:
 - `BlueskyIcon.astro` — monochrome Bluesky butterfly SVG, `currentColor`, `-translate-y-px` to align with text baseline
 - `PdslsIcon.astro` — pdsls.dev graph SVG; links to the underlying PDS record on pdsls.dev
@@ -130,15 +127,16 @@ Card components in `src/components/posts/`:
 - `BookCard` — cover, BookHive icon + title, authors, "Started/Finished [relative date]", pdsls icon link
 - `PhotoCard` — horizontally scrollable thumbnails (multi) or side-by-side (single), Grain icon + title, relative date, pdsls icon link
 
-All `<time>` elements use `formatRelativeDate` for display (e.g. "3 days ago", "Yesterday") with `title={formatDate(date)}` for the full date on hover and `datetime={toISODate(date)}` for machine readability.
+All `<time>` elements use `formatRelativeDate` for display with `title={formatDateTitle(date)}` for the full date on hover and `datetime={toISODate(date)}` for machine readability.
 
 ## Date Formatting
 
 `src/lib/dates.ts` exports:
-- `formatRelativeDate(date, now?)` — "Today" / "Yesterday" / "N days ago" for ≤13 days; falls back to `formatDateShort` for older dates. Used everywhere dates are displayed.
+- `formatRelativeDate(date)` — always returns `formatDateShort`. Used everywhere dates are displayed.
 - `formatDate(date)` — "22 April 2026". Used in `title` attributes and travelblog nav links.
-- `formatDateShort(date)` — "22 Apr 2026". Used as the `formatRelativeDate` fallback and travelblog nav links.
-- `toISODate(date)` — ISO 8601 string for `datetime` attributes.
+- `formatDateTitle(date)` — for `title` attributes: short date for date-only values; `YYYY-MM-DD HH:MM:SS±HH:MM` for timestamped values, using Europe/London timezone.
+- `formatDateShort(date)` — "22 Apr 2026". Used as the `formatRelativeDate` return value and travelblog nav links.
+- `toISODate(date)` — ISO 8601 string for `datetime` attributes. Date-only values (midnight UTC) emit `YYYY-MM-DD`; timestamped values emit local Europe/London datetime with offset.
 
 ## Styling
 
@@ -238,9 +236,17 @@ Build command: `npm run build`. Deploy command: `npx wrangler deploy`.
 Required build env vars (set in CF Workers Builds): `PUSHOVER_TOKEN`, `PUSHOVER_USER`
 
 ### PDS polling — `cloudflare/pds-poller`
-A Cloudflare Worker with a cron trigger (`*/15 * * * *`). Fetches the latest record CID from the PDS for each monitored collection, compares against previously seen CID in Workers KV (`binding: CIDS`). If any CID changed, updates KV and POSTs to the Workers Builds deploy hook.
+A Cloudflare Worker with a cron trigger (`*/15 * * * *`). Three-tier polling strategy:
 
-Monitored collections: `app.bsky.feed.post`, `app.beaconbits.beacon`, `com.barryfrost.checkin`, `social.popfeed.feed.review`, `buzz.bookhive.book`, `site.standard.document`, `site.standard.graph.subscription`, `social.grain.gallery`, `social.grain.gallery.item`, `social.grain.photo`
+1. **Tier 1 — repo rev** (`com.atproto.sync.getLatestCommit` via `bsky.network` relay): if the repo-level rev is unchanged, nothing has been written anywhere — return immediately (~1 subrequest).
+2. **Tier 2a — full digest scan** (`DIGEST_COLLECTIONS`): paginate all records in a collection and compare a sorted CID digest. Catches creates, updates, and deletes. Used for small collections.
+3. **Tier 2b — head CID** (`HEAD_COLLECTIONS`): compare only the latest record's CID. Catches creates only; used for large collections (e.g. `app.bsky.feed.post`) where full pagination is impractical.
+
+If any collection changes, updates Workers KV (`binding: CIDS`) and POSTs to the Workers Builds deploy hook.
+
+`DIGEST_COLLECTIONS`: `app.beaconbits.beacon`, `com.barryfrost.checkin`, `social.popfeed.feed.review`, `buzz.bookhive.book`, `site.standard.graph.subscription`, `social.grain.gallery`, `social.grain.gallery.item`, `social.grain.photo`, `app.rocksky.scrobble`, `app.rocksky.album`
+
+`HEAD_COLLECTIONS`: `app.bsky.feed.post`
 
 Required secrets: `DEPLOY_HOOK`
 
@@ -309,7 +315,7 @@ Both CLIs accept `--no-git` (or `CI=true`) to skip git/gh operations — used by
 2. Add collection to `src/content.config.ts` with a Zod schema
 3. Create `src/components/posts/{Type}Card.astro`
 4. Add an index page (`src/pages/{type}/index.astro`) and paginated page (`src/pages/{type}/page/[page].astro`) using `getFeedPages` and the `Feed.astro` layout
-5. Add collection NSID to the `COLLECTIONS` array in `cloudflare/pds-poller/src/index.ts` and the `PRETTY` label map
+5. Add collection NSID to `DIGEST_COLLECTIONS` (small) or `HEAD_COLLECTIONS` (large) in `cloudflare/pds-poller/src/index.ts`, and add a label to the `PRETTY` map
 6. Link from the homepage or footer as appropriate
 
 ## One-off Import Scripts

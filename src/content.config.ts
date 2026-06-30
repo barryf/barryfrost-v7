@@ -3,7 +3,6 @@ import { glob } from 'astro/loaders';
 import { blueskyLoader } from './lib/loaders/bluesky';
 import { checkInsLoader } from './lib/loaders/check-ins';
 import { filmsLoader } from './lib/loaders/films';
-import { documentsLoader } from './lib/loaders/documents';
 import { booksLoader } from './lib/loaders/books';
 import { subscriptionsLoader } from './lib/loaders/subscriptions';
 import { blogrollLoader } from './lib/loaders/blogroll';
@@ -141,19 +140,6 @@ const books = defineCollection({
   }),
 });
 
-const documents = defineCollection({
-  loader: documentsLoader(),
-  schema: z.object({
-    title: z.string().optional(),
-    path: z.string().optional(),
-    publishedAt: z.string().optional(),
-    description: z.string().optional(),
-    tags: z.array(z.string()),
-    uri: z.string(),
-    createdAt: z.string().optional(),
-  }),
-});
-
 const blogroll = defineCollection({
   loader: blogrollLoader(),
   schema: z.object({
@@ -222,7 +208,6 @@ export const collections = {
   'check-ins': checkIns,
   films,
   books,
-  documents,
   blogroll,
   standardSubscriptions,
   photos,
