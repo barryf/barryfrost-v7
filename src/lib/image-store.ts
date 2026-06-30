@@ -127,11 +127,17 @@ async function materialise(key: string, cfUrl: string): Promise<string> {
     }
     // Fetch from the CF endpoint which handles resizing; request webp explicitly.
     const res = await fetch(cfUrl, { headers: { Accept: 'image/webp,image/*' } });
-    if (!res.ok) throw new Error(`CF fetch failed ${res.status}: ${cfUrl}`);
+    if (!res.ok) {
+      console.warn(`[image-store] fetch failed ${res.status}, falling back to CF URL: ${cfUrl}`);
+      return cfUrl;
+    }
     const contentType = res.headers.get('content-type') ?? 'image/webp';
     const bytes = await res.arrayBuffer();
     await r2Put(aws, key, bytes, contentType);
     return `${IMAGES_BASE_URL}/${key}`;
+  } catch (err) {
+    console.warn(`[image-store] materialise error for ${key}, falling back to CF URL:`, err);
+    return cfUrl;
   } finally {
     releaseSlot();
   }
