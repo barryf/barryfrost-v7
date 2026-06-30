@@ -22,9 +22,12 @@
     "tailwindcss": "^4.2.4",
     "vite": "^8.0.0"
   },
+  "optionalDependencies": {
+    "@img/sharp-linux-x64": "^0.35.2"
+  },
   "overrides": {
-    "@emnapi/core": "^1.10.0",
-    "@emnapi/runtime": "^1.10.0"
+    "@emnapi/core": "^1.11.1",
+    "@emnapi/runtime": "^1.11.1"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
