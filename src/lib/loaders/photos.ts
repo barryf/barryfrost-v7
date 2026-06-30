@@ -66,15 +66,17 @@ export function photosLoader(): Loader {
         const items = (galleryItems.get(galleryUri) ?? []).sort((a, b) => a.position - b.position);
         const photoCount = items.length;
 
-        const thumbnailUrls: string[] = [];
-        const thumbnailFullUrls: string[] = [];
-        for (const item of items) {
+        const results = await Promise.all(items.map(async (item) => {
           const photo = photos.get(item.photoUri);
-          if (photo?.photo?.ref?.$link) {
-            thumbnailUrls.push(await pdsImage(photo.photo.ref.$link, { width: 240, height: 240, fit: 'cover' }));
-            thumbnailFullUrls.push(await pdsImage(photo.photo.ref.$link, { width: 2000, height: 2000, fit: 'contain' }));
-          }
-        }
+          if (!photo?.photo?.ref?.$link) return null;
+          const [thumb, full] = await Promise.all([
+            pdsImage(photo.photo.ref.$link, { width: 240, height: 240, fit: 'cover' }),
+            pdsImage(photo.photo.ref.$link, { width: 2000, height: 2000, fit: 'contain' }),
+          ]);
+          return { thumb, full };
+        }));
+        const thumbnailUrls = results.filter(r => r !== null).map(r => r.thumb);
+        const thumbnailFullUrls = results.filter(r => r !== null).map(r => r.full);
 
         store.set({
           id: gallery.rkey,

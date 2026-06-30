@@ -9,7 +9,7 @@ export function blogrollLoader(): Loader {
       logger.info('Fetching blogroll favicons');
       store.clear();
 
-      for (const blog of blogsData) {
+      await Promise.all(blogsData.map(async (blog) => {
         const hostname = new URL(blog.url).hostname;
         const avatarUrl = 'avatar' in blog && blog.avatar
           ? await remoteImage(blog.avatar, { width: 96, height: 96, fit: 'cover' })
@@ -20,7 +20,7 @@ export function blogrollLoader(): Loader {
           data: { name: blog.name, url: blog.url, hostname, avatarUrl },
           digest: generateDigest(blog.url),
         });
-      }
+      }));
     },
   };
 }

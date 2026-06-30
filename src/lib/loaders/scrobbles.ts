@@ -9,7 +9,12 @@ export function scrobblesLoader(): Loader {
       logger.info('Fetching Rocksky scrobbles');
       store.clear();
 
+      const records = [];
       for await (const record of fetchAllRecords('app.rocksky.scrobble', DID, PDS_HOST)) {
+        records.push(record);
+      }
+
+      await Promise.all(records.map(async (record) => {
         const value = record.value as Record<string, unknown>;
         const rkey = rkeyFromUri(record.uri);
         const albumArtUrl = value.albumArtUrl as string | undefined;
@@ -31,7 +36,7 @@ export function scrobblesLoader(): Loader {
           },
           digest: generateDigest(record.cid),
         });
-      }
+      }));
     },
   };
 }

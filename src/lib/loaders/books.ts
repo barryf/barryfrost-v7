@@ -9,7 +9,12 @@ export function booksLoader(): Loader {
       logger.info('Fetching BookHive books');
       store.clear();
 
+      const records = [];
       for await (const record of fetchAllRecords('buzz.bookhive.book', DID, PDS_HOST)) {
+        records.push(record);
+      }
+
+      await Promise.all(records.map(async (record) => {
         const value = record.value as Record<string, unknown>;
         const rkey = rkeyFromUri(record.uri);
         const identifiers = value.identifiers as { isbn10?: string; isbn13?: string; goodreadsId?: string } | undefined;
@@ -38,7 +43,7 @@ export function booksLoader(): Loader {
           },
           digest: generateDigest(record.cid),
         });
-      }
+      }));
     },
   };
 }
