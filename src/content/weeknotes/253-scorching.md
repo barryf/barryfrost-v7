@@ -1,0 +1,14 @@
+---
+title: "Week 253 - Scorching"
+date: 2026-06-29T12:11:00Z
+week: 253
+emoji: "🥵"
+---
+
+- The forecasts were sadly right: temperatures hit the mid-30s for several days in a row, resulting in poor sleep, irritability and general lethargy. Our homes and bodies just don't function in such heat.
+- L and the kids thankfully had air-conditioning in their classrooms during the day, as did I in my office, but tower fans weren't enough in the evenings at home. We're strongly considering getting AC units installed ready for future extreme summers. It's sadly our new climate.
+- I still went ahead with Tuesday lunch plans in London with some ex-colleagues. I'd kept reasonably cool on the train in to town, but the Underground closure at King's Cross meant I was sweaty from walking in the fierce afternoon heat to Euston Square. A few glasses of wine sat in the mercifully cool restaurant made up for it.
+- I was then home in time to watch England struggle through a goalless draw against Ghana in the World Cup. After Saturday's laboured 2-0 win against Panama, we're now through to the knockout rounds, but need to improve.
+- As the temperature dropped a little on Sunday, I went for a lovely coffee and catch-up with Calum who had cycled up from London. We used to meet regularly to organise the [London IndieWeb meet-up](https://hwclondon.co.uk) over [ten years ago](https://hwclondon.co.uk/meetups/20170712/). Time flies.
+- Back home, I took the boys down some country lanes to collect sticks and leaves for an art project at school, keeping a close eye on the horse and dog poo piles they came perilously close to touching 🤦
+- New personal website is getting closer. Soon.
