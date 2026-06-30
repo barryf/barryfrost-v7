@@ -1,12 +1,15 @@
 /**
  * image-store.ts
  *
- * Build-time image materialiser. Delegates resizing to the existing Cloudflare
- * endpoints (blob proxy + /cdn-cgi/image/), then stores the result in R2
- * under a content-addressed key. No native modules required.
+ * Build-time image materialiser. Fetches source images directly (PDS getBlob
+ * or remote URL), resizes with sharp, and stores webp in R2 under a
+ * content-addressed key. No Cloudflare runtime resizers required.
  *
- * In dev mode (PROD !== true) or when R2 credentials are absent it
- * short-circuits to the live CF URLs so local iteration works without creds.
+ * In dev mode (PROD !== true) or when R2 credentials are absent it returns the
+ * direct source URL so local iteration works without any credentials.
+ *
+ * On any build-time error (network, sharp, R2) it falls back to the direct
+ * source URL — the image renders at original size but the build succeeds.
  *
  * Key scheme:
  *   PDS blobs   → blob/{cid}/{w}x{h}-{fit}-q{q}
@@ -14,7 +17,7 @@
  */
 
 import { createHash } from 'node:crypto';
-import { blobImage, transformImage } from '@/lib/image-url';
+import { DID, PDS_HOST } from '@/lib/pds';
 
 type Fit = 'cover' | 'contain' | 'scale-down' | 'crop' | 'pad';
 
@@ -89,6 +92,20 @@ function r2Endpoint(key: string): string {
   return `https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com/${R2_BUCKET}/${key}`;
 }
 
+// ── sharp fit mapping ────────────────────────────────────────────────────────
+
+type SharpFit = 'cover' | 'contain' | 'inside' | 'outside' | 'fill';
+
+function sharpFit(fit: Fit): SharpFit {
+  switch (fit) {
+    case 'cover':      return 'cover';
+    case 'contain':    return 'contain';
+    case 'scale-down': return 'inside';   // inside + withoutEnlargement
+    case 'crop':       return 'cover';
+    case 'pad':        return 'contain';
+  }
+}
+
 // ── R2 operations ────────────────────────────────────────────────────────────
 
 async function r2Exists(aws: Awaited<ReturnType<typeof getAwsClient>>, key: string): Promise<boolean> {
@@ -103,7 +120,7 @@ async function r2Exists(aws: Awaited<ReturnType<typeof getAwsClient>>, key: stri
 async function r2Put(
   aws: Awaited<ReturnType<typeof getAwsClient>>,
   key: string,
-  body: ArrayBuffer,
+  body: Buffer,
   contentType: string,
 ): Promise<void> {
   await aws.fetch(r2Endpoint(key), {
@@ -118,26 +135,40 @@ async function r2Put(
 
 // ── core materialise function ────────────────────────────────────────────────
 
-async function materialise(key: string, cfUrl: string): Promise<string> {
+async function materialise(key: string, sourceUrl: string, opts: ImageOpts): Promise<string> {
   await acquireSlot();
   try {
     const aws = await getAwsClient();
     if (await r2Exists(aws, key)) {
       return `${IMAGES_BASE_URL}/${key}`;
     }
-    // Fetch from the CF endpoint which handles resizing; request webp explicitly.
-    const res = await fetch(cfUrl, { headers: { Accept: 'image/webp,image/*' } });
+
+    // Fetch the original image directly from its source.
+    const res = await fetch(sourceUrl);
     if (!res.ok) {
-      console.warn(`[image-store] fetch failed ${res.status}, falling back to CF URL: ${cfUrl}`);
-      return cfUrl;
+      console.warn(`[image-store] fetch failed ${res.status}: ${sourceUrl}`);
+      return sourceUrl;
     }
-    const contentType = res.headers.get('content-type') ?? 'image/webp';
-    const bytes = await res.arrayBuffer();
-    await r2Put(aws, key, bytes, contentType);
+    const srcBuf = Buffer.from(await res.arrayBuffer());
+
+    // Resize + encode as webp with sharp.
+    const { default: sharp } = await import('sharp');
+    const w = opts.width;
+    const h = opts.height;
+    const fit = sharpFit(opts.fit ?? 'cover');
+    const withoutEnlargement = opts.fit === 'scale-down';
+    const quality = opts.quality ?? 85;
+
+    const webpBuf = await sharp(srcBuf)
+      .resize(w ?? null, h ?? null, { fit, withoutEnlargement })
+      .webp({ quality })
+      .toBuffer();
+
+    await r2Put(aws, key, webpBuf, 'image/webp');
     return `${IMAGES_BASE_URL}/${key}`;
   } catch (err) {
-    console.warn(`[image-store] materialise error for ${key}, falling back to CF URL:`, err);
-    return cfUrl;
+    console.warn(`[image-store] materialise error for ${key}, falling back to source URL:`, err);
+    return sourceUrl;
   } finally {
     releaseSlot();
   }
@@ -147,20 +178,19 @@ async function materialise(key: string, cfUrl: string): Promise<string> {
 
 /**
  * Return a URL for a resized image of a PDS blob.
- * Dev/no-creds: live cdn.barryfrost.com URL. Prod: materialise to R2 once.
+ * Dev/no-creds: direct getBlob URL (unresized). Prod: materialise to R2.
  */
 export async function pdsImage(cid: string, opts: ImageOpts = {}): Promise<string> {
-  const cfUrl = blobImage(cid, opts);
-  if (!IS_PROD || !R2_CONFIGURED) return cfUrl;
-  return materialise(blobKey(cid, opts), cfUrl);
+  const sourceUrl = `https://${PDS_HOST}/xrpc/com.atproto.sync.getBlob?did=${DID}&cid=${encodeURIComponent(cid)}`;
+  if (!IS_PROD || !R2_CONFIGURED) return sourceUrl;
+  return materialise(blobKey(cid, opts), sourceUrl, opts);
 }
 
 /**
  * Return a URL for a resized image of an external URL.
- * Dev/no-creds: live /cdn-cgi/image/ URL. Prod: materialise to R2 once.
+ * Dev/no-creds: the URL as-is (unresized). Prod: materialise to R2.
  */
 export async function remoteImage(url: string, opts: ImageOpts = {}): Promise<string> {
-  const cfUrl = transformImage(url, opts);
-  if (!IS_PROD || !R2_CONFIGURED) return cfUrl;
-  return materialise(remoteKey(url, opts), cfUrl);
+  if (!IS_PROD || !R2_CONFIGURED) return url;
+  return materialise(remoteKey(url, opts), url, opts);
 }
