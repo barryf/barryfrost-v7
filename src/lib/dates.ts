@@ -21,15 +21,54 @@ export function formatMonthYear(date: Date): string {
   });
 }
 
-export function toISODate(date: Date): string {
-  return date.toISOString();
+const TZ = 'Europe/London';
+
+function isMidnightUTC(date: Date): boolean {
+  return date.getUTCHours() === 0 && date.getUTCMinutes() === 0 && date.getUTCSeconds() === 0;
 }
 
-export function formatRelativeDate(date: Date, now: Date = new Date()): string {
-  const diffMs = now.getTime() - date.getTime();
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-  if (diffDays === 0) return 'Today';
-  if (diffDays === 1) return 'Yesterday';
-  if (diffDays < 14) return `${diffDays} days ago`;
+function localParts(date: Date): { date: string; time: string } {
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: TZ,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  }).formatToParts(date);
+  const get = (t: string) => parts.find(p => p.type === t)?.value ?? '00';
+  return {
+    date: `${get('year')}-${get('month')}-${get('day')}`,
+    time: `${get('hour')}:${get('minute')}:${get('second')}`,
+  };
+}
+
+function localOffset(date: Date): string {
+  const parts = new Intl.DateTimeFormat('en-GB', {
+    timeZone: TZ,
+    timeZoneName: 'shortOffset',
+  }).formatToParts(date);
+  const tzName = parts.find(p => p.type === 'timeZoneName')?.value ?? 'GMT';
+  if (tzName === 'GMT') return '+00:00';
+  const match = tzName.match(/GMT([+-])(\d+)(?::(\d+))?/);
+  if (!match) return '+00:00';
+  return `${match[1]}${match[2].padStart(2, '0')}:${(match[3] ?? '0').padStart(2, '0')}`;
+}
+
+export function toISODate(date: Date): string {
+  if (isMidnightUTC(date)) return localParts(date).date;
+  const { date: d, time } = localParts(date);
+  return `${d}T${time}${localOffset(date)}`;
+}
+
+export function formatDateTitle(date: Date): string {
+  if (isMidnightUTC(date)) return formatDate(date);
+  const { date: d, time } = localParts(date);
+  return `${d} ${time}${localOffset(date)}`;
+}
+
+export function formatRelativeDate(date: Date): string {
   return formatDateShort(date);
 }

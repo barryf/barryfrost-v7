@@ -2,7 +2,7 @@
 import Base from '@/layouts/Base.astro';
 import Divider from '@/components/Divider.astro';
 import { getCollection } from 'astro:content';
-import { formatRelativeDate, formatDate, toISODate } from '@/lib/dates';
+import { formatRelativeDate, formatDateTitle, toISODate } from '@/lib/dates';
 import { truncateBody } from '@/lib/weeknotes';
 import { renderRichText } from '@/lib/richtext';
 import { HANDLE, pdslsUrl } from '@/lib/pds';
@@ -51,7 +51,6 @@ const recentCheckIns = checkIns
 const latestPostHtml = latestPost ? renderRichText(latestPost.data.text, latestPost.data.facets as any) : '';
 const latestPostUrl = latestPost ? `https://bsky.app/profile/${HANDLE}/post/${latestPost.id}` : '';
 
-const now = new Date();
 ---
 <Base title="Barry Frost" home={true}>
   <div class="h-card mb-4">
@@ -121,7 +120,7 @@ const now = new Date();
       <p class="e-content mb-1 wrap-break-word" set:html={latestPostHtml} />
       {latestPost.data.quotedPost && <BlueskyQuote quotedPost={latestPost.data.quotedPost as any} />}
       <div class="mb-1 text-sm text-gray-500 dark:text-gray-500">
-        <time class="mr-1" datetime={toISODate(new Date(latestPost.data.createdAt))} title={formatDate(new Date(latestPost.data.createdAt))}>{formatRelativeDate(new Date(latestPost.data.createdAt))}</time>
+        <time class="mr-1" datetime={toISODate(new Date(latestPost.data.createdAt))} title={formatDateTitle(new Date(latestPost.data.createdAt))}>{formatRelativeDate(new Date(latestPost.data.createdAt))}</time>
         <a href={latestPostUrl} class="underline" rel="noopener noreferrer" aria-label="View on Bluesky"><BlueskyIcon /></a>
         <a class="ml-1 underline" href={pdslsUrl(latestPost.data.uri)} rel="noopener noreferrer" aria-label="View on PDSls"><PdslsIcon /></a>
       </div>
@@ -162,7 +161,7 @@ const now = new Date();
                 ? <a href={venueUrl} class="underline" rel="noopener noreferrer">{entry.data.venueName}</a>
                 : <span>{entry.data.venueName}</span>
               }
-              <span class="text-sm"> {formatRelativeDate(date, now)}</span>
+              <span class="text-sm"> {formatRelativeDate(date)}</span>
             </li>
           );
         })}

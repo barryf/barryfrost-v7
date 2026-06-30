@@ -1,5 +1,5 @@
 ---
-import { formatRelativeDate, formatDate, toISODate } from '@/lib/dates';
+import { formatRelativeDate, formatDateTitle, toISODate } from '@/lib/dates';
 import { renderRichText } from '@/lib/richtext';
 import { HANDLE, pdslsUrl } from '@/lib/pds';
 import BlueskyQuote from '@/components/posts/BlueskyQuote.astro';
@@ -52,7 +52,7 @@ const date = new Date(data.createdAt);
     </div>
   )}
   <div class="mb-4 text-sm text-gray-500 dark:text-gray-500">
-    <time class="dt-published mr-1" datetime={toISODate(date)} title={formatDate(date)}>{formatRelativeDate(date)}</time>
+    <time class="dt-published mr-1" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatRelativeDate(date)}</time>
     <a class="u-url underline" href={blueskyUrl} rel="noopener noreferrer" aria-label="View on Bluesky"><BlueskyIcon /></a>
     <a class="ml-1 underline" href={pdslsUrl(data.uri)} rel="noopener noreferrer" aria-label="View on PDSls"><PdslsIcon /></a>
   </div>

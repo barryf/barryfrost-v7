@@ -1,7 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Base from '@/layouts/Base.astro';
-import { formatDate, formatDateShort, formatRelativeDate, toISODate } from '@/lib/dates';
+import { formatDateTitle, formatDateShort, formatRelativeDate, toISODate } from '@/lib/dates';
 
 export async function getStaticPaths() {
   const entries = await getCollection('travelblog');
@@ -20,7 +20,7 @@ const { Content } = await render(entry);
     <header class="mb-8">
       <h1 class="p-name mb-4 font-semibold text-black dark:text-white">Travelblog</h1>
       <h2 class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-        <time class="dt-published" datetime={toISODate(entry.data.date)} title={formatDate(entry.data.date)}>
+        <time class="dt-published" datetime={toISODate(entry.data.date)} title={formatDateTitle(entry.data.date)}>
           {formatRelativeDate(entry.data.date)}
         </time>
       </h2>

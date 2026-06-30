@@ -1,5 +1,5 @@
 ---
-import { formatRelativeDate, formatDate, toISODate } from '@/lib/dates';
+import { formatRelativeDate, formatDateTitle, toISODate } from '@/lib/dates';
 import { DID, pdslsUrl } from '@/lib/pds';
 import PdslsIcon from '@/components/icons/PdslsIcon.astro';
 import PopfeedIcon from '@/components/icons/PopfeedIcon.astro';
@@ -58,7 +58,7 @@ function toStars(rating: number): string {
       </p>
     )}
     <div>
-      <time class="dt-published text-sm text-gray-500 dark:text-gray-500 mr-1" datetime={toISODate(date)} title={formatDate(date)}>{formatRelativeDate(date)}</time>
+      <time class="dt-published text-sm text-gray-500 dark:text-gray-500 mr-1" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatRelativeDate(date)}</time>
         <a class="underline" href={pdslsUrl(data.uri)} rel="noopener noreferrer" aria-label="View on PDSls"><PdslsIcon /></a>
     </div>
   </div>

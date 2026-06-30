@@ -1,5 +1,5 @@
 ---
-import { formatRelativeDate, formatDate, toISODate } from '@/lib/dates';
+import { formatRelativeDate, formatDateTitle, toISODate } from '@/lib/dates';
 import { pdslsUrl } from '@/lib/pds';
 import PdslsIcon from '@/components/icons/PdslsIcon.astro';
 import CheckInIcon from '@/components/icons/CheckInIcon.astro';
@@ -61,7 +61,7 @@ const date = new Date(data.createdAt);
       {data.longitude && <data class="p-longitude" value={data.longitude} />}
       {data.rating !== undefined && <data class="p-rating hidden" value={data.rating} />}
       <div class="">
-        <time class="dt-published text-sm text-gray-500 dark:text-gray-500" datetime={toISODate(date)} title={formatDate(date)}>{formatRelativeDate(date)}</time>
+        <time class="dt-published text-sm text-gray-500 dark:text-gray-500" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatRelativeDate(date)}</time>
         <a class="ml-1 underline" href={pdslsUrl(data.uri)} rel="noopener noreferrer" aria-label="View on PDSls"><PdslsIcon /></a>
         {data.sourceUrl && <a href={data.sourceUrl} class="text-sm ml-2 underline" rel="noopener noreferrer">Beaconbits</a>}
       </div>
