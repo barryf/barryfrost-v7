@@ -35,7 +35,12 @@ export function subscriptionsLoader(): Loader {
       store.clear();
 
       try {
+        const records = [];
         for await (const record of fetchAllRecords('site.standard.graph.subscription', DID, PDS_HOST)) {
+          records.push(record);
+        }
+
+        await Promise.all(records.map(async (record) => {
           const value = record.value as Record<string, unknown>;
           const rkey = rkeyFromUri(record.uri);
           const publicationUri = value.publication as string;
@@ -51,7 +56,7 @@ export function subscriptionsLoader(): Loader {
           const pubRes = await fetch(getRecordUrl);
           if (!pubRes.ok) {
             logger.warn(`Could not fetch publication record for ${publicationUri}`);
-            continue;
+            return;
           }
           const pubData = await pubRes.json() as { value: PublicationRecord; cid: string };
           const pub = pubData.value;
@@ -59,7 +64,7 @@ export function subscriptionsLoader(): Loader {
           const siteUrl = pub.url ?? (pub.base_path ? `https://${pub.base_path}` : undefined);
           if (!siteUrl) {
             logger.warn(`No URL in publication record ${publicationUri}`);
-            continue;
+            return;
           }
 
           const rawIconUrl = pub.icon?.ref?.$link
@@ -82,7 +87,7 @@ export function subscriptionsLoader(): Loader {
             },
             digest: generateDigest(record.cid),
           });
-        }
+        }));
       } catch (err) {
         logger.warn(`Subscriptions fetch failed, skipping: ${err}`);
       }

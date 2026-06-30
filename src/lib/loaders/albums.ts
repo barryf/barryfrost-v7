@@ -9,7 +9,12 @@ export function albumsLoader(): Loader {
       logger.info('Fetching Rocksky albums');
       store.clear();
 
+      const records = [];
       for await (const record of fetchAllRecords('app.rocksky.album', DID, PDS_HOST)) {
+        records.push(record);
+      }
+
+      await Promise.all(records.map(async (record) => {
         const value = record.value as Record<string, unknown>;
         const rkey = rkeyFromUri(record.uri);
         const albumArtUrl = value.albumArtUrl as string | undefined;
@@ -23,12 +28,12 @@ export function albumsLoader(): Loader {
             title: value.title as string,
             artist: value.artist as string,
             coverUrl,
-createdAt: value.createdAt as string,
+            createdAt: value.createdAt as string,
             uri: record.uri,
           },
           digest: generateDigest(record.cid),
         });
-      }
+      }));
     },
   };
 }

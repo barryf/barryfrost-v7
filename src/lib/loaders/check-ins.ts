@@ -52,14 +52,17 @@ export function checkInsLoader(): Loader {
         const location = value.location as FsqLocation | undefined;
         const photos = (value.photos as CheckInPhoto[] | undefined) ?? [];
 
-        const photoUrls: string[] = [];
-        const photoFullUrls: string[] = [];
-        for (const photo of photos) {
+        const results = await Promise.all(photos.map(async (photo) => {
           const link = photo.image?.ref?.['$link'];
-          if (!link) continue;
-          photoUrls.push(await pdsImage(link, { width: 192, height: 192, fit: 'cover' }));
-          photoFullUrls.push(await pdsImage(link, { width: 720, height: 720, fit: 'cover' }));
-        }
+          if (!link) return null;
+          const [thumb, full] = await Promise.all([
+            pdsImage(link, { width: 192, height: 192, fit: 'cover' }),
+            pdsImage(link, { width: 720, height: 720, fit: 'cover' }),
+          ]);
+          return { thumb, full };
+        }));
+        const photoUrls = results.filter(r => r !== null).map(r => r.thumb);
+        const photoFullUrls = results.filter(r => r !== null).map(r => r.full);
 
         store.set({
           id: rkey,

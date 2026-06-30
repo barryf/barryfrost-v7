@@ -37,22 +37,20 @@ async function fetchPostFromAppView(uri: string): Promise<AppViewPostView | null
 }
 
 async function extractImages(embed: BlueskyEmbed | undefined): Promise<{ urls: string[]; alts: string[] }> {
-  const urls: string[] = [];
-  const alts: string[] = [];
-  if (!embed) return { urls, alts };
+  if (!embed) return { urls: [], alts: [] };
   const images = embed.$type === 'app.bsky.embed.images'
     ? embed.images
     : embed.$type === 'app.bsky.embed.recordWithMedia' && embed.media?.$type === 'app.bsky.embed.images'
       ? embed.media.images
       : undefined;
-  if (!images) return { urls, alts };
-  for (const img of images) {
+  if (!images) return { urls: [], alts: [] };
+  const results = await Promise.all(images.map(async (img) => {
     const link = img.image?.ref?.$link;
-    if (!link) continue;
-    urls.push(await pdsImage(link, { width: 192, height: 192, fit: 'contain' }));
-    alts.push(img.alt ?? '');
-  }
-  return { urls, alts };
+    if (!link) return null;
+    return { url: await pdsImage(link, { width: 192, height: 192, fit: 'contain' }), alt: img.alt ?? '' };
+  }));
+  const present = results.filter(r => r !== null);
+  return { urls: present.map(r => r.url), alts: present.map(r => r.alt) };
 }
 
 function extractQuoteRef(embed: BlueskyEmbed | undefined): { uri: string; cid: string } | null {
