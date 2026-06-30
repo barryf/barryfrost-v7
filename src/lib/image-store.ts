@@ -1,21 +1,20 @@
 /**
  * image-store.ts
  *
- * Build-time image materialiser. Fetches source images, resizes them with
- * sharp, and stores the result in R2 under a content-addressed key.
+ * Build-time image materialiser. Delegates resizing to the existing Cloudflare
+ * endpoints (blob proxy + /cdn-cgi/image/), then stores the result in R2
+ * under a content-addressed key. No native modules required.
  *
- * In dev mode (import.meta.env.PROD === false) it short-circuits to live
- * URLs (cdn.barryfrost.com blob proxy / cdn-cgi) so R2 credentials are not
- * required locally.
+ * In dev mode (PROD !== true) or when R2 credentials are absent it
+ * short-circuits to the live CF URLs so local iteration works without creds.
  *
  * Key scheme:
- *   PDS blobs  → blob/{cid}/{w}x{h}-{fit}-q{q}.webp
- *   Remote URLs → ext/{sha256hex(url)}/{w}x{h}-{fit}-q{q}.webp
+ *   PDS blobs   → blob/{cid}/{w}x{h}-{fit}-q{q}
+ *   Remote URLs → ext/{sha256hex(url)[0..15]}/{w}x{h}-{fit}-q{q}
  */
 
 import { createHash } from 'node:crypto';
 import { blobImage, transformImage } from '@/lib/image-url';
-import { DID, PDS_HOST } from '@/lib/pds';
 
 type Fit = 'cover' | 'contain' | 'scale-down' | 'crop' | 'pad';
 
@@ -26,10 +25,7 @@ interface ImageOpts {
   quality?: number;
 }
 
-// ── R2 config (read once at module level) ────────────────────────────────────
-// Use process.env for secrets — CI sets them as real environment variables,
-// which are reliably available here but may not propagate through Vite's
-// import.meta.env treatment during static builds.
+// ── R2 config ────────────────────────────────────────────────────────────────
 
 const R2_ACCOUNT_ID        = process.env.R2_ACCOUNT_ID;
 const R2_BUCKET            = process.env.R2_BUCKET;
@@ -40,16 +36,7 @@ const IMAGES_BASE_URL      = process.env.IMAGES_BASE_URL ?? 'https://images.barr
 const IS_PROD = import.meta.env.PROD === true;
 const R2_CONFIGURED = !!(R2_ACCOUNT_ID && R2_BUCKET && R2_ACCESS_KEY_ID && R2_SECRET_ACCESS_KEY);
 
-// Only import sharp + aws4fetch in Node (build). They are not available in the
-// Worker/browser runtime. Dynamic import keeps the module tree-shakeable for
-// client bundles that accidentally reference this file.
-let _sharp: typeof import('sharp') | undefined;
 let _AwsClient: (typeof import('aws4fetch'))['AwsClient'] | undefined;
-
-async function getSharp() {
-  if (!_sharp) _sharp = (await import('sharp')).default;
-  return _sharp;
-}
 
 async function getAwsClient(): Promise<InstanceType<typeof import('aws4fetch')['AwsClient']>> {
   if (!_AwsClient) {
@@ -70,20 +57,13 @@ let _active = 0;
 const _queue: Array<() => void> = [];
 
 function acquireSlot(): Promise<void> {
-  if (_active < CONCURRENCY) {
-    _active++;
-    return Promise.resolve();
-  }
+  if (_active < CONCURRENCY) { _active++; return Promise.resolve(); }
   return new Promise(resolve => _queue.push(resolve));
 }
 
 function releaseSlot() {
   const next = _queue.shift();
-  if (next) {
-    next();
-  } else {
-    _active--;
-  }
+  if (next) { next(); } else { _active--; }
 }
 
 // ── key helpers ──────────────────────────────────────────────────────────────
@@ -97,12 +77,12 @@ function dimSegment(opts: ImageOpts): string {
 }
 
 function blobKey(cid: string, opts: ImageOpts): string {
-  return `blob/${cid}/${dimSegment(opts)}.webp`;
+  return `blob/${cid}/${dimSegment(opts)}`;
 }
 
 function remoteKey(url: string, opts: ImageOpts): string {
   const hash = createHash('sha256').update(url).digest('hex').slice(0, 16);
-  return `ext/${hash}/${dimSegment(opts)}.webp`;
+  return `ext/${hash}/${dimSegment(opts)}`;
 }
 
 function r2Endpoint(key: string): string {
@@ -123,48 +103,34 @@ async function r2Exists(aws: Awaited<ReturnType<typeof getAwsClient>>, key: stri
 async function r2Put(
   aws: Awaited<ReturnType<typeof getAwsClient>>,
   key: string,
-  body: Uint8Array,
+  body: ArrayBuffer,
+  contentType: string,
 ): Promise<void> {
   await aws.fetch(r2Endpoint(key), {
     method: 'PUT',
     body,
     headers: {
-      'content-type': 'image/webp',
+      'content-type': contentType,
       'cache-control': 'public, max-age=31536000, immutable',
     },
   });
 }
 
-// ── resize helper ────────────────────────────────────────────────────────────
-
-async function resizeToWebp(srcBytes: ArrayBuffer, opts: ImageOpts): Promise<Uint8Array> {
-  const sharp = await getSharp();
-  let pipeline = sharp(new Uint8Array(srcBytes));
-  if (opts.width || opts.height) {
-    pipeline = pipeline.resize(opts.width ?? null, opts.height ?? null, {
-      fit: (opts.fit ?? 'cover') as import('sharp').FitEnum[keyof import('sharp').FitEnum],
-      withoutEnlargement: true,
-    });
-  }
-  return pipeline.webp({ quality: opts.quality ?? 85 }).toBuffer();
-}
-
 // ── core materialise function ────────────────────────────────────────────────
 
-async function materialise(
-  key: string,
-  fetchSource: () => Promise<ArrayBuffer>,
-  opts: ImageOpts,
-): Promise<string> {
+async function materialise(key: string, cfUrl: string): Promise<string> {
   await acquireSlot();
   try {
     const aws = await getAwsClient();
     if (await r2Exists(aws, key)) {
       return `${IMAGES_BASE_URL}/${key}`;
     }
-    const srcBytes = await fetchSource();
-    const webpBytes = await resizeToWebp(srcBytes, opts);
-    await r2Put(aws, key, webpBytes);
+    // Fetch from the CF endpoint which handles resizing; request webp explicitly.
+    const res = await fetch(cfUrl, { headers: { Accept: 'image/webp,image/*' } });
+    if (!res.ok) throw new Error(`CF fetch failed ${res.status}: ${cfUrl}`);
+    const contentType = res.headers.get('content-type') ?? 'image/webp';
+    const bytes = await res.arrayBuffer();
+    await r2Put(aws, key, bytes, contentType);
     return `${IMAGES_BASE_URL}/${key}`;
   } finally {
     releaseSlot();
@@ -174,38 +140,21 @@ async function materialise(
 // ── public API ───────────────────────────────────────────────────────────────
 
 /**
- * Return a URL for a resized WebP of a PDS blob.
- *
- * In dev / when R2 is not configured: returns the live cdn.barryfrost.com URL.
- * In prod with R2: materialises to R2 on first call, subsequent calls skip.
+ * Return a URL for a resized image of a PDS blob.
+ * Dev/no-creds: live cdn.barryfrost.com URL. Prod: materialise to R2 once.
  */
 export async function pdsImage(cid: string, opts: ImageOpts = {}): Promise<string> {
-  if (!IS_PROD || !R2_CONFIGURED) {
-    return blobImage(cid, opts);
-  }
-  const key = blobKey(cid, opts);
-  return materialise(key, async () => {
-    const blobUrl = `https://${PDS_HOST}/xrpc/com.atproto.sync.getBlob?did=${DID}&cid=${encodeURIComponent(cid)}`;
-    const res = await fetch(blobUrl);
-    if (!res.ok) throw new Error(`Failed to fetch PDS blob ${cid}: ${res.status}`);
-    return res.arrayBuffer();
-  }, opts);
+  const cfUrl = blobImage(cid, opts);
+  if (!IS_PROD || !R2_CONFIGURED) return cfUrl;
+  return materialise(blobKey(cid, opts), cfUrl);
 }
 
 /**
- * Return a URL for a resized WebP of an external (remote) image.
- *
- * In dev / when R2 is not configured: returns the live /cdn-cgi/image/ URL.
- * In prod with R2: materialises to R2 on first call, subsequent calls skip.
+ * Return a URL for a resized image of an external URL.
+ * Dev/no-creds: live /cdn-cgi/image/ URL. Prod: materialise to R2 once.
  */
 export async function remoteImage(url: string, opts: ImageOpts = {}): Promise<string> {
-  if (!IS_PROD || !R2_CONFIGURED) {
-    return transformImage(url, opts);
-  }
-  const key = remoteKey(url, opts);
-  return materialise(key, async () => {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`Failed to fetch remote image ${url}: ${res.status}`);
-    return res.arrayBuffer();
-  }, opts);
+  const cfUrl = transformImage(url, opts);
+  if (!IS_PROD || !R2_CONFIGURED) return cfUrl;
+  return materialise(remoteKey(url, opts), cfUrl);
 }
