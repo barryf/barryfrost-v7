@@ -69,6 +69,3 @@ export function formatDateTitle(date: Date): string {
   return `${d} ${time}${localOffset(date)}`;
 }
 
-export function formatRelativeDate(date: Date): string {
-  return formatDateShort(date);
-}

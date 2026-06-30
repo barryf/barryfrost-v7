@@ -1,5 +1,5 @@
 ---
-import { formatRelativeDate, formatDateTitle, toISODate } from '@/lib/dates';
+import { formatDateShort, formatDateTitle, toISODate } from '@/lib/dates';
 
 interface Props {
   entry: {
@@ -18,5 +18,5 @@ const url = `/articles/${entry.id}`;
 ---
 <li class="mb-4">
   <a class="p-name u-url block underline" href={url}>{data.title}</a>
-  <time class="dt-published text-sm text-gray-500 dark:text-gray-500" datetime={toISODate(data.date)} title={formatDateTitle(data.date)}>{formatRelativeDate(data.date)}</time>
+  <time class="dt-published text-sm text-gray-500 dark:text-gray-500" datetime={toISODate(data.date)} title={formatDateTitle(data.date)}>{formatDateShort(data.date)}</time>
 </li>

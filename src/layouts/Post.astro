@@ -1,6 +1,6 @@
 ---
 import Base from './Base.astro';
-import { formatDateTitle, formatDateShort, formatRelativeDate, toISODate } from '@/lib/dates';
+import { formatDateTitle, formatDateShort, toISODate } from '@/lib/dates';
 import Divider from '@/components/Divider.astro'
 
 interface Props {
@@ -13,8 +13,6 @@ interface Props {
 }
 
 const { title, date, description, emoji, section, sectionHref } = Astro.props;
-const relativeDate = formatRelativeDate(date);
-const datePreposition = relativeDate === formatDateShort(date) ? ' on ' : '';
 
 ---
 <Base title={title} description={description}>
@@ -33,11 +31,11 @@ const datePreposition = relativeDate === formatDateShort(date) ? ' on ' : '';
       {section && sectionHref ? (
         <Fragment>
           Posted in <a href={sectionHref} class="underline">{section}</a>
-          {datePreposition} <time class="dt-published" datetime={toISODate(date)} title={formatDateTitle(date)}>{relativeDate}</time>
+           on <time class="dt-published" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatDateShort(date)}</time>
         </Fragment>
       ) : (
         <Fragment>
-          Posted{datePreposition} <time class="dt-published" datetime={toISODate(date)} title={formatDateTitle(date)}>{relativeDate}</time>
+          Posted on <time class="dt-published" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatDateShort(date)}</time>
         </Fragment>
       )}
     </div>
