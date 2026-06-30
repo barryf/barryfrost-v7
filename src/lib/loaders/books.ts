@@ -1,6 +1,6 @@
 import type { Loader } from 'astro/loaders';
 import { fetchAllRecords, rkeyFromUri, DID, PDS_HOST } from '@/lib/pds';
-import { blobImage } from '@/lib/image-url';
+import { pdsImage } from '@/lib/image-store';
 
 export function booksLoader(): Loader {
   return {
@@ -15,7 +15,7 @@ export function booksLoader(): Loader {
         const identifiers = value.identifiers as { isbn10?: string; isbn13?: string; goodreadsId?: string } | undefined;
         const cover = value.cover as { ref?: { $link?: string }; mimeType?: string } | undefined;
         const coverUrl = cover?.ref?.$link
-          ? blobImage(cover.ref.$link, { width: 96, height: 144, fit: 'cover' })
+          ? await pdsImage(cover.ref.$link, { width: 96, height: 144, fit: 'cover' })
           : undefined;
 
         store.set({

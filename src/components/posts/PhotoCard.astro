@@ -1,7 +1,6 @@
 ---
 import { formatDateShort, formatDateTitle, toISODate } from '@/lib/dates';
 import { DID, pdslsUrl } from '@/lib/pds';
-import { blobImage } from '@/lib/image-url';
 import PdslsIcon from '@/components/icons/PdslsIcon.astro';
 
 interface Props {
@@ -12,6 +11,7 @@ interface Props {
       description?: string;
       address?: string;
       thumbnailUrls: string[];
+      thumbnailFullUrls: string[];
       photoCount: number;
       createdAt: string;
       galleryRkey: string;
@@ -22,10 +22,7 @@ interface Props {
 const { entry } = Astro.props;
 const { data } = entry;
 const thumbs = data.thumbnailUrls ?? [];
-const fullUrls = thumbs.map(url => {
-  const cid = new URL(url).searchParams.get('cid') ?? '';
-  return blobImage(cid, { width: 1000, height: 1000, fit: 'contain' });
-});
+const fullUrls = data.thumbnailFullUrls ?? [];
 const grainUrl = `https://grain.social/profile/${DID}/gallery/${data.galleryRkey}`;
 const date = new Date(data.createdAt);
 ---

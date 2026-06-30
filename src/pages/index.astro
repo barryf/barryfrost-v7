@@ -6,7 +6,6 @@ import { formatDateShort, formatDateTitle, toISODate } from '@/lib/dates';
 import { truncateBody } from '@/lib/weeknotes';
 import { renderRichText } from '@/lib/richtext';
 import { HANDLE, pdslsUrl } from '@/lib/pds';
-import { blobImage } from '@/lib/image-url';
 import BlueskyQuote from '@/components/posts/BlueskyQuote.astro';
 import BlueskyIcon from '@/components/icons/BlueskyIcon.astro';
 import PdslsIcon from '@/components/icons/PdslsIcon.astro';
@@ -88,8 +87,7 @@ const latestPostUrl = latestPost ? `https://bsky.app/profile/${HANDLE}/post/${la
           {recentPhotos.map((entry, i) => {
             const firstThumb = entry.data.thumbnailUrls[0];
             if (!firstThumb) return null;
-            const cid = new URL(firstThumb).searchParams.get('cid') ?? '';
-            const fullUrl = blobImage(cid, { width: 1000, height: 1000, fit: 'contain' });
+            const fullUrl = entry.data.thumbnailFullUrls?.[0] ?? firstThumb;
             return (
               <a href={fullUrl} rel="noopener noreferrer" class="flex-none">
                 <img
@@ -102,7 +100,8 @@ const latestPostUrl = latestPost ? `https://bsky.app/profile/${HANDLE}/post/${la
                     i === 0 && "rounded-l-xl",
                     i === recentPhotos.length - 1 && "rounded-r-xl"
                   ]}
-                  loading="lazy"
+                  loading="eager"
+                  fetchpriority="high"
                   decoding="async"
                 />
               </a>

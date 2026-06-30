@@ -168,6 +168,7 @@ const photos = defineCollection({
     description: z.string().optional(),
     address: z.string().optional(),
     thumbnailUrls: z.array(z.string()),
+    thumbnailFullUrls: z.array(z.string()),
     photoCount: z.number(),
     createdAt: z.string(),
     galleryRkey: z.string(),

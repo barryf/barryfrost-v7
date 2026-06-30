@@ -1,6 +1,6 @@
 import type { Loader } from 'astro/loaders';
 import { fetchAllRecords, rkeyFromUri, DID, PDS_HOST } from '@/lib/pds';
-import { transformImage } from '@/lib/image-url';
+import { remoteImage } from '@/lib/image-store';
 
 export function filmsLoader(): Loader {
   return {
@@ -16,7 +16,7 @@ export function filmsLoader(): Loader {
 
         const rawPosterUrl = value.posterUrl as string | undefined;
         const posterUrl = rawPosterUrl
-          ? transformImage(rawPosterUrl, { width: 96, height: 144, fit: 'cover' })
+          ? await remoteImage(rawPosterUrl, { width: 96, height: 144, fit: 'cover' })
           : undefined;
 
         store.set({

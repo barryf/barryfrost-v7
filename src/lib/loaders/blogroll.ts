@@ -1,6 +1,6 @@
 import type { Loader } from 'astro/loaders';
 import blogsData from '@/data/blogroll.json';
-import { transformImage } from '@/lib/image-url';
+import { remoteImage } from '@/lib/image-store';
 
 export function blogrollLoader(): Loader {
   return {
@@ -12,7 +12,7 @@ export function blogrollLoader(): Loader {
       for (const blog of blogsData) {
         const hostname = new URL(blog.url).hostname;
         const avatarUrl = 'avatar' in blog && blog.avatar
-          ? transformImage(blog.avatar, { width: 96, height: 96, fit: 'cover' })
+          ? await remoteImage(blog.avatar, { width: 96, height: 96, fit: 'cover' })
           : `https://www.google.com/s2/favicons?domain=${hostname}&sz=96`;
 
         store.set({

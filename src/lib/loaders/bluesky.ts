@@ -1,6 +1,6 @@
 import type { Loader } from 'astro/loaders';
 import { fetchAllRecords, rkeyFromUri, resolveHandle, DID, PDS_HOST } from '@/lib/pds';
-import { blobImage } from '@/lib/image-url';
+import { pdsImage } from '@/lib/image-store';
 
 interface BlueskyImage {
   alt?: string;
@@ -36,7 +36,7 @@ async function fetchPostFromAppView(uri: string): Promise<AppViewPostView | null
   return data.posts[0] ?? null;
 }
 
-function extractImages(embed: BlueskyEmbed | undefined): { urls: string[]; alts: string[] } {
+async function extractImages(embed: BlueskyEmbed | undefined): Promise<{ urls: string[]; alts: string[] }> {
   const urls: string[] = [];
   const alts: string[] = [];
   if (!embed) return { urls, alts };
@@ -49,7 +49,7 @@ function extractImages(embed: BlueskyEmbed | undefined): { urls: string[]; alts:
   for (const img of images) {
     const link = img.image?.ref?.$link;
     if (!link) continue;
-    urls.push(blobImage(link, { width: 192, height: 192, fit: 'contain' }));
+    urls.push(await pdsImage(link, { width: 192, height: 192, fit: 'contain' }));
     alts.push(img.alt ?? '');
   }
   return { urls, alts };
@@ -126,7 +126,7 @@ export function blueskyLoader(): Loader {
         if (/^Week \d+/i.test(value.text as string)) continue;
 
         const embed = value.embed as BlueskyEmbed | undefined;
-        const { urls: imageUrls, alts: imageAlts } = extractImages(embed);
+        const { urls: imageUrls, alts: imageAlts } = await extractImages(embed);
 
         const quoteRef = extractQuoteRef(embed);
         const quotedPost = quoteRef

@@ -1,6 +1,6 @@
 import type { Loader } from 'astro/loaders';
 import { fetchAllRecords, rkeyFromUri, DID, PDS_HOST } from '@/lib/pds';
-import { transformImage } from '@/lib/image-url';
+import { remoteImage } from '@/lib/image-store';
 
 export function scrobblesLoader(): Loader {
   return {
@@ -14,7 +14,7 @@ export function scrobblesLoader(): Loader {
         const rkey = rkeyFromUri(record.uri);
         const albumArtUrl = value.albumArtUrl as string | undefined;
         const coverUrl = albumArtUrl
-          ? transformImage(albumArtUrl, { width: 240, height: 240, fit: 'cover' })
+          ? await remoteImage(albumArtUrl, { width: 240, height: 240, fit: 'cover' })
           : undefined;
 
         store.set({
