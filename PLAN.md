@@ -111,7 +111,7 @@ Removed from v6: `/page/{n}` (unified feed), `/archives/`, `/tags/`, `/feed.xml`
 Icon components in `src/components/icons/`:
 - `BlueskyIcon.astro` — monochrome Bluesky butterfly SVG, `currentColor`, `-translate-y-px` to align with text baseline
 - `PdslsIcon.astro` — pdsls.dev graph SVG; links to the underlying PDS record on pdsls.dev
-- `GrainIcon.astro` — grain.social logo; used in `PhotoCard` and wherever grain.social links appear
+- `GrainIcon.astro` — grain.social logo; used in the `/photos` feed description and wherever grain.social links appear
 - `BookHiveIcon.astro` — bookhive.buzz logo; used in the `/books` feed description and homepage Recent Media link
 - `PopfeedIcon.astro` — popfeed.social logo; used in the `/films` feed description and homepage Recent Media link
 - `RockskyIcon.astro` — rocksky music note icon; used in the homepage Recent Media link
@@ -124,7 +124,7 @@ Card components in `src/components/posts/`:
 - `CheckInCard` — venue name/category/address (name links to OpenStreetMap when lat/lon available), optional photo(s), relative date, pdsls icon link, optional Beaconbits link
 - `FilmCard` — clickable poster linking to Popfeed, title, star rating, relative date, pdsls icon link
 - `BookCard` — clickable cover linking to BookHive, title, authors, "Started/Finished [relative date]", pdsls icon link
-- `PhotoCard` — horizontally scrollable thumbnails (multi) or side-by-side (single), Grain icon + title, relative date, pdsls icon link
+- `PhotoCard` — horizontally scrollable thumbnails (multi) or side-by-side (single), title link to Grain gallery, relative date, pdsls icon link
 
 All `<time>` elements use `formatRelativeDate` for display with `title={formatDateTitle(date)}` for the full date on hover and `datetime={toISODate(date)}` for machine readability.
 
