@@ -4,7 +4,8 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && pagefind --site dist && tsx scripts/notify-pushover.ts",
+    "build": "astro build && pagefind --site dist",
+    "deploy": "npx wrangler deploy && tsx scripts/notify-pushover.ts",
     "preview": "astro preview",
     "astro": "astro",
     "new:article": "tsx scripts/new-article.ts",

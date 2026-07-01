@@ -228,9 +228,9 @@ All icon files in `public/` are derived from `public/barryfrost.jpg` (192×192 p
 
 The site is a Cloudflare Worker serving static assets (`wrangler.toml` at repo root, `[assets] directory = "./dist"`). Workers Builds triggers on push to `main` and on PRs (preview URLs posted as PR comments).
 
-Build command: `npm run build`. Deploy command: `npx wrangler deploy`.
+Build command: `npm run build` (`astro build` + `pagefind`). Deploy command: `npm run deploy` (`npx wrangler deploy` followed by `scripts/notify-pushover.ts`).
 
-`npm run build` runs `astro build` followed by `scripts/notify-pushover.ts` — POSTs a success notification to Pushover. Exits silently if tokens are not set.
+The notification runs at the end of the deploy phase — after `wrangler deploy` returns, so it fires once the new version is actually live rather than at the end of the build. `scripts/notify-pushover.ts` POSTs a success notification to Pushover and exits silently if tokens are not set; the `&&` chain means a failed deploy sends no notification.
 
 Required build env vars (set in CF Workers Builds): `PUSHOVER_TOKEN`, `PUSHOVER_USER`, `R2_ACCOUNT_ID`, `R2_BUCKET`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `IMAGES_BASE_URL`
 
