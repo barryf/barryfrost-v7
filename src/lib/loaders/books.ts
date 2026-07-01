@@ -1,7 +1,7 @@
 import type { Loader } from 'astro/loaders';
 import { fetchAllRecords, rkeyFromUri, DID, PDS_HOST } from '@/lib/pds';
 import { pdsImage } from '@/lib/image-store';
-import { mapLimit } from '@/lib/concurrency';
+import { mapLimit, RECORD_CONCURRENCY } from '@/lib/concurrency';
 
 export function booksLoader(): Loader {
   return {
@@ -15,7 +15,7 @@ export function booksLoader(): Loader {
         records.push(record);
       }
 
-      await mapLimit(records, 16, async (record) => {
+      await mapLimit(records, RECORD_CONCURRENCY, async (record) => {
         const value = record.value as Record<string, unknown>;
         const rkey = rkeyFromUri(record.uri);
         const identifiers = value.identifiers as { isbn10?: string; isbn13?: string; goodreadsId?: string } | undefined;
