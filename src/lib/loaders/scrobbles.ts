@@ -1,7 +1,7 @@
 import type { Loader } from 'astro/loaders';
 import { fetchAllRecords, rkeyFromUri, DID, PDS_HOST } from '@/lib/pds';
 import { remoteImage } from '@/lib/image-store';
-import { mapLimit } from '@/lib/concurrency';
+import { mapLimit, RECORD_CONCURRENCY } from '@/lib/concurrency';
 
 export function scrobblesLoader(): Loader {
   return {
@@ -15,7 +15,7 @@ export function scrobblesLoader(): Loader {
         records.push(record);
       }
 
-      await mapLimit(records, 16, async (record) => {
+      await mapLimit(records, RECORD_CONCURRENCY, async (record) => {
         const value = record.value as Record<string, unknown>;
         const rkey = rkeyFromUri(record.uri);
         const albumArtUrl = value.albumArtUrl as string | undefined;

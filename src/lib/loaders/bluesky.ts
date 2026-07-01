@@ -1,7 +1,7 @@
 import type { Loader } from 'astro/loaders';
 import { fetchAllRecords, rkeyFromUri, resolveHandle, DID, PDS_HOST } from '@/lib/pds';
 import { pdsImage } from '@/lib/image-store';
-import { mapLimit } from '@/lib/concurrency';
+import { mapLimit, RECORD_CONCURRENCY } from '@/lib/concurrency';
 
 interface BlueskyImage {
   alt?: string;
@@ -104,7 +104,7 @@ export function blueskyLoader(): Loader {
         records.push(record);
       }
 
-      await mapLimit(records, 16, async (record) => {
+      await mapLimit(records, RECORD_CONCURRENCY, async (record) => {
         const value = record.value as Record<string, unknown>;
         const rkey = rkeyFromUri(record.uri);
 

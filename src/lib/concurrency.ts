@@ -1,3 +1,6 @@
+/** Bound on concurrent per-record processing (PDS/AppView lookups, image calls) in loaders. */
+export const RECORD_CONCURRENCY = 32;
+
 /**
  * mapLimit
  *

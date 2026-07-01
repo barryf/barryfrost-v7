@@ -55,7 +55,7 @@ async function getAwsClient(): Promise<InstanceType<typeof import('aws4fetch')['
 
 // ── concurrency limiter ──────────────────────────────────────────────────────
 
-const CONCURRENCY = 8;
+const CONCURRENCY = 24;
 let _active = 0;
 const _queue: Array<() => void> = [];
 
