@@ -1,6 +1,7 @@
 import type { Loader } from 'astro/loaders';
 import { fetchAllRecords, rkeyFromUri, DID, PDS_HOST } from '@/lib/pds';
 import { remoteImage } from '@/lib/image-store';
+import { mapLimit } from '@/lib/concurrency';
 
 export function filmsLoader(): Loader {
   return {
@@ -9,7 +10,12 @@ export function filmsLoader(): Loader {
       logger.info('Fetching films');
       store.clear();
 
+      const records = [];
       for await (const record of fetchAllRecords('social.popfeed.feed.review', DID, PDS_HOST)) {
+        records.push(record);
+      }
+
+      await mapLimit(records, 16, async (record) => {
         const value = record.value as Record<string, unknown>;
         const rkey = rkeyFromUri(record.uri);
         const identifiers = value.identifiers as { imdbId?: string; tmdbId?: string } | undefined;
@@ -40,7 +46,7 @@ export function filmsLoader(): Loader {
           },
           digest: generateDigest(record.cid),
         });
-      }
+      });
     },
   };
 }
