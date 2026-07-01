@@ -1,0 +1,50 @@
+---
+import { cleanPathname } from '@/lib/url';
+
+const links = [
+  { href: '/posts', label: 'Posts' },
+  { href: '/weeknotes', label: 'Weeknotes' },
+  { href: '/articles', label: 'Articles' },
+  { href: '/check-ins', label: 'Check-ins' },
+  { href: '/photos', label: 'Photos' },
+  { href: '/books', label: 'Books' },
+  { href: '/films', label: 'Films' },
+  { href: '/music', label: 'Music' },
+];
+
+const path = cleanPathname(Astro.url.pathname);
+const isActive = (href: string) => path === href;
+const home = isActive('/');
+---
+<div class="mb-4 flex gap-x-4 w-full justify-between">
+  <div class="h-card text-nowrap">
+    {home && (
+      <h1>
+        <a class="u-url hidden" href="https://barryfrost.com" rel="me"></a>
+        <span class="p-name font-semibold text-black dark:text-white">Barry Frost</span>
+      </h1>
+    ) || (
+      <p>
+        <a href="/" class="u-url underline" rel="me">
+          <span class="p-name">Barry Frost</span>
+        </a>
+      </p>
+    )}
+    <img src="/barryfrost.jpg" class="u-photo hidden" alt="Photo of Barry Frost" />
+    <span class="p-locality hidden">Hertfordshire</span>
+    <span class="p-country-name hidden">UK</span>
+  </div>
+  <nav>
+    <ul class="flex flex-wrap justify-end gap-x-3 gap-y-1 text-sm leading-loose">
+      {links.map(link => (
+        <li>
+          {isActive(link.href) ? (
+            <span class="font-semibold text-nowrap">{link.label}</span>
+          ) : (
+            <a href={link.href} class="underline text-nowrap">{link.label}</a>
+          )}
+        </li>
+      ))}
+    </ul>
+  </nav>
+</div>

@@ -1,25 +1,33 @@
 ---
 import BaseHead from '@/components/BaseHead.astro';
 import SiteFooter from '@/components/SiteFooter.astro';
+import SiteHeader from '@/components/SiteHeader.astro';
+import { cleanPathname } from '@/lib/url';
 import '../styles/global.css';
 
 interface Props {
   title: string;
   description?: string;
-  home?: boolean;
 }
 
-const { title, description, home = false } = Astro.props;
+const { title, description } = Astro.props;
+const home = cleanPathname(Astro.url.pathname) === '/';
 ---
 <html lang="en-GB">
   <head>
     <BaseHead title={title} description={description} />
   </head>
   <body class="m-4 sm:m-8 bg-white dark:bg-black text-gray-600 dark:text-gray-400 font-sans antialiased">
-    {!home && (
-      <div class="mb-4"><a href="/" class="underline">Barry Frost</a></div>
+    <header>
+      <SiteHeader />
+    </header>
+    <main>
+      <slot />
+    </main>
+    {home && (
+      <footer>
+        <SiteFooter />
+      </footer>
     )}
-    <slot />
-    {home && <SiteFooter />}
   </body>
 </html>

@@ -50,16 +50,8 @@ const latestPostHtml = latestPost ? renderRichText(latestPost.data.text, latestP
 const latestPostUrl = latestPost ? `https://bsky.app/profile/${HANDLE}/post/${latestPost.id}` : '';
 
 ---
-<Base title="Barry Frost" home={true}>
-  <div class="h-card mb-4">
-    <h1 class="mb-4 font-semibold text-black dark:text-white">
-      <a class="u-url hidden" href="https://barryfrost.com" rel="me"></a>
-      <span class="p-name">Barry Frost</span>
-    </h1>
-    <span class="p-locality hidden">Hertfordshire</span>
-    <span class="p-country-name hidden">UK</span>
-    <p class="mb-4">I'm a part-time software engineer and full-time technology leader with experience building teams, websites and apps. I live in a village in Hertfordshire, UK, with my wife and two sons.</p>
-  </div>
+<Base title="Barry Frost">
+  <p class="mb-4">I'm a part-time software engineer and full-time technology leader with experience building teams, websites and apps. I live in a village in Hertfordshire, UK, with my wife and two sons.</p>
 
   {latestWeeknote && (
     <>

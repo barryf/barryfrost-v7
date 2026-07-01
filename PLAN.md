@@ -51,7 +51,7 @@ Each PDS loader implements `Loader` from `astro/loaders`:
 
 The homepage (`src/pages/index.astro`) is a curated view, not a unified feed. Sections rendered in order:
 
-1. **Intro** — h-card with name, location, short bio
+1. **Intro** — short bio (h-card with name/location lives in the sitewide `SiteHeader`)
 2. **Latest Weeknote** — title + emoji, truncated excerpt, link to all weeknotes
 3. **Recent Photos** — 6 most recent photo galleries in a scrollable flex row
 4. **Latest Post** — most recent non-reply Bluesky post with text, relative date, Bluesky icon link, pdsls icon link
@@ -102,12 +102,13 @@ Removed from v6: `/page/{n}` (unified feed), `/archives/`, `/tags/`, `/feed.xml`
 
 ## Layouts & Components
 
-- `Base.astro` — HTML shell, `max-w-2xl mx-auto px-4`, dark mode via `prefers-color-scheme`
+- `Base.astro` — HTML shell, `max-w-2xl mx-auto px-4`, dark mode via `prefers-color-scheme`; renders `<header><SiteHeader /></header>`, `<main><slot /></main>`, and (home page only) `<footer><SiteFooter /></footer>`. `home` is derived from `Astro.url.pathname === '/'`, not passed as a prop.
+- `SiteHeader.astro` — sitewide header: `h-card` (name, hidden `u-photo`/`p-locality`/`p-country-name`) plus a top nav linking to Posts, Weeknotes, Articles, Check-ins, Photos, Books, Films, Music, with the current section bolded. On the homepage the name renders as an `h1`; elsewhere it's a link back to `/`.
 - `Feed.astro` — shared feed layout used by all list/paginated pages. Renders the `h-feed` wrapper, hidden `h-card p-author` MF2 author block, heading (with `(Page N)` suffix), optional named `description` slot, default slot for item content, and `<Pagination>` (suppressed via `paginate={false}` for books). Props: `title`, `currentPage?`, `totalPages`, `basePath`, `paginate?`.
 - `FilmFeed.astro` — extends `Feed.astro` for `/films` and `/films/by-rating`: adds date/rating sort toggle and renders `FilmCard` in a responsive grid (`grid-cols-1 sm:grid-cols-2 lg:grid-cols-3`)
 - `Post.astro` — individual article/weeknote with prose styles; "Posted in [Section] [relative date]" footer (omits "on" when displaying relative text); uses `Divider` above footer
 - `Divider.astro` — `⁂` separator; `my-8 text-xl`
-- `SiteFooter.astro` — footer nav (About, Colophon, Blogroll, Follow) + inline search form that submits to `/search`
+- `SiteFooter.astro` — footer nav (About, Colophon, Blogroll, Follow) + inline search form that submits to `/search`; only rendered on the homepage
 Icon components in `src/components/icons/`:
 - `BlueskyIcon.astro` — monochrome Bluesky butterfly SVG, `currentColor`, `-translate-y-px` to align with text baseline
 - `PdslsIcon.astro` — pdsls.dev graph SVG; links to the underlying PDS record on pdsls.dev

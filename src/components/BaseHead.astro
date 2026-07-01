@@ -1,5 +1,6 @@
 ---
 import { Font } from 'astro:assets';
+import { cleanPathname } from '@/lib/url';
 
 interface Props {
   title: string;
@@ -7,8 +8,7 @@ interface Props {
 }
 
 const { title, description = 'Personal website of Barry Frost' } = Astro.props;
-const cleanPath = Astro.url.pathname.replace(/\/index\.html$/, '/').replace(/\.html$/, '');
-const canonicalURL = new URL(cleanPath, Astro.site);
+const canonicalURL = new URL(cleanPathname(Astro.url.pathname), Astro.site);
 ---
 <meta charset="utf-8" />
 <Font cssVariable="--font-work-sans" preload />
