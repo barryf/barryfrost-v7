@@ -1,6 +1,7 @@
 import type { Loader } from 'astro/loaders';
 import { fetchAllRecords, rkeyFromUri, resolveHandle, didFromUri, DID, PDS_HOST } from '@/lib/pds';
 import { remoteImage } from '@/lib/image-store';
+import { mapLimit } from '@/lib/concurrency';
 
 interface DidDocument {
   service?: { id: string; type: string; serviceEndpoint: string }[];
@@ -40,7 +41,7 @@ export function subscriptionsLoader(): Loader {
           records.push(record);
         }
 
-        await Promise.all(records.map(async (record) => {
+        await mapLimit(records, 16, async (record) => {
           const value = record.value as Record<string, unknown>;
           const rkey = rkeyFromUri(record.uri);
           const publicationUri = value.publication as string;
@@ -87,7 +88,7 @@ export function subscriptionsLoader(): Loader {
             },
             digest: generateDigest(record.cid),
           });
-        }));
+        });
       } catch (err) {
         logger.warn(`Subscriptions fetch failed, skipping: ${err}`);
       }

@@ -1,6 +1,7 @@
 import type { Loader } from 'astro/loaders';
 import { fetchAllRecords, rkeyFromUri, DID, PDS_HOST } from '@/lib/pds';
 import { remoteImage } from '@/lib/image-store';
+import { mapLimit } from '@/lib/concurrency';
 
 export function albumsLoader(): Loader {
   return {
@@ -14,7 +15,7 @@ export function albumsLoader(): Loader {
         records.push(record);
       }
 
-      await Promise.all(records.map(async (record) => {
+      await mapLimit(records, 16, async (record) => {
         const value = record.value as Record<string, unknown>;
         const rkey = rkeyFromUri(record.uri);
         const albumArtUrl = value.albumArtUrl as string | undefined;
@@ -33,7 +34,7 @@ export function albumsLoader(): Loader {
           },
           digest: generateDigest(record.cid),
         });
-      }));
+      });
     },
   };
 }

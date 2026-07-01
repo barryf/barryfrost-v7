@@ -1,6 +1,7 @@
 import type { Loader } from 'astro/loaders';
 import { fetchAllRecords, rkeyFromUri, DID, PDS_HOST } from '@/lib/pds';
 import { pdsImage } from '@/lib/image-store';
+import { mapLimit } from '@/lib/concurrency';
 
 interface GalleryRecord {
   title?: string;
@@ -62,7 +63,7 @@ export function photosLoader(): Loader {
       }
 
       // Build one feed entry per gallery
-      for (const [galleryUri, gallery] of galleries) {
+      await mapLimit(Array.from(galleries.entries()), 16, async ([galleryUri, gallery]) => {
         const items = (galleryItems.get(galleryUri) ?? []).sort((a, b) => a.position - b.position);
         const photoCount = items.length;
 
@@ -92,7 +93,7 @@ export function photosLoader(): Loader {
           },
           digest: generateDigest(gallery.cid),
         });
-      }
+      });
     },
   };
 }

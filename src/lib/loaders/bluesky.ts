@@ -1,6 +1,7 @@
 import type { Loader } from 'astro/loaders';
 import { fetchAllRecords, rkeyFromUri, resolveHandle, DID, PDS_HOST } from '@/lib/pds';
 import { pdsImage } from '@/lib/image-store';
+import { mapLimit } from '@/lib/concurrency';
 
 interface BlueskyImage {
   alt?: string;
@@ -98,9 +99,16 @@ export function blueskyLoader(): Loader {
 
       const handleCache = new Map<string, string>();
 
+      const records = [];
       for await (const record of fetchAllRecords('app.bsky.feed.post', DID, PDS_HOST)) {
+        records.push(record);
+      }
+
+      await mapLimit(records, 16, async (record) => {
         const value = record.value as Record<string, unknown>;
         const rkey = rkeyFromUri(record.uri);
+
+        if (/^Week \d+/i.test(value.text as string)) return;
 
         let reply: { parentUri: string; parentHandle: string; parentRkey: string } | null = null;
         const replyRef = value.reply as { parent?: { uri?: string } } | undefined;
@@ -120,8 +128,6 @@ export function blueskyLoader(): Loader {
             parentRkey,
           };
         }
-
-        if (/^Week \d+/i.test(value.text as string)) continue;
 
         const embed = value.embed as BlueskyEmbed | undefined;
         const { urls: imageUrls, alts: imageAlts } = await extractImages(embed);
@@ -145,7 +151,7 @@ export function blueskyLoader(): Loader {
           },
           digest: generateDigest(record.cid),
         });
-      }
+      });
     },
   };
 }
