@@ -36,9 +36,9 @@ Every page is marked up with [Microformats 2](https://microformats.org/wiki/micr
 
 The only page that ships JS is `/check-ins`, which dynamically loads Leaflet and Leaflet.markercluster from a CDN to render a clustered map. Every other page is pure HTML and CSS, including dark mode (`prefers-color-scheme` only — no toggle, no flash).
 
-### Build-time images via Cloudflare
+### Build-time images via R2
 
-PDS records reference image blobs by CID. Rather than downloading blobs at build time, they are proxied and transformed on demand by a Cloudflare Worker at `cdn.barryfrost.com`. Images are edge-cached permanently (CIDs are content-addressed). This keeps build times short (~15s) and eliminates the need for a cached `public/images/` directory.
+PDS records reference image blobs by CID. At build time these are fetched, resized with `sharp`, and stored content-addressed as webp in an R2 bucket served from `images.barryfrost.com`. No runtime resizing occurs.
 
 ### Static, no SSR
 
@@ -49,7 +49,7 @@ PDS records reference image blobs by CID. Rather than downloading blobs at build
 - **Astro 7** — static site generator with content collections and custom loaders
 - **Tailwind CSS v4** — via `@tailwindcss/vite`, plus `@tailwindcss/typography` for prose; Work Sans as the primary font
 - **`@astrojs/rss`** — RSS and JSON Feed generation for articles and weeknotes
-- **Cloudflare Workers** — static asset hosting, image proxy (`cdn.barryfrost.com`), PDS polling cron
+- **Cloudflare Workers** — static asset hosting, PDS polling cron
 - **Pagefind** — static full-text search, indexed after build
 
 ## Commands
@@ -74,7 +74,7 @@ src/
     loaders/        # AT Protocol content loaders (one per collection)
     feed.ts         # paginateItems helper
     pds.ts          # PDS fetch helpers
-    image-url.ts    # Cloudflare image URL builders
+    image-store.ts  # build-time R2/sharp image pipeline
   components/
     posts/          # per-type card components (ArticleCard, FilmCard, ...)
     BlueskyIcon.astro
@@ -84,7 +84,6 @@ src/
   pages/            # routes
   styles/global.css
 cloudflare/
-  blob-proxy/       # image proxy worker (cdn.barryfrost.com)
   pds-poller/       # cron worker — triggers rebuilds on PDS changes
 scripts/            # scaffolding & one-off import scripts
 ```

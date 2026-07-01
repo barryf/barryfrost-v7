@@ -278,13 +278,9 @@ Every loader processes its records with bounded concurrency instead of a sequent
 
 This took "Syncing content" from 90s+ down to ~7s. The pattern for a loader: collect records from `fetchAllRecords` into an array first (cheap, no images involved), then `mapLimit(records, RECORD_CONCURRENCY, async (record) => {...})` over the per-record body (image fetch + any other network calls + `store.set`) — decoupling PDS pagination from per-record work.
 
-### Blob proxy — `cloudflare/blob-proxy`
+### Why `pds-poller` is separate
 
-A Cloudflare Worker at `cdn.barryfrost.com` that was the previous runtime image resizer for PDS blobs. Now superseded by the build-time R2 pipeline. **Pending retirement** — can be deleted once production is confirmed to serve all images from `images.barryfrost.com`.
-
-### Why the workers are separate
-
-Both workers live in `cloudflare/` as standalone wrangler projects. The main app is `output: 'static'` with no SSR adapter — `src/pages/*.ts` endpoints are pre-rendered at build time. Folding either worker in would require `@astrojs/cloudflare` + SSR. `pds-poller` requires a cron handler; `blob-proxy` operates on a different hostname.
+`pds-poller` lives in `cloudflare/` as a standalone wrangler project. The main app is `output: 'static'` with no SSR adapter — `src/pages/*.ts` endpoints are pre-rendered at build time. Folding it in would require `@astrojs/cloudflare` + SSR, and it requires its own cron handler.
 
 ## Key Conventions
 
