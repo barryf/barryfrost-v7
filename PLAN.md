@@ -270,6 +270,14 @@ Both functions:
 
 R2 bucket `barryfrost-images` with custom domain `images.barryfrost.com`. `sharp@0.34.5` is available as Astro's transitive optional dependency and must **not** be added as a direct dep (macOS-generated lockfiles omit Linux platform binaries, breaking `npm ci` on CF's build runners).
 
+#### Build-time concurrency
+
+Every loader processes its records with bounded concurrency instead of a sequential `for await` loop, so `image-store.ts`'s R2/sharp work and per-record PDS/AppView lookups actually run in parallel:
+- `src/lib/concurrency.ts` — `mapLimit(items, limit, fn)` helper and the shared `RECORD_CONCURRENCY` (32) constant, used by every loader in `src/lib/loaders/`
+- `image-store.ts`'s own `CONCURRENCY` (24) separately bounds the R2/sharp work specifically, regardless of how many records are in flight above it
+
+This took "Syncing content" from 90s+ down to ~7s. The pattern for a loader: collect records from `fetchAllRecords` into an array first (cheap, no images involved), then `mapLimit(records, RECORD_CONCURRENCY, async (record) => {...})` over the per-record body (image fetch + any other network calls + `store.set`) — decoupling PDS pagination from per-record work.
+
 ### Blob proxy — `cloudflare/blob-proxy`
 
 A Cloudflare Worker at `cdn.barryfrost.com` that was the previous runtime image resizer for PDS blobs. Now superseded by the build-time R2 pipeline. **Pending retirement** — can be deleted once production is confirmed to serve all images from `images.barryfrost.com`.
