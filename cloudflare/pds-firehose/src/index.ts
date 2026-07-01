@@ -69,6 +69,7 @@ export class JetstreamListener implements DurableObject {
   private deploying = false;
   private connectedAt = 0; // in-memory: when the current socket connected
   private lastEventAt = 0; // in-memory: when any event was last received
+  private replayFloor = 0; // cursor at connect: events at or below this are replays, already acted on
 
   constructor(
     private state: DurableObjectState,
@@ -113,6 +114,9 @@ export class JetstreamListener implements DurableObject {
     this.wsOpen = false;
 
     const cursor = await this.state.storage.get<number>('cursor');
+    // Reconnect replays from cursor−5s, so re-received events (time_us ≤ cursor) were
+    // already acted on. Record the floor to dedupe them and avoid phantom rebuilds.
+    this.replayFloor = cursor ?? 0;
     const resp = await fetch(buildUrl(cursor), { headers: { Upgrade: 'websocket' } });
     const ws = resp.webSocket;
     if (!ws) {
@@ -161,6 +165,10 @@ export class JetstreamListener implements DurableObject {
     if (msg.kind !== 'commit' || !msg.commit) return;
     if (!WATCHED_COLLECTIONS.includes(msg.commit.collection)) return;
 
+    // Ignore replayed commits from the reconnect buffer — acting on them would fire a
+    // phantom rebuild on every reconnect when the repo is otherwise idle.
+    if (typeof msg.time_us === 'number' && msg.time_us <= this.replayFloor) return;
+
     const { operation, collection, rkey } = msg.commit;
     console.log(`commit ${operation} ${collection} ${rkey}`);
 
@@ -196,9 +204,10 @@ export class JetstreamListener implements DurableObject {
     if (quiet || capped) await this.triggerDeploy();
   }
 
-  // POST the Cloudflare deploy hook. Idempotent-ish: the in-memory guard prevents
-  // overlapping fires, and the pending flag is cleared only on success so a
-  // transient failure is retried by the next alarm.
+  // POST the Cloudflare deploy hook. The in-memory guard prevents overlapping fires.
+  // The pending flag is cleared once the hook returns *any* response — retrying a
+  // non-2xx every 60s would loop forever. Only a network exception (no response)
+  // leaves the flag set so the next alarm retries.
   private async triggerDeploy(): Promise<void> {
     if (this.deploying) return;
     if (!(await this.state.storage.get<boolean>('deployPending'))) return;
@@ -209,12 +218,11 @@ export class JetstreamListener implements DurableObject {
       console.log(`deploy hook POST ${res.status}`);
       await this.state.storage.put('lastDeployAt', Date.now());
       await this.state.storage.put('lastDeployStatus', res.status);
-      if (res.ok) {
-        await this.state.storage.put('deployPending', false);
-        this.deployPendingSince = 0;
-      }
+      await this.state.storage.put('deployPending', false);
+      this.deployPendingSince = 0;
+      if (!res.ok) console.log(`deploy hook returned non-2xx (${res.status}) — check DEPLOY_HOOK`);
     } catch (err) {
-      console.log('deploy hook failed, will retry on next alarm', err);
+      console.log('deploy hook network error, will retry on next alarm', err);
     } finally {
       this.deploying = false;
     }
