@@ -3,6 +3,7 @@ import { fetchAllRecords, rkeyFromUri, DID, PDS_HOST } from '@/lib/pds';
 
 const DID_SHORT = DID.replace('did:plc:', '');
 import { pdsImage } from '@/lib/image-store';
+import { mapLimit } from '@/lib/concurrency';
 
 interface FsqLocation {
   fsq_place_id?: string;
@@ -46,7 +47,12 @@ export function checkInsLoader(): Loader {
         });
       }
 
+      const checkinRecords = [];
       for await (const record of fetchAllRecords('com.barryfrost.checkin', DID, PDS_HOST)) {
+        checkinRecords.push(record);
+      }
+
+      await mapLimit(checkinRecords, 16, async (record) => {
         const value = record.value as Record<string, unknown>;
         const rkey = rkeyFromUri(record.uri);
         const location = value.location as FsqLocation | undefined;
@@ -81,7 +87,7 @@ export function checkInsLoader(): Loader {
           },
           digest: generateDigest(record.cid),
         });
-      }
+      });
     },
   };
 }

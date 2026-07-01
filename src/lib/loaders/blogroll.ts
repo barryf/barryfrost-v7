@@ -1,6 +1,7 @@
 import type { Loader } from 'astro/loaders';
 import blogsData from '@/data/blogroll.json';
 import { remoteImage } from '@/lib/image-store';
+import { mapLimit } from '@/lib/concurrency';
 
 export function blogrollLoader(): Loader {
   return {
@@ -9,7 +10,7 @@ export function blogrollLoader(): Loader {
       logger.info('Fetching blogroll favicons');
       store.clear();
 
-      await Promise.all(blogsData.map(async (blog) => {
+      await mapLimit(blogsData, 16, async (blog) => {
         const hostname = new URL(blog.url).hostname;
         const avatarUrl = 'avatar' in blog && blog.avatar
           ? await remoteImage(blog.avatar, { width: 96, height: 96, fit: 'cover' })
@@ -20,7 +21,7 @@ export function blogrollLoader(): Loader {
           data: { name: blog.name, url: blog.url, hostname, avatarUrl },
           digest: generateDigest(blog.url),
         });
-      }));
+      });
     },
   };
 }
