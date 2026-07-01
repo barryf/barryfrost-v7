@@ -1,0 +1,18 @@
+name = "pds-firehose"
+main = "src/index.ts"
+compatibility_date = "2026-05-01"
+
+# Liveness only: a single no-op fetch to the Durable Object every 5 min to
+# (re)instantiate it and heal a permanently-failed alarm. This does NOT poll the
+# PDS — the real-time work happens over the Jetstream websocket the DO holds open.
+[triggers]
+crons = ["*/5 * * * *"]
+
+[[durable_objects.bindings]]
+name = "LISTENER"
+class_name = "JetstreamListener"
+
+# SQLite-backed class — required for Durable Objects on the Workers Free plan.
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["JetstreamListener"]

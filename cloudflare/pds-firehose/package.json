@@ -1,5 +1,5 @@
 {
-  "name": "pds-poller",
+  "name": "pds-firehose",
   "type": "module",
   "version": "0.0.1",
   "private": true,

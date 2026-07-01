@@ -234,20 +234,20 @@ The notification runs at the end of the deploy phase — after `wrangler deploy`
 
 Required build env vars (set in CF Workers Builds): `PUSHOVER_TOKEN`, `PUSHOVER_USER`, `R2_ACCOUNT_ID`, `R2_BUCKET`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `IMAGES_BASE_URL`
 
-### PDS polling — `cloudflare/pds-poller`
-A Cloudflare Worker with a cron trigger (`*/15 * * * *`). Three-tier polling strategy:
+### PDS firehose listener — `cloudflare/pds-firehose`
+A Cloudflare Worker that reacts to PDS changes in real time (seconds, not the old 15-minute poll) by listening to the atproto firehose over a websocket.
 
-1. **Tier 1 — repo rev** (`com.atproto.sync.getLatestCommit` via `bsky.network` relay): if the repo-level rev is unchanged, nothing has been written anywhere — return immediately (~1 subrequest).
-2. **Tier 2a — full digest scan** (`DIGEST_COLLECTIONS`): paginate all records in a collection and compare a sorted CID digest. Catches creates, updates, and deletes. Used for small collections.
-3. **Tier 2b — head CID** (`HEAD_COLLECTIONS`): compare only the latest record's CID. Catches creates only; used for large collections (e.g. `app.bsky.feed.post`) where full pagination is impractical.
+**Jetstream, not the raw firehose.** [Jetstream](https://github.com/bluesky-social/jetstream) is Bluesky's JSON-simplified view of `com.atproto.sync.subscribeRepos` — no CBOR/CAR decoding, and it filters **server-side** by DID and collection, so we only receive Barry's watched commits. Endpoint: `wss://jetstream2.us-east.bsky.network/subscribe?wantedDids=<DID>&wantedCollections=…`.
 
-If any collection changes, updates Workers KV (`binding: CIDS`) and POSTs to the Workers Builds deploy hook.
+**A Durable Object holds the connection.** Regular Workers are request-scoped and can't keep a long-lived socket. The `JetstreamListener` Durable Object opens an outbound websocket to Jetstream. Because outbound sockets don't hibernate and only pin a DO for ~15 minutes, a recurring **alarm heartbeat** (`HEARTBEAT_MS = 60s`) reconnects after the ceiling or any eviction; a `*/5 * * * *` cron does a liveness ping to (re)instantiate the DO and heal a permanently-failed alarm (it does **not** poll the PDS).
 
-`DIGEST_COLLECTIONS`: `app.beaconbits.beacon`, `com.barryfrost.checkin`, `social.popfeed.feed.review`, `buzz.bookhive.book`, `site.standard.graph.subscription`, `social.grain.gallery`, `social.grain.gallery.item`, `social.grain.photo`, `app.rocksky.scrobble`, `app.rocksky.album`
+**Reliability (DO-only, cursor replay).** No fallback poll. The last event's `time_us` is persisted as a Jetstream `cursor`; on reconnect it replays from `cursor − 5s` for gapless recovery. Cursors are time-based, so any of the four public instances is interchangeable on failover.
 
-`HEAD_COLLECTIONS`: `app.bsky.feed.post`
+**One commit → one debounced rebuild.** Every commit in a watched collection warrants a rebuild (Jetstream reports create/update/delete directly — no digest/head-CID tiers). A ~10s debounce coalesces a burst (e.g. one article syndicating to several collections) into a single POST to the deploy hook; a `MAX_WAIT_MS = 60s` cap ensures sustained writes still rebuild. The deploy-pending flag is persisted so an eviction mid-debounce still fires on the next wake.
 
-Required secrets: `DEPLOY_HOOK`
+Watched collections (`WATCHED_COLLECTIONS`): `app.bsky.feed.post`, `app.beaconbits.beacon`, `com.barryfrost.checkin`, `social.popfeed.feed.review`, `buzz.bookhive.book`, `site.standard.document`, `site.standard.graph.subscription`, `social.grain.gallery`, `social.grain.gallery.item`, `social.grain.photo`, `app.rocksky.album`
+
+Required secrets: `DEPLOY_HOOK` (same Workers Builds deploy-hook URL as before).
 
 ### `scaffold.yml`
 Manual `workflow_dispatch` for creating article/weeknote stubs. Inputs: `kind`, `title_or_topic`, `emoji`, `tags`, `date`. Runs `scripts/new-article.ts` or `scripts/new-weeknote.ts --no-git`, opens a draft PR via `peter-evans/create-pull-request`.
@@ -278,9 +278,9 @@ Every loader processes its records with bounded concurrency instead of a sequent
 
 This took "Syncing content" from 90s+ down to ~7s. The pattern for a loader: collect records from `fetchAllRecords` into an array first (cheap, no images involved), then `mapLimit(records, RECORD_CONCURRENCY, async (record) => {...})` over the per-record body (image fetch + any other network calls + `store.set`) — decoupling PDS pagination from per-record work.
 
-### Why `pds-poller` is separate
+### Why `pds-firehose` is separate
 
-`pds-poller` lives in `cloudflare/` as a standalone wrangler project. The main app is `output: 'static'` with no SSR adapter — `src/pages/*.ts` endpoints are pre-rendered at build time. Folding it in would require `@astrojs/cloudflare` + SSR, and it requires its own cron handler.
+`pds-firehose` lives in `cloudflare/` as a standalone wrangler project. The main app is `output: 'static'` with no SSR adapter — `src/pages/*.ts` endpoints are pre-rendered at build time. Folding it in would require `@astrojs/cloudflare` + SSR, and it needs its own Durable Object + cron handler. It runs on the Workers Free plan (the DO uses the SQLite storage backend, required on Free); the always-on outbound socket can't hibernate, so it consumes ~10,800 of the 13,000 GB-s/day free DO duration allowance.
 
 ## Key Conventions
 
