@@ -9,9 +9,6 @@ import { HANDLE, pdslsUrl } from '@/lib/pds';
 import BlueskyQuote from '@/components/posts/BlueskyQuote.astro';
 import BlueskyIcon from '@/components/icons/BlueskyIcon.astro';
 import PdslsIcon from '@/components/icons/PdslsIcon.astro';
-import BookHiveIcon from '@/components/icons/BookHiveIcon.astro';
-import PopfeedIcon from '@/components/icons/PopfeedIcon.astro';
-import RockskyIcon from '@/components/icons/RockskyIcon.astro';
 
 const [weeknotes, photos, blueskyPosts, articles, checkIns] = await Promise.all([
   getCollection('weeknotes'),
@@ -160,12 +157,4 @@ const latestPostUrl = latestPost ? `https://bsky.app/profile/${HANDLE}/post/${la
       <div class="mb-4 text-sm"><a href="/check-ins" class="underline">All Check-ins</a></div>
     </>
   )}
-
-  <Divider />
-  <h2 class="font-semibold text-black dark:text-white">Recent Media</h2>
-  <p class="mb-4">
-    View the <a href="/books" class="underline"><BookHiveIcon class="inline w-4 h-4 align-text-bottom mr-0.5" />books</a> I'm reading,
-    the <a href="/films" class="underline"><PopfeedIcon class="inline w-4 h-4 align-text-bottom mr-0.5" />films</a> I've watched and reviewed,
-    and the <a href="/music" class="underline"><RockskyIcon class="inline w-4 h-4 align-text-bottom mr-0.5" />music</a> I've been listening to.
-  </p>
 </Base>
