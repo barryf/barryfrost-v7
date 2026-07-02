@@ -2,7 +2,6 @@
 import BaseHead from '@/components/BaseHead.astro';
 import SiteFooter from '@/components/SiteFooter.astro';
 import SiteHeader from '@/components/SiteHeader.astro';
-import { cleanPathname } from '@/lib/url';
 import '../styles/global.css';
 
 interface Props {
@@ -11,7 +10,6 @@ interface Props {
 }
 
 const { title, description } = Astro.props;
-const home = cleanPathname(Astro.url.pathname) === '/';
 ---
 <html lang="en-GB">
   <head>
@@ -24,10 +22,8 @@ const home = cleanPathname(Astro.url.pathname) === '/';
     <main>
       <slot />
     </main>
-    {home && (
-      <footer>
-        <SiteFooter />
-      </footer>
-    )}
+    <footer>
+      <SiteFooter />
+    </footer>
   </body>
 </html>
