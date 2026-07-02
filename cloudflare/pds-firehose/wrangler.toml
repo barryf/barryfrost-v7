@@ -2,11 +2,13 @@ name = "pds-firehose"
 main = "src/index.ts"
 compatibility_date = "2026-05-01"
 
-# Liveness only: a single no-op fetch to the Durable Object every 5 min to
+# */5 — liveness only: a single no-op fetch to the Durable Object every 5 min to
 # (re)instantiate it and heal a permanently-failed alarm. This does NOT poll the
 # PDS — the real-time work happens over the Jetstream websocket the DO holds open.
+# 0 * * * * — hourly belt-and-braces rebuild in case an on-demand build failed
+# (e.g. PDS unreachable at build time) and no new commit will re-trigger it.
 [triggers]
-crons = ["*/5 * * * *"]
+crons = ["*/5 * * * *", "0 * * * *"]
 
 [[durable_objects.bindings]]
 name = "LISTENER"

@@ -246,6 +246,8 @@ A Cloudflare Worker that reacts to PDS changes in real time (seconds, not the ol
 
 **One commit → one debounced rebuild.** Every commit in a watched collection warrants a rebuild (Jetstream reports create/update/delete directly — no digest/head-CID tiers). A ~10s debounce coalesces a burst (e.g. one article syndicating to several collections) into a single POST to the deploy hook; a `MAX_WAIT_MS = 60s` cap ensures sustained writes still rebuild. The deploy-pending flag is persisted so an eviction mid-debounce still fires on the next wake.
 
+**Hourly fallback rebuild.** A second `0 * * * *` cron POSTs the deploy hook unconditionally, direct from the top-level `scheduled()` handler (bypassing the DO). This is belt-and-braces: if an on-demand build fails for a reason the deploy hook can't see (e.g. the PDS is unreachable at build time), no new commit will re-trigger it, so the hourly cron rebuilds within the hour. Distinguished from the liveness ping via `event.cron`.
+
 Watched collections (`WATCHED_COLLECTIONS`): `app.bsky.feed.post`, `app.beaconbits.beacon`, `com.barryfrost.checkin`, `social.popfeed.feed.review`, `buzz.bookhive.book`, `site.standard.document`, `site.standard.graph.subscription`, `social.grain.gallery`, `social.grain.gallery.item`, `social.grain.photo`, `app.rocksky.album`
 
 Required secrets: `DEPLOY_HOOK` (same Workers Builds deploy-hook URL as before).

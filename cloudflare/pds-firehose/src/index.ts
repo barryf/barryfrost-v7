@@ -267,8 +267,21 @@ export default {
     return new Response(null, { status: 404 });
   },
 
-  // Liveness ping: ensures the singleton DO exists and its alarm is scheduled.
-  async scheduled(_event: ScheduledEvent, env: Env): Promise<void> {
+  // The */5 cron is a liveness ping; the hourly cron is a belt-and-braces rebuild.
+  async scheduled(event: ScheduledEvent, env: Env): Promise<void> {
+    if (event.cron === '0 * * * *') {
+      // Unconditionally re-trigger a build so a build that failed (e.g. PDS
+      // unreachable) recovers even with no new firehose commit. POST the hook
+      // directly rather than via the DO, so this still fires if the DO is wedged.
+      try {
+        const res = await fetch(env.DEPLOY_HOOK, { method: 'POST' });
+        console.log(`hourly fallback deploy hook POST ${res.status}`);
+      } catch (err) {
+        console.log('hourly fallback deploy hook network error', err);
+      }
+      return;
+    }
+    // Liveness ping: ensures the singleton DO exists and its alarm is scheduled.
     await stub(env).fetch('https://do/ensure');
   },
 };
