@@ -23,10 +23,10 @@ const latestWeeknote = weeknotes
   .filter(e => e.data.visibility !== 'unlisted')
   .sort((a, b) => b.data.week - a.data.week)[0];
 
-// Recent photos (6 most recent)
+// Recent photos (8 most recent)
 const recentPhotos = photos
   .sort((a, b) => new Date(b.data.createdAt).getTime() - new Date(a.data.createdAt).getTime())
-  .slice(0, 6);
+  .slice(0, 8);
 
 // Latest post (not a reply)
 const latestPost = blueskyPosts
