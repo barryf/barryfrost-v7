@@ -2,7 +2,7 @@
   "defs": {
     "main": {
       "description": "A physical location checkin on Foursquare/Swarm",
-      "key": "tid",
+      "key": "any",
       "record": {
         "properties": {
           "address": {
