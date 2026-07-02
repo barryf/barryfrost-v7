@@ -20,7 +20,7 @@ html {
   }
 }
 
-p, blockquote, .prose {
+p, blockquote, .prose p, .prose ul {
   @apply max-w-140;
 }
 
