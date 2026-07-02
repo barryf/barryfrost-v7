@@ -4,6 +4,7 @@ import Pagination from '@/components/Pagination.astro';
 
 interface Props {
   title: string;
+  description: string;
   currentPage?: number;
   totalPages: number;
   basePath: string;
@@ -24,9 +25,9 @@ const hasDescription = Astro.slots.has('description');
       {title}{currentPage > 1 && <span class="font-normal"> (Page {currentPage})</span>}
     </h1>
     {hasDescription && (
-      <p class="mb-8 text-gray-600 dark:text-gray-400">
+      <div class="mb-8 text-gray-600 dark:text-gray-400">
         <slot name="description" />
-      </p>
+      </div>
     )}
     <slot />
   </div>

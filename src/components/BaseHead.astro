@@ -11,7 +11,6 @@ const { title, description = 'Personal website of Barry Frost' } = Astro.props;
 const canonicalURL = new URL(cleanPathname(Astro.url.pathname), Astro.site);
 ---
 <meta charset="utf-8" />
-<Font cssVariable="--font-work-sans" preload />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="canonical" href={canonicalURL} />
 <meta name="generator" content={Astro.generator} />
@@ -30,3 +29,4 @@ const canonicalURL = new URL(cleanPathname(Astro.url.pathname), Astro.site);
 <link rel="alternate" type="application/feed+json" title="Barry Frost — Articles (JSON Feed)" href="/articles/feed.json" />
 <link rel="alternate" type="application/rss+xml" title="Barry Frost — Weeknotes (RSS)" href="/weeknotes/feed.xml" />
 <link rel="alternate" type="application/feed+json" title="Barry Frost — Weeknotes (JSON Feed)" href="/weeknotes/feed.json" />
+<Font cssVariable="--font-work-sans" preload />

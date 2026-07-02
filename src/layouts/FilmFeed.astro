@@ -26,7 +26,9 @@ const { items, currentPage, totalPages, basePath = '/films', sort = 'date' } = A
 ---
 <Feed title="Films" currentPage={currentPage} totalPages={totalPages} basePath={basePath}>
   <Fragment slot="description">
-    Films I've watched and rated on
+    What I've watched and rated, originally posted on my
+    <a href="https://letterboxd.com/barryf/" class="underline">Letterboxd</a>
+    account and synchronised to
     <a href="https://popfeed.social/profile/did:plc:j5ksi3y4tdtbp7vpsxsfyask" class="underline" rel="noopener noreferrer"><PopfeedIcon class="inline w-4 h-4 align-text-bottom mr-0.5" />Popfeed</a>.
   </Fragment>
   <div class="mb-8 flex gap-4 text-sm">

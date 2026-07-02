@@ -50,15 +50,15 @@ const topAlbums = [...albumMap.values()]
 
 const rockskyUrl = 'https://rocksky.app/profile/barryfrost.com';
 ---
-<Base title="Music" description="Top albums, top artists, and recently played tracks from my Rocksky profile.">
+<Base title="Music">
   <article data-pagefind-body>
     <h1 class="mb-4 font-semibold text-black dark:text-white">Music</h1>
 
-    <p class="mb-8 text-gray-600 dark:text-gray-400">
-      All-time charts since I started scrobbling on my
-      <a href={rockskyUrl} class="underline">Rocksky</a> profile,
-      and recently played tracks.
-    </p>
+    <div class="mb-8 text-gray-600 dark:text-gray-400">
+      All-time charts since I started scrobbling to my
+      <a href={rockskyUrl} class="underline">Rocksky</a>
+      account, and recently played tracks.
+    </div>
 
     {topAlbums.length > 0 && (
       <section class="mb-4">

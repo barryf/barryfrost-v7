@@ -11,7 +11,7 @@ const { items, totalPages } = pages[0] ?? { items: [], totalPages: 1 };
 ---
 <Feed title="Articles" totalPages={totalPages} basePath="/articles">
   <Fragment slot="description">
-    Long-form writing on technology, leadership, and making things.
+    Long-form notes on technology, leadership, life and making things.
   </Fragment>
   <ul class="mb-4">
     {items.map(entry => <ArticleCard entry={entry} />)}
