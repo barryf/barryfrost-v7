@@ -1,6 +1,6 @@
 # barryfrost.com v7
 
-Personal website for Barry Frost — statically generated, IndieWeb-compliant, deployed to Cloudflare Pages.
+Personal website for Barry Frost — statically generated, IndieWeb-compliant, deployed to Cloudflare Workers.
 
 ## Stack
 
@@ -53,7 +53,7 @@ The homepage (`src/pages/index.astro`) is a curated view, not a unified feed. Se
 
 1. **Intro** — short bio (h-card with name/location lives in the sitewide `SiteHeader`)
 2. **Latest Weeknote** — title + emoji, truncated excerpt, link to all weeknotes
-3. **Recent Photos** — 6 most recent photo galleries in a scrollable flex row
+3. **Recent Photos** — 8 most recent photo galleries in a scrollable flex row
 4. **Latest Post** — most recent non-reply Bluesky post with text, relative date, Bluesky icon link, pdsls icon link
 5. **Featured Articles** — articles with `featured: true` frontmatter, sorted by date
 6. **Recent Check-ins** — 5 most recent check-ins as a compact list
@@ -64,7 +64,7 @@ Each section is separated by the `Divider` component (`❉ ❉ ❉`). Sections a
 ## Pagination
 
 `src/lib/feed.ts` exports:
-- `paginateItems(items, pageSize?)` — splits any array into `{ page, items, totalPages }[]`. Default page size is 20; films pages override to 40.
+- `paginateItems(items, pageSize?)` — splits any array into `{ page, items, totalPages }[]`. Default page size is 20; articles pages override to 10, films pages override to 40.
 - `getFeedPages(collection, opts?)` — fetches a collection, optionally filters and sorts (default: `createdAt` desc), then paginates. Shared by all feed index and paginated routes.
 
 Paginated pages show `Title (Page N)` in both the h1 and the browser window title. The `Pagination` component shows all page numbers (no window/cap).
@@ -91,7 +91,7 @@ Paginated pages show `Title (Page N)` in both the h1 and the browser window titl
 | `/music` | Music — Top Albums grid, Top Artists ranked list with bars, Recently Played tracks; all aggregated at build time from scrobbles |
 | `/now` | Now page |
 | `/work` | CV — career, education, projects, skills from PDS records |
-| `/blogroll` | Curated blogs + Standard publications |
+| `/blogroll` | "Websites" (blogs followed via Readwise Reader) + "Publications" (Standard.site subscriptions via Standard Reader) |
 | `/search` | Pagefind search |
 | `/{slug}` | Slash pages (about, colophon, etc.) |
 | `/travelblog/{num}` | Travel blog entries |
@@ -108,7 +108,7 @@ Removed from v6: `/page/{n}` (unified feed), `/archives/`, `/tags/`, `/feed.xml`
 - `FilmFeed.astro` — extends `Feed.astro` for `/films` and `/films/by-rating`: adds date/rating sort toggle and renders `FilmCard` in a responsive grid (`grid-cols-1 sm:grid-cols-2 lg:grid-cols-3`)
 - `Post.astro` — individual article/weeknote with prose styles; "Posted in [Section] [relative date]" footer (omits "on" when displaying relative text); uses `Divider` above footer
 - `Divider.astro` — `⁂` separator; `my-8 text-xl`
-- `SiteFooter.astro` — footer nav (About, Colophon, Blogroll, Follow) + inline search form that submits to `/search`, plus a copyright/license line (CC BY-SA 4.0) and link to the GitHub source repo; rendered on every page
+- `SiteFooter.astro` — footer nav (About, Colophon, Blogroll, Follow, Contact) + inline search form that submits to `/search`, plus a copyright/license line (CC BY-SA 4.0) and link to the GitHub source repo; rendered on every page
 Icon components in `src/components/icons/`:
 - `BlueskyIcon.astro` — monochrome Bluesky butterfly SVG, `currentColor`, `-translate-y-px` to align with text baseline
 - `PdslsIcon.astro` — pdsls.dev graph SVG; links to the underlying PDS record on pdsls.dev
@@ -144,7 +144,7 @@ Tailwind v4 with default palette. Work Sans as the primary font, self-hosted via
 - Imports `@tailwindcss/typography` and sources `../content/**/*.{md,mdx}`
 - Sets `--font-sans` to `var(--font-work-sans)` (the CSS variable injected by `<Font cssVariable="--font-work-sans" />` from `astro:assets`)
 - Base `font-size: 16px` / `line-height: 26px`; `sm:` bumps to `18px` / `28px`
-- `p`, `blockquote`, `.prose` capped at `max-w-140`
+- `p`, `blockquote`, `.prose p`, `.prose ul` capped at `max-w-140`
 - `.prose a` / `.underline` — `text-underline-offset: 15%`; hover colour `text-amber-600`
 - `.prose h2` — `font-size: inherit`, bold, `mb-4`, no top margin
 - `.prose h3` — `font-size: inherit`, normal weight, `mb-4`, no top margin
