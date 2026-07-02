@@ -1,0 +1,70 @@
+{
+  "defs": {
+    "main": {
+      "description": "A physical location checkin on Foursquare/Swarm",
+      "key": "tid",
+      "record": {
+        "properties": {
+          "address": {
+            "description": "Formatted venue address, e.g. \"123 High Street, London, UK\"",
+            "maxLength": 500,
+            "type": "string"
+          },
+          "category": {
+            "description": "Primary Foursquare venue category, e.g. \"Coffee Shop\"",
+            "maxLength": 100,
+            "type": "string"
+          },
+          "createdAt": {
+            "description": "ISO 8601 timestamp of the checkin",
+            "format": "datetime",
+            "type": "string"
+          },
+          "location": {
+            "description": "The Foursquare place where the checkin occurred",
+            "ref": "community.lexicon.location.fsq",
+            "type": "ref"
+          },
+          "photos": {
+            "description": "Photos taken at the checkin, uploaded as PDS blobs",
+            "items": {
+              "ref": "#photo",
+              "type": "ref"
+            },
+            "maxLength": 8,
+            "type": "array"
+          }
+        },
+        "required": [
+          "createdAt",
+          "location"
+        ],
+        "type": "object"
+      },
+      "type": "record"
+    },
+    "photo": {
+      "properties": {
+        "alt": {
+          "maxLength": 1000,
+          "type": "string"
+        },
+        "image": {
+          "accept": [
+            "image/jpeg",
+            "image/png",
+            "image/webp"
+          ],
+          "maxSize": 1000000,
+          "type": "blob"
+        }
+      },
+      "required": [
+        "image"
+      ],
+      "type": "object"
+    }
+  },
+  "id": "com.barryfrost.checkin",
+  "lexicon": 1
+}
