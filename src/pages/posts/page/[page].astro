@@ -1,7 +1,6 @@
 ---
 import Feed from '@/layouts/Feed.astro';
 import BlueskyCard from '@/components/posts/BlueskyCard.astro';
-import Divider from '@/components/Divider.astro';
 import { getFeedPages } from '@/lib/feed';
 
 export async function getStaticPaths() {
@@ -15,12 +14,7 @@ export async function getStaticPaths() {
 const { items, currentPage, totalPages } = Astro.props;
 ---
 <Feed title="Posts" currentPage={currentPage} totalPages={totalPages} basePath="/posts">
-  <div class="mb-4">
-    {(items as any[]).map((entry, i) => (
-      <>
-        <BlueskyCard entry={entry} />
-        {i < items.length - 1 && <Divider />}
-      </>
-    ))}
+  <div class="my-12 flex flex-col gap-y-8">
+    {(items as any[]).map((entry) => <BlueskyCard entry={entry} />)}
   </div>
 </Feed>
