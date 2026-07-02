@@ -7,6 +7,7 @@ export async function getStaticPaths() {
   const pages = await getFeedPages('articles', {
     filter: e => e.data.visibility !== 'unlisted',
     sort: (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+    pageSize: 10,
   });
   return pages.slice(1).map(({ page, items, totalPages }) => ({
     params: { page: String(page) },

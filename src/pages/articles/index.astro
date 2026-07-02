@@ -6,6 +6,7 @@ import { getFeedPages } from '@/lib/feed';
 const pages = await getFeedPages('articles', {
   filter: e => e.data.visibility !== 'unlisted',
   sort: (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+  pageSize: 10,
 });
 const { items, totalPages } = pages[0] ?? { items: [], totalPages: 1 };
 ---
