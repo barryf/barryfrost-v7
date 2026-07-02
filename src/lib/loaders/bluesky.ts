@@ -37,21 +37,29 @@ async function fetchPostFromAppView(uri: string): Promise<AppViewPostView | null
   return data.posts[0] ?? null;
 }
 
-async function extractImages(embed: BlueskyEmbed | undefined): Promise<{ urls: string[]; alts: string[] }> {
-  if (!embed) return { urls: [], alts: [] };
+async function extractImages(embed: BlueskyEmbed | undefined): Promise<{ urls: string[]; largeUrls: string[]; alts: string[] }> {
+  if (!embed) return { urls: [], largeUrls: [], alts: [] };
   const images = embed.$type === 'app.bsky.embed.images'
     ? embed.images
     : embed.$type === 'app.bsky.embed.recordWithMedia' && embed.media?.$type === 'app.bsky.embed.images'
       ? embed.media.images
       : undefined;
-  if (!images) return { urls: [], alts: [] };
+  if (!images) return { urls: [], largeUrls: [], alts: [] };
   const results = await Promise.all(images.map(async (img) => {
     const link = img.image?.ref?.$link;
     if (!link) return null;
-    return { url: await pdsImage(link, { width: 192, height: 192, fit: 'contain' }), alt: img.alt ?? '' };
+    const [url, largeUrl] = await Promise.all([
+      pdsImage(link, { width: 192, height: 192, fit: 'contain' }),
+      pdsImage(link, { width: 1600, fit: 'scale-down' }),
+    ]);
+    return { url, largeUrl, alt: img.alt ?? '' };
   }));
   const present = results.filter(r => r !== null);
-  return { urls: present.map(r => r.url), alts: present.map(r => r.alt) };
+  return {
+    urls: present.map(r => r.url),
+    largeUrls: present.map(r => r.largeUrl),
+    alts: present.map(r => r.alt),
+  };
 }
 
 function extractQuoteRef(embed: BlueskyEmbed | undefined): { uri: string; cid: string } | null {
@@ -130,7 +138,7 @@ export function blueskyLoader(): Loader {
         }
 
         const embed = value.embed as BlueskyEmbed | undefined;
-        const { urls: imageUrls, alts: imageAlts } = await extractImages(embed);
+        const { urls: imageUrls, largeUrls: imageLargeUrls, alts: imageAlts } = await extractImages(embed);
 
         const quoteRef = extractQuoteRef(embed);
         const quotedPost = quoteRef
@@ -146,6 +154,7 @@ export function blueskyLoader(): Loader {
             reply,
             uri: record.uri,
             imageUrls,
+            imageLargeUrls,
             imageAlts,
             quotedPost,
           },

@@ -121,7 +121,7 @@ All icons accept an optional `class` prop to override the default sizing/alignme
 
 Card components in `src/components/posts/`:
 - `ArticleCard` — title link, relative date with `title` attr
-- `BlueskyCard` — rich text, embedded images, quote posts via `BlueskyQuote`, relative date, Bluesky icon link, pdsls icon link
+- `BlueskyCard` — rich text, embedded image thumbnails (each links to a larger version), quote posts via `BlueskyQuote`, relative date, Bluesky icon link, pdsls icon link
 - `CheckInCard` — venue name/category/address (name links to OpenStreetMap when lat/lon available), optional photo(s), relative date, pdsls icon link, optional Beaconbits link
 - `FilmCard` — clickable poster linking to Popfeed, title, star rating, relative date, pdsls icon link
 - `BookCard` — clickable cover linking to BookHive, title, authors, "Started/Finished [relative date]", pdsls icon link
