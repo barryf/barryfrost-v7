@@ -22,59 +22,64 @@ And for Ruby developers, the [Sequel][] gem offers a collection of convenient me
 
 First, install the `sequel_pg` gem:
 
-    $ gem install sequel_pg
+```sh
+$ gem install sequel_pg
+```
 
 Next, create a table with a JSONB column and a GIN index and add some sample JSON data:
 
-    // Create a table with a JSONB column
-    CREATE TABLE posts (permalink VARCHAR(255) PRIMARY KEY, data JSONB);
+```sql
+-- Create a table with a JSONB column
+CREATE TABLE posts (permalink VARCHAR(255) PRIMARY KEY, data JSONB);
 
-    // Add an index using GIN
-    CREATE INDEX posts_gin ON posts USING GIN(data);
+-- Add an index using GIN
+CREATE INDEX posts_gin ON posts USING GIN(data);
 
-    // Insert a row with a JSON document
-    INSERT INTO posts VALUES ('/2017/10/my-post', '{
-        "title": "My post",
-        "content": "This is a new post that I have created.",
-        "category": [
-            "ruby",
-            "postgres"
-        ],
-        "published": "2017-10-10T16:05:10Z"
-    }');
-
+-- Insert a row with a JSON document
+INSERT INTO posts VALUES ('/2017/10/my-post', '{
+    "title": "My post",
+    "content": "This is a new post that I have created.",
+    "category": [
+        "ruby",
+        "postgres"
+    ],
+    "published": "2017-10-10T16:05:10Z"
+}');
+```
 
 And then in Ruby:
 
-    # Require the Sequel gem
-    require 'sequel'
+```rb
+# Require the Sequel gem
+require 'sequel'
 
-    # Include the Postgres JSON Operations extension
-    Sequel.extension(:pg_json_ops)
+# Include the Postgres JSON Operations extension
+Sequel.extension(:pg_json_ops)
 
-    # Connect to your Postgres instance via your database URL
-    DB = Sequel.connect(DATABASE_URL)
+# Connect to your Postgres instance via your database URL
+DB = Sequel.connect(DATABASE_URL)
 
-    # Ask Sequel to use the Postgres JSON extension with your database
-    DB.extension(:pg_json)
+# Ask Sequel to use the Postgres JSON extension with your database
+DB.extension(:pg_json)
 
-    # Create a JSONB Operation object for the "data" jsonb column in our table
-    data = Sequel.pg_jsonb_op(:data)
+# Create a JSONB Operation object for the "data" jsonb column in our table
+data = Sequel.pg_jsonb_op(:data)
 
-    # Find posts containing title "My post"
-    DB[:posts].where(data.get_text('title') => 'My post')
+# Find posts containing title "My post"
+DB[:posts].where(data.get_text('title') => 'My post')
 
-    # Find posts where the category array has a "postgres" value
-    DB[:posts].where(data['category'].contains(['postgres']))
+# Find posts where the category array has a "postgres" value
+DB[:posts].where(data['category'].contains(['postgres']))
 
-    # Find posts where the first value in the category array is "ruby"
-    DB[:posts].where(data['category'].get_text(0) => 'ruby')
+# Find posts where the first value in the category array is "ruby"
+DB[:posts].where(data['category'].get_text(0) => 'ruby')
 
-    # Find posts which have a content key
-    DB[:posts].where(data.has_key?('content'))
+# Find posts which have a content key
+DB[:posts].where(data.has_key?('content'))
 
-    # Find posts sorted by the date published
-    DB[:posts].order(data['published'])
+# Find posts sorted by the date published
+DB[:posts].order(data['published'])
+```
 
 Read the [Sequel documentation][sequeldocs] for further methods supported by the `pg_json_ops` extension.
 
