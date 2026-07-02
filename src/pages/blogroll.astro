@@ -13,10 +13,24 @@ const blogs = blogsRaw.slice().sort((a, b) => a.data.name.localeCompare(b.data.n
 publications.sort((a, b) => a.data.name.localeCompare(b.data.name));
 ---
 <Base title="Blogroll" description="Blogs and publications I follow">
-  <h1 class="mb-8 font-semibold text-black dark:text-white">Blogroll</h1>
+  <h1 class="mb-4 font-semibold text-black dark:text-white">Blogroll</h1>
+
+  <div class="mb-8 text-gray-600 dark:text-gray-400">
+    People with personal websites whose blogs I read and follow in
+    <a href="https://readwise.io/read" class="underline">Readwise Reader</a>.
+    {publications.length > 0 && (
+      <>
+        And
+        <a href="https://standard.site/" class="underline">Standard.site</a>
+        publications that I subscribe to in
+        <a href="https://standard-reader.app" class="underline">Standard Reader</a>.
+      </>
+    )}
+  </div>
 
   <section class="mb-4">
-    <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8">
+    <h2 class="mb-4 font-semibold text-black dark:text-white">Websites</h2>
+    <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-8">
       {blogs.map(blog => (
         <li class="py-2">
           <FollowCard
@@ -36,7 +50,7 @@ publications.sort((a, b) => a.data.name.localeCompare(b.data.name));
       <Divider />
       <section class="mb-4">
         <h2 class="mb-4 font-semibold text-black dark:text-white">Publications</h2>
-        <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8">
+        <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-8">
           {publications.map(s => (
             <li class="py-2">
               <FollowCard

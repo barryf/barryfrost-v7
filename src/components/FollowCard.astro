@@ -28,15 +28,15 @@ const imgClass = rounded === 'full'
   {!avatarUrl && (
     <div class="w-12 h-12 rounded-full bg-neutral-200 dark:bg-neutral-700 shrink-0" />
   )}
-  <div class="min-w-0">
+  <div class="min-w-0 leading-tight">
     <a href={profileUrl} class="p-name u-url underline" rel="noopener noreferrer">
       {name}
     </a>
     {handle && name !== handle && (
-      <p class="text-sm text-gray-500 dark:text-gray-400">@{handle}</p>
+      <p class="mt-0.5 text-sm text-gray-500 dark:text-gray-400">@{handle}</p>
     )}
     {description && (
-      <p class="text-sm text-gray-600 dark:text-gray-400 truncate">{description}</p>
+      <p class="mt-0.5 text-sm text-gray-600 dark:text-gray-400 truncate">{description}</p>
     )}
   </div>
 </div>
