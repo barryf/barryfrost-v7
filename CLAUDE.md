@@ -1,6 +1,6 @@
 # barryfrost.com v7
 
-Personal website for Barry Frost. Astro 6 + Tailwind CSS, deployed to Cloudflare Pages.
+Personal website for Barry Frost. Astro 6 + Tailwind CSS, deployed to Cloudflare Workers.
 See `PLAN.md` for full architecture, URL structure, and content type details.
 
 Live staging URL: `https://new.barryfrost.com` (v6 still serves `barryfrost.com`). Point XRay, feed readers, and other external checks at the staging URL.
