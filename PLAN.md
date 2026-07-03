@@ -149,7 +149,8 @@ Tailwind v4 with default palette. Work Sans as the primary font, self-hosted via
 - `p`, `blockquote`, `.prose p`, `.prose ul` capped at `max-w-140`
 - `.prose a` / `.underline` — `text-underline-offset: 15%`; hover colour `text-amber-600`
 - `.prose h2` — `font-size: inherit`, bold, `mb-4`, no top margin
-- `.prose h3` — `font-size: inherit`, normal weight, `mb-4`, no top margin
+- `.prose h3` — `font-size: inherit`, normal weight, italic, `mb-4`, no top margin
+- `.prose h4` — `font-size: inherit`, normal weight, `mb-4`, no top margin
 
 Dark mode is CSS-only via `prefers-color-scheme` — no JS toggle. Gray scale used throughout (`text-gray-*`) rather than `neutral`.
 

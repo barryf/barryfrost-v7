@@ -42,6 +42,14 @@ p, blockquote, .prose p, .prose ul {
 .prose h3 {
   font-size: inherit;
   font-weight: normal;
+  font-style: italic;
+  margin-top: 0;
+  @apply mb-4;
+}
+
+.prose h4 {
+  font-size: inherit;
+  font-weight: normal;
   margin-top: 0;
   @apply mb-4;
 }
