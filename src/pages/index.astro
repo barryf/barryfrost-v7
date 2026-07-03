@@ -9,6 +9,7 @@ import { HANDLE, pdslsUrl } from '@/lib/pds';
 import BlueskyQuote from '@/components/posts/BlueskyQuote.astro';
 import BlueskyIcon from '@/components/icons/BlueskyIcon.astro';
 import PdslsIcon from '@/components/icons/PdslsIcon.astro';
+import AuthorCard from '@/components/AuthorCard.astro';
 
 const [weeknotes, photos, blueskyPosts, articles, checkIns] = await Promise.all([
   getCollection('weeknotes'),
@@ -50,19 +51,25 @@ const latestPostUrl = latestPost ? `https://bsky.app/profile/${HANDLE}/post/${la
 <Base title="Barry Frost">
   <p class="mb-4">I'm a part-time software engineer and full-time technology leader with experience building teams, websites and apps. I live in a village in Hertfordshire, UK, with my wife and two sons.</p>
 
+  <div class="h-feed">
+  <AuthorCard />
+
   {latestWeeknote && (
     <>
       <Divider />
       <h2 class="font-semibold text-black dark:text-white">Latest Weeknote</h2>
-      <h3>
-        <a href={`/weeknotes/${latestWeeknote.id}`} class="underline">
-          {latestWeeknote.data.emoji && `${latestWeeknote.data.emoji} `}{latestWeeknote.data.title}</a>
-      </h3>
-      <p class="mb-1">
-        {latestWeeknote.body && (
-          <Fragment>{truncateBody(latestWeeknote.body)}</Fragment>
-        )}
-      </p>
+      <div class="h-entry">
+        <h3>
+          <a href={`/weeknotes/${latestWeeknote.id}`} class="p-name u-url underline">
+            {latestWeeknote.data.emoji && `${latestWeeknote.data.emoji} `}{latestWeeknote.data.title}</a>
+        </h3>
+        <p class="e-content mb-1">
+          {latestWeeknote.body && (
+            <Fragment>{truncateBody(latestWeeknote.body)}</Fragment>
+          )}
+        </p>
+        <time class="dt-published hidden" datetime={toISODate(latestWeeknote.data.date)}>{formatDateShort(latestWeeknote.data.date)}</time>
+      </div>
       <div class="mb-4 text-sm"><a href="/weeknotes" class="underline">All Weeknotes</a></div>
     </>
   )}
@@ -78,22 +85,25 @@ const latestPostUrl = latestPost ? `https://bsky.app/profile/${HANDLE}/post/${la
             if (!firstThumb) return null;
             const fullUrl = entry.data.thumbnailFullUrls?.[0] ?? firstThumb;
             return (
-              <a href={fullUrl} rel="noopener noreferrer" class="flex-none">
-                <img
-                  src={firstThumb}
-                  alt={entry.data.title}
-                  width="120"
-                  height="120"
-                  class:list={[
-                    "u-photo w-30 h-30 aspect-square object-cover",
-                    i === 0 && "rounded-l-xl",
-                    i === recentPhotos.length - 1 && "rounded-r-xl"
-                  ]}
-                  loading="eager"
-                  fetchpriority="high"
-                  decoding="async"
-                />
-              </a>
+              <div class="h-entry flex-none">
+                <a href={fullUrl} class="u-url" rel="noopener noreferrer">
+                  <img
+                    src={firstThumb}
+                    alt={entry.data.title}
+                    width="120"
+                    height="120"
+                    class:list={[
+                      "u-photo w-30 h-30 aspect-square object-cover",
+                      i === 0 && "rounded-l-xl",
+                      i === recentPhotos.length - 1 && "rounded-r-xl"
+                    ]}
+                    loading="eager"
+                    fetchpriority="high"
+                    decoding="async"
+                  />
+                </a>
+                <data class="p-name" value={entry.data.title}></data>
+              </div>
             );
           })}
         </div>
@@ -106,12 +116,14 @@ const latestPostUrl = latestPost ? `https://bsky.app/profile/${HANDLE}/post/${la
     <>
       <Divider />
       <h2 class="font-semibold text-black dark:text-white">Latest Post</h2>
-      <p class="e-content mb-1 wrap-break-word" set:html={latestPostHtml} />
-      {latestPost.data.quotedPost && <BlueskyQuote quotedPost={latestPost.data.quotedPost as any} />}
-      <div class="mb-1 text-sm text-gray-500 dark:text-gray-500">
-        <time class="mr-1" datetime={toISODate(new Date(latestPost.data.createdAt))} title={formatDateTitle(new Date(latestPost.data.createdAt))}>{formatDateShort(new Date(latestPost.data.createdAt))}</time>
-        <a href={latestPostUrl} class="underline" rel="noopener noreferrer" aria-label="View on Bluesky"><BlueskyIcon /></a>
-        <a class="ml-1 underline" href={pdslsUrl(latestPost.data.uri)} rel="noopener noreferrer" aria-label="View on PDSls"><PdslsIcon /></a>
+      <div class="h-entry">
+        <p class="e-content mb-1 wrap-break-word" set:html={latestPostHtml} />
+        {latestPost.data.quotedPost && <BlueskyQuote quotedPost={latestPost.data.quotedPost as any} />}
+        <div class="mb-1 text-sm text-gray-500 dark:text-gray-500">
+          <time class="dt-published mr-1" datetime={toISODate(new Date(latestPost.data.createdAt))} title={formatDateTitle(new Date(latestPost.data.createdAt))}>{formatDateShort(new Date(latestPost.data.createdAt))}</time>
+          <a href={latestPostUrl} class="u-url underline" rel="noopener noreferrer" aria-label="View on Bluesky"><BlueskyIcon /></a>
+          <a class="ml-1 underline" href={pdslsUrl(latestPost.data.uri)} rel="noopener noreferrer" aria-label="View on PDSls"><PdslsIcon /></a>
+        </div>
       </div>
       <div class="mb-4 text-sm">
         <a href="/posts" class="underline">All Posts</a>
@@ -125,7 +137,7 @@ const latestPostUrl = latestPost ? `https://bsky.app/profile/${HANDLE}/post/${la
       <h2 class="mb-1 font-semibold text-black dark:text-white">Featured Articles</h2>
       <ul class="mb-2 flex flex-col gap-2 leading-tight">
         {featuredArticles.map(entry => (
-          <li><a href={`/articles/${entry.id}`} class="underline">{entry.data.title}</a></li>
+          <li class="h-entry"><a href={`/articles/${entry.id}`} class="p-name u-url underline">{entry.data.title}</a></li>
         ))}
       </ul>
       <div class="mb-4 text-sm"><a href="/articles" class="underline">All Articles</a></div>
@@ -144,12 +156,12 @@ const latestPostUrl = latestPost ? `https://bsky.app/profile/${HANDLE}/post/${la
               : null);
           const date = new Date(entry.data.createdAt);
           return (
-            <li>
+            <li class="h-entry">
               {venueUrl
-                ? <a href={venueUrl} class="underline" rel="noopener noreferrer">{entry.data.venueName}</a>
-                : <span>{entry.data.venueName}</span>
+                ? <a href={venueUrl} class="p-name u-url underline" rel="noopener noreferrer">{entry.data.venueName}</a>
+                : <span class="p-name">{entry.data.venueName}</span>
               }
-              <span class="text-sm"> {formatDateShort(date)}</span>
+              <time class="dt-published text-sm text-gray-500 dark:text-gray-500" datetime={toISODate(date)} title={formatDateTitle(date)}> {formatDateShort(date)}</time>
             </li>
           );
         })}
@@ -157,4 +169,5 @@ const latestPostUrl = latestPost ? `https://bsky.app/profile/${HANDLE}/post/${la
       <div class="mb-4 text-sm"><a href="/check-ins" class="underline">All Check-ins</a></div>
     </>
   )}
+  </div>
 </Base>

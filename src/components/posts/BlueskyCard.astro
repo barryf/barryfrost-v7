@@ -5,6 +5,7 @@ import { HANDLE, pdslsUrl } from '@/lib/pds';
 import BlueskyQuote from '@/components/posts/BlueskyQuote.astro';
 import BlueskyIcon from '@/components/icons/BlueskyIcon.astro';
 import PdslsIcon from '@/components/icons/PdslsIcon.astro';
+import AuthorCard from '@/components/AuthorCard.astro';
 
 interface Props {
   entry: {
@@ -33,6 +34,7 @@ const blueskyUrl = `https://bsky.app/profile/${HANDLE}/post/${entry.id}`;
 const date = new Date(data.createdAt);
 ---
 <article class="h-entry" data-pagefind-body>
+  <AuthorCard />
   {data.reply && (
     <p class="text-sm text-gray-500 dark:text-gray-500 mb-1">
       In reply to <a class="u-in-reply-to underline" href={`https://bsky.app/profile/${data.reply.parentHandle}/post/${data.reply.parentRkey}`} rel="noopener noreferrer">@{data.reply.parentHandle}</a>

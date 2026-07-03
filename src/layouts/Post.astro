@@ -2,6 +2,7 @@
 import Base from './Base.astro';
 import { formatDateTitle, formatDateShort, toISODate } from '@/lib/dates';
 import Divider from '@/components/Divider.astro'
+import AuthorCard from '@/components/AuthorCard.astro';
 
 interface Props {
   title: string;
@@ -13,15 +14,13 @@ interface Props {
 }
 
 const { title, date, description, emoji, section, sectionHref } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
 ---
 <Base title={title} description={description}>
   <article class="h-entry" data-pagefind-body>
     <h1 class="p-name mb-4 text-black dark:text-white font-semibold">{emoji && `${emoji} `}{title}</h1>
-    <a class="p-author h-card hidden" data-pagefind-ignore rel="author" href="https://barryfrost.com">
-      <img class="u-photo" src="https://barryfrost.com/barryfrost.jpg" alt="Barry Frost" />
-      <span class="p-name">Barry Frost</span>
-      <span class="u-url">https://barryfrost.com</span>
-    </a>
+    <a class="u-url hidden" href={canonical}>{canonical}</a>
+    <AuthorCard />
     <div class="e-content prose dark:prose-invert max-w-none mb-4">
       <slot />
     </div>

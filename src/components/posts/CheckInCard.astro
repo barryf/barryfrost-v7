@@ -2,6 +2,7 @@
 import { formatDateShort, formatDateTitle, toISODate } from '@/lib/dates';
 import { pdslsUrl } from '@/lib/pds';
 import PdslsIcon from '@/components/icons/PdslsIcon.astro';
+import AuthorCard from '@/components/AuthorCard.astro';
 
 interface Props {
   entry: {
@@ -9,7 +10,10 @@ interface Props {
     data: {
       venueName: string;
       venueCategory?: string;
-      venueAddress?: string;
+      venueStreet?: string;
+      venueLocality?: string;
+      venueRegion?: string;
+      venuePostalCode?: string;
       latitude?: string;
       longitude?: string;
       rating?: number;
@@ -31,8 +35,15 @@ const mapUrl = data.latitude && data.longitude
   ? `https://www.openstreetmap.org/?mlat=${data.latitude}&mlon=${data.longitude}&zoom=17`
   : '';
 const date = new Date(data.createdAt);
+const addrParts = [
+  data.venueStreet && { cls: 'p-street-address', val: data.venueStreet },
+  data.venueLocality && { cls: 'p-locality', val: data.venueLocality },
+  data.venueRegion && { cls: 'p-region', val: data.venueRegion },
+  data.venuePostalCode && { cls: 'p-postal-code', val: data.venuePostalCode },
+].filter((p): p is { cls: string; val: string } => Boolean(p));
 ---
 <article class="h-entry">
+  <AuthorCard />
   {photos.length > 1 && (
     <div class="grid grid-cols-2 gap-1 mb-2">
       {photos.map((url, i) => (
@@ -42,7 +53,7 @@ const date = new Date(data.createdAt);
       ))}
     </div>
   )}
-  <div class:list={["p-checkin h-card mb-4", single && "flex gap-3 items-start"]}>
+  <div class:list={["p-checkin h-card", single && "flex gap-3 items-start"]}>
     {single && (
       <a href={fullUrls[0] ?? photos[0]} rel="noopener noreferrer">
         <img src={photos[0]} width="72" height="72" alt={data.venueName} loading="lazy" decoding="async" class="u-photo min-w-24 aspect-square object-cover rounded" />
@@ -50,20 +61,26 @@ const date = new Date(data.createdAt);
     )}
     <div>
       {mapUrl ? (
-        <a href={mapUrl} class="p-name underline" rel="noopener noreferrer">{data.venueName}</a>
+        <a href={mapUrl} class="p-name u-url underline" rel="noopener noreferrer">{data.venueName}</a>
       ) : (
         <span class="p-name">{data.venueName}</span>
       )}
       {data.venueCategory && <div class="text-sm text-gray-500 dark:text-gray-500">{data.venueCategory}</div>}
-      {data.venueAddress && <p class="p-street-address text-sm text-gray-500 dark:text-gray-500">{data.venueAddress}</p>}
+      {addrParts.length > 0 && (
+        <p class="p-adr h-adr text-sm text-gray-500 dark:text-gray-500">
+          {addrParts.map((part, i) => (
+            <Fragment>{i > 0 && ', '}<span class={part.cls}>{part.val}</span></Fragment>
+          ))}
+        </p>
+      )}
       {data.latitude && <data class="p-latitude" value={data.latitude} />}
       {data.longitude && <data class="p-longitude" value={data.longitude} />}
-      {data.rating !== undefined && <data class="p-rating hidden" value={data.rating} />}
-      <div class="">
-        <time class="dt-published text-sm text-gray-500 dark:text-gray-500" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatDateShort(date)}</time>
-        <a class="ml-1 underline" href={pdslsUrl(data.uri)} rel="noopener noreferrer" aria-label="View on PDSls"><PdslsIcon /></a>
-        {data.sourceUrl && <a href={data.sourceUrl} class="text-sm ml-2 underline" rel="noopener noreferrer">Beaconbits</a>}
-      </div>
     </div>
+  </div>
+  {data.rating !== undefined && <data class="p-rating hidden" value={data.rating} />}
+  <div class="mb-4">
+    <time class="dt-published text-sm text-gray-500 dark:text-gray-500" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatDateShort(date)}</time>
+    <a class="ml-1 underline" href={pdslsUrl(data.uri)} rel="noopener noreferrer" aria-label="View on PDSls"><PdslsIcon /></a>
+    {data.sourceUrl && <a href={data.sourceUrl} class="u-syndication text-sm ml-2 underline" rel="noopener noreferrer">Beaconbits</a>}
   </div>
 </article>

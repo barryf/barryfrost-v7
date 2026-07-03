@@ -2,6 +2,7 @@
 import { formatDateShort, formatDateTitle, toISODate } from '@/lib/dates';
 import { DID, pdslsUrl } from '@/lib/pds';
 import PdslsIcon from '@/components/icons/PdslsIcon.astro';
+import AuthorCard from '@/components/AuthorCard.astro';
 
 interface Props {
   entry: {
@@ -30,6 +31,7 @@ function toStars(rating: number): string {
 }
 ---
 <article class="h-entry flex gap-3">
+  <AuthorCard />
   {data.posterUrl && (
     <div class="p-item h-cite shrink-0">
       <a class="p-name u-url" href={filmUrl} rel="noopener noreferrer"><img
