@@ -1,0 +1,26 @@
+---
+interface Props {
+  class?: string;
+}
+const { class: className = 'w-4 h-4 flex-none' } = Astro.props;
+---
+<svg class={className} viewBox="0 0 316 307" fill="currentColor" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <title>Microformats</title>
+    <linearGradient id="bottom" y2="1">
+        <stop offset="0" stop-color="currentColor"/>
+        <stop offset="1" stop-color="currentColor"/>
+    </linearGradient>
+    <linearGradient id="middle" y2="1">
+        <stop offset="0" stop-color="currentColor"/>
+        <stop offset="1" stop-color="currentColor"/>
+    </linearGradient>
+    <linearGradient id="top" y2="1">
+        <stop offset="0" stop-color="currentColor"/>
+        <stop offset="1" stop-color="currentColor"/>
+    </linearGradient>
+    <g stroke="#fff" stroke-width="15">
+        <rect x="8" y="53" width="246" height="246" rx="51" fill="url(#bottom)"/>
+        <rect x="92" y="20" width="192" height="192" rx="39" fill="url(#middle)"/>
+        <rect x="176" y="8" width="132" height="132" rx="24" fill="url(#top)"/>
+    </g>
+</svg>

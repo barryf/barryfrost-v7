@@ -116,6 +116,8 @@ Icon components in `src/components/icons/`:
 - `BookHiveIcon.astro` — bookhive.buzz logo; used in the `/books` feed description and homepage Recent Media link
 - `PopfeedIcon.astro` — popfeed.social logo; used in the `/films` feed description and homepage Recent Media link
 - `RockskyIcon.astro` — rocksky music note icon; used in the homepage Recent Media link
+- `RSSIcon.astro`, `JSONFeedIcon.astro`, `MF2Icon.astro`, `StandardSiteIcon.astro` — feed format icons; used on `/follow`
+- `SifaIcon.astro` — sifa.id logo; used on `/follow` for the work profile link
 
 All icons accept an optional `class` prop to override the default sizing/alignment.
 
