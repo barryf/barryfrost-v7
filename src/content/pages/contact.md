@@ -5,7 +5,7 @@ description: How to contact Barry Frost.
 
 ### Email
 
-The best way of contacting me is usually by emailing my personal email address at [barry@barryfrost.com](mailto:barry@barryfrost.com).
+The best way of contacting me is emailing my personal email address at [barry@barryfrost.com](mailto:barry@barryfrost.com).
 
 ### iMessage
 
