@@ -65,12 +65,11 @@ const date = new Date(dateStr);
     <h2 class="leading-tight mb-1">
       {bookhiveUrl ? (
         <a href={bookhiveUrl} class="p-name u-url underline" rel="noopener noreferrer">
-          {data.title}
+          {data.title}<span class="sr-only">{isReading ? ' (reading)' : ' (read)'}</span>
         </a>
       ) : (
-        <span class="p-name">{data.title}</span>
+        <span class="p-name">{data.title}<span class="sr-only">{isReading ? ' (reading)' : ' (read)'}</span></span>
       )}
-      <span class="text-sm font-normal text-gray-500 dark:text-gray-500">{isReading ? ' (reading)' : ' (read)'}</span>
     </h2>
     <p class="text-sm text-gray-600 dark:text-gray-400">by {data.authors}</p>
     <div>
