@@ -1,5 +1,5 @@
 import type { Loader } from 'astro/loaders';
-import { fetchAllRecords, rkeyFromUri, resolveHandle, DID, PDS_HOST } from '@/lib/pds';
+import { fetchAllRecords, fetchWithRetry, rkeyFromUri, resolveHandle, DID, PDS_HOST } from '@/lib/pds';
 import { pdsImage } from '@/lib/image-store';
 import { mapLimit, RECORD_CONCURRENCY } from '@/lib/concurrency';
 
@@ -31,7 +31,7 @@ interface AppViewPostView {
 
 async function fetchPostFromAppView(uri: string): Promise<AppViewPostView | null> {
   const params = new URLSearchParams({ uris: uri });
-  const res = await fetch(`https://${APPVIEW_HOST}/xrpc/app.bsky.feed.getPosts?${params}`);
+  const res = await fetchWithRetry(`https://${APPVIEW_HOST}/xrpc/app.bsky.feed.getPosts?${params}`);
   if (!res.ok) return null;
   const data = await res.json() as { posts: AppViewPostView[] };
   return data.posts[0] ?? null;

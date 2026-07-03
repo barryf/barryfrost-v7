@@ -1,5 +1,5 @@
 import type { Loader } from 'astro/loaders';
-import { fetchAllRecords, rkeyFromUri, resolveHandle, didFromUri, DID, PDS_HOST } from '@/lib/pds';
+import { fetchAllRecords, fetchWithRetry, rkeyFromUri, resolveHandle, didFromUri, DID, PDS_HOST } from '@/lib/pds';
 import { remoteImage } from '@/lib/image-store';
 import { mapLimit, RECORD_CONCURRENCY } from '@/lib/concurrency';
 
@@ -9,7 +9,7 @@ interface DidDocument {
 
 async function resolvePdsHost(did: string): Promise<string> {
   try {
-    const res = await fetch(`https://plc.directory/${encodeURIComponent(did)}`);
+    const res = await fetchWithRetry(`https://plc.directory/${encodeURIComponent(did)}`);
     if (!res.ok) return PDS_HOST;
     const doc = await res.json() as DidDocument;
     const pdsService = doc.service?.find(s => s.id === '#atproto_pds');
@@ -54,7 +54,7 @@ export function subscriptionsLoader(): Loader {
           const pdsHost = await resolvePdsHost(subjectDid);
 
           const getRecordUrl = `https://${pdsHost}/xrpc/com.atproto.repo.getRecord?repo=${encodeURIComponent(subjectDid)}&collection=${encodeURIComponent(collection)}&rkey=${encodeURIComponent(pubRkey)}`;
-          const pubRes = await fetch(getRecordUrl);
+          const pubRes = await fetchWithRetry(getRecordUrl);
           if (!pubRes.ok) {
             logger.warn(`Could not fetch publication record for ${publicationUri}`);
             return;

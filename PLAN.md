@@ -44,6 +44,7 @@ Blogroll blogs come from `src/data/blogroll.json` (static JSON).
 Each PDS loader implements `Loader` from `astro/loaders`:
 - `store.clear()` at the start (full refresh each build)
 - Iterates `fetchAllRecords(collection, DID, PDS_HOST)` from `src/lib/pds.ts`
+- All PDS/atproto reads go through `fetchWithRetry` in `src/lib/pds.ts`, which retries transient failures (429/500/502/503/504 and network errors) with exponential backoff before giving up. `bsky.social`'s shared PDS intermittently 500s on valid requests, and without retries a single blip aborts the whole build.
 - Materialises images at build time via `pdsImage(cid, opts)` / `remoteImage(url, opts)` from `src/lib/image-store.ts` — fetches the source directly (PDS `getBlob` or remote URL), resizes with `sharp`, and stores as webp in R2. Returns an `images.barryfrost.com` URL on success, or the direct source URL on error/dev. Pass dimensions at 2× the CSS display size for retina (e.g. `width: 192` for a 96px display slot). Accepts `fit: 'cover'` (default) or `fit: 'contain'` to preserve aspect ratio.
 - Stores entries with `generateDigest(record.cid)` for change detection
 
