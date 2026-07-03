@@ -53,13 +53,13 @@ const addrParts = [
       ))}
     </div>
   )}
-  <div class:list={["p-checkin h-card", single && "flex gap-3 items-start"]}>
+  <div class:list={[single && "flex gap-3 items-start"]}>
     {single && (
-      <a href={fullUrls[0] ?? photos[0]} rel="noopener noreferrer">
+      <a href={fullUrls[0] ?? photos[0]} rel="noopener noreferrer" class="shrink-0">
         <img src={photos[0]} width="72" height="72" alt={data.venueName} loading="lazy" decoding="async" class="u-photo min-w-24 aspect-square object-cover rounded" />
       </a>
     )}
-    <div>
+    <div class="p-checkin h-card">
       {mapUrl ? (
         <a href={mapUrl} class="p-name u-url underline" rel="noopener noreferrer">{data.venueName}</a>
       ) : (

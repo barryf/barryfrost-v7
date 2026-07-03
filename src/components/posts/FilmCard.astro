@@ -30,11 +30,11 @@ function toStars(rating: number): string {
   return '★'.repeat(full) + (half ? '½' : '');
 }
 ---
-<article class="h-entry flex gap-3">
+<article class="h-review flex gap-3">
   <AuthorCard />
   {data.posterUrl && (
-    <div class="p-item h-cite shrink-0">
-      <a class="p-name u-url" href={filmUrl} rel="noopener noreferrer"><img
+    <span class="p-item h-cite shrink-0">
+      <a class="u-url" href={filmUrl} rel="noopener noreferrer"><img
         src={data.posterUrl}
         alt={`Poster for ${data.title}`}
         width="56"
@@ -43,11 +43,12 @@ function toStars(rating: number): string {
         loading="lazy"
         decoding="async"
       /></a>
-    </div>
+      <span class="p-name hidden">{data.title}</span>
+    </span>
   )}
   <div>
     <h2 class="leading-tight mb-1">
-      <a class="u-url underline inline-flex items-start gap-1" href={filmUrl} rel="noopener noreferrer">
+      <a class="p-name u-url underline inline-flex items-start gap-1" href={filmUrl} rel="noopener noreferrer">
         {data.title}
       </a>
     </h2>

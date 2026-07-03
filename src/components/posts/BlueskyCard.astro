@@ -49,7 +49,8 @@ const date = new Date(data.createdAt);
           <img
             src={url}
             alt={alts[i] ?? ''}
-            class="u-photo h-24 w-auto max-w-full rounded"
+            class="u-photo w-auto max-w-full rounded"
+            style="height:6rem"
             loading="lazy"
             decoding="async"
           />
@@ -59,7 +60,7 @@ const date = new Date(data.createdAt);
   )}
   <div class="mb-4 text-sm text-gray-500 dark:text-gray-500">
     <time class="dt-published mr-1" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatDateShort(date)}</time>
-    <a class="u-url underline" href={blueskyUrl} rel="noopener noreferrer" aria-label="View on Bluesky"><BlueskyIcon /></a>
+    <a class="u-syndication underline" href={blueskyUrl} rel="noopener noreferrer" aria-label="View on Bluesky"><BlueskyIcon /></a>
     <a class="ml-1 underline" href={pdslsUrl(data.uri)} rel="noopener noreferrer" aria-label="View on PDSls"><PdslsIcon /></a>
   </div>
 </article>

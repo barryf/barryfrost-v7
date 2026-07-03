@@ -10,8 +10,8 @@ interface Props {
 
 const { name, handle, avatarUrl, description, profileUrl, rounded = 'full' } = Astro.props;
 const imgClass = rounded === 'full'
-  ? 'w-12 h-12 rounded-full object-cover shrink-0'
-  : 'w-12 h-12 rounded object-cover shrink-0';
+  ? 'size-12 rounded-full object-cover shrink-0'
+  : 'size-12 rounded object-cover shrink-0';
 ---
 <div class="h-card flex gap-4 items-center">
   {avatarUrl && (
