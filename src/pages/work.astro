@@ -1,6 +1,5 @@
 ---
 import Base from '@/layouts/Base.astro';
-import Divider from '@/components/Divider.astro';
 import { formatMonthYear } from '@/lib/dates';
 import {
   getSelf,
@@ -49,29 +48,24 @@ const proficiencyLabel: Record<string, string> = {
   <div data-pagefind-body>
   <h1 class="mb-4 font-semibold text-black dark:text-white">Work</h1>
 
-  {(headline || locationStr) && (
-    <div class="mb-8 text-gray-600 dark:text-gray-400">
-      {headline && <p>{headline}</p>}
-      {locationStr && <p class="text-sm mt-1">{locationStr}</p>}
-    </div>
-  )}
+  <div class="mb-8 text-gray-600 dark:text-gray-400">
+    <p>My career history, education, projects, skills and languages, drawn from my <a href="https://sifa.id/p/barryfrost.com" class="underline">Sifa profile</a>.</p>
+    {headline && <p class="mt-2">{headline}</p>}
+    {locationStr && <p class="text-sm mt-1">{locationStr}</p>}
+  </div>
 
-  <Divider />
-
-  <section class="mb-4">
+  <section class="mb-8">
     <h2 class="font-semibold mb-4 text-black dark:text-white">Career</h2>
     <ul class="space-y-8">
       {positions.map(pos => (
         <li>
-          <div class="flex flex-wrap justify-between items-baseline gap-x-4 gap-y-1">
-            <div>
-              <span class="font-semibold">{pos.title}</span>
-              <span class="text-gray-600 dark:text-gray-400"> · {pos.company}</span>
-            </div>
-            <span class="text-sm text-gray-500 dark:text-gray-500 whitespace-nowrap">
-              {formatMonthYear(parseYM(pos.startedAt))}–{pos.endedAt ? formatMonthYear(parseYM(pos.endedAt)) : 'Present'}
-            </span>
+          <div>
+            <span class="font-semibold">{pos.title}</span>
+            <span class="text-gray-600 dark:text-gray-400"> · {pos.company}</span>
           </div>
+          <p class="text-sm text-gray-500 dark:text-gray-500">
+            {formatMonthYear(parseYM(pos.startedAt))}–{pos.endedAt ? formatMonthYear(parseYM(pos.endedAt)) : 'Present'}
+          </p>
           {pos.description && (
             <p class="mt-2 text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{pos.description.trim()}</p>
           )}
@@ -81,37 +75,30 @@ const proficiencyLabel: Record<string, string> = {
   </section>
 
   {education.length > 0 && (
-    <>
-      <Divider />
-      <section class="mb-4">
-        <h2 class="font-semibold mb-4 text-black dark:text-white">Education</h2>
-        <ul class="space-y-4">
+    <section class="mb-8">
+      <h2 class="font-semibold mb-4 text-black dark:text-white">Education</h2>
+      <ul class="space-y-4">
           {education.map(edu => (
             <li>
-              <div class="flex flex-wrap justify-between items-baseline gap-x-4 gap-y-1">
-                <span class="font-semibold">{edu.institution}</span>
-                {edu.endedAt && (
-                  <span class="text-sm text-gray-500 dark:text-gray-500 whitespace-nowrap">
-                    {formatMonthYear(parseYM(edu.endedAt))}
-                  </span>
-                )}
-              </div>
+              <span class="font-semibold">{edu.institution}</span>
               <p class="text-sm text-gray-700 dark:text-gray-300 mt-0.5">
                 {edu.degree}{edu.fieldOfStudy ? `, ${edu.fieldOfStudy}` : ''}
               </p>
+              {edu.endedAt && (
+                <p class="text-sm text-gray-500 dark:text-gray-500 mt-0.5">
+                  {formatMonthYear(parseYM(edu.endedAt))}
+                </p>
+              )}
             </li>
           ))}
         </ul>
-      </section>
-    </>
+    </section>
   )}
 
   {projects.length > 0 && (
-    <>
-      <Divider />
-      <section class="mb-4">
-        <h2 class="font-semibold mb-4 text-black dark:text-white">Projects</h2>
-        <ul class="space-y-4">
+    <section class="mb-8">
+      <h2 class="font-semibold mb-4 text-black dark:text-white">Projects</h2>
+      <ul class="space-y-4">
           {projects.map(proj => (
             <li>
               {proj.url ? (
@@ -125,16 +112,13 @@ const proficiencyLabel: Record<string, string> = {
             </li>
           ))}
         </ul>
-      </section>
-    </>
+    </section>
   )}
 
   {(skillsByCategory.technical.length > 0 || skillsByCategory.business.length > 0 || skillsByCategory.interpersonal.length > 0) && (
-    <>
-      <Divider />
-      <section class="mb-4">
-        <h2 class="font-semibold mb-4 text-black dark:text-white">Skills</h2>
-        <div class="space-y-4">
+    <section class="mb-8">
+      <h2 class="font-semibold mb-4 text-black dark:text-white">Skills</h2>
+      <div class="space-y-4">
           {skillsByCategory.technical.length > 0 && (
             <div>
               <h3 class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-500 mb-2">Technical</h3>
@@ -165,26 +149,22 @@ const proficiencyLabel: Record<string, string> = {
               </div>
             </div>
           )}
-        </div>
-      </section>
-    </>
+      </div>
+    </section>
   )}
 
   {languages.length > 0 && (
-    <>
-      <Divider />
-      <section class="mb-4">
-        <h2 class="font-semibold mb-4 text-black dark:text-white">Languages</h2>
-        <ul class="space-y-2">
+    <section class="mb-8">
+      <h2 class="font-semibold mb-4 text-black dark:text-white">Languages</h2>
+      <ul class="space-y-2">
           {languages.map(lang => (
-            <li class="flex justify-between text-sm">
+            <li class="text-sm">
               <span class="font-medium">{lang.name}</span>
-              <span class="text-gray-500 dark:text-gray-500">{proficiencyLabel[lang.proficiency] ?? lang.proficiency}</span>
+              <span class="text-gray-500 dark:text-gray-500"> · {proficiencyLabel[lang.proficiency] ?? lang.proficiency}</span>
             </li>
           ))}
         </ul>
-      </section>
-    </>
+    </section>
   )}
   </div>
 </Base>
