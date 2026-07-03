@@ -1,6 +1,9 @@
 interface Env {
   LISTENER: DurableObjectNamespace;
   DEPLOY_HOOK: string;
+  // Shared secret gating /pending-notification, which mutates state (drains the queue).
+  // Optional locally; when unset the route is unauthenticated.
+  NOTIFY_SECRET?: string;
 }
 
 const DID = 'did:plc:j5ksi3y4tdtbp7vpsxsfyask';
@@ -22,6 +25,36 @@ const WATCHED_COLLECTIONS = [
   'social.grain.photo',
   'app.rocksky.album',
 ];
+
+// Human-friendly noun per watched collection, for the deploy notification the build
+// pipeline pulls from /pending-notification. Keys mirror WATCHED_COLLECTIONS.
+const COLLECTION_NOUNS: Record<string, string> = {
+  'app.bsky.feed.post': 'post',
+  'app.beaconbits.beacon': 'beacon',
+  'com.barryfrost.checkin': 'check-in',
+  'social.popfeed.feed.review': 'review',
+  'buzz.bookhive.book': 'book',
+  'site.standard.document': 'document',
+  'site.standard.graph.subscription': 'subscription',
+  'social.grain.gallery': 'gallery',
+  'social.grain.gallery.item': 'gallery item',
+  'social.grain.photo': 'photo',
+  'app.rocksky.album': 'album',
+};
+
+const OPERATION_VERBS: Record<string, string> = {
+  create: 'New',
+  update: 'Updated',
+  delete: 'Removed',
+};
+
+// One-line description of a watched commit, e.g. "New book", "Updated post". Noun-level
+// only — no record parsing. Falls back to the raw collection for anything unmapped.
+function describeCommit(operation: string, collection: string): string {
+  const verb = OPERATION_VERBS[operation] ?? 'Changed';
+  const noun = COLLECTION_NOUNS[collection] ?? collection;
+  return `${verb} ${noun}`;
+}
 
 // Jetstream host — public Bluesky instance. Cursors are time-based, so any of the
 // four instances (jetstream{1,2}.us-{east,west}) is interchangeable on reconnect.
@@ -81,6 +114,9 @@ export class JetstreamListener implements DurableObject {
     if (url.pathname === '/ensure') {
       await this.ensure();
       return Response.json(await this.status());
+    }
+    if (url.pathname === '/pending-notification') {
+      return Response.json({ message: await this.drainSummary() });
     }
     return new Response(null, { status: 404 });
   }
@@ -177,6 +213,12 @@ export class JetstreamListener implements DurableObject {
     await this.state.storage.put('watchedCommitCount', count + 1);
     await this.state.storage.put('lastCommit', lastCommit);
 
+    // Accumulate a noun-level description the next successful build will announce. Durable
+    // so it survives DO eviction across the build window; drained by /pending-notification.
+    const pending = (await this.state.storage.get<string[]>('pendingSummary')) ?? [];
+    pending.push(describeCommit(operation, collection));
+    await this.state.storage.put('pendingSummary', pending);
+
     await this.scheduleDeploy();
   }
 
@@ -228,10 +270,22 @@ export class JetstreamListener implements DurableObject {
     }
   }
 
+  // Return the accumulated content descriptions as one message and clear the queue. Read
+  // and clear are atomic here — the DO is single-threaded, so no concurrent build can
+  // double-drain. Repeats within the window collapse to a "×N" suffix.
+  private async drainSummary(): Promise<string | null> {
+    const pending = (await this.state.storage.get<string[]>('pendingSummary')) ?? [];
+    if (pending.length === 0) return null;
+    await this.state.storage.put('pendingSummary', []);
+    const counts = new Map<string, number>();
+    for (const line of pending) counts.set(line, (counts.get(line) ?? 0) + 1);
+    return [...counts].map(([line, n]) => (n > 1 ? `${line} ×${n}` : line)).join('\n');
+  }
+
   // Observable snapshot returned by /ensure — reliable via curl and wrangler tail,
   // unlike the per-message console.logs which fire outside a tracked invocation.
   private async status(): Promise<Record<string, unknown>> {
-    const [cursor, watchedCommitCount, lastCommit, lastDeployAt, lastDeployStatus, deployPending] =
+    const [cursor, watchedCommitCount, lastCommit, lastDeployAt, lastDeployStatus, deployPending, pendingSummary] =
       await Promise.all([
         this.state.storage.get<number>('cursor'),
         this.state.storage.get<number>('watchedCommitCount'),
@@ -239,6 +293,7 @@ export class JetstreamListener implements DurableObject {
         this.state.storage.get<number>('lastDeployAt'),
         this.state.storage.get<number>('lastDeployStatus'),
         this.state.storage.get<boolean>('deployPending'),
+        this.state.storage.get<string[]>('pendingSummary'),
       ]);
     const iso = (ms: number | undefined) => (ms ? new Date(ms).toISOString() : null);
     return {
@@ -254,6 +309,7 @@ export class JetstreamListener implements DurableObject {
       deployPending: deployPending ?? false,
       lastDeployAt: iso(lastDeployAt),
       lastDeployStatus: lastDeployStatus ?? null,
+      pendingSummary: pendingSummary ?? [],
     };
   }
 }
@@ -262,6 +318,14 @@ export default {
   async fetch(req: Request, env: Env): Promise<Response> {
     const url = new URL(req.url);
     if (url.pathname === '/ensure') {
+      return stub(env).fetch(req);
+    }
+    if (url.pathname === '/pending-notification') {
+      // Gate the drain: it mutates state, so a random caller shouldn't be able to swallow
+      // a pending notification. When NOTIFY_SECRET is unset (local dev) the route is open.
+      if (env.NOTIFY_SECRET && req.headers.get('X-Notify-Secret') !== env.NOTIFY_SECRET) {
+        return new Response(null, { status: 401 });
+      }
       return stub(env).fetch(req);
     }
     return new Response(null, { status: 404 });
