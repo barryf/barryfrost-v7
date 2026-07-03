@@ -1,5 +1,6 @@
 ---
 import Base from '@/layouts/Base.astro';
+import AuthorCard from '@/components/AuthorCard.astro';
 import { getCollection } from 'astro:content';
 import { toISODate } from '@/lib/dates';
 
@@ -12,10 +13,7 @@ function titleWord(title: string): string {
 ---
 <Base title="Weeknotes">
   <div class="h-feed">
-    <div class="h-card p-author hidden">
-      <img class="u-photo" src={new URL('/barryfrost.jpg', Astro.url).href} alt="Barry Frost" width="192" height="192" />
-      <a class="p-name u-url" href={Astro.site?.href}>Barry Frost</a>
-    </div>
+    <AuthorCard />
     <h1 class="mb-4 font-semibold text-black dark:text-white">Weeknotes</h1>
     <div class="mb-8 text-gray-600 dark:text-gray-400">
       Unstructured notes on what I've been up to each week, usually published on a Sunday evening.
@@ -29,6 +27,7 @@ function titleWord(title: string): string {
             <a href={`/weeknotes/${entry.id}`} class="u-url underline truncate">{titleWord(entry.data.title)}</a>
             <data class="p-name" value={entry.data.title}></data>
             <time class="dt-published hidden" datetime={toISODate(entry.data.date)}></time>
+            <AuthorCard />
           </span>
         ))}
       </div>
