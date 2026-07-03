@@ -64,6 +64,10 @@ const HEARTBEAT_MS = 60_000; // alarm cadence: keeps the DO alive past the 15-mi
 const DEBOUNCE_MS = 10_000; // coalesce a burst of commits into a single rebuild
 const MAX_WAIT_MS = 60_000; // cap: deploy even if commits keep arriving, so sustained writes can't starve a rebuild
 const CURSOR_BUFFER_US = 5_000_000; // replay 5s before the last event for gapless reconnects
+// Max age for the persisted cursor before it's considered poisoned and dropped (see
+// dropCursorIfStale). Jetstream can silently refuse to replay from a cursor that has aged
+// out of its retention window — accept()-ing the WebSocket upgrade but never sending data.
+const STALE_CONNECTION_MS = 5 * 60_000;
 
 interface JetstreamEvent {
   did: string;
@@ -130,9 +134,34 @@ export class JetstreamListener implements DurableObject {
   // Reconnect if needed, flush a durably-pending deploy, and reschedule the alarm.
   // Runs from both the liveness fetch and the alarm — same logic on every wake path.
   private async ensure(): Promise<void> {
+    await this.dropCursorIfStale();
     await this.connectIfNeeded();
     await this.maybeDeploy();
     await this.state.storage.setAlarm(Date.now() + HEARTBEAT_MS);
+  }
+
+  // The persisted cursor is updated on every received message (not just watched ones), so
+  // its age is a durable measure of "time since we last actually heard from Jetstream" —
+  // unlike in-memory connect timers, it isn't reset by reconnect churn (deploys, evictions,
+  // ordinary socket drops). If it's aged past STALE_CONNECTION_MS, Jetstream is likely
+  // refusing to replay from it (out of its retention window) while still silently accepting
+  // the upgrade, so drop it and force the next connect to start live.
+  private async dropCursorIfStale(): Promise<void> {
+    const cursor = await this.state.storage.get<number>('cursor');
+    if (!cursor) return;
+    const ageMs = Date.now() - Math.floor(cursor / 1000);
+    if (ageMs < STALE_CONNECTION_MS) return;
+    console.log(`cursor is ${Math.round(ageMs / 1000)}s old — dropping it and forcing a fresh connect`);
+    await this.state.storage.delete('cursor');
+    if (this.wsOpen && this.ws) {
+      try {
+        this.ws.close();
+      } catch {
+        // ignore
+      }
+      this.ws = null;
+      this.wsOpen = false;
+    }
   }
 
   private async connectIfNeeded(): Promise<void> {
