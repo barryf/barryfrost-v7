@@ -1,6 +1,7 @@
 ---
 import { formatDateShort, formatDateTitle, toISODate } from '@/lib/dates';
 import AuthorCard from '@/components/AuthorCard.astro';
+import StarIcon from '@/components/icons/StarIcon.astro';
 
 interface Props {
   entry: {
@@ -9,6 +10,7 @@ interface Props {
       title: string;
       date: Date;
       description?: string;
+      featured?: boolean;
     }
   }
 }
@@ -18,7 +20,7 @@ const { data } = entry;
 const url = `/articles/${entry.id}`;
 ---
 <li class="h-entry mb-4">
-  <a class="p-name u-url block underline" href={url}>{data.title}</a>
+  <a class="p-name u-url block underline" href={url}>{data.featured && (<><StarIcon class="mr-1 w-3 h-3 inline-block -translate-y-px" /><span class="sr-only">Featured: </span></>)}{data.title}</a>
   <time class="dt-published text-sm text-gray-500 dark:text-gray-500" datetime={toISODate(data.date)} title={formatDateTitle(data.date)}>{formatDateShort(data.date)}</time>
   <AuthorCard />
 </li>
