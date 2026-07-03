@@ -48,6 +48,10 @@ const OPERATION_VERBS: Record<string, string> = {
   delete: 'Removed',
 };
 
+// Still watched (rebuilds still fire) but excluded from the notification summary — too
+// frequent to be worth a Pushover per event (e.g. every track listened to on Rocksky).
+const SILENT_COLLECTIONS = new Set(['app.rocksky.album']);
+
 // One-line description of a watched commit, e.g. "New book", "Updated post". Noun-level
 // only — no record parsing. Falls back to the raw collection for anything unmapped.
 function describeCommit(operation: string, collection: string): string {
@@ -244,9 +248,12 @@ export class JetstreamListener implements DurableObject {
 
     // Accumulate a noun-level description the next successful build will announce. Durable
     // so it survives DO eviction across the build window; drained by /pending-notification.
-    const pending = (await this.state.storage.get<string[]>('pendingSummary')) ?? [];
-    pending.push(describeCommit(operation, collection));
-    await this.state.storage.put('pendingSummary', pending);
+    // Silent collections still rebuild the site but are excluded from the summary.
+    if (!SILENT_COLLECTIONS.has(collection)) {
+      const pending = (await this.state.storage.get<string[]>('pendingSummary')) ?? [];
+      pending.push(describeCommit(operation, collection));
+      await this.state.storage.put('pendingSummary', pending);
+    }
 
     await this.scheduleDeploy();
   }
