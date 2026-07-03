@@ -5,7 +5,7 @@ import { getCollection } from 'astro:content';
 import { formatDateShort, formatDateTitle, toISODate } from '@/lib/dates';
 import { truncateBody } from '@/lib/weeknotes';
 import { renderRichText } from '@/lib/richtext';
-import { HANDLE, pdslsUrl } from '@/lib/pds';
+import { DID, HANDLE, pdslsUrl } from '@/lib/pds';
 import BlueskyQuote from '@/components/posts/BlueskyQuote.astro';
 import BlueskyIcon from '@/components/icons/BlueskyIcon.astro';
 import PdslsIcon from '@/components/icons/PdslsIcon.astro';
@@ -84,11 +84,11 @@ const latestPostUrl = latestPost ? `https://bsky.app/profile/${HANDLE}/post/${la
           {recentPhotos.map((entry, i) => {
             const firstThumb = entry.data.thumbnailUrls[0];
             if (!firstThumb) return null;
-            const fullUrl = entry.data.thumbnailFullUrls?.[0] ?? firstThumb;
+            const grainUrl = `https://grain.social/profile/${DID}/gallery/${entry.data.galleryRkey}`;
             return (
               <div class="h-entry flex-none">
                 <AuthorCard />
-                <a href={fullUrl} class="u-url" rel="noopener noreferrer">
+                <a href={grainUrl} class="u-url" rel="noopener noreferrer">
                   <img
                     src={firstThumb}
                     alt={entry.data.title}

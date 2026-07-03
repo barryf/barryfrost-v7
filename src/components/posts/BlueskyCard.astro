@@ -60,7 +60,7 @@ const date = new Date(data.createdAt);
   )}
   <div class="mb-4 text-sm text-gray-500 dark:text-gray-500">
     <time class="dt-published mr-1" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatDateShort(date)}</time>
-    <a class="u-syndication underline" href={blueskyUrl} rel="noopener noreferrer" aria-label="View on Bluesky"><BlueskyIcon /></a>
+    <a class="u-url underline" href={blueskyUrl} rel="noopener noreferrer" aria-label="View on Bluesky"><BlueskyIcon /></a>
     <a class="ml-1 underline" href={pdslsUrl(data.uri)} rel="noopener noreferrer" aria-label="View on PDSls"><PdslsIcon /></a>
   </div>
 </article>
