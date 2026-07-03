@@ -16,7 +16,7 @@ const { entry } = Astro.props;
 const { data } = entry;
 const url = `/articles/${entry.id}`;
 ---
-<li class="mb-4">
+<li class="h-entry mb-4">
   <a class="p-name u-url block underline" href={url}>{data.title}</a>
   <time class="dt-published text-sm text-gray-500 dark:text-gray-500" datetime={toISODate(data.date)} title={formatDateTitle(data.date)}>{formatDateShort(data.date)}</time>
 </li>

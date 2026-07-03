@@ -1,7 +1,7 @@
 ---
 import Base from '@/layouts/Base.astro';
-import Divider from '@/components/Divider.astro';
 import { getCollection } from 'astro:content';
+import { toISODate } from '@/lib/dates';
 
 const allWeeknotes = await getCollection('weeknotes');
 allWeeknotes.sort((a, b) => b.data.week - a.data.week);
@@ -11,19 +11,27 @@ function titleWord(title: string): string {
 }
 ---
 <Base title="Weeknotes">
-  <h1 class="mb-4 font-semibold text-black dark:text-white">Weeknotes</h1>
-  <div class="mb-8 text-gray-600 dark:text-gray-400">
-    Unstructured notes on what I've been up to each week, usually published on a Sunday evening.
-  </div>
-  <div class="mb-4">
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-1">
-      {allWeeknotes.map(entry => (
-        <span class="flex items-center gap-1 py-1.5 rounded -mx-1.5 px-1.5 group">
-          <span class="font-mono text-gray-500 dark:text-gray-500 text-xs tabular-nums w-6 text-right shrink-0">{entry.data.week}</span>
-          <span class="text-base w-6 text-center shrink-0 leading-none">{entry.data.emoji}</span>
-          <a href={`/weeknotes/${entry.id}`} class="underline truncate">{titleWord(entry.data.title)}</a>
-        </span>
-      ))}
+  <div class="h-feed">
+    <div class="h-card p-author hidden">
+      <img class="u-photo" src={new URL('/barryfrost.jpg', Astro.url).href} alt="Barry Frost" width="192" height="192" />
+      <a class="p-name u-url" href={Astro.site?.href}>Barry Frost</a>
+    </div>
+    <h1 class="mb-4 font-semibold text-black dark:text-white">Weeknotes</h1>
+    <div class="mb-8 text-gray-600 dark:text-gray-400">
+      Unstructured notes on what I've been up to each week, usually published on a Sunday evening.
+    </div>
+    <div class="mb-4">
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-1">
+        {allWeeknotes.map(entry => (
+          <span class="h-entry flex items-center gap-1 py-1.5 rounded -mx-1.5 px-1.5 group">
+            <span class="font-mono text-gray-500 dark:text-gray-500 text-xs tabular-nums w-6 text-right shrink-0">{entry.data.week}</span>
+            <span class="text-base w-6 text-center shrink-0 leading-none">{entry.data.emoji}</span>
+            <a href={`/weeknotes/${entry.id}`} class="u-url underline truncate">{titleWord(entry.data.title)}</a>
+            <data class="p-name" value={entry.data.title}></data>
+            <time class="dt-published hidden" datetime={toISODate(entry.data.date)}></time>
+          </span>
+        ))}
+      </div>
     </div>
   </div>
 </Base>
