@@ -1,6 +1,8 @@
 ---
 import Base from '@/layouts/Base.astro';
 import { formatMonthYear } from '@/lib/dates';
+import Divider from '@/components/Divider.astro';
+import SifaIcon from '@/components/icons/SifaIcon.astro';
 import {
   getSelf,
   getPositions,
@@ -47,12 +49,19 @@ const proficiencyLabel: Record<string, string> = {
 <Base title="Work" description="Barry Frost's work history, skills and projects">
   <div data-pagefind-body>
   <h1 class="mb-4 font-semibold text-black dark:text-white">Work</h1>
+  <div class="mb-8">
+    My career history, education, projects, skills and languages, from my
+    <a href="https://sifa.id/p/barryfrost.com" class="font-semibold underline text-nowrap"><SifaIcon class="inline w-4 h-4 align-text-bottom mx-1" />Sifa</a> profile.
+  </div>
 
   <div class="mb-8 text-gray-600 dark:text-gray-400">
-    <p>My career history, education, projects, skills and languages, drawn from my <a href="https://sifa.id/p/barryfrost.com" class="underline">Sifa profile</a>.</p>
-    {headline && <p class="mt-2">{headline}</p>}
-    {locationStr && <p class="text-sm mt-1">{locationStr}</p>}
+    {headline && (
+      <h2 class="font-semibold mb-4 text-black dark:text-white">Headline</h2>
+      <p class="mb-4">{headline}</p>
+    )}
   </div>
+
+  <Divider />
 
   <section class="mb-8">
     <h2 class="font-semibold mb-4 text-black dark:text-white">Career</h2>
@@ -75,6 +84,7 @@ const proficiencyLabel: Record<string, string> = {
   </section>
 
   {education.length > 0 && (
+    <Divider />
     <section class="mb-8">
       <h2 class="font-semibold mb-4 text-black dark:text-white">Education</h2>
       <ul class="space-y-4">
@@ -95,7 +105,9 @@ const proficiencyLabel: Record<string, string> = {
     </section>
   )}
 
+  <!--
   {projects.length > 0 && (
+    <Divider />
     <section class="mb-8">
       <h2 class="font-semibold mb-4 text-black dark:text-white">Projects</h2>
       <ul class="space-y-4">
@@ -114,8 +126,10 @@ const proficiencyLabel: Record<string, string> = {
         </ul>
     </section>
   )}
+  -->
 
   {(skillsByCategory.technical.length > 0 || skillsByCategory.business.length > 0 || skillsByCategory.interpersonal.length > 0) && (
+    <Divider />
     <section class="mb-8">
       <h2 class="font-semibold mb-4 text-black dark:text-white">Skills</h2>
       <div class="space-y-4">
@@ -154,6 +168,7 @@ const proficiencyLabel: Record<string, string> = {
   )}
 
   {languages.length > 0 && (
+    <Divider />
     <section class="mb-8">
       <h2 class="font-semibold mb-4 text-black dark:text-white">Languages</h2>
       <ul class="space-y-2">
