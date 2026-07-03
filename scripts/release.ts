@@ -21,7 +21,7 @@ async function sendPushover(message: string, opts: { title?: string; priority?: 
       body: JSON.stringify({
         token: PUSHOVER_TOKEN,
         user: PUSHOVER_USER,
-        title: opts.title ?? 'barryfrost',
+        title: opts.title ?? 'barryfrost-v7',
         message,
         priority: opts.priority ?? 0,
       }),
