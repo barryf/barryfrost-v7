@@ -18,8 +18,7 @@ Personal website for Barry Frost — statically generated, IndieWeb-compliant, d
 | `articles` | `src/content/articles/` | Long-form posts; `.md` or `.mdx` |
 | `weeknotes` | `src/content/weeknotes/` | Weekly notes, published Sundays; `.md` or `.mdx` |
 | `pages` | `src/content/pages/` | Slash pages (about, colophon, etc.); `.md` or `.mdx` |
-| `travelblog` | `src/content/travelblog/` | Archived travel blog entries (2000–2001), one per day; `.md` or `.mdx` |
-| `travelblogMonths` | `src/content/travelblog-months/` | One file per month (`YYYY-MM.md`); frontmatter `countries` (array) + optional `intro` line. Drives the country list and blurb on each month page and the index |
+| `travelblog` | `src/content/travelblog/` | Archived travel blog (2000–2001), **one file per month** (`YYYY-MM.md`/`.mdx`). Frontmatter: `countries` (ISO 3166-1 alpha-2 codes) + optional `intro` line; body holds that month's posts under `###` date headings. `.mdx` where a month contains images |
 
 Content files are plain `.md` by default. Use `.mdx` when a file needs Astro components — e.g. `<Image />` from `astro:assets` for images that require Tailwind utility classes.
 
@@ -97,7 +96,7 @@ Paginated pages show `Title (Page N)` in both the h1 and the browser window titl
 | `/search` | Pagefind search |
 | `/{slug}` | Slash pages (about, colophon, etc.) |
 | `/travelblog` | Archived 2000–2001 travel blog — index listing each month with its countries and a one-line summary |
-| `/travelblog/{YYYY-MM}` | A month of entries grouped onto one page (e.g. `/travelblog/2001-08`), each dated entry deep-linkable via `#entry-{num}`; countries shown with flag emoji; prev/next month nav |
+| `/travelblog/{YYYY-MM}` | A month's posts on one page (e.g. `/travelblog/2001-08`), under `###` date headings; countries shown as flag + name; prev/next month nav |
 
 All type-specific list pages have `/page/{n}` pagination except `/weeknotes` (all on one page) and `/books` (Reading/Read split, first page only; Read continues to `/books/page/{n}`).
 
@@ -142,7 +141,8 @@ All `<time>` elements use `formatRelativeDate` for display with `title={formatDa
 - `formatDateTitle(date)` — for `title` attributes: short date for date-only values; `YYYY-MM-DD HH:MM:SS±HH:MM` for timestamped values, using Europe/London timezone.
 - `formatDateShort(date)` — "22 Apr 2026". Used as the `formatRelativeDate` return value and travelblog nav links.
 - `toISODate(date)` — ISO 8601 string for `datetime` attributes. Date-only values (midnight UTC) emit `YYYY-MM-DD`; timestamped values emit local Europe/London datetime with offset.
-- `formatMonthYear(date)` — "October 2000" (UTC). `monthKey(date)` — the `YYYY-MM` bucket a date falls in. `formatMonthKey("2000-10")` — "October 2000" from a key. `formatEntryDay(date)` — "Sat 14 Oct" for within-month travelblog entry headings. All UTC-based, used by the travelblog month pages.
+- `formatMonthYear(date)` — "October 2000" (UTC). `formatMonthKey("2000-10")` — "October 2000" from a travelblog month key. Both UTC-based, used by the travelblog month pages.
+- Travelblog country flags/names are derived from ISO codes in `src/lib/flags.ts` (`countryFlag`, `countryName` via regional-indicator symbols + `Intl.DisplayNames`).
 
 ## Styling
 
@@ -243,6 +243,8 @@ The site is a Cloudflare Worker serving static assets (`wrangler.toml` at repo r
 Build command: `npm run build` (`astro build` + `pagefind`). Deploy command: `npm run deploy` (`npx wrangler deploy` followed by `scripts/notify-pushover.ts`).
 
 The notification runs at the end of the deploy phase — after `wrangler deploy` returns, so it fires once the new version is actually live rather than at the end of the build. `scripts/notify-pushover.ts` POSTs a success notification to Pushover and exits silently if tokens are not set; the `&&` chain means a failed deploy sends no notification.
+
+`wrangler.toml` also declares `[build] command = "npm run build"`. wrangler runs this before both `deploy` and `versions upload`, so **PR-preview builds** (whose deploy command is a bare `npx wrangler versions upload`) produce `./dist` too — without it the preview upload fails with "assets.directory … does not exist". Production still builds via `release.ts`; the wrangler `[build]` is the safety net that also covers previews.
 
 Required build env vars (set in CF Workers Builds): `PUSHOVER_TOKEN`, `PUSHOVER_USER`, `R2_ACCOUNT_ID`, `R2_BUCKET`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `IMAGES_BASE_URL`
 

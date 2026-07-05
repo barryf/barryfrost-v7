@@ -1,6 +1,14 @@
 name = "barryfrost-v7"
 compatibility_date = "2026-05-01"
 
+# Build the static site before any upload. Production deploys build via
+# `npm run deploy` (release.ts), but PR-preview builds run `wrangler versions
+# upload` directly, which otherwise wouldn't produce ./dist. wrangler runs this
+# command before both `deploy` and `versions upload`, guaranteeing the assets
+# directory exists.
+[build]
+command = "npm run build"
+
 [assets]
 directory = "./dist"
 not_found_handling = "404-page"
