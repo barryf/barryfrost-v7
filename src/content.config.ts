@@ -43,18 +43,11 @@ const pages = defineCollection({
   }),
 });
 
+// One file per month (id = "YYYY-MM", e.g. "2001-08"). Frontmatter carries the
+// ISO 3166-1 alpha-2 country codes visited and a short intro line; the body
+// holds that month's posts under date headings.
 const travelblog = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: 'src/content/travelblog' }),
-  schema: z.object({
-    date: z.coerce.date(),
-  }),
-});
-
-// One file per month (id = "YYYY-MM") holding the countries visited and a
-// short intro line. Entries themselves live in the `travelblog` collection and
-// are grouped onto month pages at build time.
-const travelblogMonths = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: 'src/content/travelblog-months' }),
   schema: z.object({
     countries: z.array(z.string()),
     intro: z.string().optional(),
@@ -222,7 +215,6 @@ export const collections = {
   weeknotes,
   pages,
   travelblog,
-  travelblogMonths,
   blueskyPosts,
   'check-ins': checkIns,
   films,

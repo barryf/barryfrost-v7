@@ -1,28 +1,14 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '@/layouts/Base.astro';
-import { countryFlag } from '@/lib/flags';
-import { monthKey, formatMonthKey } from '@/lib/dates';
+import { countryFlag, countryName } from '@/lib/flags';
+import { formatMonthKey } from '@/lib/dates';
 
-const entries = await getCollection('travelblog');
-const months = await getCollection('travelblogMonths');
-
-const counts = new Map<string, number>();
-for (const entry of entries) {
-  const key = monthKey(entry.data.date);
-  counts.set(key, (counts.get(key) ?? 0) + 1);
-}
-
-const list = [...counts.keys()].sort().map((key) => ({
-  key,
-  title: formatMonthKey(key),
-  count: counts.get(key)!,
-  meta: months.find((m) => m.id === key)?.data ?? null,
-}));
-
-const uniqueCountries = new Set(
-  months.flatMap((m) => m.data.countries),
+const months = [...(await getCollection('travelblog'))].sort((a, b) =>
+  a.id.localeCompare(b.id),
 );
+
+const uniqueCountries = new Set(months.flatMap((m) => m.data.countries));
 ---
 <Base title="Travelblog">
   <article>
@@ -41,25 +27,24 @@ const uniqueCountries = new Set(
     </div>
 
     <p class="mt-6 text-sm text-gray-500 dark:text-gray-400">
-      {entries.length} entries · {uniqueCountries.size} countries · {list.length} months
+      {months.length} months · {uniqueCountries.size} countries
     </p>
 
     <ul class="mt-6 divide-y divide-neutral-100 dark:divide-neutral-800">
-      {list.map(({ key, title, count, meta }) => (
+      {months.map((month) => (
         <li class="py-4">
-          <div class="flex items-baseline justify-between gap-4">
-            <a href={`/travelblog/${key}`} class="font-semibold hover:underline">{title}</a>
-            <span class="shrink-0 text-sm text-gray-400 dark:text-gray-500">{count} {count === 1 ? 'entry' : 'entries'}</span>
-          </div>
-          {meta?.countries?.length ? (
+          <a href={`/travelblog/${month.id}`} class="font-semibold hover:underline">
+            {formatMonthKey(month.id)}
+          </a>
+          {month.data.countries.length ? (
             <p class="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-sm text-gray-500 dark:text-gray-400">
-              {meta.countries.map((country) => (
-                <span>{countryFlag(country)} {country}</span>
+              {month.data.countries.map((code) => (
+                <span>{countryFlag(code)} {countryName(code)}</span>
               ))}
             </p>
           ) : null}
-          {meta?.intro ? (
-            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">{meta.intro}</p>
+          {month.data.intro ? (
+            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">{month.data.intro}</p>
           ) : null}
         </li>
       ))}
