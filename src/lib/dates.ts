@@ -18,6 +18,30 @@ export function formatMonthYear(date: Date): string {
   return date.toLocaleDateString('en-GB', {
     month: 'long',
     year: 'numeric',
+    timeZone: 'UTC',
+  });
+}
+
+// "2000-10" — the YYYY-MM bucket a (midnight-UTC) date falls in.
+export function monthKey(date: Date): string {
+  const y = date.getUTCFullYear();
+  const m = String(date.getUTCMonth() + 1).padStart(2, '0');
+  return `${y}-${m}`;
+}
+
+// "October 2000" from a "2000-10" month key.
+export function formatMonthKey(key: string): string {
+  const [y, m] = key.split('-').map(Number);
+  return formatMonthYear(new Date(Date.UTC(y, m - 1, 1)));
+}
+
+// "Sat 14 Oct" — compact weekday + day + month for a within-month entry heading.
+export function formatEntryDay(date: Date): string {
+  return date.toLocaleDateString('en-GB', {
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+    timeZone: 'UTC',
   });
 }
 
