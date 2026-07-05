@@ -1,0 +1,97 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '@/layouts/Base.astro';
+import Divider from '@/components/Divider.astro';
+import { countryFlag } from '@/lib/flags';
+import {
+  monthKey,
+  formatMonthKey,
+  formatEntryDay,
+  formatDateTitle,
+  toISODate,
+} from '@/lib/dates';
+
+export async function getStaticPaths() {
+  const entries = [...(await getCollection('travelblog'))].sort(
+    (a, b) => a.data.date.getTime() - b.data.date.getTime(),
+  );
+  const months = await getCollection('travelblogMonths');
+
+  const groups = new Map<string, typeof entries>();
+  for (const entry of entries) {
+    const key = monthKey(entry.data.date);
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key)!.push(entry);
+  }
+
+  const keys = [...groups.keys()].sort();
+  return keys.map((key, i) => ({
+    params: { month: key },
+    props: {
+      monthKey: key,
+      entries: groups.get(key)!,
+      meta: months.find((m) => m.id === key)?.data ?? null,
+      prevKey: keys[i - 1] ?? null,
+      nextKey: keys[i + 1] ?? null,
+    },
+  }));
+}
+
+const { monthKey: key, entries, meta, prevKey, nextKey } = Astro.props;
+const title = formatMonthKey(key);
+
+const rendered = await Promise.all(
+  entries.map(async (entry) => ({ entry, Content: (await render(entry)).Content })),
+);
+---
+<Base title={`Travelblog — ${title}`}>
+  <div class="h-feed" data-pagefind-body>
+    <header class="mb-8">
+      <p class="text-sm text-gray-500 dark:text-gray-400">
+        <a href="/travelblog" class="hover:underline">Travelblog</a>
+      </p>
+      <h1 class="p-name mt-1 font-semibold text-black dark:text-white">{title}</h1>
+      {meta?.countries?.length ? (
+        <p class="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-sm text-gray-500 dark:text-gray-400">
+          {meta.countries.map((country) => (
+            <span class="p-location">{countryFlag(country)} {country}</span>
+          ))}
+        </p>
+      ) : null}
+      {meta?.intro ? (
+        <p class="mt-3 text-gray-600 italic dark:text-gray-400">{meta.intro}</p>
+      ) : null}
+    </header>
+
+    {rendered.map(({ entry, Content }, i) => (
+      <>
+        {i > 0 && <Divider />}
+        <article class="h-entry" id={`entry-${entry.id}`}>
+          <h2 class="mb-4 text-sm text-gray-500 dark:text-gray-400">
+            <a href={`#entry-${entry.id}`} class="hover:underline">
+              <time
+                class="dt-published"
+                datetime={toISODate(entry.data.date)}
+                title={formatDateTitle(entry.data.date)}
+              >
+                {formatEntryDay(entry.data.date)}
+              </time>
+            </a>
+          </h2>
+          <div class="e-content prose dark:prose-invert max-w-none">
+            <Content />
+          </div>
+        </article>
+      </>
+    ))}
+
+    <nav class="mt-10 flex justify-between gap-4 border-t border-neutral-100 pt-6 text-sm dark:border-neutral-800">
+      {prevKey ? (
+        <a href={`/travelblog/${prevKey}`} class="hover:underline">← {formatMonthKey(prevKey)}</a>
+      ) : <span />}
+      {nextKey ? (
+        <a href={`/travelblog/${nextKey}`} class="text-right hover:underline">{formatMonthKey(nextKey)} →</a>
+      ) : <span />}
+    </nav>
+  </div>
+</Base>

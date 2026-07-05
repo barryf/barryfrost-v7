@@ -18,7 +18,8 @@ Personal website for Barry Frost — statically generated, IndieWeb-compliant, d
 | `articles` | `src/content/articles/` | Long-form posts; `.md` or `.mdx` |
 | `weeknotes` | `src/content/weeknotes/` | Weekly notes, published Sundays; `.md` or `.mdx` |
 | `pages` | `src/content/pages/` | Slash pages (about, colophon, etc.); `.md` or `.mdx` |
-| `travelblog` | `src/content/travelblog/` | Archived travel blog (2000–2001); `.md` or `.mdx` |
+| `travelblog` | `src/content/travelblog/` | Archived travel blog entries (2000–2001), one per day; `.md` or `.mdx` |
+| `travelblogMonths` | `src/content/travelblog-months/` | One file per month (`YYYY-MM.md`); frontmatter `countries` (array) + optional `intro` line. Drives the country list and blurb on each month page and the index |
 
 Content files are plain `.md` by default. Use `.mdx` when a file needs Astro components — e.g. `<Image />` from `astro:assets` for images that require Tailwind utility classes.
 
@@ -95,7 +96,8 @@ Paginated pages show `Title (Page N)` in both the h1 and the browser window titl
 | `/blogroll` | "Websites" (blogs followed via Readwise Reader) + "Publications" (Standard.site subscriptions via Standard Reader) |
 | `/search` | Pagefind search |
 | `/{slug}` | Slash pages (about, colophon, etc.) |
-| `/travelblog/{num}` | Travel blog entries |
+| `/travelblog` | Archived 2000–2001 travel blog — index listing each month with its countries and a one-line summary |
+| `/travelblog/{YYYY-MM}` | A month of entries grouped onto one page (e.g. `/travelblog/2001-08`), each dated entry deep-linkable via `#entry-{num}`; countries shown with flag emoji; prev/next month nav |
 
 All type-specific list pages have `/page/{n}` pagination except `/weeknotes` (all on one page) and `/books` (Reading/Read split, first page only; Read continues to `/books/page/{n}`).
 
@@ -140,6 +142,7 @@ All `<time>` elements use `formatRelativeDate` for display with `title={formatDa
 - `formatDateTitle(date)` — for `title` attributes: short date for date-only values; `YYYY-MM-DD HH:MM:SS±HH:MM` for timestamped values, using Europe/London timezone.
 - `formatDateShort(date)` — "22 Apr 2026". Used as the `formatRelativeDate` return value and travelblog nav links.
 - `toISODate(date)` — ISO 8601 string for `datetime` attributes. Date-only values (midnight UTC) emit `YYYY-MM-DD`; timestamped values emit local Europe/London datetime with offset.
+- `formatMonthYear(date)` — "October 2000" (UTC). `monthKey(date)` — the `YYYY-MM` bucket a date falls in. `formatMonthKey("2000-10")` — "October 2000" from a key. `formatEntryDay(date)` — "Sat 14 Oct" for within-month travelblog entry headings. All UTC-based, used by the travelblog month pages.
 
 ## Styling
 
@@ -173,7 +176,7 @@ Static search via [Pagefind](https://pagefind.app). After `astro build`, `pagefi
 **Scope:** Only pages with `data-pagefind-body`. Indexed content types:
 - Articles (`/articles/{slug}`) — individual pages via `Post.astro`
 - Weeknotes (`/weeknotes/{slug}`) — individual pages via `Post.astro`
-- Travelblog entries (`/travelblog/{num}`)
+- Travelblog months (`/travelblog/{YYYY-MM}`) — one indexed page per month
 - Slash pages (about, colophon, etc.) via `[...slug].astro`
 - Static pages: `/now`, `/work`, `/music`
 - Bluesky posts and photo galleries — indexed per card on feed/paginated pages (`data-pagefind-body` on each `BlueskyCard`/`PhotoCard` `<article>`); search results link to the feed page

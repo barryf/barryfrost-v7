@@ -50,6 +50,17 @@ const travelblog = defineCollection({
   }),
 });
 
+// One file per month (id = "YYYY-MM") holding the countries visited and a
+// short intro line. Entries themselves live in the `travelblog` collection and
+// are grouped onto month pages at build time.
+const travelblogMonths = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: 'src/content/travelblog-months' }),
+  schema: z.object({
+    countries: z.array(z.string()),
+    intro: z.string().optional(),
+  }),
+});
+
 const blueskyPosts = defineCollection({
   loader: blueskyLoader(),
   schema: z.object({
@@ -211,6 +222,7 @@ export const collections = {
   weeknotes,
   pages,
   travelblog,
+  travelblogMonths,
   blueskyPosts,
   'check-ins': checkIns,
   films,
