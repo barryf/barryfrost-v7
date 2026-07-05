@@ -16,16 +16,15 @@ export async function getStaticPaths() {
 
 const { entry, prev, next } = Astro.props;
 const { Content } = await render(entry);
-const title = formatMonthKey(entry.id);
+const month = formatMonthKey(entry.id);
 const { countries = [], intro } = entry.data;
 ---
-<Base title={`Travelblog — ${title}`}>
+<Base title={`Travelblog: ${month}`}>
   <article class="h-entry" data-pagefind-body>
     <header class="mb-8">
-      <p class="text-sm text-gray-500 dark:text-gray-400">
-        <a href="/travelblog" class="hover:underline">Travelblog</a>
-      </p>
-      <h1 class="p-name mt-1 font-semibold text-black dark:text-white">{title}</h1>
+      <h1 class="p-name font-semibold text-black dark:text-white">
+        <a href="/travelblog" class="hover:underline">Travelblog</a>: {month}
+      </h1>
       {countries.length ? (
         <p class="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-sm text-gray-500 dark:text-gray-400">
           {countries.map((code) => (
@@ -38,17 +37,39 @@ const { countries = [], intro } = entry.data;
       ) : null}
     </header>
 
-    <div class="e-content prose dark:prose-invert max-w-none">
+    <div class="e-content travelblog-body prose dark:prose-invert max-w-none">
       <Content />
     </div>
 
-    <nav class="mt-10 flex justify-between gap-4 border-t border-neutral-100 pt-6 text-sm dark:border-neutral-800">
-      {prev ? (
-        <a href={`/travelblog/${prev.id}`} class="hover:underline">← {formatMonthKey(prev.id)}</a>
-      ) : <span />}
-      {next ? (
-        <a href={`/travelblog/${next.id}`} class="text-right hover:underline">{formatMonthKey(next.id)} →</a>
-      ) : <span />}
-    </nav>
+    {(prev || next) && (
+      <div class="my-8 flex gap-8 text-sm" data-pagefind-ignore>
+        {prev && (
+          <div>
+            <p class="mb-1 text-gray-500 dark:text-gray-500">Previous</p>
+            <a href={`/travelblog/${prev.id}`} class="underline">{formatMonthKey(prev.id)}</a>
+          </div>
+        )}
+        {next && (
+          <div>
+            <p class="mb-1 text-gray-500 dark:text-gray-500">Next</p>
+            <a href={`/travelblog/${next.id}`} class="underline">{formatMonthKey(next.id)}</a>
+          </div>
+        )}
+      </div>
+    )}
   </article>
 </Base>
+
+<style>
+  /* A ⁂ Divider between entries: each date heading after the first is preceded
+     by the same mark the <Divider /> component renders (my-8 text-xl), so the
+     month body stays plain Markdown and dividers place themselves. */
+  .travelblog-body :global(h3:not(:first-of-type))::before {
+    content: '⁂';
+    display: block;
+    font-style: normal;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    margin-block: 2rem;
+  }
+</style>
