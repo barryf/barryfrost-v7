@@ -42,7 +42,7 @@ const addrParts = [
   data.venuePostalCode && { cls: 'p-postal-code', val: data.venuePostalCode },
 ].filter((p): p is { cls: string; val: string } => Boolean(p));
 ---
-<article class="h-entry">
+<article class="h-entry" data-pagefind-body>
   <AuthorCard />
   {photos.length > 1 && (
     <div class="grid grid-cols-2 gap-1 mb-2">
