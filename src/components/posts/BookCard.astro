@@ -32,7 +32,7 @@ const dateStr = isReading
   : (data.finishedAt ?? data.createdAt);
 const date = new Date(dateStr);
 ---
-<article class="h-entry flex gap-3">
+<article class="h-entry flex gap-3" data-pagefind-body>
   <AuthorCard />
   {data.coverUrl && (
     <div class="shrink-0">

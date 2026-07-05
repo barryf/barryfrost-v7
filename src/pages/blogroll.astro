@@ -13,6 +13,7 @@ const blogs = blogsRaw.slice().sort((a, b) => a.data.name.localeCompare(b.data.n
 publications.sort((a, b) => a.data.name.localeCompare(b.data.name));
 ---
 <Base title="Blogroll" description="Blogs and publications I follow">
+  <div data-pagefind-body>
   <h1 class="mb-4 font-semibold text-black dark:text-white">Blogroll</h1>
 
   <div class="mb-8 text-gray-600 dark:text-gray-400">
@@ -66,4 +67,5 @@ publications.sort((a, b) => a.data.name.localeCompare(b.data.name));
       </section>
     </>
   )}
+  </div>
 </Base>

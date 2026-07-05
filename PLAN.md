@@ -177,8 +177,11 @@ Static search via [Pagefind](https://pagefind.app). After `astro build`, `pagefi
 - Slash pages (about, colophon, etc.) via `[...slug].astro`
 - Static pages: `/now`, `/work`, `/music`
 - Bluesky posts and photo galleries — indexed per card on feed/paginated pages (`data-pagefind-body` on each `BlueskyCard`/`PhotoCard` `<article>`); search results link to the feed page
+- Books — indexed per card (`data-pagefind-body` on `BookCard`), covering both the Reading and Read lists
+- Films — indexed via `FilmFeed.astro` on the by-date view only (`data-pagefind-body` gated to `sort === 'date'`); the `/films/by-rating` view is skipped to avoid indexing every film twice
+- `/blogroll` — page content wrapped in `data-pagefind-body`
 
-Listing/paginated routes without card-level `data-pagefind-body` (books, films, check-ins) are excluded by omission.
+Check-ins are **deliberately excluded** — `/check-ins` is a map-first page and its venue/address text is high-volume and low search value, so `CheckInCard` carries no `data-pagefind-body`. Homepage, listing/index pages, `/search`, and `/404` are also excluded (curated/utility pages that would only duplicate content already indexed elsewhere).
 
 **UI:** A compact `<form action="/search" method="get">` in `SiteFooter.astro` submits to `/search?q=…`. The `/search` page reads the query from the URL on load, runs Pagefind, and renders results. Each result link appends `#:~:text=<query>` for native browser text highlighting.
 
