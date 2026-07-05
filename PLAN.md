@@ -18,7 +18,7 @@ Personal website for Barry Frost — statically generated, IndieWeb-compliant, d
 | `articles` | `src/content/articles/` | Long-form posts; `.md` or `.mdx` |
 | `weeknotes` | `src/content/weeknotes/` | Weekly notes, published Sundays; `.md` or `.mdx` |
 | `pages` | `src/content/pages/` | Slash pages (about, colophon, etc.); `.md` or `.mdx` |
-| `travelblog` | `src/content/travelblog/` | Archived travel blog (2000–2001), **one file per month** (`YYYY-MM.md`/`.mdx`). Frontmatter: `countries` (ISO 3166-1 alpha-2 codes) + optional `intro` line; body holds that month's posts under `###` date headings. `.mdx` where a month contains images |
+| `travelblog` | `src/content/travelblog/` | Archived travel blog (2000–2001), **one `.mdx` file per month** (`YYYY-MM.mdx`). Frontmatter: `countries` (ISO 3166-1 alpha-2 codes) + optional `intro` line; body holds that month's posts under `###` date headings with a `<Divider />` between entries (imported at the top of each file) |
 
 Content files are plain `.md` by default. Use `.mdx` when a file needs Astro components — e.g. `<Image />` from `astro:assets` for images that require Tailwind utility classes.
 

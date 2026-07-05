@@ -37,7 +37,7 @@ const { countries = [], intro } = entry.data;
       ) : null}
     </header>
 
-    <div class="e-content travelblog-body prose dark:prose-invert max-w-none">
+    <div class="e-content prose dark:prose-invert max-w-none">
       <Content />
     </div>
 
@@ -59,17 +59,3 @@ const { countries = [], intro } = entry.data;
     )}
   </article>
 </Base>
-
-<style>
-  /* A ⁂ Divider between entries: each date heading after the first is preceded
-     by the same mark the <Divider /> component renders (my-8 text-xl), so the
-     month body stays plain Markdown and dividers place themselves. */
-  .travelblog-body :global(h3:not(:first-of-type))::before {
-    content: '⁂';
-    display: block;
-    font-style: normal;
-    font-size: 1.25rem;
-    line-height: 1.75rem;
-    margin-block: 2rem;
-  }
-</style>
