@@ -240,7 +240,7 @@ Build command: `npm run build` (`astro build` + `pagefind`). Deploy command: `np
 
 The notification runs at the end of the deploy phase — after `wrangler deploy` returns, so it fires once the new version is actually live rather than at the end of the build. `scripts/notify-pushover.ts` POSTs a success notification to Pushover and exits silently if tokens are not set; the `&&` chain means a failed deploy sends no notification.
 
-`wrangler.toml` also declares `[build] command = "npm run build"`. wrangler runs this before both `deploy` and `versions upload`, so **PR-preview builds** (whose deploy command is a bare `npx wrangler versions upload`) produce `./dist` too — without it the preview upload fails with "assets.directory … does not exist". Production still builds via `release.ts`; the wrangler `[build]` is the safety net that also covers previews.
+`wrangler.toml` also declares `[build] command = "npm run build"`. wrangler runs this before both `deploy` and `versions upload`, so **PR-preview builds** (whose deploy command is a bare `npx wrangler versions upload`) produce `./dist` too — without it the preview upload fails with "assets.directory … does not exist". This `[build]` hook is the single source of the build for both paths: `release.ts` does *not* build explicitly before `wrangler deploy` (doing so built the whole site twice, ~2x deploy time), it relies on the hook firing during deploy just as previews do.
 
 Required build env vars (set in CF Workers Builds): `PUSHOVER_TOKEN`, `PUSHOVER_USER`, `R2_ACCOUNT_ID`, `R2_BUCKET`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `IMAGES_BASE_URL`
 

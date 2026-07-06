@@ -50,10 +50,12 @@ async function pendingSummary(): Promise<string | null> {
   }
 }
 
-let step = 'build';
+let step = 'deploy';
 try {
-  execSync('npm run build', { stdio: 'inherit' });
-  step = 'deploy';
+  // No explicit `npm run build` here: `wrangler deploy` runs the `[build]` hook in
+  // wrangler.toml (`npm run build`) before uploading, so building here too would build
+  // the whole site twice (~2x deploy time). The hook is the single build for both this
+  // path and PR-preview `wrangler versions upload`.
   execSync('npx wrangler deploy', { stdio: 'inherit' });
 
   // Syndicate articles/weeknotes to Standard.site — gated so it only runs in production
