@@ -4,6 +4,8 @@ import { formatDateTitle, formatDateShort, toISODate } from '@/lib/dates';
 import Divider from '@/components/Divider.astro'
 import AuthorCard from '@/components/AuthorCard.astro';
 
+import type { PUBLICATIONS } from '@/lib/standard-site';
+
 interface Props {
   title: string;
   date: Date;
@@ -11,12 +13,14 @@ interface Props {
   emoji?: string;
   section?: string;
   sectionHref?: string;
+  standardRkey?: string;
+  standardPublication?: keyof typeof PUBLICATIONS;
 }
 
-const { title, date, description, emoji, section, sectionHref } = Astro.props;
+const { title, date, description, emoji, section, sectionHref, standardRkey, standardPublication } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 ---
-<Base title={title} description={description}>
+<Base title={title} description={description} standardRkey={standardRkey} standardPublication={standardPublication}>
   <article class="h-entry" data-pagefind-body>
     <h1 class="p-name mb-4 text-black dark:text-white font-semibold">{emoji && `${emoji} `}{title}</h1>
     <a class="u-url hidden" href={canonical}>{canonical}</a>

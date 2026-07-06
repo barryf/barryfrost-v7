@@ -1,14 +1,20 @@
 ---
 import { Font } from 'astro:assets';
 import { cleanPathname } from '@/lib/url';
+import { documentUri, PUBLICATIONS } from '@/lib/standard-site';
 
 interface Props {
   title: string;
   description?: string;
+  /** rkey of this page's site.standard.document record — emits the verification link. */
+  standardRkey?: string;
+  /** Publication key whose site.standard.publication record this page belongs to (discovery). */
+  standardPublication?: keyof typeof PUBLICATIONS;
 }
 
-const { title, description = 'Personal website of Barry Frost' } = Astro.props;
+const { title, description = 'Personal website of Barry Frost', standardRkey, standardPublication } = Astro.props;
 const canonicalURL = new URL(cleanPathname(Astro.url.pathname), Astro.site);
+const publicationUri = standardPublication ? PUBLICATIONS[standardPublication].uri : '';
 ---
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -29,4 +35,6 @@ const canonicalURL = new URL(cleanPathname(Astro.url.pathname), Astro.site);
 <link rel="alternate" type="application/feed+json" title="Barry Frost — Articles (JSON Feed)" href="/articles/feed.json" />
 <link rel="alternate" type="application/rss+xml" title="Barry Frost — Weeknotes (RSS)" href="/weeknotes/feed.xml" />
 <link rel="alternate" type="application/feed+json" title="Barry Frost — Weeknotes (JSON Feed)" href="/weeknotes/feed.json" />
+{standardRkey && <link rel="site.standard.document" href={documentUri(standardRkey)} />}
+{publicationUri && <link rel="site.standard.publication" href={publicationUri} />}
 <Font cssVariable="--font-work-sans" preload />

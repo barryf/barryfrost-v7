@@ -18,7 +18,8 @@ const WATCHED_COLLECTIONS = [
   'com.barryfrost.checkin',
   'social.popfeed.feed.review',
   'buzz.bookhive.book',
-  'site.standard.document',
+  // NB: site.standard.document is intentionally NOT watched — the build writes those
+  // records itself (scripts/publish-standard-site.ts), so watching them would loop.
   'site.standard.graph.subscription',
   'social.grain.gallery',
   'social.grain.gallery.item',
@@ -34,7 +35,6 @@ const COLLECTION_NOUNS: Record<string, string> = {
   'com.barryfrost.checkin': 'check-in',
   'social.popfeed.feed.review': 'review',
   'buzz.bookhive.book': 'book',
-  'site.standard.document': 'document',
   'site.standard.graph.subscription': 'subscription',
   'social.grain.gallery': 'gallery',
   'social.grain.gallery.item': 'gallery item',

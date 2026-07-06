@@ -56,6 +56,23 @@ try {
   step = 'deploy';
   execSync('npx wrangler deploy', { stdio: 'inherit' });
 
+  // Syndicate articles/weeknotes to Standard.site — gated so it only runs in production
+  // (set PUBLISH_STANDARD_SITE=1 in the Workers Build env after launch). Runs after deploy
+  // so the .well-known files and per-page verification <link> tags are already live. The
+  // publisher is idempotent, so a failure here must not fail the deploy.
+  if (process.env.PUBLISH_STANDARD_SITE) {
+    step = 'publish-standard-site';
+    try {
+      execSync('npx tsx scripts/publish-standard-site.ts', { stdio: 'inherit' });
+    } catch (err) {
+      console.error('publish-standard-site failed (deploy unaffected)', err);
+      await sendPushover(`standard.site publish failed\n${err instanceof Error ? err.message : String(err)}`.slice(0, 900), {
+        title: 'barryfrost — standard.site publish failed',
+        priority: 1,
+      });
+    }
+  }
+
   const summary = await pendingSummary();
   if (summary) await sendPushover(summary);
 } catch (err) {
