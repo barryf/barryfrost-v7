@@ -261,7 +261,7 @@ A Cloudflare Worker that reacts to PDS changes in real time (seconds, not the ol
 
 **Hourly fallback rebuild.** A second `0 * * * *` cron POSTs the deploy hook unconditionally, direct from the top-level `scheduled()` handler (bypassing the DO). This is belt-and-braces: if an on-demand build fails for a reason the deploy hook can't see (e.g. the PDS is unreachable at build time), no new commit will re-trigger it, so the hourly cron rebuilds within the hour. Distinguished from the liveness ping via `event.cron`.
 
-Watched collections (`WATCHED_COLLECTIONS`): `app.bsky.feed.post`, `app.beaconbits.beacon`, `com.barryfrost.checkin`, `social.popfeed.feed.review`, `buzz.bookhive.book`, `site.standard.document`, `site.standard.graph.subscription`, `social.grain.gallery`, `social.grain.gallery.item`, `social.grain.photo`, `app.rocksky.album`
+Watched collections (`WATCHED_COLLECTIONS`): `app.bsky.feed.post`, `app.beaconbits.beacon`, `com.barryfrost.checkin`, `social.popfeed.feed.review`, `buzz.bookhive.book`, `site.standard.graph.subscription`, `social.grain.gallery`, `social.grain.gallery.item`, `social.grain.photo`, `app.rocksky.album`. `site.standard.document` is deliberately **not** watched — the build writes those records itself (`scripts/publish-standard-site.ts`), so watching them would loop.
 
 Required secrets: `DEPLOY_HOOK` (same Workers Builds deploy-hook URL as before).
 
@@ -356,3 +356,47 @@ Both CLIs accept `--no-git` (or `CI=true`) to skip git/gh operations — used by
 | `scripts/export-notes-csv.ts` | Export all v6 `post-type: note` records to CSV for review before Bluesky import |
 | `scripts/import-notes-bsky.ts` | Import approved notes from CSV to PDS as `app.bsky.feed.post` records |
 | `scripts/delete-imported-notes-bsky.ts` | Delete all records previously imported by `import-notes-bsky.ts` |
+| `scripts/create-standard-publications.ts` | One-time: create the two `site.standard.publication` records (`npm run standard:pubs`) |
+| `scripts/assign-standard-rkeys.ts` | One-time: write `standardRkey` TIDs into article/weeknote frontmatter (`npm run standard:rkeys`) |
+| `scripts/publish-standard-site.ts` | Upsert `site.standard.document` records + Bluesky card posts (`npm run publish:standard`) |
+
+## Standard.site Publishing
+
+Articles and weeknotes are syndicated to the AT Protocol long-form ecosystem
+([Standard.site](https://standard.site)) as `site.standard.document` records grouped under
+two `site.standard.publication` records (Articles at `/articles`, Weeknotes at `/weeknotes`).
+Local Markdown stays canonical; the PDS records are syndication targets.
+
+- **Content**: full body embedded via the community `at.markpub.markdown` lexicon, plus a
+  plaintext `textContent`; `description` is a hard truncation of the first 280 chars (never
+  generated). Weeknote titles are prefixed with the emoji.
+- **Config**: `src/lib/standard-site.ts` holds the DID + publication AT-URIs (single source
+  of truth). The `/.well-known/site.standard.publication/{articles,weeknotes}` endpoints and
+  the per-page `<link rel="site.standard.document">` verification tags derive from it.
+- **Identity/idempotency**: each post carries a stable TID `standardRkey` in frontmatter;
+  the publisher is `putRecord`-idempotent and treats the existing record's `bskyPostRef` as
+  the "already posted to Bluesky" guard, so re-runs never double-post.
+- **Bluesky**: first publish of a doc creates a companion post with a rich link card back to
+  the page; its strong-ref is stored in `bskyPostRef`.
+- **CI**: `scripts/release.ts` runs the publisher after a successful deploy, gated behind the
+  `PUBLISH_STANDARD_SITE` env var (unset on staging → no-op).
+
+### Launch (Standard.site) — run once, in order, after v7 replaces v6 at `barryfrost.com`
+
+Publications intentionally use canonical `barryfrost.com` URLs, and verification only
+resolves once v7 serves that domain — so do **not** start this on staging.
+
+1. `npm run standard:pubs` — creates the two publication records. Paste the printed AT-URIs
+   into `PUBLICATIONS.articles.uri` / `PUBLICATIONS.weeknotes.uri` in `src/lib/standard-site.ts`.
+2. `npm run standard:rkeys` — writes `standardRkey`s into all publishable (non-`unlisted`)
+   article/weeknote frontmatter. Review `git diff` and commit.
+3. Deploy, so `barryfrost.com` serves the `.well-known` files and per-page `<link>` tags.
+4. `npm run publish:standard -- --backfill` — publishes all documents. `--backfill` creates
+   **no** new Bluesky posts; it reuses an existing `bsky.app` URL from each file's
+   `syndication` frontmatter as `bskyPostRef` where present.
+5. Set `PUBLISH_STANDARD_SITE=1` in the production Cloudflare Workers Build env. From then on,
+   new/changed posts publish automatically on deploy and get a fresh Bluesky card post on
+   first publish.
+
+Validate a few records at [isitstandard.site](https://isitstandard.site) and
+[site-validator.fly.dev](https://site-validator.fly.dev).

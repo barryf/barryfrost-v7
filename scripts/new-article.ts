@@ -5,6 +5,7 @@ import {
   todayISO,
   renderArticleFrontmatter,
   writeStub,
+  genTid,
 } from './lib/scaffold.js';
 
 function parseArgs(argv: string[]): Record<string, string | true> {
@@ -44,7 +45,8 @@ const articlesDir = join(process.cwd(), 'src/content/articles');
 const filePath = join(articlesDir, `${slug}.md`);
 const branch = `content/article-${slug}`;
 
-const frontmatter = renderArticleFrontmatter({ title: title as string, date, tags });
+const standardRkey = genTid(new Date(date));
+const frontmatter = renderArticleFrontmatter({ title: title as string, date, tags, standardRkey });
 
 if (!noGit) {
   const currentBranch = execFileSync('git', ['rev-parse', '--abbrev-ref', 'HEAD'], { encoding: 'utf-8' }).trim();

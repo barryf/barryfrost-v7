@@ -6,6 +6,7 @@ import {
   nextWeekNumber,
   renderWeeknoteFrontmatter,
   writeStub,
+  genTid,
 } from './lib/scaffold.js';
 
 function parseArgs(argv: string[]): Record<string, string | true> {
@@ -49,7 +50,8 @@ const slug = `${week}-${slugify(topicStr)}`;
 const filePath = join(weeknotesDir, `${slug}.md`);
 const branch = `content/weeknote-${slug}`;
 
-const frontmatter = renderWeeknoteFrontmatter({ week, title, date, emoji, tags });
+const standardRkey = genTid(new Date(date));
+const frontmatter = renderWeeknoteFrontmatter({ week, title, date, emoji, tags, standardRkey });
 
 if (!noGit) {
   const currentBranch = execFileSync('git', ['rev-parse', '--abbrev-ref', 'HEAD'], { encoding: 'utf-8' }).trim();

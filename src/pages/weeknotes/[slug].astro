@@ -46,6 +46,8 @@ const { Content } = await render(entry);
   emoji={entry.data.emoji}
   section="Weeknotes"
   sectionHref="/weeknotes"
+  standardRkey={entry.data.standardRkey}
+  standardPublication="weeknotes"
 >
   <Content />
   <Fragment slot="nav">
