@@ -1,5 +1,40 @@
 import { existsSync, readdirSync, writeFileSync } from 'fs';
 
+// ─── TID generation ───────────────────────────────────────────────────────────
+// AT Protocol TIDs are 13-char base32-sortable-encoded 64-bit values:
+//   bits 63–10: microseconds since Unix epoch
+//   bits  9–0:  clock ID (disambiguates records sharing a timestamp)
+// Historically-dated TIDs place backfilled records in the correct chronological
+// position. Module-level state keeps a batch of generated TIDs strictly increasing.
+
+const BASE32 = '234567abcdefghijklmnopqrstuvwxyz';
+let _lastTidMicros = 0n;
+let _clockId = 0;
+
+export function genTid(date: Date = new Date()): string {
+  let micros = BigInt(date.getTime()) * 1000n;
+  if (micros <= _lastTidMicros) {
+    micros = _lastTidMicros;
+    _clockId++;
+    if (_clockId >= 1024) {
+      micros++;
+      _clockId = 0;
+    }
+  } else {
+    _clockId = 0;
+  }
+  _lastTidMicros = micros;
+
+  const tid = (micros << 10n) | BigInt(_clockId);
+  let result = '';
+  let n = tid;
+  for (let i = 0; i < 13; i++) {
+    result = BASE32[Number(n & 0x1fn)] + result;
+    n >>= 5n;
+  }
+  return result;
+}
+
 export function slugify(s: string): string {
   return s
     .toLowerCase()
@@ -32,6 +67,7 @@ export function renderArticleFrontmatter(opts: {
   title: string;
   date: string;
   tags?: string[];
+  standardRkey?: string;
 }): string {
   const lines = [
     `title: ${escapeYaml(opts.title)}`,
@@ -41,6 +77,7 @@ export function renderArticleFrontmatter(opts: {
     lines.push('tags:');
     for (const t of opts.tags) lines.push(`  - ${t}`);
   }
+  if (opts.standardRkey) lines.push(`standardRkey: ${opts.standardRkey}`);
   return lines.join('\n') + '\n';
 }
 
@@ -50,6 +87,7 @@ export function renderWeeknoteFrontmatter(opts: {
   date: string;
   emoji?: string;
   tags?: string[];
+  standardRkey?: string;
 }): string {
   const lines = [
     `title: ${escapeYaml(opts.title)}`,
@@ -61,6 +99,7 @@ export function renderWeeknoteFrontmatter(opts: {
     lines.push('tags:');
     for (const t of opts.tags) lines.push(`  - ${t}`);
   }
+  if (opts.standardRkey) lines.push(`standardRkey: ${opts.standardRkey}`);
   return lines.join('\n') + '\n';
 }
 

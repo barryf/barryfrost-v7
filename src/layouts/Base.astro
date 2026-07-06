@@ -3,17 +3,20 @@ import BaseHead from '@/components/BaseHead.astro';
 import SiteFooter from '@/components/SiteFooter.astro';
 import SiteHeader from '@/components/SiteHeader.astro';
 import '../styles/global.css';
+import type { PUBLICATIONS } from '@/lib/standard-site';
 
 interface Props {
   title: string;
   description?: string;
+  standardRkey?: string;
+  standardPublication?: keyof typeof PUBLICATIONS;
 }
 
-const { title, description } = Astro.props;
+const { title, description, standardRkey, standardPublication } = Astro.props;
 ---
 <html lang="en-GB">
   <head>
-    <BaseHead title={title} description={description} />
+    <BaseHead title={title} description={description} standardRkey={standardRkey} standardPublication={standardPublication} />
   </head>
   <body class="m-4 sm:m-8 bg-white dark:bg-black text-gray-600 dark:text-gray-400 font-sans antialiased">
     <header>
