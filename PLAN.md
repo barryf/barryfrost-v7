@@ -238,6 +238,8 @@ The site is a Cloudflare Worker serving static assets (`wrangler.toml` at repo r
 
 Build command: `npm run build` (`astro build` + `pagefind`). Deploy command: `npm run deploy` (`npx wrangler deploy` followed by `scripts/notify-pushover.ts`).
 
+`wrangler` is a pinned devDependency so `npx wrangler` resolves it from the restored dependencies cache rather than downloading it (~12s) on every build, and the version stays fixed rather than silently tracking the latest `4.x`.
+
 The notification runs at the end of the deploy phase — after `wrangler deploy` returns, so it fires once the new version is actually live rather than at the end of the build. `scripts/notify-pushover.ts` POSTs a success notification to Pushover and exits silently if tokens are not set; the `&&` chain means a failed deploy sends no notification.
 
 `wrangler.toml` also declares `[build] command = "npm run build"`. wrangler runs this before both `deploy` and `versions upload`, so **PR-preview builds** (whose deploy command is a bare `npx wrangler versions upload`) produce `./dist` too — without it the preview upload fails with "assets.directory … does not exist". This `[build]` hook is the single source of the build for both paths: `release.ts` does *not* build explicitly before `wrangler deploy` (doing so built the whole site twice, ~2x deploy time), it relies on the hook firing during deploy just as previews do.
