@@ -77,12 +77,10 @@ Paginated pages show `Title (Page N)` in both the h1 and the browser window titl
 | `/` | Curated homepage |
 | `/articles` | Articles list |
 | `/articles/{slug}` | Individual article |
-| `/articles/feed.xml` | RSS feed (articles, latest 10, full content) |
-| `/articles/feed.json` | JSON Feed v1.1 (same as RSS) |
 | `/weeknotes` | Weeknotes grid — all entries, sorted by week number descending |
 | `/weeknotes/{slug}` | Individual weeknote with "Previously this week" aside and prev/next nav |
-| `/weeknotes/feed.xml` | RSS feed (weeknotes, latest 10, full content) |
-| `/weeknotes/feed.json` | JSON Feed v1.1 (same as RSS) |
+| `/feed.xml` | Unified RSS feed (articles + weeknotes, latest 10, full content) |
+| `/feed.json` | Unified JSON Feed v1.1 (same as RSS) |
 | `/posts` | Bluesky posts list |
 | `/check-ins` | Check-ins list with Leaflet cluster map |
 | `/films` | Films grid, sorted by watched date; 40 per page |
@@ -100,7 +98,7 @@ Paginated pages show `Title (Page N)` in both the h1 and the browser window titl
 
 All type-specific list pages have `/page/{n}` pagination except `/weeknotes` (all on one page) and `/books` (Reading/Read split, first page only; Read continues to `/books/page/{n}`).
 
-Removed from v6: `/page/{n}` (unified feed), `/archives/`, `/tags/`, `/feed.xml`, `/feed.json`.
+Removed from v6: `/page/{n}` (unified paginated feed), `/archives/`, `/tags/`.
 
 ## Layouts & Components
 
@@ -206,16 +204,14 @@ Applied as static classes directly in Astro templates. No runtime JS required.
 
 ## Feeds
 
-Per-type RSS and JSON feeds for articles and weeknotes:
+A single unified RSS feed and JSON feed carry both articles and weeknotes, interleaved by date. One feed URL (matching v6) means existing subscribers keep receiving posts when v7 takes over the apex domain.
 
 | URL | Content |
 |---|---|
-| `/articles/feed.xml` | RSS — articles, latest 10, full HTML content |
-| `/articles/feed.json` | JSON Feed v1.1 — same content |
-| `/weeknotes/feed.xml` | RSS — weeknotes, latest 10, full HTML content |
-| `/weeknotes/feed.json` | JSON Feed v1.1 — same content |
+| `/feed.xml` | RSS — articles + weeknotes, latest 10, full HTML content |
+| `/feed.json` | JSON Feed v1.1 — same content |
 
-All feeds render full content via `AstroContainer`. `trailingSlash: false` passed to `@astrojs/rss`. Advertised via `<link rel="alternate">` in `BaseHead.astro`.
+`src/lib/feed-items.ts` (`getFeedItems`) is the shared source of truth: it merges both collections, filters `visibility: unlisted`, sorts by date descending, takes the latest 10, renders full content via `AstroContainer`, and **rewrites root-relative `src`/`href`/`srcset` URLs to absolute** so images (`astro:assets` `<Image>` and Markdown `![]()` both emit `/_astro/…` paths) resolve in feed readers. `trailingSlash: false` passed to `@astrojs/rss`. Advertised via `<link rel="alternate">` in `BaseHead.astro`; `/rss`, `/rss.xml`, `/index.xml`, `/feed` redirect to `/feed.xml` in `public/_redirects`.
 
 ## Favicon & Icons
 

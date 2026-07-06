@@ -5,6 +5,8 @@
 
 # RSS alias
 /rss /feed.xml 301
+/rss.xml /feed.xml 301
+/index.xml /feed.xml 301
 /feed /feed.xml 301
 
 # Travelblog

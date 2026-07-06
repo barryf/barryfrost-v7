@@ -31,10 +31,8 @@ const publicationUri = standardPublication ? PUBLICATIONS[standardPublication].u
 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <link rel="manifest" href="/site.webmanifest" />
-<link rel="alternate" type="application/rss+xml" title="Barry Frost — Articles (RSS)" href="/articles/feed.xml" />
-<link rel="alternate" type="application/feed+json" title="Barry Frost — Articles (JSON Feed)" href="/articles/feed.json" />
-<link rel="alternate" type="application/rss+xml" title="Barry Frost — Weeknotes (RSS)" href="/weeknotes/feed.xml" />
-<link rel="alternate" type="application/feed+json" title="Barry Frost — Weeknotes (JSON Feed)" href="/weeknotes/feed.json" />
+<link rel="alternate" type="application/rss+xml" title="Barry Frost (RSS)" href="/feed.xml" />
+<link rel="alternate" type="application/feed+json" title="Barry Frost (JSON Feed)" href="/feed.json" />
 {standardRkey && <link rel="site.standard.document" href={documentUri(standardRkey)} />}
 {publicationUri && <link rel="site.standard.publication" href={publicationUri} />}
 <Font cssVariable="--font-work-sans" preload />
