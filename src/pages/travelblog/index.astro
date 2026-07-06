@@ -7,16 +7,14 @@ import { formatMonthKey } from '@/lib/dates';
 const months = [...(await getCollection('travelblog'))].sort((a, b) =>
   a.id.localeCompare(b.id),
 );
-
-const uniqueCountries = new Set(months.flatMap((m) => m.data.countries));
 ---
 <Base title="Travelblog">
   <article>
     <h1 class="mb-4 font-semibold text-black dark:text-white">Travelblog</h1>
-    <div class="prose dark:prose-invert max-w-none">
+    <div class="mb-8 prose dark:prose-invert max-w-none">
       <p>
-        In 2000–2001 Sue and I spent a year travelling and working our way around
-        the world — a night in Bangkok, nine months living and working in New
+        In 2000–2001 I spent just over a year travelling and working my way around
+        the world. A couple of nights in Bangkok, nine months living and working in New
         Zealand, then Australia, Fiji, Hawaii and the west coast of the USA before
         heading home.
       </p>
@@ -26,22 +24,18 @@ const uniqueCountries = new Set(months.flatMap((m) => m.data.countries));
       </p>
     </div>
 
-    <p class="mt-6 text-sm text-gray-500 dark:text-gray-400">
-      {months.length} months · {uniqueCountries.size} countries
-    </p>
-
-    <ul class="mt-6 divide-y divide-neutral-100 dark:divide-neutral-800">
+    <ul class="mb-8">
       {months.map((month) => (
-        <li class="py-4">
-          <a href={`/travelblog/${month.id}`} class="font-semibold hover:underline">
+        <li class="mb-8">
+          <a href={`/travelblog/${month.id}`} class="underline">
             {formatMonthKey(month.id)}
           </a>
           {month.data.countries.length ? (
-            <p class="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-sm text-gray-500 dark:text-gray-400">
+            <div class="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-sm text-gray-500 dark:text-gray-400">
               {month.data.countries.map((code) => (
                 <span>{countryFlag(code)} {countryName(code)}</span>
               ))}
-            </p>
+            </div>
           ) : null}
           {month.data.intro ? (
             <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">{month.data.intro}</p>
