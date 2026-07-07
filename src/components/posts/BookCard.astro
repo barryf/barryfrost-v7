@@ -74,7 +74,7 @@ const date = new Date(dateStr);
     <p class="text-sm text-gray-600 dark:text-gray-400">by {data.authors}</p>
     <div>
       <time class="dt-published text-sm mr-1" datetime={toISODate(date)} title={formatDateTitle(date)}>{dateLabel} {formatDateShort(date)}</time>
-        <a class="underline" href={pdslsUrl(data.uri)} rel="noopener noreferrer" aria-label="View on PDSls"><PdslsIcon /></a>
+        <a class="underline text-gray-500 dark:text-gray-500" href={pdslsUrl(data.uri)} rel="noopener noreferrer" aria-label="View on PDSls"><PdslsIcon /></a>
     </div>
     <div class="p-read-of h-cite hidden">
       <span class="p-name">{data.title}</span>

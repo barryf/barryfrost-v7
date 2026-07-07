@@ -56,7 +56,7 @@ const date = new Date(data.createdAt);
       {data.title}
     </a>
     {data.description && <p class="e-content text-sm text-gray-600 dark:text-gray-400 mt-0.5">{data.description}</p>}
-    <div>
+    <div class="text-gray-500 dark:text-gray-500">
       <time class="dt-published text-sm mr-1" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatDateShort(date)}</time>
       <a class="underline" href={pdslsUrl(`at://${DID}/social.grain.gallery/${data.galleryRkey}`)} rel="noopener noreferrer" aria-label="View on PDSls"><PdslsIcon /></a>
     </div>

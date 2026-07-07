@@ -78,8 +78,8 @@ const addrParts = [
     </div>
   </div>
   {data.rating !== undefined && <data class="p-rating hidden" value={data.rating} />}
-  <div class="mb-4">
-    <time class="dt-published text-sm text-gray-500 dark:text-gray-500" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatDateShort(date)}</time>
+  <div class="mb-4 text-gray-500 dark:text-gray-500">
+    <time class="dt-published text-sm" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatDateShort(date)}</time>
     <a class="ml-1 underline" href={pdslsUrl(data.uri)} rel="noopener noreferrer" aria-label="View on PDSls"><PdslsIcon /></a>
     {data.sourceUrl && <a href={data.sourceUrl} class="u-syndication text-sm ml-2 underline" rel="noopener noreferrer">Beaconbits</a>}
   </div>
