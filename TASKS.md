@@ -98,7 +98,7 @@ path but pass it through `encodeURIComponent`; for the tag branch use
 mentions, and hashtags in posts and quoted posts must still render and resolve
 correctly (spot-check a few hrefs in devtools).
 
-### - [ ] A3. Escape venue data in the check-ins map popups
+### - [x] A3. Escape venue data in the check-ins map popups
 
 **File:** `src/components/CheckInMap.astro`
 

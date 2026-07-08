@@ -34,6 +34,11 @@ const { checkIns } = Astro.props;
 
 <script is:inline define:vars={{ checkIns }}>
   (function () {
+    function escapeHtml(s) {
+      return s.replace(/&/g, '&amp;').replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
     function loadCSS(href) {
       const el = document.createElement('link');
       el.rel = 'stylesheet';
@@ -73,8 +78,8 @@ const { checkIns } = Astro.props;
           year: 'numeric',
         });
         marker.bindPopup(
-          '<strong><a href="' + c.url + '">' + c.venueName + '</a></strong>' +
-          (c.venueCategory ? '<br><span style="font-size:0.85em">' + c.venueCategory + '</span>' : '') +
+          '<strong><a href="' + escapeHtml(c.url) + '">' + escapeHtml(c.venueName) + '</a></strong>' +
+          (c.venueCategory ? '<br><span style="font-size:0.85em">' + escapeHtml(c.venueCategory) + '</span>' : '') +
           '<br><small>' + date + '</small>'
         );
         cluster.addLayer(marker);
