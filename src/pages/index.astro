@@ -99,8 +99,8 @@ const latestPostUrl = latestPost ? `https://bsky.app/profile/${HANDLE}/post/${la
                       i === 0 && "rounded-l-xl",
                       i === recentPhotos.length - 1 && "rounded-r-xl"
                     ]}
-                    loading="eager"
-                    fetchpriority="high"
+                    loading={i < 2 ? "eager" : "lazy"}
+                    fetchpriority={i < 2 ? "high" : undefined}
                     decoding="async"
                   />
                 </a>

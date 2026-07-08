@@ -284,7 +284,7 @@ Enter jumps focus to main content.
 
 ## Phase D — Performance
 
-### - [ ] D1. Stop marking all 8 homepage photos as high priority
+### - [x] D1. Stop marking all 8 homepage photos as high priority
 
 **File:** `src/pages/index.astro` (Recent Photos section)
 
