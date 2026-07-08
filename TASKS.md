@@ -439,7 +439,7 @@ unlisted in dev to test, then revert the content change before committing.
 
 ## Phase G — Docs and dead code
 
-### - [ ] G1. Fix stale docs (PLAN.md, README.md, _redirects comment)
+### - [x] G1. Fix stale docs (PLAN.md, README.md, _redirects comment)
 
 - `PLAN.md` — "Adding a New PDS Content Type" step 5 references
   `cloudflare/pds-poller/src/index.ts`, `DIGEST_COLLECTIONS`/`HEAD_COLLECTIONS`,

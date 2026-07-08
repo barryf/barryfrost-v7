@@ -42,14 +42,14 @@ PDS records reference image blobs by CID. At build time these are fetched, resiz
 
 ### Static, no SSR
 
-`output: 'static'`, `build.format: 'file'` — everything compiles to flat `.html` files. Updates happen by rebuilding and redeploying via Cloudflare Workers Builds, which triggers on push to `main` or via a deploy hook from a PDS polling worker.
+`output: 'static'`, `build.format: 'file'` — everything compiles to flat `.html` files. Updates happen by rebuilding and redeploying via Cloudflare Workers Builds, which triggers on push to `main` or via a deploy hook from a PDS firehose listener worker.
 
 ## Stack
 
 - **Astro 7** — static site generator with content collections and custom loaders
 - **Tailwind CSS v4** — via `@tailwindcss/vite`, plus `@tailwindcss/typography` for prose; Work Sans as the primary font
 - **`@astrojs/rss`** — RSS and JSON Feed generation for articles and weeknotes
-- **Cloudflare Workers** — static asset hosting, PDS polling cron
+- **Cloudflare Workers** — static asset hosting, PDS firehose listener
 - **Pagefind** — static full-text search, indexed after build
 
 ## Commands
@@ -77,14 +77,14 @@ src/
     image-store.ts  # build-time R2/sharp image pipeline
   components/
     posts/          # per-type card components (ArticleCard, FilmCard, ...)
-    BlueskyIcon.astro
+    icons/          # BlueskyIcon, PdslsIcon, RSSIcon, ...
     Divider.astro
     SiteFooter.astro
   layouts/          # Base, FilmFeed, Post
   pages/            # routes
   styles/global.css
 cloudflare/
-  pds-poller/       # cron worker — triggers rebuilds on PDS changes
+  pds-firehose/     # Jetstream listener — triggers rebuilds on PDS changes
 scripts/            # scaffolding & one-off import scripts
 ```
 

@@ -236,15 +236,15 @@ All icon files in `public/` are derived from `public/barryfrost.jpg` (192×192 p
 
 The site is a Cloudflare Worker serving static assets (`wrangler.toml` at repo root, `[assets] directory = "./dist"`). Workers Builds triggers on push to `main` and on PRs (preview URLs posted as PR comments).
 
-Build command: `npm run build` (`astro build` + `pagefind`). Deploy command: `npm run deploy` (`npx wrangler deploy` followed by `scripts/notify-pushover.ts`).
+Build command: `npm run build` (`astro build` + `pagefind`). Deploy command: `npm run deploy` (`tsx scripts/release.ts`), a single build → deploy → Standard.site publish → Pushover orchestrator, so a failure in either the Astro build or `wrangler deploy` is caught and reported — the old `build && deploy && notify` chain went silent on a build failure.
 
 `wrangler` is a pinned devDependency so `npx wrangler` resolves it from the restored dependencies cache rather than downloading it (~12s) on every build, and the version stays fixed rather than silently tracking the latest `4.x`.
 
-The notification runs at the end of the deploy phase — after `wrangler deploy` returns, so it fires once the new version is actually live rather than at the end of the build. `scripts/notify-pushover.ts` POSTs a success notification to Pushover and exits silently if tokens are not set; the `&&` chain means a failed deploy sends no notification.
+`release.ts` runs `wrangler deploy`, then (gated behind `PUBLISH_STANDARD_SITE`) syndicates articles/weeknotes to Standard.site, then pulls a content summary from the pds-firehose Worker and only sends a Pushover notification if there is one — so hourly-cron and code-push rebuilds with no content changes stay silent. On any failure it always notifies (high priority) and exits non-zero so Cloudflare marks the build failed.
 
 `wrangler.toml` also declares `[build] command = "npm run build"`. wrangler runs this before both `deploy` and `versions upload`, so **PR-preview builds** (whose deploy command is a bare `npx wrangler versions upload`) produce `./dist` too — without it the preview upload fails with "assets.directory … does not exist". This `[build]` hook is the single source of the build for both paths: `release.ts` does *not* build explicitly before `wrangler deploy` (doing so built the whole site twice, ~2x deploy time), it relies on the hook firing during deploy just as previews do.
 
-Required build env vars (set in CF Workers Builds): `PUSHOVER_TOKEN`, `PUSHOVER_USER`, `R2_ACCOUNT_ID`, `R2_BUCKET`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `IMAGES_BASE_URL`
+Required build env vars (set in CF Workers Builds): `PUSHOVER_TOKEN`, `PUSHOVER_USER`, `NOTIFY_SECRET`, `R2_ACCOUNT_ID`, `R2_BUCKET`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `IMAGES_BASE_URL`
 
 ### PDS firehose listener — `cloudflare/pds-firehose`
 A Cloudflare Worker that reacts to PDS changes in real time (seconds, not the old 15-minute poll) by listening to the atproto firehose over a websocket.
@@ -342,7 +342,7 @@ Both CLIs accept `--no-git` (or `CI=true`) to skip git/gh operations — used by
 2. Add collection to `src/content.config.ts` with a Zod schema
 3. Create `src/components/posts/{Type}Card.astro`
 4. Add an index page (`src/pages/{type}/index.astro`) and paginated page (`src/pages/{type}/page/[page].astro`) using `getFeedPages` and the `Feed.astro` layout
-5. Add collection NSID to `DIGEST_COLLECTIONS` (small) or `HEAD_COLLECTIONS` (large) in `cloudflare/pds-poller/src/index.ts`, and add a label to the `PRETTY` map
+5. Add the collection NSID to `WATCHED_COLLECTIONS` and a label to `COLLECTION_NOUNS` in `cloudflare/pds-firehose/src/index.ts`
 6. Link from the homepage or footer as appropriate
 
 ## One-off Import Scripts

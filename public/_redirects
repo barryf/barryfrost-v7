@@ -1,4 +1,4 @@
-# Cloudflare Pages allows for:
+# Cloudflare Workers static assets allows for:
 # * 100 dynamic redirects (rules using wildcards * / :splat or :placeholders)
 # * 2,000 static redirects, for a combined total of 2,100
 # Remember: specify static redirects before wildcard redirects
