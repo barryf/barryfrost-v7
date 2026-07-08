@@ -58,7 +58,7 @@ function toStars(rating: number): string {
       </p>
     )}
     <div class="text-gray-500 dark:text-gray-400">
-      <time class="dt-published text-sm mr-1" datetime={toISODate(date)}>{formatDateShort(date)}</time>
+      <time class="dt-published text-sm mr-1" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatDateShort(date)}</time>
         <a class="underline" href={pdslsUrl(data.uri)} rel="noopener noreferrer" aria-label="View on PDSls"><PdslsIcon /></a>
     </div>
   </div>

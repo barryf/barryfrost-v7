@@ -462,7 +462,7 @@ unlisted in dev to test, then revert the content change before committing.
 **Verify:** re-read each edited section for internal consistency; `grep -rn
 pds-poller PLAN.md README.md` returns nothing.
 
-### - [ ] G2. Remove dead code
+### - [x] G2. Remove dead code
 
 - `src/pages/work.astro` — delete the commented-out Projects section
   (lines ~108–129), remove `getProjects` from the import and the `Promise.all`

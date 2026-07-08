@@ -89,7 +89,7 @@ Paginated pages show `Title (Page N)` in both the h1 and the browser window titl
 | `/books` | Books — "Reading" and "Read" sections; two-column at lg |
 | `/music` | Music — Top Albums grid, Top Artists ranked list with bars, Recently Played tracks; all aggregated at build time from scrobbles |
 | `/now` | Now page |
-| `/work` | CV — career, education, projects, skills from PDS records |
+| `/work` | CV — career, education, skills from PDS records |
 | `/blogroll` | "Websites" (blogs followed via Readwise Reader) + "Publications" (Standard.site subscriptions via Standard Reader) |
 | `/search` | Pagefind search |
 | `/{slug}` | Slash pages (about, colophon, etc.) |
