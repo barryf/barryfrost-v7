@@ -479,7 +479,7 @@ pds-poller PLAN.md README.md` returns nothing.
 **Verify:** `npm run dev` → `/work` and `/films` render correctly; films date
 shows full date on hover.
 
-### - [ ] G3. Fix hardcoded staging link in content
+### - [x] G3. Fix hardcoded staging link in content
 
 **File:** `src/content/weeknotes/242-gardens.md` line ~14 links to
 `https://new.barryfrost.com/weeknotes/237-fumes`. Change to relative:
