@@ -113,7 +113,7 @@ building the popup string.
 **Verify:** `npm run dev`, open `/check-ins`, click a few markers — popups render
 with working venue links.
 
-### - [ ] A4. Add `public/_headers` — security + caching headers
+### - [x] A4. Add `public/_headers` — security + caching headers
 
 **New file:** `public/_headers` (Cloudflare Workers static assets applies this
 file; same format as Pages). Contents:
