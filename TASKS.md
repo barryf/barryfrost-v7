@@ -321,7 +321,7 @@ still pass.
 
 ## Phase E — SEO / discovery
 
-### - [ ] E1. Sitemap + robots.txt
+### - [x] E1. Sitemap + robots.txt
 
 **Files:** `astro.config.mjs`, `package.json`, new `public/robots.txt`
 
