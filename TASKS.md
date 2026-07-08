@@ -215,7 +215,7 @@ Conventions bullet about Leaflet CDN) and `PLAN.md` ("Minimal JS" bullet).
 
 ## Phase C — Accessibility
 
-### - [ ] C1. Label the search inputs
+### - [x] C1. Label the search inputs
 
 **Files:** `src/components/SiteFooter.astro`, `src/pages/search.astro`
 
