@@ -27,6 +27,11 @@ const isDev = import.meta.env.DEV;
     var pagefind;
     var debounceTimer;
 
+    function escapeHtml(s) {
+      return s.replace(/&/g, '&amp;').replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
     async function loadPagefind() {
       if (pagefind || isDev) return;
       pagefind = await import('/pagefind/pagefind.js');
@@ -46,7 +51,7 @@ const isDev = import.meta.env.DEV;
       }
       var search = await pagefind.search(query);
       if (!search.results.length) {
-        resultsEl.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400">No results for “' + query + '”.</p>';
+        resultsEl.innerHTML = '<p class="text-sm text-gray-500 dark:text-gray-400">No results for “' + escapeHtml(query) + '”.</p>';
         return;
       }
       var hits = await Promise.all(search.results.map(function (r) { return r.data(); }));
@@ -54,7 +59,7 @@ const isDev = import.meta.env.DEV;
       var html = '<p class="text-sm text-gray-500 dark:text-gray-500 mb-8">' + hits.length + ' result' + (hits.length === 1 ? '' : 's') + '</p>';
       html += hits.map(function (hit) {
         var url = hit.url.replace(/\.html$/, '');
-        var title = (hit.meta && hit.meta.title) ? hit.meta.title : url;
+        var title = escapeHtml((hit.meta && hit.meta.title) ? hit.meta.title : url);
         return '<article class="mb-8">'
           + '<a href="' + url + fragment + '" class="underline">' + title + '</a>'
           + (hit.excerpt ? '<p class="text-gray-600 dark:text-gray-400 mt-1">' + hit.excerpt + '</p>' : '')
