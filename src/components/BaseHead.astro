@@ -46,4 +46,7 @@ const publicationUri = standardPublication ? PUBLICATIONS[standardPublication].u
 <link rel="alternate" type="application/feed+json" title="Barry Frost (JSON Feed)" href="/feed.json" />
 {standardRkey && <link rel="site.standard.document" href={documentUri(standardRkey)} />}
 {publicationUri && <link rel="site.standard.publication" href={publicationUri} />}
+{!import.meta.env.DEV && (
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="bcbce94f-c8e0-48fb-aead-d900a8db3a69"></script>
+)}
 <Font cssVariable="--font-work-sans" preload />
