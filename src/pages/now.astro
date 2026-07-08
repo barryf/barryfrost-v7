@@ -1,6 +1,7 @@
 ---
 import { statSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { execSync } from 'node:child_process';
 import { getCollection, getEntry, render } from 'astro:content';
 import Base from '@/layouts/Base.astro';
 import { formatDateShort, formatDateTitle, toISODate } from '@/lib/dates';
@@ -12,7 +13,12 @@ if (!nowEntry) throw new Error('src/content/pages/now.md not found');
 const { Content } = await render(nowEntry);
 
 const nowMdPath = resolve(process.cwd(), 'src/content/pages/now.md');
-const lastUpdated = statSync(nowMdPath).mtime;
+let lastUpdated = statSync(nowMdPath).mtime; // fallback: local dev / no git
+try {
+  const iso = execSync('git log -1 --format=%cI -- src/content/pages/now.md', { encoding: 'utf8' }).trim();
+  const d = new Date(iso);
+  if (iso && !Number.isNaN(d.getTime())) lastUpdated = d;
+} catch { /* keep fallback */ }
 
 const [position, self, bookEntries, checkInEntries, weeknoteEntries, filmEntries, albumEntries] = await Promise.all([
   getCurrentPosition(),

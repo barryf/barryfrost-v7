@@ -391,7 +391,7 @@ published_time + og:image) and the homepage (og:type website + og:image).
 
 ## Phase F — Behavioural bugs
 
-### - [ ] F1. Fix “Last updated” on /now (mtime is wrong in CI)
+### - [x] F1. Fix “Last updated” on /now (mtime is wrong in CI)
 
 **File:** `src/pages/now.astro`
 
