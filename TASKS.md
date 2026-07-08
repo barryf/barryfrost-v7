@@ -265,7 +265,7 @@ accessible names. Confirm MF2 unchanged by eyeballing the class attributes.
 text visibly lighter but layout unchanged; hover links in light mode are a
 darker amber.
 
-### - [ ] C4. Skip-to-content link
+### - [x] C4. Skip-to-content link
 
 **File:** `src/layouts/Base.astro`
 
