@@ -52,6 +52,7 @@ const latestPostUrl = latestPost ? `https://bsky.app/profile/${HANDLE}/post/${la
   <p class="mb-4">I'm a part-time software engineer and full-time technology leader with experience building teams, websites and apps. I live in a village in Hertfordshire, UK, with my wife and two sons.</p>
 
   <div class="h-feed">
+  <data class="p-name hidden">Latest content feed</data>
   <AuthorCard />
 
   {latestWeeknote && (
@@ -180,6 +181,7 @@ const latestPostUrl = latestPost ? `https://bsky.app/profile/${HANDLE}/post/${la
                 {entry.data.latitude && <data class="p-latitude" value={entry.data.latitude} />}
                 {entry.data.longitude && <data class="p-longitude" value={entry.data.longitude} />}
               </span>
+              <data class="p-name hidden">{entry.data.venueName}</data>
               <time class="dt-published text-sm text-gray-500 dark:text-gray-400" datetime={toISODate(date)} title={formatDateTitle(date)}> {formatDateShort(date)}</time>
             </li>
           );
