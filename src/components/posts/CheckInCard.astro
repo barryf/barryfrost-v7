@@ -47,7 +47,7 @@ const addrParts = [
   {photos.length > 1 && (
     <div class="grid grid-cols-2 gap-1 mb-2">
       {photos.map((url, i) => (
-        <a href={fullUrls[i] ?? url} rel="noopener noreferrer">
+        <a href={fullUrls[i] ?? url} rel="noopener noreferrer" aria-label={`Photo ${i + 1} at ${data.venueName}`}>
           <img src={url} width="96" height="96" alt="" loading="lazy" decoding="async" class="u-photo w-full aspect-square object-cover rounded" />
         </a>
       ))}

@@ -45,7 +45,7 @@ const date = new Date(data.createdAt);
   {images.length > 0 && (
     <div class="flex flex-wrap gap-2 mt-2 mb-1">
       {images.map((url, i) => (
-        <a href={largeImages[i] ?? url} class="block">
+        <a href={largeImages[i] ?? url} class="block" aria-label={alts[i] || 'Post image'}>
           <img
             src={url}
             alt={alts[i] ?? ''}

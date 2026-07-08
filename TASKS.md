@@ -226,7 +226,7 @@ aria-label is the right tool. Don't add a submit button — Enter submits.)
 **Verify:** `npm run dev`, inspect both inputs — accessible name present in
 devtools accessibility pane.
 
-### - [ ] C2. Accessible names for image-only links
+### - [x] C2. Accessible names for image-only links
 
 **Files:** `src/components/posts/CheckInCard.astro`, `src/components/posts/BlueskyCard.astro`
 
