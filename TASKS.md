@@ -416,7 +416,7 @@ the empty/NaN guard above handles that by keeping the mtime fallback.
 **Verify:** `npm run dev` → `/now` shows the date of the last commit that touched
 `now.md` (check with `git log -1 --format=%cI -- src/content/pages/now.md`).
 
-### - [ ] F2. Keep unlisted weeknotes out of prev/next and “Previously this week”
+### - [x] F2. Keep unlisted weeknotes out of prev/next and “Previously this week”
 
 **File:** `src/pages/weeknotes/[slug].astro`
 

@@ -7,10 +7,13 @@ import Divider from '@/components/Divider.astro';
 export async function getStaticPaths() {
   const weeknotes = await getCollection('weeknotes');
   const sorted = [...weeknotes].sort((a, b) => a.data.week - b.data.week);
+  const listed = sorted.filter(e => e.data.visibility !== 'unlisted');
 
-  return sorted.map((entry, i) => {
+  return sorted.map((entry) => {
     const weekNum = entry.data.week;
-    const onThisDay = sorted
+    const prev = [...listed].reverse().find(e => e.data.week < weekNum) ?? null;
+    const next = listed.find(e => e.data.week > weekNum) ?? null;
+    const onThisDay = listed
       .filter(e => {
         const diff = Math.abs(weekNum - e.data.week);
         return diff > 0 && diff % 52 === 0;
@@ -28,8 +31,8 @@ export async function getStaticPaths() {
       params: { slug: entry.id },
       props: {
         entry,
-        prev: sorted[i - 1] ?? null,
-        next: sorted[i + 1] ?? null,
+        prev,
+        next,
         onThisDay,
       },
     };
