@@ -298,7 +298,7 @@ This took "Syncing content" from 90s+ down to ~7s. The pattern for a loader: col
 
 ## Key Conventions
 
-- **Minimal JS** — `/check-ins` loads Leaflet + Leaflet.markercluster (CDN) for the cluster map with fullscreen toggle; all other pages are JS-free
+- **Minimal JS** — `/check-ins` bundles Leaflet + Leaflet.markercluster via npm for the cluster map with fullscreen toggle; all other pages are JS-free
 - **No runtime JS elsewhere** — MF2, dark mode, and layout are pure HTML/CSS
 - **Local Markdown is canonical** — PDS documents are syndication targets, not source of truth
 - **Images pre-generated at build time** — fetched from source (PDS `getBlob` / remote URL), resized with `sharp`, stored as webp in R2 (`images.barryfrost.com`); served statically with no runtime resizing. Dev/error fallback uses direct source URLs.

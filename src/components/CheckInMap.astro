@@ -32,114 +32,112 @@ const { checkIns } = Astro.props;
   </button>
 </div>
 
-<script is:inline define:vars={{ checkIns }}>
-  (function () {
-    function escapeHtml(s) {
-      return s.replace(/&/g, '&amp;').replace(/</g, '&lt;')
-              .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-    }
+<script type="application/json" id="check-in-data" set:html={JSON.stringify(checkIns).replace(/</g, '\\u003c')} />
 
-    function loadCSS(href) {
-      const el = document.createElement('link');
-      el.rel = 'stylesheet';
-      el.href = href;
-      document.head.appendChild(el);
-    }
+<script>
+  import L from 'leaflet';
+  import 'leaflet/dist/leaflet.css';
+  import 'leaflet.markercluster';
+  import 'leaflet.markercluster/dist/MarkerCluster.css';
+  import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
+  import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
+  import markerIcon from 'leaflet/dist/images/marker-icon.png';
+  import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
-    function loadScript(src, cb) {
-      const el = document.createElement('script');
-      el.src = src;
-      el.onload = cb;
-      document.head.appendChild(el);
-    }
+  L.Icon.Default.mergeOptions({
+    iconRetinaUrl: markerIcon2x.src ?? markerIcon2x,
+    iconUrl: markerIcon.src ?? markerIcon,
+    shadowUrl: markerShadow.src ?? markerShadow,
+  });
 
-    function initMap() {
-      const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const tileUrl = dark
-        ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-        : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+  const checkIns = JSON.parse(document.getElementById('check-in-data').textContent);
 
-      const map = L.map('check-in-map');
-      L.tileLayer(tileUrl, {
-        attribution:
-          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors ' +
-          '&copy; <a href="https://carto.com/attributions">CARTO</a>',
-        subdomains: 'abcd',
-        maxZoom: 20,
-      }).addTo(map);
+  function escapeHtml(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
 
-      const cluster = L.markerClusterGroup();
+  function initMap() {
+    const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const tileUrl = dark
+      ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+      : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
 
-      for (const c of checkIns) {
-        const marker = L.marker([parseFloat(c.latitude), parseFloat(c.longitude)]);
-        const date = new Date(c.createdAt).toLocaleDateString('en-GB', {
-          day: 'numeric',
-          month: 'long',
-          year: 'numeric',
-        });
-        marker.bindPopup(
-          '<strong><a href="' + escapeHtml(c.url) + '">' + escapeHtml(c.venueName) + '</a></strong>' +
-          (c.venueCategory ? '<br><span style="font-size:0.85em">' + escapeHtml(c.venueCategory) + '</span>' : '') +
-          '<br><small>' + date + '</small>'
-        );
-        cluster.addLayer(marker);
-      }
+    const map = L.map('check-in-map');
+    L.tileLayer(tileUrl, {
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors ' +
+        '&copy; <a href="https://carto.com/attributions">CARTO</a>',
+      subdomains: 'abcd',
+      maxZoom: 20,
+    }).addTo(map);
 
-      map.addLayer(cluster);
+    const cluster = L.markerClusterGroup();
 
-      if (checkIns.length > 0) {
-        map.fitBounds(cluster.getBounds(), { padding: [30, 30] });
-      } else {
-        map.setView([51.5, -0.1], 10);
-      }
-
-      var container = document.getElementById('check-in-map-container');
-      var mapEl = document.getElementById('check-in-map');
-      var btn = document.getElementById('check-in-map-fullscreen-btn');
-      var expandIcon = document.getElementById('check-in-map-expand-icon');
-      var collapseIcon = document.getElementById('check-in-map-collapse-icon');
-      var isFullscreen = false;
-
-      function enterFullscreen() {
-        isFullscreen = true;
-        container.style.cssText = 'position:fixed;inset:0;z-index:9999;margin:0;';
-        mapEl.style.height = '100dvh';
-        mapEl.style.borderRadius = '0';
-        expandIcon.style.display = 'none';
-        collapseIcon.style.display = '';
-        btn.title = 'Exit fullscreen';
-        btn.setAttribute('aria-label', 'Exit fullscreen');
-        document.body.style.overflow = 'hidden';
-        map.invalidateSize();
-      }
-
-      function exitFullscreen() {
-        isFullscreen = false;
-        container.style.cssText = '';
-        mapEl.style.height = '360px';
-        mapEl.style.borderRadius = '';
-        expandIcon.style.display = '';
-        collapseIcon.style.display = 'none';
-        btn.title = 'Toggle fullscreen';
-        btn.setAttribute('aria-label', 'Toggle fullscreen');
-        document.body.style.overflow = '';
-        map.invalidateSize();
-      }
-
-      btn.addEventListener('click', function () {
-        if (isFullscreen) exitFullscreen(); else enterFullscreen();
+    for (const c of checkIns) {
+      const marker = L.marker([parseFloat(c.latitude), parseFloat(c.longitude)]);
+      const date = new Date(c.createdAt).toLocaleDateString('en-GB', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
       });
-
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && isFullscreen) exitFullscreen();
-      });
+      marker.bindPopup(
+        '<strong><a href="' + escapeHtml(c.url) + '">' + escapeHtml(c.venueName) + '</a></strong>' +
+        (c.venueCategory ? '<br><span style="font-size:0.85em">' + escapeHtml(c.venueCategory) + '</span>' : '') +
+        '<br><small>' + date + '</small>'
+      );
+      cluster.addLayer(marker);
     }
 
-    loadCSS('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css');
-    loadCSS('https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css');
-    loadCSS('https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css');
-    loadScript('https://unpkg.com/leaflet@1.9.4/dist/leaflet.js', function () {
-      loadScript('https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js', initMap);
+    map.addLayer(cluster);
+
+    if (checkIns.length > 0) {
+      map.fitBounds(cluster.getBounds(), { padding: [30, 30] });
+    } else {
+      map.setView([51.5, -0.1], 10);
+    }
+
+    var container = document.getElementById('check-in-map-container');
+    var mapEl = document.getElementById('check-in-map');
+    var btn = document.getElementById('check-in-map-fullscreen-btn');
+    var expandIcon = document.getElementById('check-in-map-expand-icon');
+    var collapseIcon = document.getElementById('check-in-map-collapse-icon');
+    var isFullscreen = false;
+
+    function enterFullscreen() {
+      isFullscreen = true;
+      container.style.cssText = 'position:fixed;inset:0;z-index:9999;margin:0;';
+      mapEl.style.height = '100dvh';
+      mapEl.style.borderRadius = '0';
+      expandIcon.style.display = 'none';
+      collapseIcon.style.display = '';
+      btn.title = 'Exit fullscreen';
+      btn.setAttribute('aria-label', 'Exit fullscreen');
+      document.body.style.overflow = 'hidden';
+      map.invalidateSize();
+    }
+
+    function exitFullscreen() {
+      isFullscreen = false;
+      container.style.cssText = '';
+      mapEl.style.height = '360px';
+      mapEl.style.borderRadius = '';
+      expandIcon.style.display = '';
+      collapseIcon.style.display = 'none';
+      btn.title = 'Toggle fullscreen';
+      btn.setAttribute('aria-label', 'Toggle fullscreen');
+      document.body.style.overflow = '';
+      map.invalidateSize();
+    }
+
+    btn.addEventListener('click', function () {
+      if (isFullscreen) exitFullscreen(); else enterFullscreen();
     });
-  })();
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && isFullscreen) exitFullscreen();
+    });
+  }
+
+  initMap();
 </script>

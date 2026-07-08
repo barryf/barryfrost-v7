@@ -157,7 +157,7 @@ covers code only, which matches the README's wording. No README change needed.)
 
 ## Phase B — Self-host Leaflet (removes unpkg supply-chain risk + 5 external requests)
 
-### - [ ] B1. Bundle Leaflet + markercluster instead of loading from unpkg
+### - [x] B1. Bundle Leaflet + markercluster instead of loading from unpkg
 
 **Files:** `src/components/CheckInMap.astro`, `package.json`, `package-lock.json`
 
