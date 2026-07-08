@@ -366,7 +366,7 @@ exist; spot-check entries have no `.html` suffix; confirm no unlisted slug
 appears (`grep -c unlisted src/content/articles/*.md src/content/weeknotes/*.md`
 to find candidates first — if none are unlisted, note that and move on).
 
-### - [ ] E2. og:image and og:type=article
+### - [x] E2. og:image and og:type=article
 
 **Files:** `src/components/BaseHead.astro`, `src/layouts/Post.astro`,
 `src/layouts/Base.astro`
