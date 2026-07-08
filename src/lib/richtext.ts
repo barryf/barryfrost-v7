@@ -27,12 +27,12 @@ export function renderRichText(text: string, facets: Facet[]): string {
     const facetText = escapeHtml(decoder.decode(encoded.slice(byteStart, byteEnd)));
     const feature = facet.features[0];
 
-    if (feature?.$type === 'app.bsky.richtext.facet#link') {
-      html += `<a class="underline" href="${escapeAttr(feature.uri!)}" rel="nofollow noopener" target="_blank">${facetText}</a>`;
+    if (feature?.$type === 'app.bsky.richtext.facet#link' && feature.uri && isSafeUrl(feature.uri)) {
+      html += `<a class="underline" href="${escapeHtml(feature.uri)}" rel="nofollow noopener" target="_blank">${facetText}</a>`;
     } else if (feature?.$type === 'app.bsky.richtext.facet#mention') {
-      html += `<a class="underline" href="https://bsky.app/profile/${escapeAttr(feature.did!)}">${facetText}</a>`;
+      html += `<a class="underline" href="https://bsky.app/profile/${escapeHtml(encodeURIComponent(feature.did!))}">${facetText}</a>`;
     } else if (feature?.$type === 'app.bsky.richtext.facet#tag') {
-      html += `<a class="underline" href="https://bsky.app/hashtag/${escapeAttr(feature.tag!)}">${facetText}</a>`;
+      html += `<a class="underline" href="https://bsky.app/hashtag/${escapeHtml(encodeURIComponent(feature.tag!))}">${facetText}</a>`;
     } else {
       html += facetText;
     }
@@ -55,6 +55,11 @@ function escapeHtml(str: string): string {
     .replace(/"/g, '&quot;');
 }
 
-function escapeAttr(str: string): string {
-  return str.replace(/"/g, '&quot;').replace(/&/g, '&amp;');
+function isSafeUrl(uri: string): boolean {
+  try {
+    const { protocol } = new URL(uri);
+    return protocol === 'https:' || protocol === 'http:';
+  } catch {
+    return false;
+  }
 }

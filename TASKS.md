@@ -61,7 +61,7 @@ as-is — Pagefind emits sanitised `<mark>` markup there. The
 `/search?q=<img src=x onerror=alert(1)>` — the query must render as literal text,
 no broken image / no alert. A normal search must still work.
 
-### - [ ] A2. Harden rich-text link rendering (facet URLs)
+### - [x] A2. Harden rich-text link rendering (facet URLs)
 
 **File:** `src/lib/richtext.ts`
 
