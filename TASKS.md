@@ -142,7 +142,7 @@ there. Do **not** add a CSP in this task (inline scripts make it fiddly — see 
 If wrangler dev doesn't apply them locally, note that in the commit message and
 verify on the next PR preview deployment instead.
 
-### - [ ] A5. Add a LICENSE file
+### - [x] A5. Add a LICENSE file
 
 **New file:** `LICENSE` at repo root. `README.md` already links `./LICENSE` and
 states the code is MIT-licensed, but the file doesn't exist.
