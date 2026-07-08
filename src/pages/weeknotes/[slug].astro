@@ -55,13 +55,13 @@ const { Content } = await render(entry);
       <div class="my-8 flex gap-8 text-sm" data-pagefind-ignore>
         {prev && (
           <div>
-            <p class="text-gray-500 dark:text-gray-500 mb-1">Previous</p>
+            <p class="text-gray-500 dark:text-gray-400 mb-1">Previous</p>
             <span>{prev.data.emoji && `${prev.data.emoji}`}<a href={`/weeknotes/${prev.id}`} class="ml-2 underline">{prev.data.title}</a></span>
           </div>
         )}
         {next && (
           <div>
-            <p class="text-gray-500 dark:text-gray-500 mb-1">Next</p>
+            <p class="text-gray-500 dark:text-gray-400 mb-1">Next</p>
             <span>{next.data.emoji && `${next.data.emoji}`}<a href={`/weeknotes/${next.id}`} class="ml-2 underline">{next.data.title}</a></span>
           </div>
         )}
@@ -69,7 +69,7 @@ const { Content } = await render(entry);
     )}
     {onThisDay.length > 0 && (
       <aside class="mb-4 text-gray-600 dark:text-gray-400 text-sm" data-pagefind-ignore>
-        <h2 class="mb-2 text-gray-500 dark:text-gray-500">Previously this week</h2>
+        <h2 class="mb-2 text-gray-500 dark:text-gray-400">Previously this week</h2>
         <ul class="space-y-2">
           {onThisDay.map(e => (
             <li class="flex gap-x-2">

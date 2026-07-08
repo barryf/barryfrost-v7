@@ -123,7 +123,7 @@ const latestPostUrl = latestPost ? `https://bsky.app/profile/${HANDLE}/post/${la
         <AuthorCard />
         <p class="e-content mb-1 wrap-break-word" set:html={latestPostHtml} />
         {latestPost.data.quotedPost && <BlueskyQuote quotedPost={latestPost.data.quotedPost as any} />}
-        <div class="mb-1 text-sm text-gray-500 dark:text-gray-500">
+        <div class="mb-1 text-sm text-gray-500 dark:text-gray-400">
           <time class="dt-published mr-1" datetime={toISODate(new Date(latestPost.data.createdAt))} title={formatDateTitle(new Date(latestPost.data.createdAt))}>{formatDateShort(new Date(latestPost.data.createdAt))}</time>
           <a href={latestPostUrl} class="u-url underline" rel="noopener noreferrer" aria-label="View on Bluesky"><BlueskyIcon /></a>
           <a class="ml-1 underline" href={pdslsUrl(latestPost.data.uri)} rel="noopener noreferrer" aria-label="View on PDSls"><PdslsIcon /></a>
@@ -180,7 +180,7 @@ const latestPostUrl = latestPost ? `https://bsky.app/profile/${HANDLE}/post/${la
                 {entry.data.latitude && <data class="p-latitude" value={entry.data.latitude} />}
                 {entry.data.longitude && <data class="p-longitude" value={entry.data.longitude} />}
               </span>
-              <time class="dt-published text-sm text-gray-500 dark:text-gray-500" datetime={toISODate(date)} title={formatDateTitle(date)}> {formatDateShort(date)}</time>
+              <time class="dt-published text-sm text-gray-500 dark:text-gray-400" datetime={toISODate(date)} title={formatDateTitle(date)}> {formatDateShort(date)}</time>
             </li>
           );
         })}

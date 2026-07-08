@@ -36,7 +36,7 @@ const date = new Date(data.createdAt);
 <article class="h-entry" data-pagefind-body>
   <AuthorCard />
   {data.reply && (
-    <p class="text-sm text-gray-500 dark:text-gray-500 mb-1">
+    <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">
       In reply to <a class="u-in-reply-to underline" href={`https://bsky.app/profile/${data.reply.parentHandle}/post/${data.reply.parentRkey}`} rel="noopener noreferrer">@{data.reply.parentHandle}</a>
     </p>
   )}
@@ -58,7 +58,7 @@ const date = new Date(data.createdAt);
       ))}
     </div>
   )}
-  <div class="mb-4 text-sm text-gray-500 dark:text-gray-500">
+  <div class="mb-4 text-sm text-gray-500 dark:text-gray-400">
     <time class="dt-published mr-1" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatDateShort(date)}</time>
     <a class="u-url underline" href={blueskyUrl} rel="noopener noreferrer" aria-label="View on Bluesky"><BlueskyIcon /></a>
     <a class="ml-1 underline" href={pdslsUrl(data.uri)} rel="noopener noreferrer" aria-label="View on PDSls"><PdslsIcon /></a>

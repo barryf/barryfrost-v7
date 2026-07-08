@@ -57,14 +57,14 @@ const isDev = import.meta.env.DEV;
       }
       var hits = await Promise.all(search.results.map(function (r) { return r.data(); }));
       var fragment = '#:~:text=' + encodeURIComponent(query);
-      var html = '<p class="text-sm text-gray-500 dark:text-gray-500 mb-8">' + hits.length + ' result' + (hits.length === 1 ? '' : 's') + '</p>';
+      var html = '<p class="text-sm text-gray-500 dark:text-gray-400 mb-8">' + hits.length + ' result' + (hits.length === 1 ? '' : 's') + '</p>';
       html += hits.map(function (hit) {
         var url = hit.url.replace(/\.html$/, '');
         var title = escapeHtml((hit.meta && hit.meta.title) ? hit.meta.title : url);
         return '<article class="mb-8">'
           + '<a href="' + url + fragment + '" class="underline">' + title + '</a>'
           + (hit.excerpt ? '<p class="text-gray-600 dark:text-gray-400 mt-1">' + hit.excerpt + '</p>' : '')
-          + '<p class="text-sm text-gray-500 dark:text-gray-500 mt-1">' + url + '</p>'
+          + '<p class="text-sm text-gray-500 dark:text-gray-400 mt-1">' + url + '</p>'
           + '</article>';
       }).join('');
       resultsEl.innerHTML = html;

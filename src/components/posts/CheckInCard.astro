@@ -65,9 +65,9 @@ const addrParts = [
       ) : (
         <span class="p-name">{data.venueName}</span>
       )}
-      {data.venueCategory && <div class="text-sm text-gray-500 dark:text-gray-500">{data.venueCategory}</div>}
+      {data.venueCategory && <div class="text-sm text-gray-500 dark:text-gray-400">{data.venueCategory}</div>}
       {addrParts.length > 0 && (
-        <p class="p-adr h-adr text-sm text-gray-500 dark:text-gray-500">
+        <p class="p-adr h-adr text-sm text-gray-500 dark:text-gray-400">
           {addrParts.map((part, i) => (
             <Fragment>{i > 0 && ', '}<span class={part.cls}>{part.val}</span></Fragment>
           ))}
@@ -78,7 +78,7 @@ const addrParts = [
     </div>
   </div>
   {data.rating !== undefined && <data class="p-rating hidden" value={data.rating} />}
-  <div class="mb-4 text-gray-500 dark:text-gray-500">
+  <div class="mb-4 text-gray-500 dark:text-gray-400">
     <time class="dt-published text-sm" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatDateShort(date)}</time>
     <a class="ml-1 underline" href={pdslsUrl(data.uri)} rel="noopener noreferrer" aria-label="View on PDSls"><PdslsIcon /></a>
     {data.sourceUrl && <a href={data.sourceUrl} class="u-syndication text-sm ml-2 underline" rel="noopener noreferrer">Beaconbits</a>}

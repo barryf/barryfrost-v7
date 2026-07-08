@@ -242,7 +242,7 @@ Do **not** change any MF2 classes (`u-photo` stays on the imgs).
 **Verify:** `npm run dev` → `/check-ins` and `/posts`; inspect the links'
 accessible names. Confirm MF2 unchanged by eyeballing the class attributes.
 
-### - [ ] C3. Contrast fixes
+### - [x] C3. Contrast fixes
 
 **Files:** `src/styles/global.css`, plus a find/replace across `src/`
 

@@ -74,7 +74,7 @@ const rockskySource: Source = { label: 'Rocksky', url: 'https://rocksky.app/prof
 <Base title="Now" description={nowEntry.data.description}>
   <article data-pagefind-body>
     <h1 class="mb-4 font-semibold text-black dark:text-white">Now</h1>
-    <p class="text-sm text-gray-500 dark:text-gray-500 mb-6">
+    <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">
       Last updated <time datetime={toISODate(lastUpdated)} title={formatDateTitle(lastUpdated)}>{formatDateShort(lastUpdated)}</time>
     </p>
 
@@ -129,7 +129,7 @@ const rockskySource: Source = { label: 'Rocksky', url: 'https://rocksky.app/prof
                     <span class="font-medium">{book.data.title}</span>
                   )}
                   <p class="text-sm text-gray-600 dark:text-gray-400">by {book.data.authors}</p>
-                  <div class="mt-0.5 flex items-center gap-3 text-sm text-gray-500 dark:text-gray-500">
+                  <div class="mt-0.5 flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
                     <time datetime={toISODate(new Date(book.data.createdAt))} title={formatDateTitle(new Date(book.data.createdAt))}>Started {formatDateShort(new Date(book.data.createdAt))}</time>
                     {book.data.hiveId && (
                       <a href={`https://bookhive.buzz/books/${book.data.hiveId}`} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded hover:text-gray-700 dark:hover:text-gray-300">Bookhive</a>
@@ -199,7 +199,7 @@ const rockskySource: Source = { label: 'Rocksky', url: 'https://rocksky.app/prof
                   <span class="text-sm text-gray-600 dark:text-gray-400"> · {td.venueCategory}</span>
                 )}
               </p>
-              <div class="mt-0.5 flex items-center gap-3 text-sm text-gray-500 dark:text-gray-500">
+              <div class="mt-0.5 flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
                 <time datetime={toISODate(new Date(td.createdAt))} title={formatDateTitle(new Date(td.createdAt))}>{formatDateShort(new Date(td.createdAt))}</time>
                 {td.sourceUrl && <a href={td.sourceUrl} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded hover:text-gray-700 dark:hover:text-gray-300" rel="noopener noreferrer">Beaconbits</a>}
               </div>
@@ -217,7 +217,7 @@ const rockskySource: Source = { label: 'Rocksky', url: 'https://rocksky.app/prof
             <a href={`/weeknotes/${latestWeeknote.id}`} class="font-medium hover:underline">
               {latestWeeknote.data.emoji && `${latestWeeknote.data.emoji} `}{latestWeeknote.data.title}
             </a>
-            <div class="mt-0.5 text-sm text-gray-500 dark:text-gray-500">
+            <div class="mt-0.5 text-sm text-gray-500 dark:text-gray-400">
               <time datetime={toISODate(latestWeeknote.data.date)} title={formatDateTitle(latestWeeknote.data.date)}>{formatDateShort(latestWeeknote.data.date)}</time>
             </div>
           </div>
@@ -252,7 +252,7 @@ const rockskySource: Source = { label: 'Rocksky', url: 'https://rocksky.app/prof
                     {toStars(filmData.rating)}
                   </p>
                 )}
-                <div class="mt-0.5 flex items-center gap-3 text-sm text-gray-500 dark:text-gray-500">
+                <div class="mt-0.5 flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
                   <time datetime={toISODate(latestFilm.date)} title={formatDateTitle(latestFilm.date)}>{formatDateShort(latestFilm.date)}</time>
                   <a href={popfeedSource.url} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded hover:text-gray-700 dark:hover:text-gray-300">{popfeedSource.label}</a>
                 </div>

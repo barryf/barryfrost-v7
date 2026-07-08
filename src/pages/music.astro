@@ -88,7 +88,7 @@ const rockskyUrl = 'https://rocksky.app/profile/barryfrost.com';
               </div>
               <p class="mt-1.5 text-sm font-medium leading-tight truncate" title={album.title}>{album.title}</p>
               <p class="text-xs text-gray-600 dark:text-gray-400 truncate" title={album.artist}>{album.artist}</p>
-              <p class="text-xs text-gray-500 dark:text-gray-500 font-mono tabular-nums mt-0.5">
+              <p class="text-xs text-gray-500 dark:text-gray-400 font-mono tabular-nums mt-0.5">
                 {album.count} {album.count === 1 ? 'play' : 'plays'}
               </p>
             </div>
@@ -108,11 +108,11 @@ const rockskyUrl = 'https://rocksky.app/profile/barryfrost.com';
           {topArtists.map(([name, count], i) => (
             <li class="flex flex-col">
               <div class="flex items-baseline gap-2 mb-1">
-                <span class="text-sm font-mono tabular-nums text-gray-500 dark:text-gray-500 w-5 shrink-0">
+                <span class="text-sm font-mono tabular-nums text-gray-500 dark:text-gray-400 w-5 shrink-0">
                   {i + 1}
                 </span>
                 <span class="truncate flex-1 min-w-0">{name}</span>
-                <span class="text-xs text-gray-500 dark:text-gray-500 font-mono tabular-nums shrink-0">
+                <span class="text-xs text-gray-500 dark:text-gray-400 font-mono tabular-nums shrink-0">
                   {count} {count == 1 ? 'play' : 'plays'}
                 </span>
               </div>
@@ -155,7 +155,7 @@ const rockskyUrl = 'https://rocksky.app/profile/barryfrost.com';
                 <div class="truncate">{s.data.title}</div>
                 <div class="text-sm text-gray-600 dark:text-gray-400 truncate">{s.data.artist}</div>
                 <time
-                  class="text-sm text-gray-500 dark:text-gray-500 tabular-nums"
+                  class="text-sm text-gray-500 dark:text-gray-400 tabular-nums"
                   datetime={toISODate(new Date(s.data.createdAt))}
                   title={formatDateTitle(new Date(s.data.createdAt))}
                 >

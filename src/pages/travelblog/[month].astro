@@ -45,13 +45,13 @@ const { countries = [], intro } = entry.data;
       <div class="my-8 flex gap-8 text-sm" data-pagefind-ignore>
         {prev && (
           <div>
-            <p class="mb-1 text-gray-500 dark:text-gray-500">Previous</p>
+            <p class="mb-1 text-gray-500 dark:text-gray-400">Previous</p>
             <a href={`/travelblog/${prev.id}`} class="underline">{formatMonthKey(prev.id)}</a>
           </div>
         )}
         {next && (
           <div>
-            <p class="mb-1 text-gray-500 dark:text-gray-500">Next</p>
+            <p class="mb-1 text-gray-500 dark:text-gray-400">Next</p>
             <a href={`/travelblog/${next.id}`} class="underline">{formatMonthKey(next.id)}</a>
           </div>
         )}
