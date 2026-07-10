@@ -93,7 +93,7 @@ Paginated pages show `Title (Page N)` in both the h1 and the browser window titl
 | `/blogroll` | "Websites" (blogs followed via Readwise Reader) + "Publications" (Standard.site subscriptions via Standard Reader) |
 | `/search` | Pagefind search |
 | `/{slug}` | Slash pages (about, colophon, etc.) |
-| `/travelblog` | Archived 2000–2001 travel blog — index listing each month with its countries and a one-line summary |
+| `/travelblog` | Archived 2000–2001 travel blog — horizontal photo strip, then an index listing each month with its countries and a one-line summary |
 | `/travelblog/{YYYY-MM}` | A month's posts on one page (e.g. `/travelblog/2001-08`), under `###` date headings; countries shown as flag + name; prev/next month nav |
 
 All type-specific list pages have `/page/{n}` pagination except `/weeknotes` (all on one page) and `/books` (Reading/Read split, first page only; Read continues to `/books/page/{n}`).
