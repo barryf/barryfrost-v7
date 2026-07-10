@@ -167,6 +167,8 @@ import myPhoto from '../../assets/photo.jpg';
 <Image src={myPhoto} alt="..." class="float-right ml-8 rounded" />
 ```
 
+`Caption.astro` renders a small muted line (`text-xs text-gray-600 dark:text-gray-400 -mt-5 mb-8`) directly under an `<Image />` for a photo caption — used in the travelblog archive.
+
 ## Search
 
 Static search via [Pagefind](https://pagefind.app). After `astro build`, `pagefind --site dist` indexes the built HTML and emits a self-contained bundle into `dist/pagefind/`.
