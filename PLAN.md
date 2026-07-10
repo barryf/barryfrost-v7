@@ -202,6 +202,8 @@ Applied as static classes directly in Astro templates. No runtime JS required.
 - **BookCard**: nested `p-read-of h-cite` with `u-photo` (cover), hidden `p-name u-url`, `p-author`
 - **PhotoCard**: `u-photo` on each thumbnail, `p-name u-url` on title
 
+`BaseHead.astro` also emits IndieWeb discovery `<link>` tags in `<head>`: `rel="me"` (GitHub, Mastodon), `rel="me atproto"`, plus `webmention`, `microsub`, `authorization_endpoint` and `token_endpoint` for IndieAuth.
+
 ## Feeds
 
 A single unified RSS feed and JSON feed carry both articles and weeknotes, interleaved by date. One feed URL (matching v6) means existing subscribers keep receiving posts when v7 takes over the apex domain.
