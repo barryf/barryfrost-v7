@@ -9,7 +9,10 @@ const { items, totalPages } = pages[0] ?? { items: [], totalPages: 1 };
 ---
 <Feed title="Posts" description="Short posts, links and replies that I've published on my Bluesky account." totalPages={totalPages} basePath="/posts">
   <Fragment slot="description">
-    Short posts, links and replies that I've published on my <a href="https://bsky.app/profile/barryfrost.com" class="underline"><BlueskyIcon class="inline w-4 h-4 align-text-bottom mr-1" />Bluesky</a> account.
+    Short posts, links and replies that I've published on my
+    <a href="https://bsky.app/profile/barryfrost.com" class="underline">
+      <BlueskyIcon class="inline w-4 h-4 align-text-bottom mr-1" />Bluesky
+      account</a>.
   </Fragment>
   <div class="my-12 flex flex-col gap-y-8">
     {items.map((entry) => <BlueskyCard entry={entry} />)}
