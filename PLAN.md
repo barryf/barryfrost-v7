@@ -108,7 +108,7 @@ Removed from v6: `/page/{n}` (unified paginated feed), `/archives/`, `/tags/`.
 - `FilmFeed.astro` — extends `Feed.astro` for `/films` and `/films/by-rating`: adds date/rating sort toggle and renders `FilmCard` in a responsive grid (`grid-cols-1 sm:grid-cols-2 lg:grid-cols-3`)
 - `Post.astro` — individual article/weeknote with prose styles; "Posted in [Section] [relative date]" footer (omits "on" when displaying relative text); uses `Divider` above footer
 - `Divider.astro` — `⁂` separator; `my-8 text-xl`
-- `SiteFooter.astro` — footer nav (About, Colophon, Uses, Blogroll, Follow, Contact) + inline search form that submits to `/search`, plus a copyright/license line (CC BY-SA 4.0) and link to the GitHub source repo; rendered on every page
+- `SiteFooter.astro` — footer nav (back-to-top, About, Colophon, Blogroll, Follow, Contact) + inline search form that submits to `/search`, plus a copyright/license line (CC BY-SA 4.0) and link to the GitHub source repo; rendered on every page
 Icon components in `src/components/icons/`:
 - `BlueskyIcon.astro` — monochrome Bluesky butterfly SVG, `currentColor`, `-translate-y-px` to align with text baseline
 - `PdslsIcon.astro` — pdsls.dev graph SVG; links to the underlying PDS record on pdsls.dev
