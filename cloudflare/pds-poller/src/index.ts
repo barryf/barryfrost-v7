@@ -9,9 +9,9 @@ interface Env {
 const DID = 'did:plc:j5ksi3y4tdtbp7vpsxsfyask';
 const PDS_HOST = 'bsky.social';
 
-// Collections whose newest record is polled every minute. Unlike a firehose subscription
-// there's no server-side filtering, so this list drives 10 individual listRecords calls
-// per cycle — trivial load (~14.4k/day) against bsky.social's 3,000-per-5-min per-IP limit.
+// Collections tracked as a full rkey→cid map, so an edit or delete of *any* record (not
+// just the newest) is detected. Only actually paginated when the repo rev has moved (see
+// poll()) — most minutes cost a single getLatestCommit call.
 //
 // NB: site.standard.document is intentionally NOT watched — the build writes those
 // records itself (scripts/publish-standard-site.ts), so watching them would loop.
@@ -47,6 +47,8 @@ const COLLECTION_NOUNS: Record<string, string> = {
 // frequent to be worth a Pushover per event (e.g. every track listened to on Rocksky).
 const SILENT_COLLECTIONS = new Set(['app.rocksky.album']);
 
+const LIST_RECORDS_PAGE_LIMIT = 100;
+
 type Verb = 'New' | 'Updated' | 'Removed';
 
 // One-line description of a watched change, e.g. "New book", "Updated post". Noun-level
@@ -56,12 +58,28 @@ function describeChange(verb: Verb, collection: string): string {
   return `${verb} ${noun}`;
 }
 
-interface RecordRef {
+// rkey → cid for every record currently in a collection.
+type CollectionMap = Record<string, string>;
+type CollectionsState = Record<string, CollectionMap>;
+
+interface RecordChange {
+  verb: Verb;
   rkey: string;
-  cid: string;
 }
 
-type LatestMap = Record<string, RecordRef | null>;
+// Full-map diff: catches a create/update/delete of *any* record, not just the newest —
+// unlike a "compare the newest rkey" check, which misses edits to older records.
+function diffCollection(prev: CollectionMap, next: CollectionMap): RecordChange[] {
+  const changes: RecordChange[] = [];
+  for (const rkey of Object.keys(next)) {
+    if (!(rkey in prev)) changes.push({ verb: 'New', rkey });
+    else if (prev[rkey] !== next[rkey]) changes.push({ verb: 'Updated', rkey });
+  }
+  for (const rkey of Object.keys(prev)) {
+    if (!(rkey in next)) changes.push({ verb: 'Removed', rkey });
+  }
+  return changes;
+}
 
 // Persisted so it survives DO eviction — surfaced by the /status snapshot.
 interface LastChange {
@@ -69,22 +87,6 @@ interface LastChange {
   collection: string;
   rkey: string;
   at: number; // wall-clock ms
-}
-
-interface CollectionResult {
-  collection: string;
-  ref: RecordRef | null;
-}
-
-// rkeys are TIDs (lexically sortable by creation time), so string comparison alone tells
-// us whether the newest record moved forward (new/updated) or backward (something ahead
-// of it got deleted).
-function diff(prev: RecordRef | null, next: RecordRef | null): Verb | null {
-  if (!next) return prev ? 'Removed' : null;
-  if (!prev) return 'New';
-  if (next.rkey > prev.rkey) return 'New';
-  if (next.rkey === prev.rkey) return next.cid !== prev.cid ? 'Updated' : null;
-  return 'Removed'; // the previously-newest record is gone; this older one is now newest
 }
 
 export class PdsPoller implements DurableObject {
@@ -110,58 +112,69 @@ export class PdsPoller implements DurableObject {
     return new Response(null, { status: 404 });
   }
 
-  // Fetch the newest record of every watched collection, diff against the stored
-  // baseline, queue notification lines, and fire the deploy hook if anything (or a
-  // previously-failed deploy attempt) is pending.
+  // Cheap gate: com.atproto.sync.getLatestCommit's rev changes on *any* commit to the
+  // repo — including collections we don't watch (likes, follows, reposts) and the
+  // build's own site.standard.document writes. So a rev change doesn't by itself mean a
+  // watched collection changed; it just means it's worth checking. Most minutes the rev
+  // is unchanged and poll() costs exactly one subrequest.
   //
-  // Documented blind spot: an update or delete of a *non-newest* record in a collection
-  // doesn't change records[0], so this poll misses it. Rare in practice (edits/deletes
-  // almost always target the latest record) and the hourly unconditional rebuild covers it.
+  // When the rev has moved (or its check failed — fail open rather than going blind),
+  // fully paginate every watched collection and diff its rkey→cid map against the stored
+  // one. This catches an edit or delete of *any* record, closing the blind spot a
+  // "newest record only" check would have.
   private async poll(): Promise<void> {
-    const stored = await this.state.storage.get<LatestMap>('latest');
+    const storedRev = await this.state.storage.get<string>('rev');
+    const storedCollections = await this.state.storage.get<CollectionsState>('collections');
     const errors: string[] = [];
 
-    const results = await Promise.all(
-      WATCHED_COLLECTIONS.map((collection): Promise<CollectionResult | null> => this.fetchLatest(collection, errors)),
-    );
+    const rev = await this.fetchLatestCommitRev(errors);
 
-    // First run (no stored baseline): persist and return without deploying, so deploying
-    // the Worker itself doesn't fire a spurious rebuild.
-    if (!stored) {
-      const baseline: LatestMap = {};
-      for (const r of results) if (r) baseline[r.collection] = r.ref;
-      await this.state.storage.put('latest', baseline);
+    // First run (no stored baseline): scan once to establish it and return without
+    // deploying, so deploying the Worker itself doesn't fire a spurious rebuild.
+    if (!storedCollections) {
+      const baseline = await this.scanCollections(errors);
+      await this.state.storage.put('collections', baseline);
+      if (rev) await this.state.storage.put('rev', rev);
       await this.state.storage.put('lastPollAt', Date.now());
       await this.state.storage.put('lastPollErrors', errors);
       return;
     }
 
-    const latest: LatestMap = { ...stored };
+    // Nothing moved — skip the full scan entirely.
+    if (rev && rev === storedRev) {
+      await this.state.storage.put('lastPollAt', Date.now());
+      await this.state.storage.put('lastPollErrors', errors);
+      return;
+    }
+
+    const scanned = await this.scanCollections(errors);
+    const collections: CollectionsState = { ...storedCollections };
     let changed = false;
 
-    for (const r of results) {
-      if (!r) continue; // this collection's fetch failed this cycle — keep the stored value
-      const { collection, ref } = r;
-      const prev = stored[collection] ?? null;
-      const verb = diff(prev, ref);
-      if (!verb) continue;
+    for (const [collection, next] of Object.entries(scanned)) {
+      const prev = storedCollections[collection] ?? {};
+      const diffs = diffCollection(prev, next);
+      if (diffs.length === 0) continue;
 
       changed = true;
-      latest[collection] = ref;
+      collections[collection] = next;
 
-      const count = (await this.state.storage.get<number>('changeCount')) ?? 0;
-      await this.state.storage.put('changeCount', count + 1);
-      const lastChange: LastChange = { verb, collection, rkey: (ref ?? prev)!.rkey, at: Date.now() };
-      await this.state.storage.put('lastChange', lastChange);
+      for (const { verb, rkey } of diffs) {
+        const count = (await this.state.storage.get<number>('changeCount')) ?? 0;
+        await this.state.storage.put('changeCount', count + 1);
+        const lastChange: LastChange = { verb, collection, rkey, at: Date.now() };
+        await this.state.storage.put('lastChange', lastChange);
 
-      if (!SILENT_COLLECTIONS.has(collection)) {
-        const pending = (await this.state.storage.get<string[]>('pendingSummary')) ?? [];
-        pending.push(describeChange(verb, collection));
-        await this.state.storage.put('pendingSummary', pending);
+        if (!SILENT_COLLECTIONS.has(collection)) {
+          const pending = (await this.state.storage.get<string[]>('pendingSummary')) ?? [];
+          pending.push(describeChange(verb, collection));
+          await this.state.storage.put('pendingSummary', pending);
+        }
       }
     }
 
-    await this.state.storage.put('latest', latest);
+    await this.state.storage.put('collections', collections);
+    if (rev) await this.state.storage.put('rev', rev);
     await this.state.storage.put('lastPollAt', Date.now());
     await this.state.storage.put('lastPollErrors', errors);
 
@@ -169,21 +182,92 @@ export class PdsPoller implements DurableObject {
     await this.maybeDeploy();
   }
 
-  private async fetchLatest(collection: string, errors: string[]): Promise<CollectionResult | null> {
+  // Fetch every watched collection's full rkey→cid map in parallel. A collection whose
+  // fetch fails is omitted from the result (caller keeps the stored value for it).
+  private async scanCollections(errors: string[]): Promise<CollectionsState> {
+    const results = await Promise.all(
+      WATCHED_COLLECTIONS.map(async (collection) => ({
+        collection,
+        map: await this.fetchCollectionMap(collection, errors),
+      })),
+    );
+    const scanned: CollectionsState = {};
+    for (const { collection, map } of results) if (map) scanned[collection] = map;
+    return scanned;
+  }
+
+  private async fetchCollectionMap(collection: string, errors: string[]): Promise<CollectionMap | null> {
+    const map: CollectionMap = {};
+    let cursor: string | undefined;
     try {
-      const params = new URLSearchParams({ repo: DID, collection, limit: '1' });
-      const res = await fetch(`https://${PDS_HOST}/xrpc/com.atproto.repo.listRecords?${params}`);
-      if (!res.ok) {
-        errors.push(`${collection}: HTTP ${res.status}`);
-        return null;
-      }
-      const body = (await res.json()) as { records?: Array<{ uri: string; cid: string }> };
-      const record = body.records?.[0];
-      if (!record) return { collection, ref: null };
-      const rkey = record.uri.split('/').pop() ?? '';
-      return { collection, ref: { rkey, cid: record.cid } };
+      do {
+        const params = new URLSearchParams({ repo: DID, collection, limit: String(LIST_RECORDS_PAGE_LIMIT) });
+        if (cursor) params.set('cursor', cursor);
+        const res = await fetch(`https://${PDS_HOST}/xrpc/com.atproto.repo.listRecords?${params}`);
+        if (!res.ok) {
+          errors.push(`${collection}: HTTP ${res.status}`);
+          return null;
+        }
+        const body = (await res.json()) as { records?: Array<{ uri: string; cid: string }>; cursor?: string };
+        const records = body.records ?? [];
+        for (const record of records) {
+          const rkey = record.uri.split('/').pop() ?? '';
+          map[rkey] = record.cid;
+        }
+        // A short page means we've reached the end, regardless of what cursor comes back.
+        cursor = records.length === LIST_RECORDS_PAGE_LIMIT ? body.cursor : undefined;
+      } while (cursor);
+      return map;
     } catch (err) {
       errors.push(`${collection}: ${err instanceof Error ? err.message : String(err)}`);
+      return null;
+    }
+  }
+
+  // Unlike listRecords, the bsky.social entryway returns 401 (AuthMissing) on
+  // getLatestCommit for a repo hosted on its own dedicated PDS shard — the same call
+  // works unauthenticated when sent to that shard directly. So this needs the DID's
+  // actual PDS host, resolved from its DID document and cached in DO storage (looked up
+  // once, not every cycle). If the cached host starts rejecting the call, drop the cache
+  // so the next cycle re-resolves rather than failing forever on a stale host.
+  private async fetchLatestCommitRev(errors: string[]): Promise<string | null> {
+    const host = await this.resolvePdsHost(errors);
+    if (!host) return null;
+    try {
+      const res = await fetch(`https://${host}/xrpc/com.atproto.sync.getLatestCommit?did=${DID}`);
+      if (!res.ok) {
+        errors.push(`getLatestCommit: HTTP ${res.status}`);
+        if (res.status === 401 || res.status === 404) await this.state.storage.delete('pdsHost');
+        return null;
+      }
+      const body = (await res.json()) as { rev?: string };
+      return body.rev ?? null;
+    } catch (err) {
+      errors.push(`getLatestCommit: ${err instanceof Error ? err.message : String(err)}`);
+      return null;
+    }
+  }
+
+  private async resolvePdsHost(errors: string[]): Promise<string | null> {
+    const cached = await this.state.storage.get<string>('pdsHost');
+    if (cached) return cached;
+    try {
+      const res = await fetch(`https://plc.directory/${DID}`);
+      if (!res.ok) {
+        errors.push(`plc.directory: HTTP ${res.status}`);
+        return null;
+      }
+      const doc = (await res.json()) as { service?: Array<{ type: string; serviceEndpoint: string }> };
+      const service = doc.service?.find((s) => s.type === 'AtprotoPersonalDataServer');
+      if (!service) {
+        errors.push('plc.directory: no AtprotoPersonalDataServer service found');
+        return null;
+      }
+      const host = new URL(service.serviceEndpoint).host;
+      await this.state.storage.put('pdsHost', host);
+      return host;
+    } catch (err) {
+      errors.push(`plc.directory: ${err instanceof Error ? err.message : String(err)}`);
       return null;
     }
   }
@@ -218,7 +302,9 @@ export class PdsPoller implements DurableObject {
 
   // Return the accumulated content descriptions as one message and clear the queue. Read
   // and clear are atomic here — the DO is single-threaded, so no concurrent build can
-  // double-drain. Repeats within the window collapse to a "×N" suffix.
+  // double-drain. Repeats within the window collapse to a "×N" suffix. This atomicity is
+  // also why state lives in the DO rather than KV: a plain scheduled Worker writing to KV
+  // while a build's GET races the read-modify-write could drop or duplicate a notification.
   private async drainSummary(): Promise<string | null> {
     const pending = (await this.state.storage.get<string[]>('pendingSummary')) ?? [];
     if (pending.length === 0) return null;
@@ -230,9 +316,11 @@ export class PdsPoller implements DurableObject {
 
   // Observable snapshot returned by /poll and /status — reliable via curl and wrangler tail.
   private async status(): Promise<Record<string, unknown>> {
-    const [latest, changeCount, lastChange, lastPollAt, lastPollErrors, deployPending, lastDeployAt, lastDeployStatus, pendingSummary] =
+    const [rev, pdsHost, collections, changeCount, lastChange, lastPollAt, lastPollErrors, deployPending, lastDeployAt, lastDeployStatus, pendingSummary] =
       await Promise.all([
-        this.state.storage.get<LatestMap>('latest'),
+        this.state.storage.get<string>('rev'),
+        this.state.storage.get<string>('pdsHost'),
+        this.state.storage.get<CollectionsState>('collections'),
         this.state.storage.get<number>('changeCount'),
         this.state.storage.get<LastChange>('lastChange'),
         this.state.storage.get<number>('lastPollAt'),
@@ -245,7 +333,9 @@ export class PdsPoller implements DurableObject {
     const iso = (ms: number | undefined) => (ms ? new Date(ms).toISOString() : null);
     return {
       now: new Date().toISOString(),
-      latest: latest ?? null,
+      rev: rev ?? null,
+      pdsHost: pdsHost ?? null,
+      recordCounts: Object.fromEntries(Object.entries(collections ?? {}).map(([c, m]) => [c, Object.keys(m).length])),
       changeCount: changeCount ?? 0,
       lastChange: lastChange ?? null,
       lastPollAt: iso(lastPollAt),
@@ -279,9 +369,8 @@ export default {
   async scheduled(event: ScheduledEvent, env: Env): Promise<void> {
     if (event.cron === '0 * * * *') {
       // Unconditionally re-trigger a build so a build that failed (e.g. PDS unreachable)
-      // recovers even with no new record, and so the poll's non-newest-record blind spot
-      // self-heals within the hour. POST the hook directly rather than via the DO, so this
-      // still fires if the DO is wedged.
+      // recovers even with no new record. POST the hook directly rather than via the DO,
+      // so this still fires if the DO is wedged.
       try {
         const res = await fetch(env.DEPLOY_HOOK, { method: 'POST' });
         console.log(`hourly fallback deploy hook POST ${res.status}`);
