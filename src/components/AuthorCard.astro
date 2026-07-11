@@ -3,7 +3,7 @@
 // h-feed level and inside each h-entry so feed readers that don't apply
 // feed-level author inheritance (e.g. Monocle) still attribute each item.
 ---
-<div class="h-card p-author hidden">
+<div class="h-card p-author hidden" data-pagefind-ignore>
   <img class="u-photo" src={new URL('/barryfrost.jpg', Astro.url).href} alt="Barry Frost" width="192" height="192" />
   <a class="p-name u-url" href={Astro.site?.href}>Barry Frost</a>
 </div>
