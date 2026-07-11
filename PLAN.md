@@ -244,28 +244,32 @@ Build command: `npm run build` (`astro build` + `pagefind`). Deploy command: `np
 
 `wrangler` is a pinned devDependency so `npx wrangler` resolves it from the restored dependencies cache rather than downloading it (~12s) on every build, and the version stays fixed rather than silently tracking the latest `4.x`.
 
-`release.ts` runs `wrangler deploy`, then (gated behind `PUBLISH_STANDARD_SITE`) syndicates articles/weeknotes to Standard.site, then pulls a content summary from the pds-firehose Worker and only sends a Pushover notification if there is one — so hourly-cron and code-push rebuilds with no content changes stay silent. On any failure it always notifies (high priority) and exits non-zero so Cloudflare marks the build failed.
+`release.ts` runs `wrangler deploy`, then (gated behind `PUBLISH_STANDARD_SITE`) syndicates articles/weeknotes to Standard.site, then pulls a content summary from the pds-poller Worker and only sends a Pushover notification if there is one — so hourly-cron and code-push rebuilds with no content changes stay silent. On any failure it always notifies (high priority) and exits non-zero so Cloudflare marks the build failed.
 
 `wrangler.toml` also declares `[build] command = "npm run build"`. wrangler runs this before both `deploy` and `versions upload`, so **PR-preview builds** (whose deploy command is a bare `npx wrangler versions upload`) produce `./dist` too — without it the preview upload fails with "assets.directory … does not exist". This `[build]` hook is the single source of the build for both paths: `release.ts` does *not* build explicitly before `wrangler deploy` (doing so built the whole site twice, ~2x deploy time), it relies on the hook firing during deploy just as previews do.
 
 Required build env vars (set in CF Workers Builds): `PUSHOVER_TOKEN`, `PUSHOVER_USER`, `NOTIFY_SECRET`, `R2_ACCOUNT_ID`, `R2_BUCKET`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `IMAGES_BASE_URL`
 
-### PDS firehose listener — `cloudflare/pds-firehose`
-A Cloudflare Worker that reacts to PDS changes in real time (seconds, not the old 15-minute poll) by listening to the atproto firehose over a websocket.
+### PDS poller — `cloudflare/pds-poller`
+A Cloudflare Worker that detects PDS changes by polling every 60 seconds, driven by a `* * * * *` cron trigger.
 
-**Jetstream, not the raw firehose.** [Jetstream](https://github.com/bluesky-social/jetstream) is Bluesky's JSON-simplified view of `com.atproto.sync.subscribeRepos` — no CBOR/CAR decoding, and it filters **server-side** by DID and collection, so we only receive Barry's watched commits. Endpoint: `wss://jetstream2.us-east.bsky.network/subscribe?wantedDids=<DID>&wantedCollections=…`.
+**Why polling, not a websocket.** The prior design (`pds-firehose`) held a Jetstream websocket open from a Durable Object. A single-DID filtered Jetstream subscription has no heartbeat, so a silently-dead socket was indistinguishable from a quiet repo, and commits made while the socket was deaf were never delivered (reconnects are live-only). This failed repeatedly — a post once sat undetected for 15+ minutes despite the status endpoint reporting `connected: true`. Heuristic watchdogs shrank but couldn't close the window. A poll makes every failure mode a visible HTTP error that self-heals on the next cycle, at the cost of a worst-case detection latency of ~60–70s (still well inside the ~2-minute goal).
 
-**A Durable Object holds the connection.** Regular Workers are request-scoped and can't keep a long-lived socket. The `JetstreamListener` Durable Object opens an outbound websocket to Jetstream. Because outbound sockets don't hibernate and only pin a DO for ~15 minutes, a recurring **alarm heartbeat** (`HEARTBEAT_MS = 60s`) reconnects after the ceiling or any eviction; a `*/5 * * * *` cron does a liveness ping to (re)instantiate the DO and heal a permanently-failed alarm (it does **not** poll the PDS).
+**A minute cron drives the poll — no DO alarms.** The `* * * * *` trigger calls `stub.fetch('/poll')` on a singleton `PdsPoller` Durable Object (`idFromName('singleton')`) every minute; the schedule is externally guaranteed by Cloudflare, so there's no self-perpetuating alarm chain or liveness ping to maintain. The DO still holds the state (per-collection latest record, pending notification summary) because DO storage gives atomic single-threaded read-modify-write, which the notification drain relies on.
 
-**Reliability (DO-only, cursor replay).** No fallback poll. The last event's `time_us` is persisted as a Jetstream `cursor`; on reconnect it replays from `cursor − 5s` for gapless recovery. Cursors are time-based, so any of the four public instances is interchangeable on failover.
+**Per-collection polling, not repo-rev.** Each cycle fetches `com.atproto.repo.listRecords?limit=1` for each of the 10 watched collections in parallel and compares the newest record (`rkey`/`cid`) against the stored baseline — rather than polling `getLatestCommit` for a single repo-rev, which also changes on likes/follows/reposts and on the build's own writes, and so wouldn't reliably signal a "watched" collection changed. rkeys are TIDs (lexically sortable): a higher rkey than stored is `New`, the same rkey with a different cid is `Updated`, and a lower rkey (or newly empty) is `Removed`. The first poll after a (re)deploy has no stored baseline, so it persists one without deploying — otherwise deploying the Worker would fire a spurious rebuild.
 
-**One commit → one debounced rebuild.** Every commit in a watched collection warrants a rebuild (Jetstream reports create/update/delete directly — no digest/head-CID tiers). A ~10s debounce coalesces a burst (e.g. one article syndicating to several collections) into a single POST to the deploy hook; a `MAX_WAIT_MS = 60s` cap ensures sustained writes still rebuild. The deploy-pending flag is persisted so an eviction mid-debounce still fires on the next wake.
+**Documented blind spot.** An edit or delete of a *non-newest* record in a collection doesn't change `records[0]`, so the poll misses it. Rare in practice — edits/deletes almost always target the latest record — and the hourly unconditional rebuild (below) covers it.
 
-**Hourly fallback rebuild.** A second `0 * * * *` cron POSTs the deploy hook unconditionally, direct from the top-level `scheduled()` handler (bypassing the DO). This is belt-and-braces: if an on-demand build fails for a reason the deploy hook can't see (e.g. the PDS is unreachable at build time), no new commit will re-trigger it, so the hourly cron rebuilds within the hour. Distinguished from the liveness ping via `event.cron`.
+**One changed collection → one deploy.** Changes landing in the same minute (e.g. one article syndicating to several collections) coalesce naturally into a single deploy-hook POST, since they're all diffed and deployed within the same `/poll` invocation — no debounce timers needed. A `deployPending` flag is persisted so a deploy-hook network failure retries on the next cycle; it's cleared once the hook returns *any* HTTP response (retrying a non-2xx forever would loop).
+
+**Hourly fallback rebuild.** A second `0 * * * *` cron POSTs the deploy hook unconditionally, direct from the top-level `scheduled()` handler (bypassing the DO). This is belt-and-braces: it recovers a build that failed for a reason the deploy hook can't see (e.g. the PDS unreachable at build time), and it's what covers the per-collection poll's blind spot above. Distinguished from the minute poll via `event.cron`.
+
+**Load.** 10 unauthenticated `listRecords?limit=1` reads per minute (~14.4k/day) against `bsky.social`, whose per-IP limit is 3,000 requests per 5 minutes — trivial, and well under what the site's own build already does (full paginated `listRecords` over every collection on each rebuild).
 
 Watched collections (`WATCHED_COLLECTIONS`): `app.bsky.feed.post`, `app.beaconbits.beacon`, `com.barryfrost.checkin`, `social.popfeed.feed.review`, `buzz.bookhive.book`, `site.standard.graph.subscription`, `social.grain.gallery`, `social.grain.gallery.item`, `social.grain.photo`, `app.rocksky.album`. `site.standard.document` is deliberately **not** watched — the build writes those records itself (`scripts/publish-standard-site.ts`), so watching them would loop.
 
-Required secrets: `DEPLOY_HOOK` (same Workers Builds deploy-hook URL as before).
+Required secrets: `DEPLOY_HOOK` (same Workers Builds deploy-hook URL as before), `NOTIFY_SECRET` (gates `/pending-notification`).
 
 ### `scaffold.yml`
 Manual `workflow_dispatch` for creating article/weeknote stubs. Inputs: `kind`, `title_or_topic`, `emoji`, `tags`, `date`. Runs `scripts/new-article.ts` or `scripts/new-weeknote.ts --no-git`, opens a draft PR via `peter-evans/create-pull-request`.
@@ -296,9 +300,9 @@ Every loader processes its records with bounded concurrency instead of a sequent
 
 This took "Syncing content" from 90s+ down to ~7s. The pattern for a loader: collect records from `fetchAllRecords` into an array first (cheap, no images involved), then `mapLimit(records, RECORD_CONCURRENCY, async (record) => {...})` over the per-record body (image fetch + any other network calls + `store.set`) — decoupling PDS pagination from per-record work.
 
-### Why `pds-firehose` is separate
+### Why `pds-poller` is separate
 
-`pds-firehose` lives in `cloudflare/` as a standalone wrangler project. The main app is `output: 'static'` with no SSR adapter — `src/pages/*.ts` endpoints are pre-rendered at build time. Folding it in would require `@astrojs/cloudflare` + SSR, and it needs its own Durable Object + cron handler. It runs on the Workers Free plan (the DO uses the SQLite storage backend, required on Free); the always-on outbound socket can't hibernate, so it consumes ~10,800 of the 13,000 GB-s/day free DO duration allowance.
+`pds-poller` lives in `cloudflare/` as a standalone wrangler project. The main app is `output: 'static'` with no SSR adapter — `src/pages/*.ts` endpoints are pre-rendered at build time. Folding it in would require `@astrojs/cloudflare` + SSR, and it needs its own Durable Object + cron handler. It runs on the Workers Free plan (the DO uses the SQLite storage backend, required on Free); unlike the old always-on websocket, the DO here is only awake ~1–2s per minute to run a poll cycle, so DO duration usage is a few hundred GB-s/day rather than the ~10,800 of the 13,000 GB-s/day free allowance the always-open socket consumed.
 
 ## Key Conventions
 
@@ -346,7 +350,7 @@ Both CLIs accept `--no-git` (or `CI=true`) to skip git/gh operations — used by
 2. Add collection to `src/content.config.ts` with a Zod schema
 3. Create `src/components/posts/{Type}Card.astro`
 4. Add an index page (`src/pages/{type}/index.astro`) and paginated page (`src/pages/{type}/page/[page].astro`) using `getFeedPages` and the `Feed.astro` layout
-5. Add the collection NSID to `WATCHED_COLLECTIONS` and a label to `COLLECTION_NOUNS` in `cloudflare/pds-firehose/src/index.ts`
+5. Add the collection NSID to `WATCHED_COLLECTIONS` and a label to `COLLECTION_NOUNS` in `cloudflare/pds-poller/src/index.ts`
 6. Link from the homepage or footer as appropriate
 
 ## One-off Import Scripts

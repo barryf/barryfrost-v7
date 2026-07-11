@@ -15,7 +15,7 @@ Live staging URL: `https://new.barryfrost.com` (v6 still serves `barryfrost.com`
 - MF2 classes applied directly in Astro templates — no runtime JS except `/check-ins` (Leaflet map)
 - Light/dark mode via `prefers-color-scheme` only — no JS toggle
 - Images resized at build time with sharp and stored content-addressed in R2 (`src/lib/image-store.ts`); dev mode and PRs without R2 credentials use direct source URLs
-- No SSR — the `pds-firehose` Worker listens to the atproto firehose (Jetstream) over a websocket and POSTs the Cloudflare deploy hook when watched PDS collections change
+- No SSR — the `pds-poller` Worker polls the PDS every 60s via a cron trigger and POSTs the Cloudflare deploy hook when watched collections change
 
 ## Script conventions
 When writing Python scripts for one-off tasks, always create them in `scripts/` rather than /tmp. Name them descriptively. This keeps them reviewable and version-controlled.

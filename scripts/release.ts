@@ -3,13 +3,13 @@
 // or `wrangler deploy` is caught and reported — the old `build && deploy && notify` chain
 // went silent on a build failure.
 //
-// On success it pulls a content summary from the pds-firehose Worker and only notifies if
+// On success it pulls a content summary from the pds-poller Worker and only notifies if
 // there is one, so hourly-cron and code-push rebuilds stay silent. On any failure it always
 // notifies (high priority) and exits non-zero so Cloudflare marks the build failed.
 import { execSync } from 'node:child_process';
 
 const { PUSHOVER_TOKEN, PUSHOVER_USER, NOTIFY_SECRET } = process.env;
-const FIREHOSE_URL = 'https://pds-firehose.barryf.workers.dev';
+const POLLER_URL = 'https://pds-poller.barryf.workers.dev';
 
 // No-op when Pushover creds are absent (e.g. local runs), mirroring the old script's guard.
 async function sendPushover(message: string, opts: { title?: string; priority?: number } = {}): Promise<void> {
@@ -31,11 +31,11 @@ async function sendPushover(message: string, opts: { title?: string; priority?: 
   }
 }
 
-// Drain the firehose Worker's pending content summary. Returns null (send nothing) on any
+// Drain the poller Worker's pending content summary. Returns null (send nothing) on any
 // error or when the build was not content-driven — notifications must never block a deploy.
 async function pendingSummary(): Promise<string | null> {
   try {
-    const res = await fetch(`${FIREHOSE_URL}/pending-notification`, {
+    const res = await fetch(`${POLLER_URL}/pending-notification`, {
       headers: NOTIFY_SECRET ? { 'X-Notify-Secret': NOTIFY_SECRET } : {},
     });
     if (!res.ok) {

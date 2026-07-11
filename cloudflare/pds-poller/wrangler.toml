@@ -1,0 +1,19 @@
+name = "pds-poller"
+main = "src/index.ts"
+compatibility_date = "2026-05-01"
+
+# * * * * * — minute poll: fetches the 10 watched collections and deploys on change.
+# 0 * * * * — hourly belt-and-braces rebuild in case an on-demand build failed
+# (e.g. PDS unreachable at build time) and no new record will re-trigger it. Also
+# covers the poll's blind spot (an edit/delete of a non-newest record).
+[triggers]
+crons = ["* * * * *", "0 * * * *"]
+
+[[durable_objects.bindings]]
+name = "POLLER"
+class_name = "PdsPoller"
+
+# SQLite-backed class — required for Durable Objects on the Workers Free plan.
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["PdsPoller"]
