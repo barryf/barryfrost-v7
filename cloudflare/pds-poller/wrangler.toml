@@ -2,10 +2,10 @@ name = "pds-poller"
 main = "src/index.ts"
 compatibility_date = "2026-05-01"
 
-# * * * * * — minute poll: fetches the 10 watched collections and deploys on change.
+# * * * * * — minute poll: checks the repo rev, and on a change, diffs the 10 watched
+# collections and deploys on change.
 # 0 * * * * — hourly belt-and-braces rebuild in case an on-demand build failed
-# (e.g. PDS unreachable at build time) and no new record will re-trigger it. Also
-# covers the poll's blind spot (an edit/delete of a non-newest record).
+# (e.g. PDS unreachable at build time) and no new record will re-trigger it.
 [triggers]
 crons = ["* * * * *", "0 * * * *"]
 
