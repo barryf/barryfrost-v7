@@ -123,6 +123,13 @@ export class PdsPoller implements DurableObject {
   // one. This catches an edit or delete of *any* record, closing the blind spot a
   // "newest record only" check would have.
   private async poll(): Promise<void> {
+    // Flush a deploy left pending by a POST that threw a network error last cycle. This
+    // has to happen before the early returns below (unchanged rev, or a scan this cycle
+    // with nothing changed) — otherwise a failed deploy sits stuck until the next
+    // detected change or the hourly fallback, since those early-return paths never
+    // reached maybeDeploy() before.
+    await this.maybeDeploy();
+
     const storedRev = await this.state.storage.get<string>('rev');
     const storedCollections = await this.state.storage.get<CollectionsState>('collections');
     const errors: string[] = [];
@@ -132,9 +139,9 @@ export class PdsPoller implements DurableObject {
     // First run (no stored baseline): scan once to establish it and return without
     // deploying, so deploying the Worker itself doesn't fire a spurious rebuild.
     if (!storedCollections) {
-      const baseline = await this.scanCollections(errors);
-      await this.state.storage.put('collections', baseline);
-      if (rev) await this.state.storage.put('rev', rev);
+      const scanned = await this.scanCollections(errors);
+      await this.state.storage.put('collections', scanned);
+      await this.maybeAdvanceRev(rev, scanned);
       await this.state.storage.put('lastPollAt', Date.now());
       await this.state.storage.put('lastPollErrors', errors);
       return;
@@ -149,41 +156,73 @@ export class PdsPoller implements DurableObject {
 
     const scanned = await this.scanCollections(errors);
     const collections: CollectionsState = { ...storedCollections };
-    let changed = false;
+    const changes: Array<{ collection: string; verb: Verb; rkey: string }> = [];
 
     for (const [collection, next] of Object.entries(scanned)) {
       const prev = storedCollections[collection] ?? {};
       const diffs = diffCollection(prev, next);
       if (diffs.length === 0) continue;
-
-      changed = true;
       collections[collection] = next;
-
-      for (const { verb, rkey } of diffs) {
-        const count = (await this.state.storage.get<number>('changeCount')) ?? 0;
-        await this.state.storage.put('changeCount', count + 1);
-        const lastChange: LastChange = { verb, collection, rkey, at: Date.now() };
-        await this.state.storage.put('lastChange', lastChange);
-
-        if (!SILENT_COLLECTIONS.has(collection)) {
-          const pending = (await this.state.storage.get<string[]>('pendingSummary')) ?? [];
-          pending.push(describeChange(verb, collection));
-          await this.state.storage.put('pendingSummary', pending);
-        }
-      }
+      for (const { verb, rkey } of diffs) changes.push({ collection, verb, rkey });
     }
 
-    await this.state.storage.put('collections', collections);
-    if (rev) await this.state.storage.put('rev', rev);
+    if (changes.length > 0) {
+      await this.state.storage.put('collections', collections);
+
+      const count = (await this.state.storage.get<number>('changeCount')) ?? 0;
+      await this.state.storage.put('changeCount', count + changes.length);
+
+      const last = changes[changes.length - 1];
+      const lastChange: LastChange = { verb: last.verb, collection: last.collection, rkey: last.rkey, at: Date.now() };
+      await this.state.storage.put('lastChange', lastChange);
+
+      const pending = (await this.state.storage.get<string[]>('pendingSummary')) ?? [];
+      for (const { verb, collection } of changes) {
+        if (!SILENT_COLLECTIONS.has(collection)) pending.push(describeChange(verb, collection));
+      }
+      await this.state.storage.put('pendingSummary', pending);
+
+      await this.state.storage.put('deployPending', true);
+    }
+
+    await this.maybeAdvanceRev(rev, scanned);
     await this.state.storage.put('lastPollAt', Date.now());
     await this.state.storage.put('lastPollErrors', errors);
 
-    if (changed) await this.state.storage.put('deployPending', true);
     await this.maybeDeploy();
+  }
+
+  // Only persist the new rev once every watched collection scanned cleanly. If a
+  // collection's fetch failed this cycle, its stored map is left stale (fine — the
+  // caller kept the old value), but advancing rev regardless would mean the cheap
+  // rev-gate short-circuits every later cycle until the repo happens to change again —
+  // silently deferring detection of anything already sitting in that collection,
+  // possibly for days. Withholding rev instead forces a rescan every cycle until the
+  // collection succeeds.
+  //
+  // Trade-off: a persistently failing collection (e.g. its upstream service goes away
+  // and starts 4xx-ing) causes a full ~30-request scan every minute instead of the
+  // usual single getLatestCommit call. That's still well inside bsky.social's rate
+  // limit, and it's loudly visible in lastPollErrors, so it's an acceptable default —
+  // but it's a deliberate trade, not an oversight.
+  private async maybeAdvanceRev(rev: string | null, scanned: CollectionsState): Promise<void> {
+    if (!rev) return;
+    if (Object.keys(scanned).length < WATCHED_COLLECTIONS.length) return;
+    await this.state.storage.put('rev', rev);
   }
 
   // Fetch every watched collection's full rkey→cid map in parallel. A collection whose
   // fetch fails is omitted from the result (caller keeps the stored value for it).
+  //
+  // Subrequest ceiling: the Workers free plan allows 50 subrequests per invocation. A
+  // full scan is already ~30 (roughly one listRecords page per ~100 records across all
+  // watched collections, plus getLatestCommit, plus an occasional plc.directory lookup).
+  // app.bsky.feed.post and com.barryfrost.checkin grow monotonically, so at roughly
+  // double today's record counts a scan will start clipping the ceiling and truncate
+  // silently into the errors path. No action needed now, but if scans start failing,
+  // that's why — the fix is spreading per-collection scans across multiple cycles, or
+  // switching to com.atproto.sync.getRepo?since=<rev> CAR diffing instead of per-
+  // collection listRecords pagination.
   private async scanCollections(errors: string[]): Promise<CollectionsState> {
     const results = await Promise.all(
       WATCHED_COLLECTIONS.map(async (collection) => ({
@@ -351,12 +390,15 @@ export class PdsPoller implements DurableObject {
 export default {
   async fetch(req: Request, env: Env): Promise<Response> {
     const url = new URL(req.url);
-    if (url.pathname === '/poll' || url.pathname === '/status') {
+    if (url.pathname === '/status') {
       return stub(env).fetch(req);
     }
-    if (url.pathname === '/pending-notification') {
-      // Gate the drain: it mutates state, so a random caller shouldn't be able to swallow
-      // a pending notification. When NOTIFY_SECRET is unset (local dev) the route is open.
+    if (url.pathname === '/poll' || url.pathname === '/pending-notification') {
+      // Gate: both mutate state (poll drives a scan and can trigger a deploy; the drain
+      // clears the notification queue), so a random caller shouldn't be able to trigger
+      // either. The minute cron doesn't go through this router at all — it calls
+      // stub.fetch('/poll') on the DO directly — so this is purely for manual curl
+      // debugging. When NOTIFY_SECRET is unset (local dev) both routes are open.
       if (env.NOTIFY_SECRET && req.headers.get('X-Notify-Secret') !== env.NOTIFY_SECRET) {
         return new Response(null, { status: 401 });
       }
