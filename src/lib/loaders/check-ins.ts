@@ -122,6 +122,7 @@ export function checkInsLoader(): Loader {
             latitude: location?.latitude,
             longitude: location?.longitude,
             createdAt: value.createdAt as string,
+            comment: value.comment as string | undefined,
             uri: record.uri,
             photoUrls: photoUrls.length > 0 ? photoUrls : undefined,
             photoFullUrls: photoFullUrls.length > 0 ? photoFullUrls : undefined,

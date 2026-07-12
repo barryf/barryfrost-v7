@@ -37,6 +37,8 @@ Fetched at build time from `bsky.social` for DID `did:plc:j5ksi3y4tdtbp7vpsxsfya
 | `site.standard.graph.subscription` | `subscriptions.ts` | `/blogroll` only |
 
 > **Note on `com.barryfrost.checkin`:** The site route and code use `check-in` (hyphenated), but the AT Protocol NSID cannot follow suit — the spec only allows `[a-zA-Z0-9]` in NSID name segments (no hyphens). The NSID is therefore intentionally kept as `com.barryfrost.checkin`.
+>
+> This repo is the canonical home of the `com.barryfrost.checkin` lexicon doc: `lexicons/com/barryfrost/checkin.json`, published to the PDS as a `com.atproto.lexicon.schema` record via `npm run publish:lexicon` (the fsq2pds importer repo no longer keeps a copy). Records carry an optional `comment` field (the Swarm "shout" user comment); `check-ins.ts` exposes it in loader data, but no card/template renders it yet.
 
 Blogroll blogs come from `src/data/blogroll.json` (static JSON).
 
@@ -367,6 +369,7 @@ Both CLIs accept `--no-git` (or `CI=true`) to skip git/gh operations — used by
 | `scripts/create-standard-publications.ts` | One-time: create the two `site.standard.publication` records (`npm run standard:pubs`) |
 | `scripts/assign-standard-rkeys.ts` | One-time: write `standardRkey` TIDs into article/weeknote frontmatter (`npm run standard:rkeys`) |
 | `scripts/publish-standard-site.ts` | Upsert `site.standard.document` records + Bluesky card posts (`npm run publish:standard`) |
+| `scripts/publish-lexicon.ts` | Upsert the canonical `com.barryfrost.checkin` lexicon doc to the PDS (`npm run publish:lexicon`) |
 
 ## Standard.site Publishing
 

@@ -15,6 +15,11 @@
             "maxLength": 100,
             "type": "string"
           },
+          "comment": {
+            "description": "Optional user comment (Swarm \"shout\") attached to the checkin",
+            "maxLength": 1000,
+            "type": "string"
+          },
           "createdAt": {
             "description": "ISO 8601 timestamp of the checkin",
             "format": "datetime",

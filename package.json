@@ -13,7 +13,8 @@
     "import:grain": "tsx scripts/import-grain-photos.ts",
     "standard:pubs": "tsx scripts/create-standard-publications.ts",
     "standard:rkeys": "tsx scripts/assign-standard-rkeys.ts",
-    "publish:standard": "tsx scripts/publish-standard-site.ts"
+    "publish:standard": "tsx scripts/publish-standard-site.ts",
+    "publish:lexicon": "tsx scripts/publish-lexicon.ts"
   },
   "dependencies": {
     "@astrojs/mdx": "^7.0.0",
