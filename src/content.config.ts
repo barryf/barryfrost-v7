@@ -102,6 +102,7 @@ const checkIns = defineCollection({
     latitude: z.string().optional(),
     longitude: z.string().optional(),
     rating: z.number().optional(),
+    comment: z.string().optional(),
     createdAt: z.string(),
     uri: z.string().optional(),
     sourceUrl: z.string().optional(),

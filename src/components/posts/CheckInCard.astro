@@ -17,6 +17,7 @@ interface Props {
       latitude?: string;
       longitude?: string;
       rating?: number;
+      comment?: string;
       sourceUrl?: string;
       photoUrls?: string[];
       photoFullUrls?: string[];
@@ -65,6 +66,7 @@ const addrParts = [
       ) : (
         <span class="p-name">{data.venueName}</span>
       )}
+      {data.comment && <p class="e-content wrap-break-word italic text-sm">{data.comment}</p>}
       {data.venueCategory && <div class="text-sm text-gray-500 dark:text-gray-400">{data.venueCategory}</div>}
       {addrParts.length > 0 && (
         <p class="p-adr h-adr text-sm text-gray-500 dark:text-gray-400">
