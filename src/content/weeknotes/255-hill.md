@@ -1,0 +1,14 @@
+---
+title: "Week 255 - Hill"
+date: 2026-07-13T13:49Z
+week: 255
+emoji: "⛰️"
+---
+
+- I was back at [The Oval](https://www.kiaoval.com) on Wednesday, in scorching sunshine, to watch [Surrey crush Sussex](https://www.cricinfo.com/series/vitality-blast-men-2026-1512690/surrey-vs-sussex-south-group-1512860/live-cricket-score) in the evening T20 cricket.
+- Arriving at the ground, sensibly sunscreened, I swallowed my pride and bought a Surrey cap to protect my head. Last time I went to the cricket my head was fairly pink, and I knew it was time to do the right thing, even if, ["There's fewer more distressing sights than that of an Englishman in a baseball cap."](https://genius.com/The-libertines-time-for-heroes-lyrics) Sorry Pete, but the Panamas were £85.
+- We were drinking lovely refreshing pints of [Brixton Electric tropical lager](https://brixtonbrewery.com/products/electric-tropical-lager), which tasted just like [Um Bongo](http://www.umbongo.com), but much more expensive.
+- This week I've been trying out Anthropic's new [Claude Fable](https://www.anthropic.com/claude/fable) model while it's still available in my Pro account. The challenge is finding a task equal to its capability. It was pretty good at finding security vulnerabilities and my accessibility misses, but I mostly feel like I'm asking a Michelin-starred chef to boil me an egg.
+- The relentless sun kept us indoors all Saturday, with fans on full-blast, and kids (and parents) listless and tired. By the time [England's World Cup Quarter-Final against Norway](https://www.bbc.co.uk/sport/football/live/cgl33l55100t) started at 10pm, despite wanting to watch it on TV, H was tucked up asleep in bed. Finishing at 1am after the extra-time win, I was pretty tired myself.
+- I had a rare Sunday gig. It was well worth the walk up the infamous Alexandra Palace hill to see [Super Furry Animals](https://www.alexandrapalace.com/whats-on/super-furry-animals/), with support from [The Beta Band](https://www.thebetaband.com) and [Badly Drawn Boy](https://en.wikipedia.org/wiki/Badly_Drawn_Boy). BDB left us wanting more, getting a lot of love from an audience, with lumps in our throats, as he battled through his first gig since his mother died. The Beta Band set the mood as the sun went down, with lots of drumming and bongos, and then the Super Furries smashed it. So many great melodic songs. My highlight was [Ice Hockey Hair](https://www.electronicsound.co.uk/features/landmarks/ice-hockey-hair/) from their 1998 EP.
+- Not used to two late nights out of three though 🥱
