@@ -17,23 +17,27 @@ interface Props {
       imageUrls: string[];
       imageLargeUrls: string[];
       imageAlts: string[];
+      external: { uri: string; title: string; description: string; thumbUrl: string | null } | null;
       quotedPost: { available: boolean; uri: string; [key: string]: unknown } | null;
       createdAt: string;
       uri: string;
     }
-  }
+  };
+  /** Emit data-pagefind-body so this post is added to the search index. Set false to reuse the card outside the canonical /posts list (e.g. the homepage) without duplicate indexing. */
+  indexable?: boolean;
 }
 
-const { entry } = Astro.props;
+const { entry, indexable = true } = Astro.props;
 const { data } = entry;
 const html = renderRichText(data.text, data.facets as any);
 const images = data.imageUrls ?? [];
 const largeImages = data.imageLargeUrls ?? [];
 const alts = data.imageAlts ?? [];
+const external = data.external;
 const blueskyUrl = `https://bsky.app/profile/${HANDLE}/post/${entry.id}`;
 const date = new Date(data.createdAt);
 ---
-<article class="h-entry" data-pagefind-body>
+<article class="h-entry" data-pagefind-body={indexable ? '' : undefined}>
   <AuthorCard />
   {data.reply && (
     <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">
@@ -58,7 +62,21 @@ const date = new Date(data.createdAt);
       ))}
     </div>
   )}
-  <div class="mb-4 text-sm text-gray-500 dark:text-gray-400">
+  {external && external.thumbUrl && (
+    <div class="mt-2 mb-1">
+      <a href={external.uri} rel="noopener noreferrer" class="block" title={external.title || undefined}>
+        <img
+          src={external.thumbUrl}
+          alt={external.description || external.title || ''}
+          class="u-photo w-auto max-w-full rounded"
+          style="height:6rem"
+          loading="lazy"
+          decoding="async"
+        />
+      </a>
+    </div>
+  )}
+  <div class="text-sm text-gray-500 dark:text-gray-400">
     <time class="dt-published mr-1" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatDateShort(date)}</time>
     <a class="u-url underline" href={blueskyUrl} rel="noopener noreferrer" aria-label="View on Bluesky"><BlueskyIcon /></a>
     <a class="ml-1 underline" href={pdslsUrl(data.uri)} rel="noopener noreferrer" aria-label="View on PDSls"><PdslsIcon /></a>

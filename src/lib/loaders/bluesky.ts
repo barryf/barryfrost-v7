@@ -13,11 +13,19 @@ interface BlueskyQuoteRef {
   cid?: string;
 }
 
+interface BlueskyExternal {
+  uri?: string;
+  title?: string;
+  description?: string;
+  thumb?: { ref?: { $link?: string } };
+}
+
 interface BlueskyEmbed {
   $type?: string;
   images?: BlueskyImage[];
-  media?: { $type?: string; images?: BlueskyImage[] };
+  media?: { $type?: string; images?: BlueskyImage[]; external?: BlueskyExternal };
   record?: BlueskyQuoteRef | { record?: BlueskyQuoteRef };
+  external?: BlueskyExternal;
 }
 
 const APPVIEW_HOST = 'public.api.bsky.app';
@@ -59,6 +67,23 @@ async function extractImages(embed: BlueskyEmbed | undefined): Promise<{ urls: s
     urls: present.map(r => r.url),
     largeUrls: present.map(r => r.largeUrl),
     alts: present.map(r => r.alt),
+  };
+}
+
+async function extractExternal(embed: BlueskyEmbed | undefined): Promise<{ uri: string; title: string; description: string; thumbUrl: string | null } | null> {
+  const external = embed?.$type === 'app.bsky.embed.external'
+    ? embed.external
+    : embed?.$type === 'app.bsky.embed.recordWithMedia' && embed.media?.$type === 'app.bsky.embed.external'
+      ? embed.media.external
+      : undefined;
+  if (!external?.uri) return null;
+  const link = external.thumb?.ref?.$link;
+  const thumbUrl = link ? await pdsImage(link, { width: 600, fit: 'scale-down' }) : null;
+  return {
+    uri: external.uri,
+    title: external.title ?? '',
+    description: (external.description ?? '').replace(/^Alt:\s*/i, ''),
+    thumbUrl,
   };
 }
 
@@ -140,6 +165,8 @@ export function blueskyLoader(): Loader {
         const embed = value.embed as BlueskyEmbed | undefined;
         const { urls: imageUrls, largeUrls: imageLargeUrls, alts: imageAlts } = await extractImages(embed);
 
+        const external = await extractExternal(embed);
+
         const quoteRef = extractQuoteRef(embed);
         const quotedPost = quoteRef
           ? await hydrateQuotedPost(quoteRef.uri, quoteRef.cid)
@@ -156,6 +183,7 @@ export function blueskyLoader(): Loader {
             imageUrls,
             imageLargeUrls,
             imageAlts,
+            external,
             quotedPost,
           },
           digest: generateDigest(record.cid),

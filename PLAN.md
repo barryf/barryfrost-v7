@@ -57,7 +57,7 @@ The homepage (`src/pages/index.astro`) is a curated view, not a unified feed. Se
 1. **Intro** — short bio (h-card with name/location lives in the sitewide `SiteHeader`)
 2. **Latest Weeknote** — title + emoji, truncated excerpt, link to all weeknotes
 3. **Recent Photos** — 8 most recent photo galleries in a scrollable flex row
-4. **Latest Post** — most recent non-reply Bluesky post with text, relative date, Bluesky icon link, pdsls icon link
+4. **Latest Post** — most recent non-reply Bluesky post, rendered with the shared `BlueskyCard` (so images, quotes, and external embeds appear as on `/posts`); passed `indexable={false}` to keep the post out of the Pagefind index, since it is already indexed on `/posts`
 5. **Featured Articles** — articles with `featured: true` frontmatter, sorted by date
 6. **Recent Check-ins** — 5 most recent check-ins as a compact list
 7. **Recent Media** — links to `/books`, `/films`, and `/music`
@@ -125,7 +125,7 @@ All icons accept an optional `class` prop to override the default sizing/alignme
 
 Card components in `src/components/posts/`:
 - `ArticleCard` — title link, relative date with `title` attr
-- `BlueskyCard` — rich text, embedded image thumbnails (each links to a larger version), quote posts via `BlueskyQuote`, relative date, Bluesky icon link, pdsls icon link
+- `BlueskyCard` — rich text, embedded image thumbnails (each links to a larger version), external embed thumbnails (e.g. GIFs) linking to the source URL with alt from the embed's description, quote posts via `BlueskyQuote`, relative date, Bluesky icon link, pdsls icon link. An `indexable` prop (default `true`) gates the `data-pagefind-body` attribute so the card can be reused off the canonical `/posts` list (e.g. the homepage) without duplicate search indexing
 - `CheckInCard` — venue name/category/address (name links to OpenStreetMap when lat/lon available), optional photo(s), relative date, pdsls icon link, optional Beaconbits link
 - `FilmCard` — clickable poster linking to Popfeed, title, star rating, relative date, pdsls icon link
 - `BookCard` — clickable cover linking to BookHive, title, authors, "Started/Finished [relative date]", pdsls icon link
@@ -181,7 +181,7 @@ Static search via [Pagefind](https://pagefind.app). After `astro build`, `pagefi
 - Travelblog months (`/travelblog/{YYYY-MM}`) — one indexed page per month
 - Slash pages (about, colophon, etc.) via `[...slug].astro`
 - Static pages: `/now`, `/work`, `/music`
-- Bluesky posts and photo galleries — indexed per card on feed/paginated pages (`data-pagefind-body` on each `BlueskyCard`/`PhotoCard` `<article>`); search results link to the feed page
+- Bluesky posts and photo galleries — indexed per card on feed/paginated pages (`data-pagefind-body` on each `BlueskyCard`/`PhotoCard` `<article>`); search results link to the feed page. The homepage's Latest Post reuses `BlueskyCard` with `indexable={false}`, which omits `data-pagefind-body` entirely — note the attribute must be *absent* (not `="false"`, which Pagefind still treats as a body marker), so the card renders it as `{indexable ? '' : undefined}`
 - Books — indexed per card (`data-pagefind-body` on `BookCard`), covering both the Reading and Read lists
 - Films — indexed via `FilmFeed.astro` on the by-date view only (`data-pagefind-body` gated to `sort === 'date'`); the `/films/by-rating` view is skipped to avoid indexing every film twice
 - `/blogroll` — page content wrapped in `data-pagefind-body`
