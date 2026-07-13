@@ -4,12 +4,10 @@ import Divider from '@/components/Divider.astro';
 import { getCollection } from 'astro:content';
 import { formatDateShort, formatDateTitle, toISODate } from '@/lib/dates';
 import { truncateBody } from '@/lib/weeknotes';
-import { renderRichText } from '@/lib/richtext';
-import { DID, HANDLE, pdslsUrl } from '@/lib/pds';
-import BlueskyQuote from '@/components/posts/BlueskyQuote.astro';
-import BlueskyIcon from '@/components/icons/BlueskyIcon.astro';
+import { DID } from '@/lib/pds';
 import PdslsIcon from '@/components/icons/PdslsIcon.astro';
 import AuthorCard from '@/components/AuthorCard.astro';
+import BlueskyCard from '@/components/posts/BlueskyCard.astro';
 
 const [weeknotes, photos, blueskyPosts, articles, checkIns] = await Promise.all([
   getCollection('weeknotes'),
@@ -44,12 +42,28 @@ const recentCheckIns = checkIns
   .sort((a, b) => new Date(b.data.createdAt).getTime() - new Date(a.data.createdAt).getTime())
   .slice(0, 5);
 
-const latestPostHtml = latestPost ? renderRichText(latestPost.data.text, latestPost.data.facets as any) : '';
-const latestPostUrl = latestPost ? `https://bsky.app/profile/${HANDLE}/post/${latestPost.id}` : '';
-
 ---
 <Base title="Barry Frost">
-  <p class="mb-4">I'm a part-time software engineer and full-time technology leader with experience building teams, websites and apps. I live in a village in Hertfordshire, UK, with my wife and two sons.</p>
+  <p class="mb-4">
+      I'm a part-time software engineer and full-time technology leader with experience building teams, websites and apps.
+      I live in a village in Hertfordshire, UK, with my wife and two sons.
+      <a href="/work" class="underline">Work</a>
+      <a href="/about" class="underline">About</a>
+  </p>
+
+  <p class="mb-4">
+    This site is <a href="/colophon" class="underline">built</a> using
+    <a class="underline" href="https://atproto.com" title="AT Protocol">atproto</a>.
+    Content is stored in my
+    <a class="underline text-nowrap" href={`https://pdsls.dev/at://${DID}`} rel="noopener noreferrer" aria-label="View on PDSls">
+      <PdslsIcon class="w-3 h-3 inline-block -translate-y-px mr-1" />PDS</a>
+      WIP
+  </p>
+
+  <p class="mb-4 flex gap-x-3 text-sm">
+    <a href="/now" class="underline">Now</a>
+    <a href="/uses" class="underline">Uses</a>
+  </p>
 
   <div class="h-feed">
   <data class="p-name hidden">Latest content feed</data>
@@ -65,12 +79,14 @@ const latestPostUrl = latestPost ? `https://bsky.app/profile/${HANDLE}/post/${la
           <a href={`/weeknotes/${latestWeeknote.id}`} class="p-name u-url underline">
             {latestWeeknote.data.emoji && `${latestWeeknote.data.emoji} `}{latestWeeknote.data.title}</a>
         </h3>
-        <p class="e-content mb-1">
+        <p class="e-content">
           {latestWeeknote.body && (
             <Fragment>{truncateBody(latestWeeknote.body)}</Fragment>
           )}
         </p>
-        <time class="dt-published hidden" datetime={toISODate(latestWeeknote.data.date)}>{formatDateShort(latestWeeknote.data.date)}</time>
+        <div class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+          <time class="dt-published" datetime={toISODate(latestWeeknote.data.date)} title={formatDateTitle(latestWeeknote.data.date)}>{formatDateShort(latestWeeknote.data.date)}</time>
+        </div>
       </div>
       <div class="mb-4 text-sm"><a href="/weeknotes" class="underline">All Weeknotes</a></div>
     </>
@@ -120,17 +136,8 @@ const latestPostUrl = latestPost ? `https://bsky.app/profile/${HANDLE}/post/${la
     <>
       <Divider />
       <h2 class="font-semibold text-black dark:text-white">Latest Post</h2>
-      <div class="h-entry">
-        <AuthorCard />
-        <p class="e-content mb-1 wrap-break-word" set:html={latestPostHtml} />
-        {latestPost.data.quotedPost && <BlueskyQuote quotedPost={latestPost.data.quotedPost as any} />}
-        <div class="mb-1 text-sm text-gray-500 dark:text-gray-400">
-          <time class="dt-published mr-1" datetime={toISODate(new Date(latestPost.data.createdAt))} title={formatDateTitle(new Date(latestPost.data.createdAt))}>{formatDateShort(new Date(latestPost.data.createdAt))}</time>
-          <a href={latestPostUrl} class="u-url underline" rel="noopener noreferrer" aria-label="View on Bluesky"><BlueskyIcon /></a>
-          <a class="ml-1 underline" href={pdslsUrl(latestPost.data.uri)} rel="noopener noreferrer" aria-label="View on PDSls"><PdslsIcon /></a>
-        </div>
-      </div>
-      <div class="mb-4 text-sm">
+      <BlueskyCard entry={latestPost} indexable={false} />
+      <div class="mb-4 mt-1 text-sm">
         <a href="/posts" class="underline">All Posts</a>
       </div>
     </>
