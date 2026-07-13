@@ -18,6 +18,10 @@
 
 import { createHash } from 'node:crypto';
 import { DID, PDS_HOST } from '@/lib/pds';
+import {
+  IMAGES_BASE_URL, IS_PROD, R2_CONFIGURED,
+  getAwsClient, r2Exists, r2Put, acquireSlot, releaseSlot,
+} from '@/lib/r2';
 
 type Fit = 'cover' | 'contain' | 'scale-down' | 'crop' | 'pad';
 
@@ -26,47 +30,6 @@ interface ImageOpts {
   height?: number;
   fit?: Fit;
   quality?: number;
-}
-
-// ── R2 config ────────────────────────────────────────────────────────────────
-
-const R2_ACCOUNT_ID        = process.env.R2_ACCOUNT_ID;
-const R2_BUCKET            = process.env.R2_BUCKET;
-const R2_ACCESS_KEY_ID     = process.env.R2_ACCESS_KEY_ID;
-const R2_SECRET_ACCESS_KEY = process.env.R2_SECRET_ACCESS_KEY;
-const IMAGES_BASE_URL      = process.env.IMAGES_BASE_URL ?? 'https://images.barryfrost.com';
-
-const IS_PROD = import.meta.env.PROD === true;
-const R2_CONFIGURED = !!(R2_ACCOUNT_ID && R2_BUCKET && R2_ACCESS_KEY_ID && R2_SECRET_ACCESS_KEY);
-
-let _AwsClient: (typeof import('aws4fetch'))['AwsClient'] | undefined;
-
-async function getAwsClient(): Promise<InstanceType<typeof import('aws4fetch')['AwsClient']>> {
-  if (!_AwsClient) {
-    _AwsClient = (await import('aws4fetch')).AwsClient;
-  }
-  return new _AwsClient({
-    accessKeyId: R2_ACCESS_KEY_ID!,
-    secretAccessKey: R2_SECRET_ACCESS_KEY!,
-    service: 's3',
-    region: 'auto',
-  });
-}
-
-// ── concurrency limiter ──────────────────────────────────────────────────────
-
-const CONCURRENCY = 24;
-let _active = 0;
-const _queue: Array<() => void> = [];
-
-function acquireSlot(): Promise<void> {
-  if (_active < CONCURRENCY) { _active++; return Promise.resolve(); }
-  return new Promise(resolve => _queue.push(resolve));
-}
-
-function releaseSlot() {
-  const next = _queue.shift();
-  if (next) { next(); } else { _active--; }
 }
 
 // ── key helpers ──────────────────────────────────────────────────────────────
@@ -88,10 +51,6 @@ function remoteKey(url: string, opts: ImageOpts): string {
   return `ext/${hash}/${dimSegment(opts)}`;
 }
 
-function r2Endpoint(key: string): string {
-  return `https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com/${R2_BUCKET}/${key}`;
-}
-
 // ── sharp fit mapping ────────────────────────────────────────────────────────
 
 type SharpFit = 'cover' | 'contain' | 'inside' | 'outside' | 'fill';
@@ -104,33 +63,6 @@ function sharpFit(fit: Fit): SharpFit {
     case 'crop':       return 'cover';
     case 'pad':        return 'contain';
   }
-}
-
-// ── R2 operations ────────────────────────────────────────────────────────────
-
-async function r2Exists(aws: Awaited<ReturnType<typeof getAwsClient>>, key: string): Promise<boolean> {
-  try {
-    const res = await aws.fetch(r2Endpoint(key), { method: 'HEAD' });
-    return res.status === 200;
-  } catch {
-    return false;
-  }
-}
-
-async function r2Put(
-  aws: Awaited<ReturnType<typeof getAwsClient>>,
-  key: string,
-  body: Buffer,
-  contentType: string,
-): Promise<void> {
-  await aws.fetch(r2Endpoint(key), {
-    method: 'PUT',
-    body,
-    headers: {
-      'content-type': contentType,
-      'cache-control': 'public, max-age=31536000, immutable',
-    },
-  });
 }
 
 // ── core materialise function ────────────────────────────────────────────────
