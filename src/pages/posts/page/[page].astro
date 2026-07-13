@@ -14,7 +14,7 @@ export async function getStaticPaths() {
 const { items, currentPage, totalPages } = Astro.props;
 ---
 <Feed title="Posts" currentPage={currentPage} totalPages={totalPages} basePath="/posts">
-  <div class="my-12 flex flex-col gap-y-8">
+  <div class="my-12 flex flex-col gap-y-16">
     {(items as any[]).map((entry) => <BlueskyCard entry={entry} />)}
   </div>
 </Feed>
