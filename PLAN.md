@@ -284,7 +284,7 @@ Required secrets: `GH_PAT`
 
 Images are pre-generated **at build time** and served from an R2 bucket at `images.barryfrost.com`. No runtime resizing occurs.
 
-`src/lib/image-store.ts` exposes two async helpers used by all loaders:
+`src/lib/image-store.ts` exposes two async helpers used by all loaders (the shared R2 primitives — signed client, HEAD/PUT, concurrency limiter, config detection — live in `src/lib/r2.ts`, reused by `og-store.ts`):
 - `pdsImage(cid, opts)` — fetches blob from `bsky.social` via `com.atproto.sync.getBlob`
 - `remoteImage(url, opts)` — fetches from the URL directly
 
@@ -300,9 +300,20 @@ R2 bucket `barryfrost-images` with custom domain `images.barryfrost.com`. `sharp
 
 Every loader processes its records with bounded concurrency instead of a sequential `for await` loop, so `image-store.ts`'s R2/sharp work and per-record PDS/AppView lookups actually run in parallel:
 - `src/lib/concurrency.ts` — `mapLimit(items, limit, fn)` helper and the shared `RECORD_CONCURRENCY` (32) constant, used by every loader in `src/lib/loaders/`
-- `image-store.ts`'s own `CONCURRENCY` (24) separately bounds the R2/sharp work specifically, regardless of how many records are in flight above it
+- the shared R2 concurrency limiter (`CONCURRENCY` 24, in `src/lib/r2.ts`) separately bounds the R2/sharp work specifically, regardless of how many records are in flight above it
 
 This took "Syncing content" from 90s+ down to ~7s. The pattern for a loader: collect records from `fetchAllRecords` into an array first (cheap, no images involved), then `mapLimit(records, RECORD_CONCURRENCY, async (record) => {...})` over the per-record body (image fetch + any other network calls + `store.set`) — decoupling PDS pagination from per-record work.
+
+### Social cards — satori + R2
+
+OpenGraph/Twitter share images (1200×630) are generated **at build time** and stored content-addressed in R2 alongside content images, so cron redeploys re-render nothing unless a card's content changes.
+
+- `src/lib/og/` renders a card: `satori` turns a plain VDOM (`cards.ts`) into SVG, then the existing transitive `sharp` rasterises it to PNG (`render.ts`) — no native rasteriser dep. Work Sans comes from `@fontsource/work-sans`'s **woff** files (satori can't read woff2); emoji from `@twemoji/svg` via satori's `loadAdditionalAsset` (`fonts.ts`, `emoji.ts`). All three are pure-JS/asset deps, safe to add directly (unlike `sharp`).
+- `src/lib/og-store.ts` — `ogCardUrl(data, localPath)` mirrors `image-store.ts`: content-addresses on `sha256(OG_TEMPLATE_VERSION + inputs)` → `og/{hash}.png`, HEAD-checks R2, renders + uploads only if missing, reusing the shared R2 primitives in `src/lib/r2.ts`. Bump `OG_TEMPLATE_VERSION` to invalidate every card after a design change.
+- Three card kinds: **weeknote** (large twemoji emoji + week/title + date), **article** (title + date), and a branded **default** (wordmark + tagline + small avatar) used by every other page.
+- `src/pages/og/{weeknotes,articles}/[slug].png.ts` + `default.png.ts` are the dev / credential-less fallback: `getStaticPaths` returns `[]` when R2 is configured (cards live in R2), else renders each card as a static PNG. In dev and PR builds `ogCardUrl` returns these local paths.
+- `BaseHead.astro` emits `og:image` (+ `:width`/`:height`/`:alt`), `twitter:card=summary_large_image`, and `twitter:image`, defaulting to the branded card; weeknote/article pages pass their own via an `ogImage` prop threaded through `Base`/`Post`.
+- **Descriptions:** `og:description` and `<meta name="description">` use the frontmatter `description` if set, else a 160-char plain-text body excerpt (`plainExcerpt` in `src/lib/excerpt.ts`), else the site default. Bluesky ignores `twitter:card` and always renders a large 1.91:1 card, so a good `og:image` + `og:description` is what matters there.
 
 ### Why `pds-poller` is separate
 

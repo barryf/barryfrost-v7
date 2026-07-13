@@ -1,3 +1,9 @@
+/**
+ * Plain-text excerpts from Markdown/MDX bodies, for social descriptions and
+ * homepage previews. Strips inline markup, collapses whitespace, and truncates
+ * on a word boundary with an ellipsis.
+ */
+
 export function truncateBody(body: string, maxLen = 280): string {
   const text = body
     .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
@@ -19,4 +25,3 @@ export function plainExcerpt(body: string, maxLen = 160): string {
     .trim();
   return text.length > maxLen ? text.slice(0, maxLen).replace(/\s\S*$/, '') + '…' : text;
 }
-
