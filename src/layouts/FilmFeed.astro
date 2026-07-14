@@ -36,7 +36,7 @@ const { items, currentPage, totalPages, basePath = '/films', sort = 'date' } = A
       <a href="/films/by-rating" class="underline">By rating</a>
     )}
   </div>
-  <div class="mb-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-6" data-pagefind-body={sort === 'date'}>
+  <div class="mb-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-6" data-pagefind-body={sort === 'date' ? '' : undefined}>
     {items.map(entry => <FilmCard entry={entry} />)}
   </div>
 </Feed>
