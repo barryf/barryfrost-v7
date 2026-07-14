@@ -3,7 +3,6 @@ import { getCollection, render } from 'astro:content';
 import Post from '@/layouts/Post.astro';
 import { plainExcerpt } from '@/lib/excerpt';
 import { socialMeta } from '@/lib/social';
-import Divider from '@/components/Divider.astro';
 
 export async function getStaticPaths() {
   const weeknotes = await getCollection('weeknotes');

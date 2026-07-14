@@ -75,7 +75,7 @@ export function subscriptionsLoader(): Loader {
             ? await remoteImage(rawIconUrl, { width: 96, height: 96, fit: 'cover' })
             : undefined;
 
-          const handle = await resolveHandle(subjectDid, pdsHost);
+          const handle = await resolveHandle(subjectDid);
 
           store.set({
             id: rkey,

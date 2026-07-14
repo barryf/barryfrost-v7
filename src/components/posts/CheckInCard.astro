@@ -1,30 +1,12 @@
 ---
+import type { CollectionEntry } from 'astro:content';
 import { formatDateShort, formatDateTitle, toISODate } from '@/lib/dates';
 import { pdslsUrl } from '@/lib/pds';
 import PdslsIcon from '@/components/icons/PdslsIcon.astro';
 import AuthorCard from '@/components/AuthorCard.astro';
 
 interface Props {
-  entry: {
-    id: string;
-    data: {
-      venueName: string;
-      venueCategory?: string;
-      venueStreet?: string;
-      venueLocality?: string;
-      venueRegion?: string;
-      venuePostalCode?: string;
-      latitude?: string;
-      longitude?: string;
-      rating?: number;
-      comment?: string;
-      sourceUrl?: string;
-      photoUrls?: string[];
-      photoFullUrls?: string[];
-      createdAt: string;
-      uri: string;
-    }
-  }
+  entry: CollectionEntry<'check-ins'>;
 }
 
 const { entry } = Astro.props;
@@ -82,7 +64,7 @@ const addrParts = [
   {data.rating !== undefined && <data class="p-rating hidden" value={data.rating} />}
   <div class="mb-4 text-gray-500 dark:text-gray-400">
     <time class="dt-published text-sm" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatDateShort(date)}</time>
-    <a class="ml-1 underline" href={pdslsUrl(data.uri)} rel="noopener noreferrer" aria-label="View on PDSls"><PdslsIcon /></a>
+    {data.uri && <a class="ml-1 underline" href={pdslsUrl(data.uri)} rel="noopener noreferrer" aria-label="View on PDSls"><PdslsIcon /></a>}
     {data.sourceUrl && <a href={data.sourceUrl} class="u-syndication text-sm ml-2 underline" rel="noopener noreferrer">Beaconbits</a>}
   </div>
 </article>

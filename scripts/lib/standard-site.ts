@@ -217,7 +217,7 @@ export function buildDocumentRecord(entry: Entry, bskyPostRef?: StrongRef): Docu
 
 /** Fields that determine whether a re-put is needed (excludes bskyPostRef/updatedAt).
  *  Accepts either a freshly-built record or a raw record fetched from the PDS. */
-export function documentContentSignature(r: Record<string, unknown>): string {
+export function documentContentSignature(r: DocumentRecord | Record<string, unknown>): string {
   const content = r.content as { text?: { markdown?: string } } | undefined;
   return JSON.stringify({
     site: r.site ?? '',

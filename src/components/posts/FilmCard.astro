@@ -1,21 +1,12 @@
 ---
+import type { CollectionEntry } from 'astro:content';
 import { formatDateShort, formatDateTitle, toISODate } from '@/lib/dates';
 import { DID, pdslsUrl } from '@/lib/pds';
 import PdslsIcon from '@/components/icons/PdslsIcon.astro';
 import AuthorCard from '@/components/AuthorCard.astro';
 
 interface Props {
-  entry: {
-    id: string;
-    data: {
-      title: string;
-      creativeWorkType: string;
-      rating?: number;
-      posterUrl?: string;
-      createdAt: string;
-      uri: string;
-    }
-  }
+  entry: CollectionEntry<'films'>;
 }
 
 const { entry } = Astro.props;

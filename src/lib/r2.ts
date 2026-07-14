@@ -70,7 +70,8 @@ export async function r2Exists(aws: Aws, key: string): Promise<boolean> {
 export async function r2Put(aws: Aws, key: string, body: Buffer, contentType: string): Promise<void> {
   await aws.fetch(r2Endpoint(key), {
     method: 'PUT',
-    body,
+    // Node's Buffer is a Uint8Array, but its type doesn't line up with the DOM BodyInit union.
+    body: new Uint8Array(body),
     headers: {
       'content-type': contentType,
       'cache-control': 'public, max-age=31536000, immutable',

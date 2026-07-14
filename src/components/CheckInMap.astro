@@ -50,9 +50,10 @@ const { checkIns } = Astro.props;
     shadowUrl: markerShadow.src ?? markerShadow,
   });
 
-  const checkIns = JSON.parse(document.getElementById('check-in-data').textContent);
+  const dataEl = document.getElementById('check-in-data');
+  const checkIns = JSON.parse(dataEl?.textContent ?? '[]');
 
-  function escapeHtml(s) {
+  function escapeHtml(s: string) {
     return s.replace(/&/g, '&amp;').replace(/</g, '&lt;')
             .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
@@ -97,14 +98,16 @@ const { checkIns } = Astro.props;
       map.setView([51.5, -0.1], 10);
     }
 
-    var container = document.getElementById('check-in-map-container');
-    var mapEl = document.getElementById('check-in-map');
-    var btn = document.getElementById('check-in-map-fullscreen-btn');
-    var expandIcon = document.getElementById('check-in-map-expand-icon');
-    var collapseIcon = document.getElementById('check-in-map-collapse-icon');
-    var isFullscreen = false;
+    const container = document.getElementById('check-in-map-container');
+    const mapEl = document.getElementById('check-in-map');
+    const btn = document.getElementById('check-in-map-fullscreen-btn');
+    const expandIcon = document.getElementById('check-in-map-expand-icon');
+    const collapseIcon = document.getElementById('check-in-map-collapse-icon');
+    if (!container || !mapEl || !btn || !expandIcon || !collapseIcon) return;
 
-    function enterFullscreen() {
+    let isFullscreen = false;
+
+    const enterFullscreen = () => {
       isFullscreen = true;
       container.style.cssText = 'position:fixed;inset:0;z-index:9999;margin:0;';
       mapEl.style.height = '100dvh';
@@ -115,9 +118,9 @@ const { checkIns } = Astro.props;
       btn.setAttribute('aria-label', 'Exit fullscreen');
       document.body.style.overflow = 'hidden';
       map.invalidateSize();
-    }
+    };
 
-    function exitFullscreen() {
+    const exitFullscreen = () => {
       isFullscreen = false;
       container.style.cssText = '';
       mapEl.style.height = '360px';
@@ -128,7 +131,7 @@ const { checkIns } = Astro.props;
       btn.setAttribute('aria-label', 'Toggle fullscreen');
       document.body.style.overflow = '';
       map.invalidateSize();
-    }
+    };
 
     btn.addEventListener('click', function () {
       if (isFullscreen) exitFullscreen(); else enterFullscreen();

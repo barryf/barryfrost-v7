@@ -1,4 +1,5 @@
 ---
+import type { CollectionEntry } from 'astro:content';
 import { formatDateShort, formatDateTitle, toISODate } from '@/lib/dates';
 import { renderRichText } from '@/lib/richtext';
 import { HANDLE, pdslsUrl } from '@/lib/pds';
@@ -8,21 +9,7 @@ import PdslsIcon from '@/components/icons/PdslsIcon.astro';
 import AuthorCard from '@/components/AuthorCard.astro';
 
 interface Props {
-  entry: {
-    id: string;
-    data: {
-      text: string;
-      facets: unknown[];
-      reply: { parentHandle: string; parentRkey: string } | null;
-      imageUrls: string[];
-      imageLargeUrls: string[];
-      imageAlts: string[];
-      external: { uri: string; title: string; description: string; thumbUrl: string | null } | null;
-      quotedPost: { available: boolean; uri: string; [key: string]: unknown } | null;
-      createdAt: string;
-      uri: string;
-    }
-  };
+  entry: CollectionEntry<'blueskyPosts'>;
   /** Emit data-pagefind-body so this post is added to the search index. Set false to reuse the card outside the canonical /posts list (e.g. the homepage) without duplicate indexing. */
   indexable?: boolean;
 }

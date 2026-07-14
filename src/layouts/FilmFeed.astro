@@ -1,22 +1,12 @@
 ---
+import type { CollectionEntry } from 'astro:content';
 import Feed from './Feed.astro';
 import FilmCard from '@/components/posts/FilmCard.astro';
 import PopfeedIcon from '@/components/icons/PopfeedIcon.astro';
 import { SECTIONS } from '@/lib/sections';
 
-interface FilmEntry {
-  id: string;
-  data: {
-    title: string;
-    creativeWorkType: string;
-    rating?: number;
-    posterUrl?: string;
-    createdAt: string;
-  }
-}
-
 interface Props {
-  items: FilmEntry[];
+  items: CollectionEntry<'films'>[];
   currentPage: number;
   totalPages: number;
   basePath?: string;

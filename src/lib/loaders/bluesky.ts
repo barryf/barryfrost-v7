@@ -152,7 +152,7 @@ export function blueskyLoader(): Loader {
           const parentRkey = parts[2];
 
           if (!handleCache.has(parentDid)) {
-            handleCache.set(parentDid, await resolveHandle(parentDid, PDS_HOST));
+            handleCache.set(parentDid, await resolveHandle(parentDid));
           }
 
           reply = {

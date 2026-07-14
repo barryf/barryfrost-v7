@@ -9,7 +9,6 @@ import {
   getEducation,
   getSkills,
   getLanguages,
-  formatLocation,
   parseYM,
 } from '@/lib/sifa';
 
@@ -22,7 +21,6 @@ const [self, positions, education, skills, languages] = await Promise.all([
 ]);
 
 const headline = self?.headline;
-const locationStr = formatLocation(self);
 
 type SkillCategory = 'technical' | 'business' | 'interpersonal';
 const skillsByCategory = skills.reduce<Record<SkillCategory, string[]>>(

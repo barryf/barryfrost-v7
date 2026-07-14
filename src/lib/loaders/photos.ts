@@ -50,7 +50,7 @@ export function photosLoader(): Loader {
       // Collect all gallery items grouped by gallery URI
       const galleryItems = new Map<string, { photoUri: string; position: number }[]>();
       for await (const record of fetchAllRecords('social.grain.gallery.item', DID, PDS_HOST)) {
-        const value = record.value as GalleryItemRecord;
+        const value = record.value as unknown as GalleryItemRecord;
         const existing = galleryItems.get(value.gallery) ?? [];
         existing.push({ photoUri: value.item, position: value.position });
         galleryItems.set(value.gallery, existing);

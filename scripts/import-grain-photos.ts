@@ -151,7 +151,7 @@ async function uploadBlob(pds: string, jwt: string, bytes: Buffer, mimeType: str
       'Authorization': `Bearer ${jwt}`,
       'Content-Type': mimeType,
     },
-    body: bytes,
+    body: new Uint8Array(bytes),
   });
   if (!res.ok) throw new Error(`uploadBlob failed: ${res.status} ${await res.text()}`);
   const data = await res.json() as { blob: unknown };

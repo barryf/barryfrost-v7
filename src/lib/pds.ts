@@ -25,7 +25,7 @@ export async function fetchWithRetry(url: string, attempts = 4): Promise<Respons
   }
 }
 
-export async function resolveHandle(did: string, host: string = PDS_HOST): Promise<string> {
+export async function resolveHandle(did: string): Promise<string> {
   const res = await fetchWithRetry(`https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=${did}`);
   if (!res.ok) return did;
   const data = await res.json() as { handle?: string };

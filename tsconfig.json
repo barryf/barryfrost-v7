@@ -4,6 +4,14 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
-    }
-  }
+    },
+    // Every array index and map lookup becomes `T | undefined`, which is more
+    // ceremony than this codebase warrants.
+    "noUncheckedIndexedAccess": false,
+    // Astro component props are optional-by-omission; passing an explicit
+    // `undefined` through to `<Base description={maybe} />` is intended.
+    "exactOptionalPropertyTypes": false
+  },
+  // The Worker has its own tsconfig and its own @cloudflare/workers-types.
+  "exclude": ["dist", "cloudflare"]
 }
