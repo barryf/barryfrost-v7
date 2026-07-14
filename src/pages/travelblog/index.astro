@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import Base from '@/layouts/Base.astro';
 import { countryFlag, countryName } from '@/lib/flags';
 import { formatMonthKey } from '@/lib/dates';
+import { SECTIONS } from '@/lib/sections';
 import { Image } from 'astro:assets';
 import harbour from '@/assets/travelblog/me-auckland-harbour.jpg';
 import milfordSound from '@/assets/travelblog/milford-sound.jpg';
@@ -16,7 +17,7 @@ const months = [...(await getCollection('travelblog'))].sort((a, b) =>
   a.id.localeCompare(b.id),
 );
 ---
-<Base title="Travelblog">
+<Base title={SECTIONS.travelblog.title} description={SECTIONS.travelblog.description}>
   <h1 class="mb-4 font-semibold text-black dark:text-white">Travelblog</h1>
 
   <div class="mb-8 flex gap-1 overflow-x-auto">

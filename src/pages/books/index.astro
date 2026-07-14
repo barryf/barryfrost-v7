@@ -6,6 +6,7 @@ import Divider from '@/components/Divider.astro';
 import BookHiveIcon from '@/components/icons/BookHiveIcon.astro';
 import { getCollection } from 'astro:content';
 import { paginateItems } from '@/lib/feed';
+import { SECTIONS } from '@/lib/sections';
 
 const allBooks = await getCollection('books');
 
@@ -20,7 +21,7 @@ const finishedBooks = allBooks
 const pages = paginateItems(finishedBooks);
 const { items, totalPages } = pages[0] ?? { items: [], totalPages: 1 };
 ---
-<Feed title="Books" totalPages={totalPages} basePath="/books" paginate={false}>
+<Feed {...SECTIONS.books} totalPages={totalPages} basePath="/books" paginate={false}>
   <Fragment slot="description">
     What I'm currently reading and what I've finished, tracked on my
     <a href="https://bookhive.buzz/profile/barryfrost.com" class="underline text-nowrap">

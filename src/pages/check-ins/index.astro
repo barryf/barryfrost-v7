@@ -4,6 +4,7 @@ import CheckInCard from '@/components/posts/CheckInCard.astro';
 import CheckInMap from '@/components/CheckInMap.astro';
 import { getCollection } from 'astro:content';
 import { paginateItems } from '@/lib/feed';
+import { SECTIONS } from '@/lib/sections';
 
 const allCheckIns = (await getCollection('check-ins'))
   .sort((a, b) => new Date(b.data.createdAt).getTime() - new Date(a.data.createdAt).getTime());
@@ -22,7 +23,7 @@ const mapCheckIns = allCheckIns
     url: `https://www.openstreetmap.org/?mlat=${c.data.latitude}&mlon=${c.data.longitude}&zoom=17`,
   }));
 ---
-<Feed title="Check-ins" totalPages={totalPages} basePath="/check-ins">
+<Feed {...SECTIONS['check-ins']} totalPages={totalPages} basePath="/check-ins">
   <Fragment slot="description">
     Places I've visited and remembered to check in to, via <a href="https://foursquare.com" class="underline">Foursquare Swarm</a>.
   </Fragment>

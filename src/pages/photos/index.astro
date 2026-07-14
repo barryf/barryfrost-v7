@@ -3,11 +3,12 @@ import Feed from '@/layouts/Feed.astro';
 import PhotoCard from '@/components/posts/PhotoCard.astro';
 import { getFeedPages } from '@/lib/feed';
 import GrainIcon from '@/components/icons/GrainIcon.astro';
+import { SECTIONS } from '@/lib/sections';
 
 const pages = await getFeedPages('photos');
 const { items, totalPages } = pages[0] ?? { items: [], totalPages: 1 };
 ---
-<Feed title="Photos" totalPages={totalPages} basePath="/photos">
+<Feed {...SECTIONS.photos} totalPages={totalPages} basePath="/photos">
   <Fragment slot="description">
     Photo galleries that I've uploaded to my
     <a href="https://grain.social/profile/barryfrost.com" class="underline">

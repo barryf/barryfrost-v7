@@ -2,8 +2,8 @@
 import { getCollection, render } from 'astro:content';
 import Post from '@/layouts/Post.astro';
 import { plainExcerpt } from '@/lib/excerpt';
+import { socialMeta } from '@/lib/social';
 import Divider from '@/components/Divider.astro';
-import { ogCardUrl, weeknoteCardData } from '@/lib/og-store';
 
 export async function getStaticPaths() {
   const weeknotes = await getCollection('weeknotes');
@@ -42,8 +42,8 @@ export async function getStaticPaths() {
 
 const { entry, prev, next, onThisDay } = Astro.props;
 const { Content } = await render(entry);
-const ogImage = await ogCardUrl(weeknoteCardData(entry), `/og/weeknotes/${entry.id}.png`);
-const description = entry.data.description || plainExcerpt(entry.body ?? '') || undefined;
+const social = await socialMeta(entry);
+const description = entry.data.description || social.description;
 ---
 <Post
   title={entry.data.title}
@@ -54,7 +54,10 @@ const description = entry.data.description || plainExcerpt(entry.body ?? '') || 
   sectionHref="/weeknotes"
   standardRkey={entry.data.standardRkey}
   standardPublication="weeknotes"
-  ogImage={ogImage}
+  ogImage={social.image}
+  ogImageAlt={social.imageAlt}
+  ogImageWidth={social.imageWidth}
+  ogImageHeight={social.imageHeight}
 >
   <Content />
   <Fragment slot="nav">

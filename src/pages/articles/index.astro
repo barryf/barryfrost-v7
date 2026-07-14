@@ -3,6 +3,7 @@ import Feed from '@/layouts/Feed.astro';
 import ArticleCard from '@/components/posts/ArticleCard.astro';
 import StarIcon from '@/components/icons/StarIcon.astro';
 import { getFeedPages } from '@/lib/feed';
+import { SECTIONS } from '@/lib/sections';
 
 const pages = await getFeedPages('articles', {
   filter: e => e.data.visibility !== 'unlisted',
@@ -11,7 +12,7 @@ const pages = await getFeedPages('articles', {
 });
 const { items, totalPages } = pages[0] ?? { items: [], totalPages: 1 };
 ---
-<Feed title="Articles" totalPages={totalPages} basePath="/articles">
+<Feed {...SECTIONS.articles} totalPages={totalPages} basePath="/articles">
   <Fragment slot="description">
     Long-form notes on technology, leadership, life and making things. NB:
     <StarIcon class="w-3 h-3 inline-block -translate-y-px" /> marks a featured

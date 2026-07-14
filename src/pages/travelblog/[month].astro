@@ -20,7 +20,7 @@ const { Content } = await render(entry);
 const month = formatMonthKey(entry.id);
 const { countries = [], intro } = entry.data;
 ---
-<Base title={`Travelblog: ${month}`}>
+<Base title={`Travelblog: ${month}`} description={intro}>
   <article class="h-entry" data-pagefind-body>
     <header class="mb-12">
       <h1 class="p-name">

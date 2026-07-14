@@ -3,11 +3,12 @@ import Feed from '@/layouts/Feed.astro';
 import BlueskyCard from '@/components/posts/BlueskyCard.astro';
 import BlueskyIcon from '@/components/icons/BlueskyIcon.astro';
 import { getFeedPages } from '@/lib/feed';
+import { SECTIONS } from '@/lib/sections';
 
 const pages = await getFeedPages('blueskyPosts');
 const { items, totalPages } = pages[0] ?? { items: [], totalPages: 1 };
 ---
-<Feed title="Posts" description="Short posts, links and replies that I've published on my Bluesky account." totalPages={totalPages} basePath="/posts">
+<Feed {...SECTIONS.posts} totalPages={totalPages} basePath="/posts">
   <Fragment slot="description">
     Short posts, links and replies that I've published on my
     <a href="https://bsky.app/profile/barryfrost.com" class="underline">

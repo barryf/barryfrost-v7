@@ -284,7 +284,7 @@ Required secrets: `GH_PAT`
 
 Images are pre-generated **at build time** and served from an R2 bucket at `images.barryfrost.com`. No runtime resizing occurs.
 
-`src/lib/image-store.ts` exposes two async helpers used by all loaders (the shared R2 primitives — signed client, HEAD/PUT, concurrency limiter, config detection — live in `src/lib/r2.ts`, reused by `og-store.ts`):
+`src/lib/image-store.ts` exposes two async helpers used by all loaders (the shared R2 primitives — signed client, HEAD/PUT, concurrency limiter, config detection — live in `src/lib/r2.ts`):
 - `pdsImage(cid, opts)` — fetches blob from `bsky.social` via `com.atproto.sync.getBlob`
 - `remoteImage(url, opts)` — fetches from the URL directly
 
@@ -304,16 +304,39 @@ Every loader processes its records with bounded concurrency instead of a sequent
 
 This took "Syncing content" from 90s+ down to ~7s. The pattern for a loader: collect records from `fetchAllRecords` into an array first (cheap, no images involved), then `mapLimit(records, RECORD_CONCURRENCY, async (record) => {...})` over the per-record body (image fetch + any other network calls + `store.set`) — decoupling PDS pagination from per-record work.
 
-### Social cards — satori + R2
+### Head metadata — plain OpenGraph, no generated cards
 
-OpenGraph/Twitter share images (1200×630) are generated **at build time** and stored content-addressed in R2 alongside content images, so cron redeploys re-render nothing unless a card's content changes.
+No social images are generated. A share image appears only when the post itself contains
+one; every other page gets a text-only preview. `BaseHead.astro` is pure template — it makes
+no network or R2 calls.
 
-- `src/lib/og/` renders a card: `satori` turns a plain VDOM (`cards.ts`) into SVG, then the existing transitive `sharp` rasterises it to PNG (`render.ts`) — no native rasteriser dep. Work Sans comes from `@fontsource/work-sans`'s **woff** files (satori can't read woff2); emoji from `@twemoji/svg` via satori's `loadAdditionalAsset` (`fonts.ts`, `emoji.ts`). All three are pure-JS/asset deps, safe to add directly (unlike `sharp`).
-- `src/lib/og-store.ts` — `ogCardUrl(data, localPath)` mirrors `image-store.ts`: content-addresses on `sha256(OG_TEMPLATE_VERSION + inputs)` → `og/{hash}.png`, HEAD-checks R2, renders + uploads only if missing, reusing the shared R2 primitives in `src/lib/r2.ts`. Bump `OG_TEMPLATE_VERSION` to invalidate every card after a design change.
-- Three card kinds: **weeknote** (large twemoji emoji + week/title + date), **article** (title + date), and a branded **default** (wordmark + tagline + small avatar) used by every other page.
-- `src/pages/og/{weeknotes,articles}/[slug].png.ts` + `default.png.ts` are the dev / credential-less fallback: `getStaticPaths` returns `[]` when R2 is configured (cards live in R2), else renders each card as a static PNG. In dev and PR builds `ogCardUrl` returns these local paths.
-- `BaseHead.astro` emits `og:image` (+ `:width`/`:height`/`:alt`), `twitter:card=summary_large_image`, and `twitter:image`, defaulting to the branded card; weeknote/article pages pass their own via an `ogImage` prop threaded through `Base`/`Post`.
-- **Descriptions:** `og:description` and `<meta name="description">` use the frontmatter `description` if set, else a 160-char plain-text body excerpt (`plainExcerpt` in `src/lib/excerpt.ts`), else the site default. Bluesky ignores `twitter:card` and always renders a large 1.91:1 card, so a good `og:image` + `og:description` is what matters there.
+- **Title and description are set on the layout tag** in `src/pages/`, and threaded down
+  through `Base`/`Post`/`Feed` to `BaseHead`. `Feed` takes a plain-text `description` prop
+  for the `<head>`; that is *separate* from its `description` **slot**, which is the rich
+  visible intro copy (links, icon components) shown on the page. Feed sections keep their
+  title + description together in `src/lib/sections.ts`, shared between a section's index
+  page and its `page/[page].astro` sibling.
+- **Articles and weeknotes** derive both from their rendered body via `socialMeta(entry)` in
+  `src/lib/social.ts`: the body is rendered to HTML through the shared Astro container in
+  `src/lib/container.ts`, then `stripHtml` + `truncate` give a 200-char description, and the
+  first `<img>` gives `og:image` with its `alt`/`width`/`height`. Frontmatter `description`
+  overrides the excerpt when set.
+- `src/lib/container.ts` holds the one `experimental_AstroContainer` used to render bodies to
+  HTML strings at build time, shared with `feed-items.ts`. It **must** register the MDX
+  renderer (`loadRenderers([getContainerRenderer()])`) or any `.mdx` body throws
+  `NoMatchingRenderer` — MDX compiles to JSX, which a bare container cannot render.
+- Rendering the body — rather than regexing the Markdown source — is what makes `.md` and
+  `.mdx` behave identically (both compile to plain `<img>`, and an MDX body's `import` block
+  never leaks into the description), and it is the only way to learn an image's final
+  content-hashed `/_astro/…` URL.
+- `BaseHead.astro` always emits `og:site_name`, `og:title`, `og:description`, `og:url` and
+  `og:type` (`article` + `article:published_time` when a `publishedDate` is passed, else
+  `website`). `og:image` (+ `:alt`/`:width`/`:height`) and `twitter:card=summary_large_image`
+  are emitted **only** when a post has a body image. Bluesky ignores `twitter:card` and
+  always renders a large 1.91:1 card, so `og:image` + `og:description` are what matter.
+- `src/lib/excerpt.ts` still serves in-page previews of *other* posts (the homepage's latest
+  weeknote, the "Previously this week" list), where rendering each related body would be
+  wasteful. It reads raw source, so it strips MDX imports and JSX itself.
 
 ### Why `pds-poller` is separate
 

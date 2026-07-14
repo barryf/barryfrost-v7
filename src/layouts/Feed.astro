@@ -5,17 +5,22 @@ import AuthorCard from '@/components/AuthorCard.astro';
 
 interface Props {
   title: string;
+  /**
+   * Plain-text description for the <head> meta tags. Separate from the `description`
+   * slot below, which is the rich visible intro copy shown on the page.
+   */
+  description?: string;
   currentPage?: number;
   totalPages: number;
   basePath: string;
   paginate?: boolean;
 }
 
-const { title, currentPage = 1, totalPages, basePath, paginate = true } = Astro.props;
+const { title, description, currentPage = 1, totalPages, basePath, paginate = true } = Astro.props;
 const pageTitle = currentPage > 1 ? `${title} (Page ${currentPage})` : title;
 const hasDescription = Astro.slots.has('description');
 ---
-<Base title={pageTitle}>
+<Base title={pageTitle} description={description}>
   <div class="h-feed">
     <AuthorCard />
     <h1 class={`${hasDescription ? 'mb-4' : 'mb-8'} font-semibold text-black dark:text-white`}>

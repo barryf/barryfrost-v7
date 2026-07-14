@@ -3,7 +3,7 @@
  *
  * Shared build-time R2 primitives: config detection, a signed S3 client
  * (aws4fetch), a concurrency limiter, and HEAD/PUT helpers. Used by
- * image-store.ts (resized content images) and og-store.ts (social cards).
+ * image-store.ts (resized content images).
  *
  * In dev (PROD !== true) or when credentials are absent, R2_CONFIGURED is
  * false and callers fall back to a non-R2 path.

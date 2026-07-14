@@ -2,6 +2,7 @@
 import Feed from './Feed.astro';
 import FilmCard from '@/components/posts/FilmCard.astro';
 import PopfeedIcon from '@/components/icons/PopfeedIcon.astro';
+import { SECTIONS } from '@/lib/sections';
 
 interface FilmEntry {
   id: string;
@@ -24,7 +25,7 @@ interface Props {
 
 const { items, currentPage, totalPages, basePath = '/films', sort = 'date' } = Astro.props;
 ---
-<Feed title="Films" currentPage={currentPage} totalPages={totalPages} basePath={basePath}>
+<Feed {...SECTIONS.films} currentPage={currentPage} totalPages={totalPages} basePath={basePath}>
   <Fragment slot="description">
     What I've watched and rated, originally posted on
     <a href="https://letterboxd.com/barryf/" class="underline">Letterboxd</a>

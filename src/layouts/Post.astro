@@ -16,12 +16,15 @@ interface Props {
   standardRkey?: string;
   standardPublication?: keyof typeof PUBLICATIONS;
   ogImage?: string;
+  ogImageAlt?: string;
+  ogImageWidth?: number;
+  ogImageHeight?: number;
 }
 
-const { title, date, description, emoji, section, sectionHref, standardRkey, standardPublication, ogImage } = Astro.props;
+const { title, date, description, emoji, section, sectionHref, standardRkey, standardPublication, ogImage, ogImageAlt, ogImageWidth, ogImageHeight } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 ---
-<Base title={title} description={description} standardRkey={standardRkey} standardPublication={standardPublication} publishedDate={date} ogImage={ogImage}>
+<Base title={title} description={description} standardRkey={standardRkey} standardPublication={standardPublication} publishedDate={date} ogImage={ogImage} ogImageAlt={ogImageAlt} ogImageWidth={ogImageWidth} ogImageHeight={ogImageHeight}>
   <article class="h-entry" data-pagefind-body>
     <h1 class="p-name mb-4 text-black dark:text-white font-semibold">{emoji && `${emoji} `}{title}</h1>
     <a class="u-url hidden" href={canonical}>{canonical}</a>

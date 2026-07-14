@@ -2,6 +2,7 @@
 import Feed from '@/layouts/Feed.astro';
 import PhotoCard from '@/components/posts/PhotoCard.astro';
 import { getFeedPages } from '@/lib/feed';
+import { SECTIONS } from '@/lib/sections';
 
 export async function getStaticPaths() {
   const pages = await getFeedPages('photos');
@@ -13,7 +14,7 @@ export async function getStaticPaths() {
 
 const { items, currentPage, totalPages } = Astro.props;
 ---
-<Feed title="Photos" currentPage={currentPage} totalPages={totalPages} basePath="/photos">
+<Feed {...SECTIONS.photos} currentPage={currentPage} totalPages={totalPages} basePath="/photos">
   <div class="mb-4 flex flex-col gap-y-8">
     {items.map((entry: any) => <PhotoCard entry={entry} />)}
   </div>

@@ -2,6 +2,7 @@
 import Feed from '@/layouts/Feed.astro';
 import CheckInCard from '@/components/posts/CheckInCard.astro';
 import { getFeedPages } from '@/lib/feed';
+import { SECTIONS } from '@/lib/sections';
 
 export async function getStaticPaths() {
   const pages = await getFeedPages('check-ins');
@@ -13,7 +14,7 @@ export async function getStaticPaths() {
 
 const { items, currentPage, totalPages } = Astro.props;
 ---
-<Feed title="Check-ins" currentPage={currentPage} totalPages={totalPages} basePath="/check-ins">
+<Feed {...SECTIONS['check-ins']} currentPage={currentPage} totalPages={totalPages} basePath="/check-ins">
   <div class="mb-4 flex flex-col gap-y-4">
     {items.map((entry: any) => <CheckInCard entry={entry} />)}
   </div>

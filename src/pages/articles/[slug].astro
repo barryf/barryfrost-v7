@@ -1,8 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Post from '@/layouts/Post.astro';
-import { ogCardUrl, articleCardData } from '@/lib/og-store';
-import { plainExcerpt } from '@/lib/excerpt';
+import { socialMeta } from '@/lib/social';
 
 export async function getStaticPaths() {
   const articles = await getCollection('articles');
@@ -14,8 +13,8 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const { Content } = await render(entry);
-const ogImage = await ogCardUrl(articleCardData(entry), `/og/articles/${entry.id}.png`);
-const description = entry.data.description || plainExcerpt(entry.body ?? '') || undefined;
+const social = await socialMeta(entry);
+const description = entry.data.description || social.description;
 ---
 <Post
   title={entry.data.title}
@@ -25,7 +24,10 @@ const description = entry.data.description || plainExcerpt(entry.body ?? '') || 
   sectionHref="/articles"
   standardRkey={entry.data.standardRkey}
   standardPublication="articles"
-  ogImage={ogImage}
+  ogImage={social.image}
+  ogImageAlt={social.imageAlt}
+  ogImageWidth={social.imageWidth}
+  ogImageHeight={social.imageHeight}
 >
   <Content />
 </Post>
