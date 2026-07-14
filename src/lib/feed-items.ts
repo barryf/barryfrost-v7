@@ -1,5 +1,5 @@
 import { getCollection, render, type CollectionEntry } from 'astro:content';
-import { experimental_AstroContainer as AstroContainer } from 'astro/container';
+import { getContainer } from '@/lib/container';
 
 export interface FeedItem {
   title: string;
@@ -70,7 +70,7 @@ export async function getFeedItems(site: URL): Promise<FeedItem[]> {
     .sort((a, b) => b.entry.data.date.getTime() - a.entry.data.date.getTime())
     .slice(0, 10);
 
-  const container = await AstroContainer.create();
+  const container = await getContainer();
 
   return Promise.all(
     sorted.map(async ({ section, entry }) => {
