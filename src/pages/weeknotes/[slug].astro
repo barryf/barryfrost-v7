@@ -44,12 +44,13 @@ const { entry, prev, next, onThisDay } = Astro.props;
 const { Content } = await render(entry);
 const social = await socialMeta(entry);
 const description = entry.data.description || social.description;
+const { emoji } = entry.data;
+const title = emoji ? `${emoji} ${entry.data.title}` : entry.data.title;
 ---
 <Post
-  title={entry.data.title}
+  title={title}
   date={entry.data.date}
   description={description}
-  emoji={entry.data.emoji}
   section="Weeknotes"
   sectionHref="/weeknotes"
   standardRkey={entry.data.standardRkey}

@@ -7,10 +7,10 @@ import AuthorCard from '@/components/AuthorCard.astro';
 import type { PUBLICATIONS } from '@/lib/standard-site';
 
 interface Props {
+  /** Rendered as-is in the h1 and every head tag — callers fold in any emoji prefix. */
   title: string;
   date: Date;
   description?: string;
-  emoji?: string;
   section?: string;
   sectionHref?: string;
   standardRkey?: string;
@@ -21,12 +21,12 @@ interface Props {
   ogImageHeight?: number;
 }
 
-const { title, date, description, emoji, section, sectionHref, standardRkey, standardPublication, ogImage, ogImageAlt, ogImageWidth, ogImageHeight } = Astro.props;
+const { title, date, description, section, sectionHref, standardRkey, standardPublication, ogImage, ogImageAlt, ogImageWidth, ogImageHeight } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 ---
 <Base title={title} description={description} standardRkey={standardRkey} standardPublication={standardPublication} publishedDate={date} ogImage={ogImage} ogImageAlt={ogImageAlt} ogImageWidth={ogImageWidth} ogImageHeight={ogImageHeight}>
   <article class="h-entry" data-pagefind-body>
-    <h1 class="p-name mb-4 text-black dark:text-white font-semibold">{emoji && `${emoji} `}{title}</h1>
+    <h1 class="p-name mb-4 text-black dark:text-white font-semibold">{title}</h1>
     <a class="u-url hidden" href={canonical}>{canonical}</a>
     <AuthorCard />
     <div class="e-content prose dark:prose-invert max-w-none mb-4">
