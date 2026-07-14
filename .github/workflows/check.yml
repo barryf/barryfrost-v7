@@ -1,0 +1,40 @@
+name: Typecheck
+
+# Nothing else in the pipeline checks types: `astro build` strips them with
+# esbuild, tsx runs the scripts, and wrangler bundles the Worker. This job is
+# the only thing that runs `tsc`.
+#
+# Note it does not gate deployment — Cloudflare Workers Builds deploys from its
+# own hook, not from Actions. A failure here shows a red X on the commit; it
+# won't stop the site going out.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - run: npm ci
+
+      # astro check syncs content first, which runs the loaders against the PDS
+      # and the other upstream APIs. Run it as its own step so a network failure
+      # upstream reads as a sync failure rather than a phantom type error.
+      - name: Sync content collections
+        run: npx astro sync
+
+      - name: Check types
+        run: npm run check
