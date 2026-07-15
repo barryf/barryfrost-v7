@@ -3,6 +3,7 @@ export function formatDate(date: Date): string {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
+    timeZone: TZ,
   });
 }
 
@@ -12,6 +13,44 @@ export function formatDateShort(date: Date): string {
     month: 'short',
     year: 'numeric',
   });
+}
+
+const RELATIVE_CUTOFF_DAYS = 14;
+
+// Whole-calendar-day difference in Europe/London (negative = in the past).
+function calendarDayDiff(from: Date, to: Date): number {
+  const dayNumber = (d: Date) => {
+    const [y, m, day] = localParts(d).date.split('-').map(Number);
+    return Math.floor(Date.UTC(y, m - 1, day) / 86_400_000);
+  };
+  return dayNumber(to) - dayNumber(from);
+}
+
+// "2 days ago" / "3 hours ago" for recent dates; the absolute short date once older
+// than the cutoff. Relative to build time — safe because the site rebuilds hourly.
+export function formatDateRelative(date: Date, now: Date = new Date()): string {
+  const rtf = new Intl.RelativeTimeFormat('en-GB', { numeric: 'auto' });
+
+  // All-day dates: compare by whole calendar days so a post from today reads "today",
+  // not "14 hours ago".
+  if (isMidnightUTC(date)) {
+    const days = calendarDayDiff(now, date);
+    if (Math.abs(days) > RELATIVE_CUTOFF_DAYS) return formatDateShort(date);
+    return rtf.format(days, 'day');
+  }
+
+  const diffMs = date.getTime() - now.getTime(); // negative = past
+  if (Math.abs(diffMs) > RELATIVE_CUTOFF_DAYS * 86_400_000) return formatDateShort(date);
+
+  const sign = diffMs < 0 ? -1 : 1;
+  const abs = Math.abs(diffMs);
+  const sec = Math.round(abs / 1000);
+  if (sec < 60) return rtf.format(sign * sec, 'second');
+  const min = Math.round(abs / 60_000);
+  if (min < 60) return rtf.format(sign * min, 'minute');
+  const hr = Math.round(abs / 3_600_000);
+  if (hr < 24) return rtf.format(sign * hr, 'hour');
+  return rtf.format(sign * Math.round(abs / 86_400_000), 'day');
 }
 
 export function formatMonthYear(date: Date): string {
@@ -64,15 +103,25 @@ function localOffset(date: Date): string {
   return `${match[1]}${match[2].padStart(2, '0')}:${(match[3] ?? '0').padStart(2, '0')}`;
 }
 
+// Human offset label ("GMT+1" / "GMT") for display in title tooltips.
+function localOffsetLabel(date: Date): string {
+  const parts = new Intl.DateTimeFormat('en-GB', {
+    timeZone: TZ,
+    timeZoneName: 'shortOffset',
+  }).formatToParts(date);
+  return parts.find(p => p.type === 'timeZoneName')?.value ?? 'GMT';
+}
+
 export function toISODate(date: Date): string {
   if (isMidnightUTC(date)) return localParts(date).date;
   const { date: d, time } = localParts(date);
   return `${d}T${time}${localOffset(date)}`;
 }
 
+// "4 July 2026 13:45:12 (GMT+1)" when there's a time; "4 July 2026" for all-day dates.
 export function formatDateTitle(date: Date): string {
   if (isMidnightUTC(date)) return formatDate(date);
-  const { date: d, time } = localParts(date);
-  return `${d} ${time}${localOffset(date)}`;
+  const { time } = localParts(date);
+  return `${formatDate(date)} ${time} (${localOffsetLabel(date)})`;
 }
 

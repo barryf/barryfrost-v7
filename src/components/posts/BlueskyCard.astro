@@ -1,6 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import { formatDateShort, formatDateTitle, toISODate } from '@/lib/dates';
+import { formatDateRelative, formatDateTitle, toISODate } from '@/lib/dates';
 import { renderRichText } from '@/lib/richtext';
 import { HANDLE, pdslsUrl } from '@/lib/pds';
 import BlueskyQuote from '@/components/posts/BlueskyQuote.astro';
@@ -64,7 +64,7 @@ const date = new Date(data.createdAt);
     </div>
   )}
   <div class="text-sm text-gray-500 dark:text-gray-400">
-    <time class="dt-published mr-1" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatDateShort(date)}</time>
+    <time class="dt-published mr-1" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatDateRelative(date)}</time>
     <a class="u-url underline" href={blueskyUrl} rel="noopener noreferrer" aria-label="View on Bluesky"><BlueskyIcon /></a>
     <a class="ml-1 underline" href={pdslsUrl(data.uri)} rel="noopener noreferrer" aria-label="View on PDSls"><PdslsIcon /></a>
   </div>

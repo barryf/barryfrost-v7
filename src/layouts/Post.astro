@@ -1,6 +1,6 @@
 ---
 import Base from './Base.astro';
-import { formatDateTitle, formatDateShort, toISODate } from '@/lib/dates';
+import { formatDateTitle, formatDateRelative, toISODate } from '@/lib/dates';
 import Divider from '@/components/Divider.astro'
 import AuthorCard from '@/components/AuthorCard.astro';
 
@@ -37,11 +37,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
       {section && sectionHref ? (
         <Fragment>
           Posted in <a href={sectionHref} class="underline">{section}</a>
-           on <time class="dt-published" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatDateShort(date)}</time>
+           on <time class="dt-published" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatDateRelative(date)}</time>
         </Fragment>
       ) : (
         <Fragment>
-          Posted on <time class="dt-published" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatDateShort(date)}</time>
+          Posted on <time class="dt-published" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatDateRelative(date)}</time>
         </Fragment>
       )}
     </div>

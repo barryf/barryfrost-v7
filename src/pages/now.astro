@@ -4,7 +4,7 @@ import { resolve } from 'node:path';
 import { execSync } from 'node:child_process';
 import { getCollection, getEntry, render } from 'astro:content';
 import Base from '@/layouts/Base.astro';
-import { formatDateShort, formatDateTitle, toISODate } from '@/lib/dates';
+import { formatDateRelative, formatDateTitle, toISODate } from '@/lib/dates';
 import { getCurrentPosition, getSelf, formatLocation } from '@/lib/sifa';
 import { DID } from '@/lib/pds';
 
@@ -80,7 +80,7 @@ const rockskySource: Source = { label: 'Rocksky', url: 'https://rocksky.app/prof
   <article data-pagefind-body>
     <h1 class="mb-4 font-semibold text-black dark:text-white">Now</h1>
     <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">
-      Last updated <time datetime={toISODate(lastUpdated)} title={formatDateTitle(lastUpdated)}>{formatDateShort(lastUpdated)}</time>
+      Last updated <time datetime={toISODate(lastUpdated)} title={formatDateTitle(lastUpdated)}>{formatDateRelative(lastUpdated)}</time>
     </p>
 
     <div class="prose dark:prose-invert max-w-none mb-10">
@@ -135,7 +135,7 @@ const rockskySource: Source = { label: 'Rocksky', url: 'https://rocksky.app/prof
                   )}
                   <p class="text-sm text-gray-600 dark:text-gray-400">by {book.data.authors}</p>
                   <div class="mt-0.5 flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
-                    <time datetime={toISODate(new Date(book.data.createdAt))} title={formatDateTitle(new Date(book.data.createdAt))}>Started {formatDateShort(new Date(book.data.createdAt))}</time>
+                    <time datetime={toISODate(new Date(book.data.createdAt))} title={formatDateTitle(new Date(book.data.createdAt))}>Started {formatDateRelative(new Date(book.data.createdAt))}</time>
                     {book.data.hiveId && (
                       <a href={`https://bookhive.buzz/books/${book.data.hiveId}`} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded hover:text-gray-700 dark:hover:text-gray-300">Bookhive</a>
                     )}
@@ -205,7 +205,7 @@ const rockskySource: Source = { label: 'Rocksky', url: 'https://rocksky.app/prof
                 )}
               </p>
               <div class="mt-0.5 flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
-                <time datetime={toISODate(new Date(td.createdAt))} title={formatDateTitle(new Date(td.createdAt))}>{formatDateShort(new Date(td.createdAt))}</time>
+                <time datetime={toISODate(new Date(td.createdAt))} title={formatDateTitle(new Date(td.createdAt))}>{formatDateRelative(new Date(td.createdAt))}</time>
                 {td.sourceUrl && <a href={td.sourceUrl} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded hover:text-gray-700 dark:hover:text-gray-300" rel="noopener noreferrer">Beaconbits</a>}
               </div>
             </div>
@@ -223,7 +223,7 @@ const rockskySource: Source = { label: 'Rocksky', url: 'https://rocksky.app/prof
               {latestWeeknote.data.emoji && `${latestWeeknote.data.emoji} `}{latestWeeknote.data.title}
             </a>
             <div class="mt-0.5 text-sm text-gray-500 dark:text-gray-400">
-              <time datetime={toISODate(latestWeeknote.data.date)} title={formatDateTitle(latestWeeknote.data.date)}>{formatDateShort(latestWeeknote.data.date)}</time>
+              <time datetime={toISODate(latestWeeknote.data.date)} title={formatDateTitle(latestWeeknote.data.date)}>{formatDateRelative(latestWeeknote.data.date)}</time>
             </div>
           </div>
         </div>
@@ -258,7 +258,7 @@ const rockskySource: Source = { label: 'Rocksky', url: 'https://rocksky.app/prof
                   </p>
                 )}
                 <div class="mt-0.5 flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
-                  <time datetime={toISODate(latestFilm.date)} title={formatDateTitle(latestFilm.date)}>{formatDateShort(latestFilm.date)}</time>
+                  <time datetime={toISODate(latestFilm.date)} title={formatDateTitle(latestFilm.date)}>{formatDateRelative(latestFilm.date)}</time>
                   <a href={popfeedSource.url} class="px-2 py-0.5 text-xs bg-neutral-100 dark:bg-neutral-800 rounded hover:text-gray-700 dark:hover:text-gray-300">{popfeedSource.label}</a>
                 </div>
               </div>

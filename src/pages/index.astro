@@ -2,7 +2,7 @@
 import Base from '@/layouts/Base.astro';
 import Divider from '@/components/Divider.astro';
 import { getCollection } from 'astro:content';
-import { formatDateShort, formatDateTitle, toISODate } from '@/lib/dates';
+import { formatDateShort, formatDateRelative, formatDateTitle, toISODate } from '@/lib/dates';
 import { truncateBody } from '@/lib/excerpt';
 import { DID } from '@/lib/pds';
 import PdslsIcon from '@/components/icons/PdslsIcon.astro';
@@ -88,7 +88,7 @@ const recentCheckIns = checkIns
           )}
         </p>
         <div class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-          <time class="dt-published" datetime={toISODate(latestWeeknote.data.date)} title={formatDateTitle(latestWeeknote.data.date)}>{formatDateShort(latestWeeknote.data.date)}</time>
+          <time class="dt-published" datetime={toISODate(latestWeeknote.data.date)} title={formatDateTitle(latestWeeknote.data.date)}>{formatDateRelative(latestWeeknote.data.date)}</time>
         </div>
       </div>
       <div class="mb-4 text-sm"><a href="/weeknotes" class="underline">All Weeknotes</a></div>
@@ -192,7 +192,7 @@ const recentCheckIns = checkIns
                 {entry.data.longitude && <data class="p-longitude" value={entry.data.longitude} />}
               </span>
               <data class="p-name hidden">{entry.data.venueName}</data>
-              <time class="dt-published text-sm text-gray-500 dark:text-gray-400" datetime={toISODate(date)} title={formatDateTitle(date)}> {formatDateShort(date)}</time>
+              <time class="dt-published text-sm text-gray-500 dark:text-gray-400" datetime={toISODate(date)} title={formatDateTitle(date)}> {formatDateRelative(date)}</time>
             </li>
           );
         })}

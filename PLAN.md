@@ -108,7 +108,7 @@ Removed from v6: `/page/{n}` (unified paginated feed), `/archives/`, `/tags/`.
 - `SiteHeader.astro` — sitewide header: `h-card` (name, hidden `u-photo`/`p-locality`/`p-country-name`) plus a top nav linking to Posts, Weeknotes, Articles, Check-ins, Photos, Books, Films, Music, with the current section bolded. On the homepage the name renders as an `h1`; elsewhere it's a link back to `/`.
 - `Feed.astro` — shared feed layout used by all list/paginated pages. Renders the `h-feed` wrapper, hidden `h-card p-author` MF2 author block, heading (with `(Page N)` suffix), optional named `description` slot, default slot for item content, and `<Pagination>` (suppressed via `paginate={false}` for books). Props: `title`, `currentPage?`, `totalPages`, `basePath`, `paginate?`.
 - `FilmFeed.astro` — extends `Feed.astro` for `/films` and `/films/by-rating`: adds date/rating sort toggle and renders `FilmCard` in a responsive grid (`grid-cols-1 sm:grid-cols-2 lg:grid-cols-3`)
-- `Post.astro` — individual article/weeknote with prose styles; "Posted in [Section] [relative date]" footer (omits "on" when displaying relative text); uses `Divider` above footer
+- `Post.astro` — individual article/weeknote with prose styles; "Posted in [Section] on [relative date]" (or "Posted on [relative date]") footer; uses `Divider` above footer
 - `Divider.astro` — `⁂` separator; `my-8 text-xl`
 - `SiteFooter.astro` — footer nav (back-to-top, About, Colophon, Blogroll, Follow, Contact) + inline search form that submits to `/search`, plus a copyright/license line (CC BY-SA 4.0) and link to the GitHub source repo; rendered on every page
 Icon components in `src/components/icons/`:
@@ -131,15 +131,15 @@ Card components in `src/components/posts/`:
 - `BookCard` — clickable cover linking to BookHive, title, authors, "Started/Finished [relative date]", pdsls icon link
 - `PhotoCard` — horizontally scrollable thumbnails (multi) or side-by-side (single), title link to Grain gallery, relative date, pdsls icon link
 
-All `<time>` elements use `formatRelativeDate` for display with `title={formatDateTitle(date)}` for the full date on hover and `datetime={toISODate(date)}` for machine readability.
+All visible `<time>` elements use `formatDateRelative` for display, with `title={formatDateTitle(date)}` for the full date on hover and `datetime={toISODate(date)}` for machine readability. Hidden microformat-only `<time>` tags (e.g. the homepage photo/article/check-in lists) keep the absolute `formatDateShort` value.
 
 ## Date Formatting
 
 `src/lib/dates.ts` exports:
-- `formatRelativeDate(date)` — always returns `formatDateShort`. Used everywhere dates are displayed.
-- `formatDate(date)` — "22 April 2026". Used in `title` attributes and travelblog nav links.
-- `formatDateTitle(date)` — for `title` attributes: short date for date-only values; `YYYY-MM-DD HH:MM:SS±HH:MM` for timestamped values, using Europe/London timezone.
-- `formatDateShort(date)` — "22 Apr 2026". Used as the `formatRelativeDate` return value and travelblog nav links.
+- `formatDateRelative(date, now?)` — relative time ("today", "yesterday", "3 days ago", "5 hours ago") for dates within 14 days; falls back to `formatDateShort` beyond that. All-day (midnight-UTC) dates compare by whole Europe/London calendar days; timestamped dates resolve down to the second. Computed at build time — safe because the site rebuilds at least hourly. Used for every visible displayed date.
+- `formatDate(date)` — "22 April 2026" (Europe/London). Used only inside `formatDateTitle`.
+- `formatDateTitle(date)` — for `title` attributes: "22 April 2026" for date-only (or midnight-UTC) values; "22 April 2026 13:45:12 (GMT+1)" for timestamped values, using Europe/London time and offset.
+- `formatDateShort(date)` — "22 Apr 2026". Used as the `formatDateRelative` fallback beyond the 14-day cutoff and for the hidden microformat-only `<time>` tags.
 - `toISODate(date)` — ISO 8601 string for `datetime` attributes. Date-only values (midnight UTC) emit `YYYY-MM-DD`; timestamped values emit local Europe/London datetime with offset.
 - `formatMonthYear(date)` — "October 2000" (UTC). `formatMonthKey("2000-10")` — "October 2000" from a travelblog month key. Both UTC-based, used by the travelblog month pages.
 - Travelblog country flags/names are derived from ISO codes in `src/lib/flags.ts` (`countryFlag`, `countryName` via regional-indicator symbols + `Intl.DisplayNames`).

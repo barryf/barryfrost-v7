@@ -1,6 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import { formatDateShort, formatDateTitle, toISODate } from '@/lib/dates';
+import { formatDateRelative, formatDateTitle, toISODate } from '@/lib/dates';
 import { DID, pdslsUrl } from '@/lib/pds';
 import PdslsIcon from '@/components/icons/PdslsIcon.astro';
 import AuthorCard from '@/components/AuthorCard.astro';
@@ -49,7 +49,7 @@ function toStars(rating: number): string {
       </p>
     )}
     <div class="text-gray-500 dark:text-gray-400">
-      <time class="dt-published text-sm mr-1" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatDateShort(date)}</time>
+      <time class="dt-published text-sm mr-1" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatDateRelative(date)}</time>
         <a class="underline" href={pdslsUrl(data.uri)} rel="noopener noreferrer" aria-label="View on PDSls"><PdslsIcon /></a>
     </div>
   </div>

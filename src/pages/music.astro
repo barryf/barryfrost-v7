@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 import Base from '@/layouts/Base.astro';
 import Divider from '@/components/Divider.astro';
-import { formatDateShort, formatDateTitle, toISODate } from '@/lib/dates';
+import { formatDateRelative, formatDateTitle, toISODate } from '@/lib/dates';
 
 const scrobbleEntries = await getCollection('scrobbles');
 
@@ -164,7 +164,7 @@ const rockskyUrl = 'https://rocksky.app/profile/barryfrost.com';
                   datetime={toISODate(new Date(s.data.createdAt))}
                   title={formatDateTitle(new Date(s.data.createdAt))}
                 >
-                  {formatDateShort(new Date(s.data.createdAt))}
+                  {formatDateRelative(new Date(s.data.createdAt))}
                 </time>
               </div>
             </div>
