@@ -80,7 +80,7 @@ Paginated pages show `Title (Page N)` in both the h1 and the browser window titl
 | `/articles` | Articles list |
 | `/articles/{slug}` | Individual article |
 | `/weeknotes` | Weeknotes grid — all entries, sorted by week number descending |
-| `/weeknotes/{slug}` | Individual weeknote with "Previously this week" aside and prev/next nav |
+| `/weeknotes/{N}` | Individual weeknote with "Previously this week" aside and prev/next nav |
 | `/feed.xml` | Unified RSS feed (articles + weeknotes, latest 10, full content) |
 | `/feed.json` | Unified JSON Feed v1.1 (same as RSS) |
 | `/posts` | Bluesky posts list |
@@ -177,7 +177,7 @@ Static search via [Pagefind](https://pagefind.app). After `astro build`, `pagefi
 
 **Scope:** Only pages with `data-pagefind-body`. Indexed content types:
 - Articles (`/articles/{slug}`) — individual pages via `Post.astro`
-- Weeknotes (`/weeknotes/{slug}`) — individual pages via `Post.astro`
+- Weeknotes (`/weeknotes/{N}`) — individual pages via `Post.astro`
 - Travelblog months (`/travelblog/{YYYY-MM}`) — one indexed page per month
 - Slash pages (about, colophon, etc.) via `[...slug].astro`
 - Static pages: `/now`, `/work`, `/music`
@@ -371,14 +371,14 @@ Both commands: verify working tree is clean on `main`, create a `content/...` br
 |---|---|
 | `scripts/lib/scaffold.ts` | Pure helpers: `slugify`, `escapeYaml`, `nextWeekNumber`, frontmatter renderers, `writeStub` |
 | `scripts/new-article.ts` | Article CLI — slug from title, writes `src/content/articles/{slug}.md` |
-| `scripts/new-weeknote.ts` | Weeknote CLI — week = `max(existing) + 1`, writes `src/content/weeknotes/{N}-{slug}.md` |
+| `scripts/new-weeknote.ts` | Weeknote CLI — week = `max(existing) + 1`, writes `src/content/weeknotes/{N}.md` |
 
 Both CLIs accept `--no-git` (or `CI=true`) to skip git/gh operations — used by `scaffold.yml`.
 
 ### Weeknote conventions
 
 - Week numbers are sequential integers starting at 1 (not ISO weeks)
-- Filename: `{N}-{slugified-topic}.md` — e.g. `244-sofa.md`
+- Filename: `{N}.md` — e.g. `244.md`; URL is `/weeknotes/{N}` (no title slug)
 - Required frontmatter: `title`, `date`, `week` (unquoted integer). `emoji` optional but conventional
 - Title format: `"Week {N} - {Topic}"` (hyphen with surrounding spaces)
 

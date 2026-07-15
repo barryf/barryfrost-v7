@@ -57,7 +57,7 @@ export function nextWeekNumber(weeknotesDir: string): number {
   const files = readdirSync(weeknotesDir);
   let max = 0;
   for (const f of files) {
-    const m = f.match(/^(\d+)-/);
+    const m = f.match(/^(\d+)\./);
     if (m) max = Math.max(max, parseInt(m[1], 10));
   }
   return max + 1;

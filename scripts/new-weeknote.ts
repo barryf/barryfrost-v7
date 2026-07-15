@@ -46,9 +46,8 @@ const weeknotesDir = join(process.cwd(), 'src/content/weeknotes');
 const week = nextWeekNumber(weeknotesDir);
 const topicStr = topic as string;
 const title = `Week ${week} - ${topicStr}`;
-const slug = `${week}-${slugify(topicStr)}`;
-const filePath = join(weeknotesDir, `${slug}.md`);
-const branch = `content/weeknote-${slug}`;
+const filePath = join(weeknotesDir, `${week}.md`);
+const branch = `content/weeknote-${week}-${slugify(topicStr)}`;
 
 const standardRkey = genTid(new Date(date));
 const frontmatter = renderWeeknoteFrontmatter({ week, title, date, emoji, tags, standardRkey });
