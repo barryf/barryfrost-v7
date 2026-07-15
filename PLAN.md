@@ -423,6 +423,13 @@ Local Markdown stays canonical; the PDS records are syndication targets.
   the "already posted to Bluesky" guard, so re-runs never double-post.
 - **Bluesky**: first publish of a doc creates a companion post with a rich link card back to
   the page; its strong-ref is stored in `bskyPostRef`.
+- **Cover image**: mirrors the web's OG rule (a post's first body image, or none) — the
+  publisher fetches the post's own live page and lifts its rendered `og:image` (rather than
+  re-parsing Markdown, which can't resolve MDX `<Image>`/content-hashed asset URLs the way
+  Astro's renderer does), re-encodes it under the PDS's 1MB blob limit, and attaches it as
+  `coverImage`. Resolved once per doc and then sticky, like `bskyPostRef`; runs in both
+  incremental and `--backfill` modes since it's a harmless enrichment. The Bluesky card itself
+  still has no thumbnail — that scope was deliberately left for later.
 - **CI**: `scripts/release.ts` runs the publisher after a successful deploy, gated behind the
   `PUBLISH_STANDARD_SITE` env var (unset on staging → no-op).
 

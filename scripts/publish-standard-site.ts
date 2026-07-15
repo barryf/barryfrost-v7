@@ -13,7 +13,8 @@ import {
   readEntries, isPublishable, buildDocumentRecord, buildBlueskyPost,
   documentContentSignature, canonicalUrl, DOCUMENT_COLLECTION, PUBLICATIONS,
   createSession, getRecord, putRecord, createRecord, resolveBskyPostRef,
-  type CollectionName, type Entry, type Session, type StrongRef,
+  resolveCoverImage, fetchOgImageUrl,
+  type CollectionName, type Entry, type Session, type StrongRef, type BlobRef,
 } from './lib/standard-site.js';
 
 interface Args {
@@ -45,6 +46,7 @@ async function processEntry(entry: Entry, args: Args, session: Session | null): 
   const rkey = entry.data.standardRkey!;
   const existing = session ? await getRecord(session, DOCUMENT_COLLECTION, rkey) : null;
   const existingRef = existing?.value.bskyPostRef as StrongRef | undefined;
+  const existingCover = existing?.value.coverImage as BlobRef | undefined;
 
   const desiredNoRef = buildDocumentRecord(entry);
   const contentChanged = !existing || documentContentSignature(existing.value) !== documentContentSignature(desiredNoRef);
@@ -56,7 +58,22 @@ async function processEntry(entry: Entry, args: Args, session: Session | null): 
     if (syndicationUrl && session) bskyRef = (await resolveBskyPostRef(session, syndicationUrl)) ?? undefined;
   }
 
-  const needsWrite = contentChanged || (!!bskyRef && !!existing && !existingRef);
+  // Resolve the coverImage we should end up with — attached once, then sticky (like bskyRef).
+  // Unlike Bluesky posting this is a harmless enrichment, so it runs in both incremental and
+  // --backfill modes: every published post already has a live page to read its og:image from.
+  // The actual upload is a real PDS write, so it's skipped under --dry-run in favour of a
+  // read-only peek at what would be attached.
+  let coverImage: BlobRef | undefined = existingCover;
+  let coverPreviewUrl: string | undefined;
+  if (!existingCover && session) {
+    if (args.dryRun) coverPreviewUrl = await fetchOgImageUrl(entry);
+    else coverImage = (await resolveCoverImage(session, entry)) ?? undefined;
+  }
+  const willAttachCover = !!coverImage || !!coverPreviewUrl;
+
+  const needsWrite = contentChanged
+    || (!!bskyRef && !!existing && !existingRef)
+    || (willAttachCover && !!existing);
   if (!needsWrite) {
     console.log(`  = skip   ${entry.collection}/${entry.slug}`);
     return 'skip';
@@ -75,7 +92,13 @@ async function processEntry(entry: Entry, args: Args, session: Session | null): 
     }
   }
 
-  const record = buildDocumentRecord(entry, bskyRef);
+  if (args.dryRun && !existingCover) {
+    console.log(coverPreviewUrl
+      ? `    would attach coverImage from: ${coverPreviewUrl}`
+      : `    no body image — no coverImage`);
+  }
+
+  const record = buildDocumentRecord(entry, bskyRef, coverImage);
   if (existing) record.updatedAt = new Date().toISOString();
 
   const action: Action = existing ? 'update' : 'create';

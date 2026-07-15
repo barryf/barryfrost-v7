@@ -7,17 +7,20 @@
 // every record is hand-built JSON over com.atproto.repo.* XRPC.
 import { readdirSync, readFileSync, statSync } from 'fs';
 import { join, extname, relative } from 'path';
+import sharp from 'sharp';
 import {
   PUBLICATIONS,
   DID,
   DOCUMENT_COLLECTION,
   documentUri,
+  STAGING_ORIGIN,
 } from '../../src/lib/standard-site.js';
 
-export { PUBLICATIONS, DID, DOCUMENT_COLLECTION, documentUri };
+export { PUBLICATIONS, DID, DOCUMENT_COLLECTION, documentUri, STAGING_ORIGIN };
 
 export const DESCRIPTION_MAX_CHARS = 280;
 export const BSKY_MAX_GRAPHEMES = 300;
+export const COVER_MAX_BLOB_BYTES = 1_000_000;
 
 export type CollectionName = keyof typeof PUBLICATIONS;
 
@@ -172,6 +175,14 @@ export function isPublishable(entry: Entry): boolean {
 
 export interface StrongRef { uri: string; cid: string }
 
+/** Result of com.atproto.repo.uploadBlob — embeddable directly as a lexicon `blob` value. */
+export interface BlobRef {
+  $type: 'blob';
+  ref: { $link: string };
+  mimeType: string;
+  size: number;
+}
+
 export interface DocumentRecord {
   $type: 'site.standard.document';
   site: string;
@@ -186,11 +197,14 @@ export interface DocumentRecord {
     flavor: 'gfm';
     text: { $type: 'at.markpub.text'; markdown: string };
   };
+  coverImage?: BlobRef;
   bskyPostRef?: StrongRef;
   updatedAt?: string;
 }
 
-export function buildDocumentRecord(entry: Entry, bskyPostRef?: StrongRef): DocumentRecord {
+export function buildDocumentRecord(
+  entry: Entry, bskyPostRef?: StrongRef, coverImage?: BlobRef,
+): DocumentRecord {
   const pub = PUBLICATIONS[entry.collection];
   const plaintext = toPlaintext(entry.body);
   const markdown = cleanMarkdown(entry.body);
@@ -211,11 +225,13 @@ export function buildDocumentRecord(entry: Entry, bskyPostRef?: StrongRef): Docu
     record.description = truncateDescription(plaintext);
   }
   if (entry.data.tags?.length) record.tags = entry.data.tags;
+  if (coverImage) record.coverImage = coverImage;
   if (bskyPostRef) record.bskyPostRef = bskyPostRef;
   return record;
 }
 
-/** Fields that determine whether a re-put is needed (excludes bskyPostRef/updatedAt).
+/** Fields that determine whether a re-put is needed (excludes bskyPostRef/coverImage/updatedAt
+ *  — these are resolved once and stick, so they must not force a re-put on every run).
  *  Accepts either a freshly-built record or a raw record fetched from the PDS. */
 export function documentContentSignature(r: DocumentRecord | Record<string, unknown>): string {
   const content = r.content as { text?: { markdown?: string } } | undefined;
@@ -352,10 +368,104 @@ export async function createRecord(
   return await res.json() as StrongRef;
 }
 
+export async function uploadBlob(session: Session, bytes: Buffer, mimeType: string): Promise<BlobRef> {
+  const res = await fetch(`${session.pds}/xrpc/com.atproto.repo.uploadBlob`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${session.jwt}`, 'Content-Type': mimeType },
+    body: new Uint8Array(bytes),
+  });
+  if (!res.ok) throw new Error(`uploadBlob failed: ${res.status} ${await res.text()}`);
+  const data = await res.json() as { blob: BlobRef };
+  return data.blob;
+}
+
 /** Resolve a bsky.app post URL (…/profile/<handle-or-did>/post/<rkey>) to a strong ref. */
 export async function resolveBskyPostRef(session: Session, url: string): Promise<StrongRef | null> {
   const m = /\/post\/([a-z0-9]+)\/?$/i.exec(url);
   if (!m) return null;
   const existing = await getRecord(session, 'app.bsky.feed.post', m[1]);
   return existing ? { uri: existing.uri, cid: existing.cid } : null;
+}
+
+// ─── Cover image (site.standard.document coverImage) ────────────────────────────
+//
+// Mirrors the web's OG image rule (src/lib/social.ts: first body image, or none) without
+// re-implementing Astro rendering here. The publish script runs standalone via tsx, after
+// `wrangler deploy` (see scripts/release.ts), so the simplest correct source is the already-
+// rendered live page's own <meta property="og:image">.
+
+export function stagingUrl(entry: Entry): string {
+  return `${STAGING_ORIGIN}/${entry.collection}/${entry.slug}`;
+}
+
+/** Downscale/recompress to fit under the 1MB blob limit, mirroring
+ *  scripts/import-grain-photos.ts's encodePhoto ladder. Returns null if it never fits. */
+export async function encodeCoverUnder1MB(srcBytes: Buffer): Promise<Buffer | null> {
+  const attempt = async (maxEdge?: number): Promise<Buffer | null> => {
+    for (const quality of [90, 80, 70, 60]) {
+      let pipeline = sharp(srcBytes).rotate().jpeg({ quality, mozjpeg: true });
+      if (maxEdge) {
+        pipeline = sharp(srcBytes).rotate()
+          .resize({ width: maxEdge, height: maxEdge, fit: 'inside', withoutEnlargement: true })
+          .jpeg({ quality, mozjpeg: true });
+      }
+      const out = await pipeline.toBuffer();
+      if (out.length <= COVER_MAX_BLOB_BYTES) return out;
+    }
+    return null;
+  };
+  return (await attempt()) ?? (await attempt(2400)) ?? (await attempt(1800))
+    ?? (await attempt(1400)) ?? (await attempt(1000));
+}
+
+/** Extract a <meta property="og:image" content="…"> (or reversed attribute order) URL from
+ *  rendered HTML. */
+export function extractOgImage(html: string): string | undefined {
+  const re = /<meta\s+(?:property="og:image"\s+content="([^"]+)"|content="([^"]+)"\s+property="og:image")/i;
+  const m = re.exec(html);
+  return m?.[1] ?? m?.[2];
+}
+
+/** Read-only peek at a post's live page for its og:image URL (absolute), or undefined if the
+ *  page isn't up yet or the post has no body image. Safe to call in --dry-run: no writes. */
+export async function fetchOgImageUrl(entry: Entry): Promise<string | undefined> {
+  const pageUrl = stagingUrl(entry);
+  try {
+    const pageRes = await fetch(pageUrl);
+    if (!pageRes.ok) {
+      console.warn(`[coverImage] page fetch failed ${pageRes.status}: ${pageUrl}`);
+      return undefined;
+    }
+    const ogImage = extractOgImage(await pageRes.text());
+    return ogImage ? new URL(ogImage, pageUrl).toString() : undefined;
+  } catch (err) {
+    console.warn(`[coverImage] error fetching page for ${pageUrl}:`, err);
+    return undefined;
+  }
+}
+
+/** Fetch a post's og:image (the post's first body image, per the web's rule) and upload it as
+ *  a Standard Site coverImage blob. Returns null — never throws — on any failure: no live
+ *  page, no og:image (post has no body image), fetch/encode error. Performs a real PDS write
+ *  (uploadBlob) — do not call this under --dry-run; use fetchOgImageUrl to preview instead. */
+export async function resolveCoverImage(session: Session, entry: Entry): Promise<BlobRef | null> {
+  const ogImageUrl = await fetchOgImageUrl(entry);
+  if (!ogImageUrl) return null;
+  try {
+    const imgRes = await fetch(ogImageUrl);
+    if (!imgRes.ok) {
+      console.warn(`[coverImage] image fetch failed ${imgRes.status}: ${ogImageUrl}`);
+      return null;
+    }
+    const srcBytes = Buffer.from(await imgRes.arrayBuffer());
+    const encoded = await encodeCoverUnder1MB(srcBytes);
+    if (!encoded) {
+      console.warn(`[coverImage] could not encode under 1MB: ${ogImageUrl}`);
+      return null;
+    }
+    return await uploadBlob(session, encoded, 'image/jpeg');
+  } catch (err) {
+    console.warn(`[coverImage] error resolving cover from ${ogImageUrl}:`, err);
+    return null;
+  }
 }

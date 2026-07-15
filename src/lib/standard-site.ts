@@ -14,6 +14,11 @@ export const PUBLICATION_COLLECTION = 'site.standard.publication';
  *  new.barryfrost.com staging host) so verification resolves once v7 is live there. */
 export const SITE_ORIGIN = 'https://barryfrost.com';
 
+/** Where v7 is actually deployed right now (mirrors astro.config.mjs `site:`). Used to fetch
+ *  a post's rendered og:image for Standard Site's coverImage — collapses into SITE_ORIGIN once
+ *  v7 takes over barryfrost.com. */
+export const STAGING_ORIGIN = 'https://new.barryfrost.com';
+
 export interface PublicationConfig {
   /** Base URL — combined with a document `path` to form the canonical URL. No trailing slash. */
   readonly url: string;
