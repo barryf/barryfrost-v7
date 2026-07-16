@@ -4,7 +4,7 @@ Personal website for Barry Frost — statically generated, IndieWeb-compliant, d
 
 ## Stack
 
-- **Astro 7** — static output (`output: 'static'`), `build.format: 'file'`; Rust-based compiler (`@astrojs/compiler-rs`), Vite 8 bundler
+- **Astro 7.1** — static output (`output: 'static'`), `build.format: 'file'`; Rust-based compiler (`@astrojs/compiler-rs`), Vite 8 bundler
 - **`@astrojs/mdx`** — MDX support; `.md` and `.mdx` files coexist in all content collections
 - **Tailwind CSS v4** — via `@tailwindcss/vite` plugin, `@tailwindcss/typography` for prose
 - **`@astrojs/rss`** — RSS feed generation
@@ -66,11 +66,11 @@ Each section is separated by the `Divider` component (`❉ ❉ ❉`). Sections a
 
 ## Pagination
 
-`src/lib/feed.ts` exports:
-- `paginateItems(items, pageSize?)` — splits any array into `{ page, items, totalPages }[]`. Default page size is 20; articles pages override to 10, films pages override to 40.
-- `getFeedPages(collection, opts?)` — fetches a collection, optionally filters and sorts (default: `createdAt` desc), then paginates. Shared by all feed index and paginated routes.
+Each paginated section is a single rest-param route (`src/pages/{type}/[...page].astro`) using Astro's built-in `paginate()` from `getStaticPaths` and the standard `Page` prop: page 1 renders at the bare section URL (`/posts`), page N at `/posts/{n}`. Default page size is 20 (`PAGE_SIZE` in `src/lib/feed.ts`); articles use 10, films 40.
 
-Paginated pages show `Title (Page N)` in both the h1 and the browser window title. The `Pagination` component shows all page numbers (no window/cap).
+`src/lib/feed.ts` exports `getFeedEntries(collection, opts?)` — fetches a collection, optionally filters and sorts (default: `createdAt` desc). Slicing into pages belongs to `paginate()`.
+
+Paginated pages show `Title (Page N)` in both the h1 and the browser window title. The `Pagination` component shows all page numbers (no window/cap). Page-1-only content (section intros, the check-ins map, the books Reading column) is gated on `page.currentPage === 1` — note that slotted content can't be wrapped in a conditional (Astro extracts slots at compile time), so intros are hidden via `Feed.astro`'s `showDescription` prop instead.
 
 ## URL Structure
 
@@ -80,7 +80,7 @@ Paginated pages show `Title (Page N)` in both the h1 and the browser window titl
 | `/articles` | Articles list |
 | `/articles/{slug}` | Individual article |
 | `/weeknotes` | Weeknotes grid — all entries, sorted by week number descending |
-| `/weeknotes/{N}` | Individual weeknote with "Previously this week" aside and prev/next nav |
+| `/weeknotes/week-{N}` | Individual weeknote with "Previously this week" aside and prev/next nav |
 | `/feed.xml` | Unified RSS feed (articles + weeknotes, latest 10, full content) |
 | `/feed.json` | Unified JSON Feed v1.1 (same as RSS) |
 | `/posts` | Bluesky posts list |
@@ -98,7 +98,7 @@ Paginated pages show `Title (Page N)` in both the h1 and the browser window titl
 | `/travelblog` | Archived 2000–2001 travel blog — horizontal photo strip, then an index listing each month with its countries and a one-line summary |
 | `/travelblog/{YYYY-MM}` | A month's posts on one page (e.g. `/travelblog/2001-08`), under `###` date headings; countries shown as flag + name; prev/next month nav |
 
-All type-specific list pages have `/page/{n}` pagination except `/weeknotes` (all on one page) and `/books` (Reading/Read split, first page only; Read continues to `/books/page/{n}`).
+All type-specific list pages have `/{type}/{n}` pagination except `/weeknotes` (all on one page). `/books` splits Reading/Read on page 1; Read continues to `/books/{n}`. Weeknote permalinks carry a `week-` prefix (`weeknoteUrl()` in `src/lib/urls.ts`) so their numeric IDs don't collide with the `/{type}/{n}` pattern.
 
 Removed from v6: `/page/{n}` (unified paginated feed), `/archives/`, `/tags/`.
 
@@ -106,7 +106,7 @@ Removed from v6: `/page/{n}` (unified paginated feed), `/archives/`, `/tags/`.
 
 - `Base.astro` — HTML shell, `max-w-2xl mx-auto px-4`, dark mode via `prefers-color-scheme`; renders `<header><SiteHeader /></header>`, `<main><slot /></main>`, and `<footer><SiteFooter /></footer>` on every page.
 - `SiteHeader.astro` — sitewide header: `h-card` (name, hidden `u-photo`/`p-locality`/`p-country-name`) plus a top nav linking to Posts, Weeknotes, Articles, Check-ins, Photos, Books, Films, Music, with the current section bolded. On the homepage the name renders as an `h1`; elsewhere it's a link back to `/`.
-- `Feed.astro` — shared feed layout used by all list/paginated pages. Renders the `h-feed` wrapper, hidden `h-card p-author` MF2 author block, heading (with `(Page N)` suffix), optional named `description` slot, default slot for item content, and `<Pagination>` (suppressed via `paginate={false}` for books). Props: `title`, `currentPage?`, `totalPages`, `basePath`, `paginate?`.
+- `Feed.astro` — shared feed layout used by all list/paginated pages. Renders the `h-feed` wrapper, hidden `h-card p-author` MF2 author block, heading (with `(Page N)` suffix), optional named `description` slot, default slot for item content, and `<Pagination>` (suppressed via `paginate={false}` for books page 1). Props: `title`, `currentPage?`, `totalPages`, `basePath`, `paginate?`, `showDescription?` (set false on pages 2+ to hide the intro slot, since slots can't be conditionally passed).
 - `FilmFeed.astro` — extends `Feed.astro` for `/films` and `/films/by-rating`: adds date/rating sort toggle and renders `FilmCard` in a responsive grid (`grid-cols-1 sm:grid-cols-2 lg:grid-cols-3`)
 - `Post.astro` — individual article/weeknote with prose styles; "Posted in [Section] on [relative date]" (or "Posted on [relative date]") footer; uses `Divider` above footer
 - `Divider.astro` — `⁂` separator; `my-8 text-xl`
@@ -314,8 +314,8 @@ no network or R2 calls.
   through `Base`/`Post`/`Feed` to `BaseHead`. `Feed` takes a plain-text `description` prop
   for the `<head>`; that is *separate* from its `description` **slot**, which is the rich
   visible intro copy (links, icon components) shown on the page. Feed sections keep their
-  title + description together in `src/lib/sections.ts`, shared between a section's index
-  page and its `page/[page].astro` sibling.
+  title + description together in `src/lib/sections.ts`, used by the section's
+  `[...page].astro` route.
 - **Articles and weeknotes** derive both from their rendered body via `socialMeta(entry)` in
   `src/lib/social.ts`: the body is rendered to HTML through the shared Astro container in
   `src/lib/container.ts`, then `stripHtml` + `truncate` give a 200-char description, and the
@@ -378,7 +378,7 @@ Both CLIs accept `--no-git` (or `CI=true`) to skip git/gh operations — used by
 ### Weeknote conventions
 
 - Week numbers are sequential integers starting at 1 (not ISO weeks)
-- Filename: `{N}.md` — e.g. `244.md`; URL is `/weeknotes/{N}` (no title slug)
+- Filename: `{N}.md` — e.g. `244.md`; URL is `/weeknotes/week-{N}` (no title slug; the `week-` prefix keeps numeric IDs distinct from `/{type}/{n}` pagination URLs)
 - Required frontmatter: `title`, `date`, `week` (unquoted integer). `emoji` optional but conventional
 - Title format: `"Week {N} - {Topic}"` (hyphen with surrounding spaces)
 
@@ -387,7 +387,7 @@ Both CLIs accept `--no-git` (or `CI=true`) to skip git/gh operations — used by
 1. Create `src/lib/loaders/{type}.ts` — implement `Loader`, use `fetchAllRecords`, materialise images with `pdsImage(cid, opts)` or `remoteImage(url, opts)` from `src/lib/image-store.ts`
 2. Add collection to `src/content.config.ts` with a Zod schema
 3. Create `src/components/posts/{Type}Card.astro`
-4. Add an index page (`src/pages/{type}/index.astro`) and paginated page (`src/pages/{type}/page/[page].astro`) using `getFeedPages` and the `Feed.astro` layout
+4. Add a paginated route (`src/pages/{type}/[...page].astro`) using `paginate()` with `getFeedEntries` and the `Feed.astro` layout
 5. Add the collection NSID to `WATCHED_COLLECTIONS` and a label to `COLLECTION_NOUNS` in `cloudflare/pds-poller/src/index.ts`
 6. Link from the homepage or footer as appropriate
 
@@ -410,7 +410,9 @@ Both CLIs accept `--no-git` (or `CI=true`) to skip git/gh operations — used by
 Articles and weeknotes are syndicated to the AT Protocol long-form ecosystem
 ([Standard.site](https://standard.site)) as `site.standard.document` records grouped under
 two `site.standard.publication` records (Articles at `/articles`, Weeknotes at `/weeknotes`).
-Local Markdown stays canonical; the PDS records are syndication targets.
+Document `path`s mirror the site's URLs (`documentPath()` in `scripts/lib/standard-site.ts`),
+so weeknotes use `/week-{N}`. Local Markdown stays canonical; the PDS records are syndication
+targets.
 
 - **Content**: full body embedded via the community `at.markpub.markdown` lexicon, plus a
   plaintext `textContent`; `description` is a hard truncation of the first 280 chars (never
