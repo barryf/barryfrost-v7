@@ -3,6 +3,7 @@ import { getCollection, render } from 'astro:content';
 import Post from '@/layouts/Post.astro';
 import { plainExcerpt } from '@/lib/excerpt';
 import { socialMeta } from '@/lib/social';
+import { weeknoteUrl } from '@/lib/urls';
 
 export async function getStaticPaths() {
   const weeknotes = await getCollection('weeknotes');
@@ -28,7 +29,7 @@ export async function getStaticPaths() {
       }));
 
     return {
-      params: { slug: entry.id },
+      params: { slug: `week-${entry.id}` },
       props: {
         entry,
         prev,
@@ -66,13 +67,13 @@ const title = emoji ? `${emoji} ${entry.data.title}` : entry.data.title;
         {prev && (
           <div>
             <p class="text-gray-500 dark:text-gray-400 mb-1">Previous</p>
-            <span>{prev.data.emoji && `${prev.data.emoji}`}<a href={`/weeknotes/${prev.id}`} class="ml-2 underline">{prev.data.title}</a></span>
+            <span>{prev.data.emoji && `${prev.data.emoji}`}<a href={weeknoteUrl(prev.id)} class="ml-2 underline">{prev.data.title}</a></span>
           </div>
         )}
         {next && (
           <div>
             <p class="text-gray-500 dark:text-gray-400 mb-1">Next</p>
-            <span>{next.data.emoji && `${next.data.emoji}`}<a href={`/weeknotes/${next.id}`} class="ml-2 underline">{next.data.title}</a></span>
+            <span>{next.data.emoji && `${next.data.emoji}`}<a href={weeknoteUrl(next.id)} class="ml-2 underline">{next.data.title}</a></span>
           </div>
         )}
       </div>
@@ -85,7 +86,7 @@ const title = emoji ? `${emoji} ${entry.data.title}` : entry.data.title;
             <li class="flex gap-x-2">
               <span>{e.year}</span>
               {e.emoji && <span>{e.emoji}</span>}
-              <a href={`/weeknotes/${e.id}`} class="underline">{e.title}</a>
+              <a href={weeknoteUrl(e.id)} class="underline">{e.title}</a>
             </li>
           ))}
         </ul>

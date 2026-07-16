@@ -4,6 +4,7 @@ import AuthorCard from '@/components/AuthorCard.astro';
 import { getCollection } from 'astro:content';
 import { toISODate } from '@/lib/dates';
 import { SECTIONS } from '@/lib/sections';
+import { weeknoteUrl } from '@/lib/urls';
 
 const allWeeknotes = await getCollection('weeknotes');
 allWeeknotes.sort((a, b) => b.data.week - a.data.week);
@@ -26,7 +27,7 @@ function titleWord(title: string): string {
           <span class="h-entry flex items-center gap-1 py-1.5 rounded -mx-1.5 px-1.5 group">
             <span class="font-mono text-gray-500 dark:text-gray-400 text-xs tabular-nums w-6 text-right shrink-0">{entry.data.week}</span>
             <span class="text-base w-6 text-center shrink-0 leading-none">{entry.data.emoji}</span>
-            <a href={`/weeknotes/${entry.id}`} class="u-url underline truncate">{titleWord(entry.data.title)}</a>
+            <a href={weeknoteUrl(entry.id)} class="u-url underline truncate">{titleWord(entry.data.title)}</a>
             <data class="p-name" value={entry.data.title}></data>
             <time class="dt-published hidden" datetime={toISODate(entry.data.date)}></time>
             <AuthorCard />

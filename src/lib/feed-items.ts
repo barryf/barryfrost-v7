@@ -1,5 +1,6 @@
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import { getContainer } from '@/lib/container';
+import { weeknoteUrl } from '@/lib/urls';
 
 export interface FeedItem {
   title: string;
@@ -76,7 +77,8 @@ export async function getFeedItems(site: URL): Promise<FeedItem[]> {
     sorted.map(async ({ section, entry }) => {
       const { Content } = await render(entry);
       const html = await container.renderToString(Content);
-      const url = new URL(`/${section}/${entry.id}`, site).href;
+      const path = section === 'weeknotes' ? weeknoteUrl(entry.id) : `/${section}/${entry.id}`;
+      const url = new URL(path, site).href;
       return {
         title: entry.data.title,
         link: url,

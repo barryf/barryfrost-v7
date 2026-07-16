@@ -141,8 +141,14 @@ export function documentTitle(entry: Entry): string {
   return entry.data.title ?? '';
 }
 
+/** Path under the publication URL. Weeknote slugs are numeric, so they carry a
+ * `week-` prefix to stay distinct from /section/N pagination URLs. */
+export function documentPath(entry: Entry): string {
+  return entry.collection === 'weeknotes' ? `/week-${entry.slug}` : `/${entry.slug}`;
+}
+
 export function canonicalUrl(entry: Entry): string {
-  return `${PUBLICATIONS[entry.collection].url}/${entry.slug}`;
+  return `${PUBLICATIONS[entry.collection].url}${documentPath(entry)}`;
 }
 
 // ─── Reading local content ──────────────────────────────────────────────────────
@@ -212,7 +218,7 @@ export function buildDocumentRecord(
     $type: 'site.standard.document',
     site: pub.uri,
     title: documentTitle(entry),
-    path: `/${entry.slug}`,
+    path: documentPath(entry),
     publishedAt: new Date(entry.data.date ?? Date.now()).toISOString(),
     content: {
       $type: 'at.markpub.markdown',

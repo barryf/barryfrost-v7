@@ -15,11 +15,11 @@ function unlistedPaths(dir, prefix) {
   return readdirSync(dir)
     .filter((f) => /\.(md|mdx)$/.test(f))
     .filter((f) => /^visibility:\s*unlisted/m.test(readFileSync(`${dir}/${f}`, 'utf8')))
-    .map((f) => `${prefix}/${f.replace(/\.(md|mdx)$/, '')}`);
+    .map((f) => `${prefix}${f.replace(/\.(md|mdx)$/, '')}`);
 }
 const excluded = new Set([
-  ...unlistedPaths('src/content/articles', '/articles'),
-  ...unlistedPaths('src/content/weeknotes', '/weeknotes'),
+  ...unlistedPaths('src/content/articles', '/articles/'),
+  ...unlistedPaths('src/content/weeknotes', '/weeknotes/week-'),
   '/search', '/404',
 ]);
 

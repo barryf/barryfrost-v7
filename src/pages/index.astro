@@ -5,6 +5,7 @@ import { getCollection } from 'astro:content';
 import { formatDateShort, formatDateRelative, formatDateTitle, toISODate } from '@/lib/dates';
 import { truncateBody } from '@/lib/excerpt';
 import { DID } from '@/lib/pds';
+import { weeknoteUrl } from '@/lib/urls';
 import PdslsIcon from '@/components/icons/PdslsIcon.astro';
 import AuthorCard from '@/components/AuthorCard.astro';
 import BlueskyCard from '@/components/posts/BlueskyCard.astro';
@@ -79,7 +80,7 @@ const recentCheckIns = checkIns
       <div class="h-entry">
         <AuthorCard />
         <h3>
-          <a href={`/weeknotes/${latestWeeknote.id}`} class="p-name u-url underline">
+          <a href={weeknoteUrl(latestWeeknote.id)} class="p-name u-url underline">
             {latestWeeknote.data.emoji && `${latestWeeknote.data.emoji} `}{latestWeeknote.data.title}</a>
         </h3>
         <p class="e-content">
