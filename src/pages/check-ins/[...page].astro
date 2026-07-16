@@ -1,0 +1,48 @@
+---
+import type { GetStaticPathsOptions, Page } from 'astro';
+import type { CollectionEntry } from 'astro:content';
+import Feed from '@/layouts/Feed.astro';
+import CheckInCard from '@/components/posts/CheckInCard.astro';
+import CheckInMap from '@/components/CheckInMap.astro';
+import { getFeedEntries, PAGE_SIZE } from '@/lib/feed';
+import { SECTIONS } from '@/lib/sections';
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+  const entries = await getFeedEntries('check-ins');
+  return paginate(entries, { pageSize: PAGE_SIZE });
+}
+
+interface Props {
+  page: Page<CollectionEntry<'check-ins'>>;
+}
+
+const { page } = Astro.props;
+
+// The Leaflet map (all check-ins with coordinates) only appears on page 1.
+const mapCheckIns =
+  page.currentPage === 1
+    ? (await getFeedEntries('check-ins'))
+        .filter(c => c.data.latitude && c.data.longitude)
+        .map(c => ({
+          venueName: c.data.venueName,
+          latitude: c.data.latitude!,
+          longitude: c.data.longitude!,
+          venueCategory: c.data.venueCategory,
+          createdAt: c.data.createdAt,
+          url: `https://www.openstreetmap.org/?mlat=${c.data.latitude}&mlon=${c.data.longitude}&zoom=17`,
+        }))
+    : [];
+---
+<Feed {...SECTIONS['check-ins']} currentPage={page.currentPage} totalPages={page.lastPage} basePath="/check-ins" showDescription={page.currentPage === 1}>
+  <Fragment slot="description">
+    Places I've visited and remembered to check in to, via <a href="https://foursquare.com" class="underline">Foursquare Swarm</a>.
+  </Fragment>
+  {mapCheckIns.length > 0 && (
+    <div class="mb-8 -ml-4 -mr-4 sm:-ml-8 sm:-mr-8">
+      <CheckInMap checkIns={mapCheckIns} />
+    </div>
+  )}
+  <div class="mb-4 flex flex-col gap-y-4">
+    {page.data.map(entry => <CheckInCard entry={entry} />)}
+  </div>
+</Feed>

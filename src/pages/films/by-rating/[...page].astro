@@ -1,0 +1,20 @@
+---
+import type { GetStaticPathsOptions, Page } from 'astro';
+import type { CollectionEntry } from 'astro:content';
+import FilmFeed from '@/layouts/FilmFeed.astro';
+import { getFeedEntries } from '@/lib/feed';
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+  const entries = await getFeedEntries('films', {
+    sort: (a, b) => (b.data.rating ?? -1) - (a.data.rating ?? -1),
+  });
+  return paginate(entries, { pageSize: 40 });
+}
+
+interface Props {
+  page: Page<CollectionEntry<'films'>>;
+}
+
+const { page } = Astro.props;
+---
+<FilmFeed items={page.data} currentPage={page.currentPage} totalPages={page.lastPage} basePath="/films/by-rating" sort="rating" />

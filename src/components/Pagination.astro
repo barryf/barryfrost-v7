@@ -9,7 +9,7 @@ const { currentPage, totalPages, basePath = '' } = Astro.props;
 
 function pageUrl(page: number): string {
   if (page === 1) return basePath || '/';
-  return basePath ? `${basePath}/page/${page}` : `/page/${page}`;
+  return `${basePath}/${page}`;
 }
 
 const pages = Array.from({ length: totalPages }, (_, i) => i + 1);

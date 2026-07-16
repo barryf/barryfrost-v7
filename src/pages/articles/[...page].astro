@@ -1,0 +1,33 @@
+---
+import type { GetStaticPathsOptions, Page } from 'astro';
+import type { CollectionEntry } from 'astro:content';
+import Feed from '@/layouts/Feed.astro';
+import ArticleCard from '@/components/posts/ArticleCard.astro';
+import StarIcon from '@/components/icons/StarIcon.astro';
+import { getFeedEntries } from '@/lib/feed';
+import { SECTIONS } from '@/lib/sections';
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+  const entries = await getFeedEntries('articles', {
+    filter: e => e.data.visibility !== 'unlisted',
+    sort: (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+  });
+  return paginate(entries, { pageSize: 10 });
+}
+
+interface Props {
+  page: Page<CollectionEntry<'articles'>>;
+}
+
+const { page } = Astro.props;
+---
+<Feed {...SECTIONS.articles} currentPage={page.currentPage} totalPages={page.lastPage} basePath="/articles" showDescription={page.currentPage === 1}>
+  <Fragment slot="description">
+    Long-form notes on technology, leadership, life and making things. NB:
+    <StarIcon class="w-3 h-3 inline-block -translate-y-px" /> marks a featured
+    article.
+  </Fragment>
+  <ul class="mb-4">
+    {page.data.map(entry => <ArticleCard entry={entry} />)}
+  </ul>
+</Feed>

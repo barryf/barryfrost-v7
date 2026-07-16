@@ -1,0 +1,31 @@
+---
+import type { GetStaticPathsOptions, Page } from 'astro';
+import type { CollectionEntry } from 'astro:content';
+import Feed from '@/layouts/Feed.astro';
+import BlueskyCard from '@/components/posts/BlueskyCard.astro';
+import BlueskyIcon from '@/components/icons/BlueskyIcon.astro';
+import { getFeedEntries, PAGE_SIZE } from '@/lib/feed';
+import { SECTIONS } from '@/lib/sections';
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+  const entries = await getFeedEntries('blueskyPosts');
+  return paginate(entries, { pageSize: PAGE_SIZE });
+}
+
+interface Props {
+  page: Page<CollectionEntry<'blueskyPosts'>>;
+}
+
+const { page } = Astro.props;
+---
+<Feed {...SECTIONS.posts} currentPage={page.currentPage} totalPages={page.lastPage} basePath="/posts" showDescription={page.currentPage === 1}>
+  <Fragment slot="description">
+    Short posts, links and replies that I've published on my
+    <a href="https://bsky.app/profile/barryfrost.com" class="underline">
+      <BlueskyIcon class="inline w-4 h-4 align-text-bottom mr-1" />Bluesky
+      account</a>.
+  </Fragment>
+  <div class="my-12 flex flex-col gap-y-16">
+    {page.data.map(entry => <BlueskyCard entry={entry} />)}
+  </div>
+</Feed>

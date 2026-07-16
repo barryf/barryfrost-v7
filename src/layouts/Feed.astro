@@ -14,11 +14,13 @@ interface Props {
   totalPages: number;
   basePath: string;
   paginate?: boolean;
+  /** Set false to hide the description slot, e.g. on pages after the first. */
+  showDescription?: boolean;
 }
 
-const { title, description, currentPage = 1, totalPages, basePath, paginate = true } = Astro.props;
+const { title, description, currentPage = 1, totalPages, basePath, paginate = true, showDescription = true } = Astro.props;
 const pageTitle = currentPage > 1 ? `${title} (Page ${currentPage})` : title;
-const hasDescription = Astro.slots.has('description');
+const hasDescription = Astro.slots.has('description') && showDescription;
 ---
 <Base title={pageTitle} description={description}>
   <div class="h-feed">
