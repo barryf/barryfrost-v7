@@ -309,9 +309,3 @@
 
 # Redirect archived barryfrost.com posts to archive.barryfrost.com
 /20* https://archive.barryfrost.com/20:splat 301
-
-# Categories renamed to tags
-/categories/* /tags/:splat 301
-
-# Check-ins paginated route renamed
-/checkins/* /check-ins/:splat 301
