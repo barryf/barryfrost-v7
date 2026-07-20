@@ -108,7 +108,8 @@ Removed from v6: `/page/{n}` (unified paginated feed), `/archives/`, `/tags/`.
 - `SiteHeader.astro` — sitewide header: `h-card` (name, hidden `u-photo`/`p-locality`/`p-country-name`) plus a top nav linking to Posts, Weeknotes, Articles, Check-ins, Photos, Books, Films, Music, with the current section bolded. On the homepage the name renders as an `h1`; elsewhere it's a link back to `/`.
 - `Feed.astro` — shared feed layout used by all list/paginated pages. Renders the `h-feed` wrapper, hidden `h-card p-author` MF2 author block, heading (with `(Page N)` suffix), optional named `description` slot, default slot for item content, and `<Pagination>` (suppressed via `paginate={false}` for books page 1). Props: `title`, `currentPage?`, `totalPages`, `basePath`, `paginate?`, `showDescription?` (set false on pages 2+ to hide the intro slot, since slots can't be conditionally passed).
 - `FilmFeed.astro` — extends `Feed.astro` for `/films` and `/films/by-rating`: adds date/rating sort toggle and renders `FilmCard` in a responsive grid (`grid-cols-1 sm:grid-cols-2 lg:grid-cols-3`)
-- `Post.astro` — individual article/weeknote with prose styles; "Posted in [Section] on [relative date]" (or "Posted on [relative date]") footer; uses `Divider` above footer
+- `Post.astro` — individual article/weeknote with prose styles; "Posted in [Section] on [relative date]" (or "Posted on [relative date]") footer, followed by `Syndication` links when the post has `syndication` frontmatter; uses `Divider` above footer
+- `Syndication.astro` — renders a post's `syndication` frontmatter URLs as icon + label links (`u-syndication`, `rel="syndication"`) after the timestamp in `Post.astro`. `serviceFor(url)` maps a URL's host to a known service (Bluesky, Mastodon, Twitter, Medium, LinkedIn, IndieNews) and its icon; an unrecognised host falls back to a bare hostname label with no icon
 - `Divider.astro` — `⁂` separator; `my-8 text-xl`
 - `SiteFooter.astro` — footer nav (back-to-top, About, Colophon, Blogroll, Follow, Contact) + inline search form that submits to `/search`, plus a copyright/license line (CC BY-SA 4.0) and link to the GitHub source repo; rendered on every page
 Icon components in `src/components/icons/`:
@@ -120,6 +121,7 @@ Icon components in `src/components/icons/`:
 - `RockskyIcon.astro` — rocksky music note icon; used in the homepage Recent Media link
 - `RSSIcon.astro`, `JSONFeedIcon.astro`, `MF2Icon.astro`, `StandardSiteIcon.astro` — feed format icons; used on `/follow`
 - `SifaIcon.astro` — sifa.id logo; used on `/follow` for the work profile link
+- `MastodonIcon.astro`, `TwitterIcon.astro`, `MediumIcon.astro`, `LinkedInIcon.astro`, `IndieNewsIcon.astro` — syndication-target logos used by `Syndication.astro` (Bluesky reuses `BlueskyIcon.astro`)
 
 All icons accept an optional `class` prop to override the default sizing/alignment.
 
@@ -353,6 +355,7 @@ no network or R2 calls.
 - **`build.format: 'file'`** — generates `about.html` not `about/index.html`
 - **`compressHTML: false`** — keeps HTML readable
 - **`featured: true`** frontmatter on articles — surfaces them on the homepage
+- **`syndication`** frontmatter (array of URLs) on articles/weeknotes — the POSSE targets a post was cross-posted to; rendered as icon + label links after the timestamp on the post page (`Syndication.astro`)
 
 ## Authoring New Content
 

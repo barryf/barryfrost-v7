@@ -1,0 +1,47 @@
+---
+import BlueskyIcon from '@/components/icons/BlueskyIcon.astro';
+import MastodonIcon from '@/components/icons/MastodonIcon.astro';
+import TwitterIcon from '@/components/icons/TwitterIcon.astro';
+import MediumIcon from '@/components/icons/MediumIcon.astro';
+import LinkedInIcon from '@/components/icons/LinkedInIcon.astro';
+import IndieNewsIcon from '@/components/icons/IndieNewsIcon.astro';
+
+interface Props {
+  /** Syndication URLs from post frontmatter. */
+  urls?: string[];
+}
+
+type Service = { label: string; Icon?: typeof BlueskyIcon };
+
+/** Map a syndication URL's host to a service label + icon. */
+function serviceFor(url: string): Service {
+  let host = '';
+  try {
+    host = new URL(url).hostname.replace(/^www\./, '');
+  } catch {
+    return { label: url };
+  }
+  if (host === 'bsky.app' || host === 'staging.bsky.app') return { label: 'Bluesky', Icon: BlueskyIcon };
+  if (host.endsWith('mastodon.social') || host.startsWith('mastodon.')) return { label: 'Mastodon', Icon: MastodonIcon };
+  if (host === 'twitter.com' || host === 'x.com') return { label: 'Twitter', Icon: TwitterIcon };
+  if (host === 'medium.com') return { label: 'Medium', Icon: MediumIcon };
+  if (host === 'linkedin.com') return { label: 'LinkedIn', Icon: LinkedInIcon };
+  if (host === 'news.indieweb.org') return { label: 'IndieNews', Icon: IndieNewsIcon };
+  return { label: host };
+}
+
+const { urls = [] } = Astro.props;
+const services = urls.map((url) => ({ url, ...serviceFor(url) }));
+---
+{services.length > 0 && (
+  <span class="text-gray-500 dark:text-gray-400">
+    {services.map(({ url, label, Icon }) => (
+      <Fragment>
+        {' '}
+        <a href={url} class="u-syndication ml-1 underline whitespace-nowrap" rel="syndication noopener noreferrer">
+          {Icon && <Icon class="w-4 h-4 inline-block mr-1 -translate-y-px" />}{label}
+        </a>
+      </Fragment>
+    ))}
+  </span>
+)}

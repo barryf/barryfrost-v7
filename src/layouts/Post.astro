@@ -3,6 +3,7 @@ import Base from './Base.astro';
 import { formatDateTitle, formatDateRelative, toISODate } from '@/lib/dates';
 import Divider from '@/components/Divider.astro'
 import AuthorCard from '@/components/AuthorCard.astro';
+import Syndication from '@/components/Syndication.astro';
 
 import type { PUBLICATIONS } from '@/lib/standard-site';
 
@@ -15,13 +16,14 @@ interface Props {
   sectionHref?: string;
   standardRkey?: string;
   standardPublication?: keyof typeof PUBLICATIONS;
+  syndication?: string[];
   ogImage?: string;
   ogImageAlt?: string;
   ogImageWidth?: number;
   ogImageHeight?: number;
 }
 
-const { title, date, description, section, sectionHref, standardRkey, standardPublication, ogImage, ogImageAlt, ogImageWidth, ogImageHeight } = Astro.props;
+const { title, date, description, section, sectionHref, standardRkey, standardPublication, syndication, ogImage, ogImageAlt, ogImageWidth, ogImageHeight } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 ---
 <Base title={title} description={description} standardRkey={standardRkey} standardPublication={standardPublication} publishedDate={date} ogImage={ogImage} ogImageAlt={ogImageAlt} ogImageWidth={ogImageWidth} ogImageHeight={ogImageHeight}>
@@ -44,6 +46,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
           Posted on <time class="dt-published" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatDateRelative(date)}</time>
         </Fragment>
       )}
+      <Syndication urls={syndication} />
     </div>
 <slot name="nav" />
   </article>
