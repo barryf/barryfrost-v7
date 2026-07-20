@@ -1,6 +1,6 @@
 ---
 import Base from './Base.astro';
-import { formatDateTitle, formatDateRelative, toISODate } from '@/lib/dates';
+import { formatDateTitle, formatDateRelative, isRelativeDate, toISODate } from '@/lib/dates';
 import Divider from '@/components/Divider.astro'
 import AuthorCard from '@/components/AuthorCard.astro';
 import Syndication from '@/components/Syndication.astro';
@@ -25,6 +25,9 @@ interface Props {
 
 const { title, date, description, section, sectionHref, standardRkey, standardPublication, syndication, ogImage, ogImageAlt, ogImageWidth, ogImageHeight } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
+// Drop "on" for relative phrasing ("Posted 3 days ago") but keep it for absolute
+// dates ("Posted on 22 Apr 2026").
+const dateConnector = isRelativeDate(date) ? '' : 'on ';
 ---
 <Base title={title} description={description} standardRkey={standardRkey} standardPublication={standardPublication} publishedDate={date} ogImage={ogImage} ogImageAlt={ogImageAlt} ogImageWidth={ogImageWidth} ogImageHeight={ogImageHeight}>
   <article class="h-entry" data-pagefind-body>
@@ -38,12 +41,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
     <div class="mb-4 text-sm">
       {section && sectionHref ? (
         <Fragment>
-          Posted in <a href={sectionHref} class="underline">{section}</a>
-           on <time class="dt-published" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatDateRelative(date)}</time>
+          Posted in <a href={sectionHref} class="underline">{section}</a>{' '}{dateConnector}<time class="dt-published" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatDateRelative(date)}</time>
         </Fragment>
       ) : (
         <Fragment>
-          Posted on <time class="dt-published" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatDateRelative(date)}</time>
+          Posted {dateConnector}<time class="dt-published" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatDateRelative(date)}</time>
         </Fragment>
       )}
       <Syndication urls={syndication} />

@@ -53,6 +53,17 @@ export function formatDateRelative(date: Date, now: Date = new Date()): string {
   return rtf.format(sign * Math.round(abs / 86_400_000), 'day');
 }
 
+// True when formatDateRelative renders a relative phrase ("today", "3 days ago")
+// rather than an absolute date — i.e. the date is within the relative cutoff window.
+// Mirrors the branch selection in formatDateRelative so callers can adjust surrounding
+// copy (e.g. "Posted 3 days ago" vs "Posted on 22 Apr 2026").
+export function isRelativeDate(date: Date, now: Date = new Date()): boolean {
+  if (isMidnightUTC(date)) {
+    return Math.abs(calendarDayDiff(now, date)) <= RELATIVE_CUTOFF_DAYS;
+  }
+  return Math.abs(date.getTime() - now.getTime()) <= RELATIVE_CUTOFF_DAYS * 86_400_000;
+}
+
 export function formatMonthYear(date: Date): string {
   return date.toLocaleDateString('en-GB', {
     month: 'long',
