@@ -17,12 +17,12 @@ const THEME = {
 
 const META: Record<CollectionName, { name: string; description: string }> = {
   articles: {
-    name: 'Barry Frost — Articles',
-    description: 'Longer-form writing by Barry Frost on software, the web, and whatever else.',
+    name: 'Barry Frost - Articles',
+    description: 'Longer-form writing by Barry on software, the web, and whatever else.',
   },
   weeknotes: {
-    name: 'Barry Frost — Weeknotes',
-    description: 'Weekly notes from Barry Frost.',
+    name: 'Barry Frost - Weeknotes',
+    description: 'Weekly notes posted by Barry.',
   },
 };
 
