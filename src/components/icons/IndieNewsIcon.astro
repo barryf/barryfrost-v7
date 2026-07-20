@@ -1,0 +1,14 @@
+---
+// Globe mark for IndieNews (news.indieweb.org), the IndieWeb community aggregator.
+interface Props {
+  class?: string;
+}
+const { class: className = 'w-4 h-4 inline-block -translate-y-px' } = Astro.props;
+---
+<svg class={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="12" cy="12" r="9.5" />
+  <ellipse cx="12" cy="12" rx="4.2" ry="9.5" />
+  <line x1="2.5" y1="12" x2="21.5" y2="12" />
+  <line x1="4" y1="6.5" x2="20" y2="6.5" />
+  <line x1="4" y1="17.5" x2="20" y2="17.5" />
+</svg>
