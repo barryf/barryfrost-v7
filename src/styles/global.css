@@ -53,3 +53,10 @@ p, blockquote, .prose p, .prose ul {
   margin-top: 0;
   @apply mb-4;
 }
+
+.prose code::before {
+  content: "";
+}
+.prose code::after {
+  content: "";
+}
