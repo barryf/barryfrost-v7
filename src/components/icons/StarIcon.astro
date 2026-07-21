@@ -1,9 +1,11 @@
 ---
+import { STAR_PATH } from '@/lib/icons';
+
 interface Props {
   class?: string;
 }
 const { class: className = 'size-3 inline-block -translate-y-px' } = Astro.props;
 ---
-<svg class={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-  <path d="M12 1.75l2.882 6.166 6.618.833-4.867 4.567 1.256 6.584L12 17.65l-5.889 3.05 1.256-6.584L2.5 9.549l6.618-.833L12 1.75z"/>
+<svg class={className} viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+  <path stroke-linecap="round" stroke-linejoin="round" d={STAR_PATH} />
 </svg>
