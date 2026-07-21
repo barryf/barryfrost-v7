@@ -24,6 +24,16 @@ p, blockquote, .prose p, .prose ul {
   @apply max-w-140;
 }
 
+/* Typography zeroes the top margin on `.prose > :first-child`, but not on that
+   element's own first child — so a body starting with a list leaks the first
+   `li`'s margin upwards. It collapses away harmlessly in normal flow, but once
+   the column becomes a flex item (the weeknotes aside layout at lg) the margin
+   is contained instead, dropping the body by that amount. Zero it so the body
+   starts flush at every width. */
+.prose > :first-child > :first-child {
+  margin-top: 0;
+}
+
 .underline, .prose a {
   text-underline-offset: 15%;
 }
