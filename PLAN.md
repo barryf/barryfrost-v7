@@ -80,7 +80,7 @@ Paginated pages show `Title (Page N)` in both the h1 and the browser window titl
 | `/articles` | Articles list |
 | `/articles/{slug}` | Individual article |
 | `/weeknotes` | Weeknotes grid — all entries, sorted by week number descending |
-| `/weeknotes/week-{N}` | Individual weeknote with "Previously this week" aside and prev/next nav |
+| `/weeknotes/week-{N}` | Individual weeknote with "Previously this week" aside and prev/next nav, shown in a right-hand column on wide viewports |
 | `/feed.xml` | Unified RSS feed (articles + weeknotes, latest 10, full content) |
 | `/feed.json` | Unified JSON Feed v1.1 (same as RSS) |
 | `/posts` | Bluesky posts list |
@@ -108,7 +108,7 @@ Removed from v6: `/page/{n}` (unified paginated feed), `/archives/`, `/tags/`.
 - `SiteHeader.astro` — sitewide header: `h-card` (name, hidden `u-photo`/`p-locality`/`p-country-name`) plus a top nav linking to Posts, Weeknotes, Articles, Check-ins, Photos, Books, Films, Music, with the current section bolded. On the homepage the name renders as an `h1`; elsewhere it's a link back to `/`.
 - `Feed.astro` — shared feed layout used by all list/paginated pages. Renders the `h-feed` wrapper, hidden `h-card p-author` MF2 author block, heading (with `(Page N)` suffix), optional named `description` slot, default slot for item content, and `<Pagination>` (suppressed via `paginate={false}` for books page 1). Props: `title`, `currentPage?`, `totalPages`, `basePath`, `paginate?`, `showDescription?` (set false on pages 2+ to hide the intro slot, since slots can't be conditionally passed).
 - `FilmFeed.astro` — extends `Feed.astro` for `/films` and `/films/by-rating`: adds date/rating sort toggle and renders `FilmCard` in a responsive grid (`grid-cols-1 sm:grid-cols-2 lg:grid-cols-3`)
-- `Post.astro` — individual article/weeknote with prose styles; "Posted in [Section] on [relative date]" (or "Posted on [relative date]") footer, followed by `Syndication` links when the post has `syndication` frontmatter; uses `Divider` above footer
+- `Post.astro` — individual article/weeknote with prose styles; "Posted in [Section] on [relative date]" (or "Posted on [relative date]") footer, followed by `Syndication` links when the post has `syndication` frontmatter. Optional `navAside` prop (set by weeknotes) moves the named `nav` slot into a right-hand column at `lg` and above; below that the columns collapse and the slot stacks under the body in source order. The columns align on `items-baseline` so the smaller aside text shares a baseline with the body's first line
 - `Syndication.astro` — renders a post's `syndication` frontmatter URLs as icon + label links (`u-syndication`, `rel="syndication"`), prefixed with "and also on", after the timestamp in `Post.astro`. `serviceFor(url)` maps a URL's host to a known service (Bluesky, Mastodon, X/Twitter, Medium, LinkedIn, IndieNews) and its icon; an unrecognised host falls back to a bare hostname label with no icon
 - `Divider.astro` — `⁂` separator; `my-8 text-xl`
 - `SiteFooter.astro` — footer nav (back-to-top, About, Colophon, Blogroll, Follow, Contact) + inline search form that submits to `/search`, plus a copyright/license line (CC BY-SA 4.0) and link to the GitHub source repo; rendered on every page
@@ -153,6 +153,7 @@ Tailwind v4 with default palette. Work Sans as the primary font, self-hosted via
 - Sets `--font-sans` to `var(--font-work-sans)` (the CSS variable injected by `<Font cssVariable="--font-work-sans" />` from `astro:assets`)
 - Base `font-size: 16px` / `line-height: 26px`; `sm:` bumps to `18px` / `28px`
 - `p`, `blockquote`, `.prose p`, `.prose ul` capped at `max-w-140`
+- `.prose > :first-child > :first-child` — `margin-top: 0`. Typography only zeroes the top margin on `.prose > :first-child`, so a body opening with a list still leaks its first `li`'s margin upwards. That collapses away in normal flow but is contained once the column becomes a flex item (the weeknotes aside layout), which would otherwise drop the body a few pixels at that breakpoint
 - `.prose a` / `.underline` — `text-underline-offset: 15%`; hover colour `text-amber-600`
 - `.prose h2` — `font-size: inherit`, bold, `mb-4`, no top margin
 - `.prose h3` — `font-size: inherit`, normal weight, italic, `mb-4`, no top margin

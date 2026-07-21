@@ -56,6 +56,7 @@ const title = emoji ? `${emoji} ${entry.data.title}` : entry.data.title;
   standardRkey={entry.data.standardRkey}
   standardPublication="weeknotes"
   syndication={entry.data.syndication}
+  navAside
   ogImage={social.image}
   ogImageAlt={social.imageAlt}
   ogImageWidth={social.imageWidth}
@@ -64,7 +65,7 @@ const title = emoji ? `${emoji} ${entry.data.title}` : entry.data.title;
   <Content />
   <Fragment slot="nav">
     {(prev || next) && (
-      <div class="my-8 flex gap-8 text-sm" data-pagefind-ignore>
+      <div class="my-12 flex gap-8 text-sm lg:mt-0 lg:flex-col lg:gap-6" data-pagefind-ignore>
         {prev && (
           <div>
             <p class="text-gray-500 dark:text-gray-400 mb-1">Previous</p>

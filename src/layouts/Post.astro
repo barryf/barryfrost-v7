@@ -1,7 +1,6 @@
 ---
 import Base from './Base.astro';
 import { formatDateTitle, formatDateRelative, isRelativeDate, toISODate } from '@/lib/dates';
-import Divider from '@/components/Divider.astro'
 import AuthorCard from '@/components/AuthorCard.astro';
 import Syndication from '@/components/Syndication.astro';
 
@@ -17,14 +16,26 @@ interface Props {
   standardRkey?: string;
   standardPublication?: keyof typeof PUBLICATIONS;
   syndication?: string[];
+  /** Float the "nav" slot into a right-hand column once there's room for it. */
+  navAside?: boolean;
   ogImage?: string;
   ogImageAlt?: string;
   ogImageWidth?: number;
   ogImageHeight?: number;
 }
 
-const { title, date, description, section, sectionHref, standardRkey, standardPublication, syndication, ogImage, ogImageAlt, ogImageWidth, ogImageHeight } = Astro.props;
+const { title, date, description, section, sectionHref, standardRkey, standardPublication, syndication, navAside, ogImage, ogImageAlt, ogImageWidth, ogImageHeight } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
+// Below lg the columns collapse and everything stacks in source order, so the
+// aside classes are additive — no separate stacked markup needed. items-baseline
+// lines the aside's first line up with the body's first line of text; the two
+// columns use different font sizes, so matching box tops would leave the smaller
+// aside text sitting visibly high.
+const columnsClass = navAside ? 'lg:flex lg:items-baseline lg:gap-20' : '';
+// Body text is already capped at max-w-140, so cap the column to match rather
+// than letting flex-1 stretch it and strand the aside at the far right.
+const mainColumnClass = navAside ? 'min-w-0 lg:flex-1 lg:max-w-140' : '';
+const asideColumnClass = navAside ? 'lg:w-64 lg:shrink-0' : '';
 // Drop "on" for relative phrasing ("Posted 3 days ago") but keep it for absolute
 // dates ("Posted on 22 Apr 2026").
 const dateConnector = isRelativeDate(date) ? '' : 'on ';
@@ -34,22 +45,27 @@ const dateConnector = isRelativeDate(date) ? '' : 'on ';
     <h1 class="p-name mb-4 text-black dark:text-white font-semibold">{title}</h1>
     <a class="u-url hidden" href={canonical}>{canonical}</a>
     <AuthorCard />
-    <div class="e-content prose dark:prose-invert max-w-none mb-4">
-      <slot />
+    <div class={columnsClass}>
+      <div class={mainColumnClass}>
+        <div class="e-content prose dark:prose-invert max-w-none mb-8">
+          <slot />
+        </div>
+        <div class="text-sm text-gray-500 dark:text-gray-400">
+          {section && sectionHref ? (
+            <Fragment>
+              Posted in <a href={sectionHref} class="underline">{section}</a>{' '}{dateConnector}<time class="dt-published" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatDateRelative(date)}</time>
+            </Fragment>
+          ) : (
+            <Fragment>
+              Posted {dateConnector}<time class="dt-published" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatDateRelative(date)}</time>
+            </Fragment>
+          )}
+          <Syndication urls={syndication} />
+        </div>
+      </div>
+      <div class={asideColumnClass}>
+        <slot name="nav" />
+      </div>
     </div>
-    <Divider />
-    <div class="mb-4 text-sm">
-      {section && sectionHref ? (
-        <Fragment>
-          Posted in <a href={sectionHref} class="underline">{section}</a>{' '}{dateConnector}<time class="dt-published" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatDateRelative(date)}</time>
-        </Fragment>
-      ) : (
-        <Fragment>
-          Posted {dateConnector}<time class="dt-published" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatDateRelative(date)}</time>
-        </Fragment>
-      )}
-      <Syndication urls={syndication} />
-    </div>
-<slot name="nav" />
   </article>
 </Base>
