@@ -34,7 +34,7 @@ const { urls = [] } = Astro.props;
 const services = urls.map((url) => ({ url, ...serviceFor(url) }));
 ---
 {services.length > 0 && (
-  <span class="text-gray-500 dark:text-gray-400"> and also on {services.map(({ url, label, Icon }, i) => (
-    <Fragment>{i > 0 && ' '}<a href={url} class="u-syndication underline whitespace-nowrap" rel="syndication noopener noreferrer">{Icon && <Icon class="w-4 h-4 inline-block mr-1 -translate-y-px" />}{label}</a></Fragment>
+  <span>and also on {services.map(({ url, label, Icon }, i) => (
+    <Fragment>{i > 0 && ' '}<a href={url} class="u-syndication underline whitespace-nowrap" rel="syndication noopener noreferrer">{Icon && <Icon class="size-3 inline-block mr-1 -translate-y-px" />}{label}</a></Fragment>
   ))}</span>
 )}
