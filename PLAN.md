@@ -116,6 +116,7 @@ Removed from v6: `/page/{n}` (unified paginated feed), `/archives/`, `/tags/`.
 - `Divider.astro` — `⁂` separator; `my-8 text-xl`
 - `SiteFooter.astro` — footer nav (back-to-top, About, Colophon, Blogroll, Follow, Contact) + inline search form that submits to `/search`, plus a copyright/license line (CC BY-SA 4.0) and link to the GitHub source repo; rendered on every page
 Icon components in `src/components/icons/`:
+- `ArticleIcon.astro`, `WeeknoteIcon.astro` — document-text and calendar glyphs (Heroicons 16/solid) used as the `/log` timeline node icons for the two local content types that have no service logo
 - `BlueskyIcon.astro` — monochrome Bluesky butterfly SVG, `currentColor`, `-translate-y-px` to align with text baseline
 - `PdslsIcon.astro` — pdsls.dev graph SVG; links to the underlying PDS record on pdsls.dev
 - `GrainIcon.astro` — grain.social logo; used in the `/photos` feed description and wherever grain.social links appear
@@ -205,7 +206,7 @@ Applied as static classes directly in Astro templates. No runtime JS required.
 
 - **Feed pages**: `h-feed` + `p-name` + hidden `h-card p-author` containing `u-photo`, `p-name`, `u-url`
 - **All cards**: `h-entry` with `dt-published`, `u-url`
-- **Log page** (`/log`): each timeline item is an `h-entry` (`<li>`) with a hidden `p-author` `AuthorCard`, `u-url` on the canonical link, `dt-published`, and a `p-name` (titled items) or `p-summary` (posts) lead plus an optional `p-summary` detail line
+- **Log page** (`/log`): a vertical-line timeline grouped into Europe/London calendar days (day heading + continuous line via an absolutely-positioned rule). Each item is an `h-entry` (`<li>`) whose node on the line is a circular badge holding the type's icon (`ring` matched to the page background so it masks the line); the text label is replaced by that icon. MF2: hidden `p-author` `AuthorCard`, `u-url` on the canonical link, `dt-published` (visible clock time for timestamped items, `sr-only` for all-day), and a `p-name` (titled items) or `p-summary` (posts) lead plus an optional `p-summary` detail line. Type→icon: article→`ArticleIcon`, weeknote→`WeeknoteIcon`, post→`BlueskyIcon`, checkin→`CheckInIcon`, film→`PopfeedIcon`, book→`BookHiveIcon`, photo→`GrainIcon`, subscription→`StandardSiteIcon`
 - **ArticleCard**: `p-name`, `p-summary`; tags as `p-category`
 - **BlueskyCard**: `e-content` for rich text, `u-in-reply-to` on reply link, `u-photo` on embedded images
 - **CheckInCard**: nested `p-checkin h-card` with `p-name`, `p-latitude`, `p-longitude`, `p-street-address`; `p-rating` (hidden) when present
