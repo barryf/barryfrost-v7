@@ -4,6 +4,7 @@ import { formatDateRelative, formatDateTitle, toISODate } from '@/lib/dates';
 import { DID, pdslsUrl } from '@/lib/pds';
 import PdslsIcon from '@/components/icons/PdslsIcon.astro';
 import AuthorCard from '@/components/AuthorCard.astro';
+import StarRating from '@/components/StarRating.astro';
 
 interface Props {
   entry: CollectionEntry<'films'>;
@@ -13,13 +14,6 @@ const { entry } = Astro.props;
 const { data } = entry;
 const filmUrl = `https://popfeed.social/review/at:/${DID}/social.popfeed.feed.review/${entry.id}`;
 const date = new Date(data.createdAt);
-
-function toStars(rating: number): string {
-  const stars = rating / 2;
-  const full = Math.floor(stars);
-  const half = stars % 1 >= 0.5;
-  return '★'.repeat(full) + (half ? '½' : '');
-}
 ---
 <article class="h-review flex gap-3">
   <AuthorCard />
@@ -45,7 +39,7 @@ function toStars(rating: number): string {
     </h2>
     {data.rating !== undefined && (
       <p class="mb-0 text-sm text-gray-500 dark:text-gray-400">
-        <data class="p-rating" value={data.rating} title={`${data.rating}/10`}>{toStars(data.rating)}</data>
+        <data class="p-rating" value={data.rating} title={`${data.rating}/10`}><StarRating rating={data.rating} /></data>
       </p>
     )}
     <div class="text-gray-500 dark:text-gray-400">

@@ -8,6 +8,7 @@ import { formatDateRelative, formatDateTitle, toISODate } from '@/lib/dates';
 import { getCurrentPosition, getSelf, formatLocation } from '@/lib/sifa';
 import { DID } from '@/lib/pds';
 import { weeknoteUrl } from '@/lib/urls';
+import StarRating from '@/components/StarRating.astro';
 
 const nowEntry = await getEntry('pages', 'now');
 if (!nowEntry) throw new Error('src/content/pages/now.md not found');
@@ -61,13 +62,6 @@ const latestFilm = latestFilmEntry ? {
 const recentAlbums = [...albumEntries]
   .sort((a, b) => new Date(b.data.createdAt).getTime() - new Date(a.data.createdAt).getTime())
   .slice(0, 10);
-
-function toStars(rating: number): string {
-  const stars = rating / 2;
-  const full = Math.floor(stars);
-  const half = stars % 1 >= 0.5;
-  return '★'.repeat(full) + (half ? '½' : '');
-}
 
 interface Source {
   label: string;
@@ -255,7 +249,7 @@ const rockskySource: Source = { label: 'Rocksky', url: 'https://rocksky.app/prof
                 </a>
                 {filmData.rating !== undefined && (
                   <p class="text-sm text-gray-600 dark:text-gray-400 mt-0.5" title={`${filmData.rating}/10`}>
-                    {toStars(filmData.rating)}
+                    <StarRating rating={filmData.rating} />
                   </p>
                 )}
                 <div class="mt-0.5 flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400">

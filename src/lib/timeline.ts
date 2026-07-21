@@ -23,6 +23,8 @@ export interface TimelineItem {
   title: string;
   /** Secondary detail line, plain text. */
   summary?: string;
+  /** Rating out of 10, when the item has one — rendered as stars on the page. */
+  rating?: number;
   /** Canonical link — absolute. Local paths are absolutised against `site`. */
   url: string;
   /** Whether the canonical copy lives on this site (no rel=noopener needed). */
@@ -158,6 +160,7 @@ export async function getTimelineItems(site: URL): Promise<TimelineItem[]> {
       titlePrefix: 'Watched',
       title: data.title,
       summary: data.rating !== undefined ? toStars(data.rating) : undefined,
+      rating: data.rating,
       url,
       local: false,
       date: new Date(data.createdAt),

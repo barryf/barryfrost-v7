@@ -1,6 +1,7 @@
 ---
 import Feed from '@/layouts/Feed.astro';
 import AuthorCard from '@/components/AuthorCard.astro';
+import StarRating from '@/components/StarRating.astro';
 import MF2Icon from '@/components/icons/MF2Icon.astro';
 import RSSIcon from '@/components/icons/RSSIcon.astro';
 import JSONFeedIcon from '@/components/icons/JSONFeedIcon.astro';
@@ -83,7 +84,9 @@ const capitalise = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
                     >{item.title}</a>
                   </span>
                 </div>
-                {item.summary && item.type !== 'post' && (
+                {item.rating !== undefined ? (
+                  <p class="text-sm text-gray-600 dark:text-gray-400"><data class="p-rating" value={item.rating} title={`${item.rating}/10`}><StarRating rating={item.rating} /></data></p>
+                ) : item.summary && item.type !== 'post' && (
                   <p class="p-summary text-sm text-gray-600 dark:text-gray-400 wrap-break-word">{item.summary}</p>
                 )}
                 <time
