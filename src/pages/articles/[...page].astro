@@ -24,7 +24,7 @@ const { page } = Astro.props;
 <Feed {...SECTIONS.articles} currentPage={page.currentPage} totalPages={page.lastPage} basePath="/articles" showDescription={page.currentPage === 1}>
   <Fragment slot="description">
     Long-form notes on technology, leadership, life and making things. NB:
-    <StarIcon class="w-3 h-3 inline-block -translate-y-px" /> marks a featured
+    <StarIcon class="size-3 inline-block -translate-y-px" /> marks a featured
     article.
   </Fragment>
   <ul class="mb-4">
