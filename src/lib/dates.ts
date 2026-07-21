@@ -64,6 +64,16 @@ export function isRelativeDate(date: Date, now: Date = new Date()): boolean {
   return Math.abs(date.getTime() - now.getTime()) <= RELATIVE_CUTOFF_DAYS * 86_400_000;
 }
 
+// Like formatDateRelative but always at whole-calendar-day (Europe/London) granularity —
+// never hours or minutes — so it reads as a date even for timestamped values. Falls back
+// to the absolute short date beyond the cutoff. Used for the /log day-group headings.
+export function formatDateRelativeDays(date: Date, now: Date = new Date()): string {
+  const days = calendarDayDiff(now, date);
+  if (Math.abs(days) > RELATIVE_CUTOFF_DAYS) return formatDateShort(date);
+  const rtf = new Intl.RelativeTimeFormat('en-GB', { numeric: 'auto' });
+  return rtf.format(days, 'day');
+}
+
 export function formatMonthYear(date: Date): string {
   return date.toLocaleDateString('en-GB', {
     month: 'long',
