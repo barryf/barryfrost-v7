@@ -1,6 +1,7 @@
 ---
 import Feed from '@/layouts/Feed.astro';
 import AuthorCard from '@/components/AuthorCard.astro';
+import MF2Icon from '@/components/icons/MF2Icon.astro';
 import RSSIcon from '@/components/icons/RSSIcon.astro';
 import JSONFeedIcon from '@/components/icons/JSONFeedIcon.astro';
 import ArticleIcon from '@/components/icons/ArticleIcon.astro';
@@ -42,11 +43,12 @@ const capitalise = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 ---
 <Feed {...SECTIONS.log} totalPages={1} basePath="/log" paginate={false}>
   <Fragment slot="description">
-    A single timeline of my recent activity across the site and elsewhere, summarised and
+    A single timeline of my recent activity across this website and elsewhere, summarised and
     linking to each canonical copy. Also available as
-    <a href="/log.xml" class="underline"><RSSIcon class="inline size-4 align-text-bottom mr-0.5" />RSS</a>
+    <span class="whitespace-nowrap"><MF2Icon class="inline size-4 align-text-bottom mr-0.5 -translate-y-1" />MF2 h-feed,</span>
+    <span class="whitespace-nowrap"><a href="/log.xml" class="underline"><RSSIcon class="inline size-4 align-text-bottom mr-0.5" />RSS</a></span>
     and
-    <a href="/log.json" class="underline"><JSONFeedIcon class="inline size-4 align-text-bottom mr-0.5" />JSON</a>.
+    <span class="whitespace-nowrap"><a href="/log.json" class="underline"><JSONFeedIcon class="inline size-4 align-text-bottom mr-0.5" />JSON Feed</a>.</span>
   </Fragment>
 
   <div class="relative mt-8">
@@ -82,10 +84,10 @@ const capitalise = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
                   </span>
                 </div>
                 {item.summary && item.type !== 'post' && (
-                  <p class="p-summary -mt-0.5 text-sm text-gray-600 dark:text-gray-400 wrap-break-word">{item.summary}</p>
+                  <p class="p-summary text-sm text-gray-600 dark:text-gray-400 wrap-break-word">{item.summary}</p>
                 )}
                 <time
-                  class:list={['dt-published mt-1 block text-sm text-gray-500 dark:text-gray-400', !time && 'sr-only']}
+                  class:list={['dt-published block text-sm text-gray-500 dark:text-gray-400', !time && 'sr-only']}
                   datetime={iso}
                   title={formatDateTitle(item.date)}
                 >{time ?? formatDateShort(item.date)}</time>
