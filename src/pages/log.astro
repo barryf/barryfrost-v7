@@ -75,7 +75,7 @@ const capitalise = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
                 </span>
                 <div class="pt-px">
                   <span class="wrap-break-word">
-                    {item.titlePrefix && <span class="text-gray-500 dark:text-gray-400">{item.titlePrefix}</span>}
+                    {item.titlePrefix && <span class="text-gray-500 dark:text-gray-400 text-sm">{item.titlePrefix}</span>}
                     <a
                       class:list={[item.type === 'post' ? 'p-summary u-url' : 'p-name u-url', 'underline']}
                       href={item.url}
