@@ -1,0 +1,101 @@
+---
+import Feed from '@/layouts/Feed.astro';
+import AuthorCard from '@/components/AuthorCard.astro';
+import MF2Icon from '@/components/icons/MF2Icon.astro';
+import RSSIcon from '@/components/icons/RSSIcon.astro';
+import JSONFeedIcon from '@/components/icons/JSONFeedIcon.astro';
+import ArticleIcon from '@/components/icons/ArticleIcon.astro';
+import WeeknoteIcon from '@/components/icons/WeeknoteIcon.astro';
+import BlueskyIcon from '@/components/icons/BlueskyIcon.astro';
+import CheckInIcon from '@/components/icons/CheckInIcon.astro';
+import PopfeedIcon from '@/components/icons/PopfeedIcon.astro';
+import BookHiveIcon from '@/components/icons/BookHiveIcon.astro';
+import GrainIcon from '@/components/icons/GrainIcon.astro';
+import StandardSiteIcon from '@/components/icons/StandardSiteIcon.astro';
+import { formatDateRelativeDays, formatDateShort, formatDateTitle, toISODate } from '@/lib/dates';
+import { getTimelineItems, type TimelineItem, type TimelineType } from '@/lib/timeline';
+import { SECTIONS } from '@/lib/sections';
+
+const items = await getTimelineItems(Astro.site!);
+
+const ICONS: Record<TimelineType, typeof ArticleIcon> = {
+  article: ArticleIcon,
+  weeknote: WeeknoteIcon,
+  post: BlueskyIcon,
+  checkin: CheckInIcon,
+  film: PopfeedIcon,
+  book: BookHiveIcon,
+  photo: GrainIcon,
+  subscription: StandardSiteIcon,
+};
+
+// Group into consecutive Europe/London calendar days (items are already date-desc).
+// toISODate yields a London-local date prefix for both timestamped and all-day values.
+const groups: { key: string; date: Date; items: TimelineItem[] }[] = [];
+for (const item of items) {
+  const key = toISODate(item.date).slice(0, 10);
+  const last = groups.at(-1);
+  if (last && last.key === key) last.items.push(item);
+  else groups.push({ key, date: item.date, items: [item] });
+}
+
+const capitalise = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+---
+<Feed {...SECTIONS.log} totalPages={1} basePath="/log" paginate={false}>
+  <Fragment slot="description">
+    A single timeline of my recent activity across this website and elsewhere, summarised and
+    linking to each canonical copy. Also available as
+    <span class="whitespace-nowrap"><MF2Icon class="inline size-4 align-text-bottom mr-0.5 -translate-y-1" />MF2 h-feed,</span>
+    <span class="whitespace-nowrap"><a href="/log.xml" class="underline"><RSSIcon class="inline size-4 align-text-bottom mr-0.5" />RSS</a></span>
+    and
+    <span class="whitespace-nowrap"><a href="/log.json" class="underline"><JSONFeedIcon class="inline size-4 align-text-bottom mr-0.5" />JSON Feed</a>.</span>
+  </Fragment>
+
+  <div class="relative mt-8">
+    <span class="pointer-events-none absolute left-4 top-2 bottom-2 w-px -translate-x-1/2 bg-gray-200 dark:bg-gray-800" aria-hidden="true"></span>
+    {groups.map((group) => (
+      <section>
+        <h2 class="relative pl-0 py-2 text-sm bg-white dark:bg-black font-semibold text-black dark:text-white">
+          {capitalise(formatDateRelativeDays(group.date))}
+        </h2>
+        <ol class="timeline">
+          {group.items.map((item) => {
+            const Icon = ICONS[item.type];
+            const iso = toISODate(item.date);
+            const time = iso.includes('T') ? iso.slice(11, 16) : null;
+            return (
+              <li class="h-entry relative pl-12 my-4">
+                <AuthorCard />
+                <span
+                  class="absolute left-0 top-0 grid size-8 place-items-center rounded-full bg-gray-100 text-gray-600 ring-4 ring-white dark:bg-gray-800 dark:text-gray-300 dark:ring-black"
+                  aria-hidden="true"
+                  title={item.typeLabel}
+                >
+                  <Icon class="size-4" />
+                </span>
+                <div class="pt-px">
+                  <span class="wrap-break-word">
+                    {item.titlePrefix && <span class="text-gray-500 dark:text-gray-400">{item.titlePrefix}</span>}
+                    <a
+                      class:list={[item.type === 'post' ? 'p-summary u-url' : 'p-name u-url', 'underline']}
+                      href={item.url}
+                      rel={item.local ? undefined : 'noopener noreferrer'}
+                    >{item.title}</a>
+                  </span>
+                </div>
+                {item.summary && item.type !== 'post' && (
+                  <p class="p-summary text-sm text-gray-600 dark:text-gray-400 wrap-break-word">{item.summary}</p>
+                )}
+                <time
+                  class:list={['dt-published block text-sm text-gray-500 dark:text-gray-400', !time && 'sr-only']}
+                  datetime={iso}
+                  title={formatDateTitle(item.date)}
+                >{time ?? formatDateShort(item.date)}</time>
+              </li>
+            );
+          })}
+        </ol>
+      </section>
+    ))}
+  </div>
+</Feed>

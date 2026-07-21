@@ -85,6 +85,7 @@ export function subscriptionsLoader(): Loader {
               siteUrl,
               iconUrl,
               handle,
+              createdAt: value.createdAt as string | undefined,
             },
             digest: generateDigest(record.cid),
           });
