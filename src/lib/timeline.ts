@@ -17,6 +17,8 @@ export interface TimelineItem {
   type: TimelineType;
   /** Human label for the item's kind, e.g. "Article", "Post", "Check-in". */
   typeLabel: string;
+  /** Non-link text shown before the title (e.g. a weeknote emoji, "Replied: "). */
+  titlePrefix?: string;
   /** Always non-empty; posts use a truncated text lead in place of a title. */
   title: string;
   /** Secondary detail line, plain text. */
@@ -100,11 +102,11 @@ export async function getTimelineItems(site: URL): Promise<TimelineItem[]> {
   for (const entry of weeknotes) {
     if (entry.data.visibility === 'unlisted') continue;
     const url = absolute(weeknoteUrl(entry.id));
-    const emoji = entry.data.emoji ? `${entry.data.emoji} ` : '';
     items.push({
       type: 'weeknote',
       typeLabel: 'Weeknote',
-      title: `${emoji}${entry.data.title}`,
+      titlePrefix: entry.data.emoji ? `${entry.data.emoji} ` : undefined,
+      title: entry.data.title,
       summary: entry.data.description ?? plainExcerpt(entry.body ?? ''),
       url,
       local: true,
@@ -118,6 +120,7 @@ export async function getTimelineItems(site: URL): Promise<TimelineItem[]> {
     items.push({
       type: 'post',
       typeLabel: 'Post',
+      titlePrefix: entry.data.reply ? 'Replied: ' : undefined,
       title: truncateText(entry.data.text) || 'Post',
       url,
       local: false,

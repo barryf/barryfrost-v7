@@ -11,7 +11,7 @@ import PopfeedIcon from '@/components/icons/PopfeedIcon.astro';
 import BookHiveIcon from '@/components/icons/BookHiveIcon.astro';
 import GrainIcon from '@/components/icons/GrainIcon.astro';
 import StandardSiteIcon from '@/components/icons/StandardSiteIcon.astro';
-import { formatDate, formatDateShort, formatDateTitle, toISODate } from '@/lib/dates';
+import { formatDateRelativeDays, formatDateShort, formatDateTitle, toISODate } from '@/lib/dates';
 import { getTimelineItems, type TimelineItem, type TimelineType } from '@/lib/timeline';
 import { SECTIONS } from '@/lib/sections';
 
@@ -37,6 +37,8 @@ for (const item of items) {
   if (last && last.key === key) last.items.push(item);
   else groups.push({ key, date: item.date, items: [item] });
 }
+
+const capitalise = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 ---
 <Feed {...SECTIONS.log} totalPages={1} basePath="/log" paginate={false}>
   <Fragment slot="description">
@@ -52,7 +54,7 @@ for (const item of items) {
     {groups.map((group) => (
       <section>
         <h2 class="relative pl-0 py-2 text-sm bg-white dark:bg-black font-semibold text-black dark:text-white">
-          {formatDate(group.date)}
+          {capitalise(formatDateRelativeDays(group.date))}
         </h2>
         <ol class="timeline">
           {group.items.map((item) => {
@@ -70,11 +72,14 @@ for (const item of items) {
                   <Icon class="size-4" />
                 </span>
                 <div class="pt-px">
-                  <a
-                    class:list={[item.type === 'post' ? 'p-summary u-url' : 'p-name u-url', 'underline wrap-break-word']}
-                    href={item.url}
-                    rel={item.local ? undefined : 'noopener noreferrer'}
-                  >{item.title}</a>
+                  <span class="wrap-break-word">
+                    {item.titlePrefix && <span class="text-gray-500 dark:text-gray-400">{item.titlePrefix}</span>}
+                    <a
+                      class:list={[item.type === 'post' ? 'p-summary u-url' : 'p-name u-url', 'underline']}
+                      href={item.url}
+                      rel={item.local ? undefined : 'noopener noreferrer'}
+                    >{item.title}</a>
+                  </span>
                 </div>
                 {item.summary && item.type !== 'post' && (
                   <p class="p-summary -mt-0.5 text-sm text-gray-600 dark:text-gray-400 wrap-break-word">{item.summary}</p>
