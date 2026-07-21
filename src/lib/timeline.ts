@@ -17,7 +17,7 @@ export interface TimelineItem {
   type: TimelineType;
   /** Human label for the item's kind, e.g. "Article", "Post", "Check-in". */
   typeLabel: string;
-  /** Non-link text shown before the title (e.g. a weeknote emoji, "Replied: "). */
+  /** Non-link text shown before the title (e.g. a weeknote emoji, "Replied"). */
   titlePrefix?: string;
   /** Always non-empty; posts use a truncated text lead in place of a title. */
   title: string;
@@ -120,7 +120,7 @@ export async function getTimelineItems(site: URL): Promise<TimelineItem[]> {
     items.push({
       type: 'post',
       typeLabel: 'Post',
-      titlePrefix: entry.data.reply ? 'Replied: ' : undefined,
+      titlePrefix: entry.data.reply ? 'Replied ' : undefined,
       title: truncateText(entry.data.text) || 'Post',
       url,
       local: false,
@@ -139,7 +139,8 @@ export async function getTimelineItems(site: URL): Promise<TimelineItem[]> {
     items.push({
       type: 'checkin',
       typeLabel: 'Check-in',
-      title: `Checked in at ${data.venueName}`,
+      titlePrefix: 'Checked in at',
+      title: data.venueName,
       summary: data.comment || place || undefined,
       url,
       local: false,
@@ -154,6 +155,7 @@ export async function getTimelineItems(site: URL): Promise<TimelineItem[]> {
     items.push({
       type: 'film',
       typeLabel: 'Film',
+      titlePrefix: 'Watched',
       title: data.title,
       summary: data.rating !== undefined ? toStars(data.rating) : undefined,
       url,
@@ -172,8 +174,9 @@ export async function getTimelineItems(site: URL): Promise<TimelineItem[]> {
     items.push({
       type: 'book',
       typeLabel: 'Book',
+      titlePrefix: isReading ? 'Reading' : 'Read',
       title: data.title,
-      summary: `${isReading ? 'Reading' : 'Read'} — by ${data.authors}`,
+      summary: `by ${data.authors}`,
       url,
       local: false,
       date: new Date(data.createdAt),
@@ -203,7 +206,8 @@ export async function getTimelineItems(site: URL): Promise<TimelineItem[]> {
     items.push({
       type: 'subscription',
       typeLabel: 'Subscription',
-      title: `Subscribed to ${data.name}`,
+      titlePrefix: 'Subscribed to ',
+      title: data.name,
       summary: data.description || undefined,
       url: data.siteUrl,
       local: false,
