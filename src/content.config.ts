@@ -179,6 +179,7 @@ const standardSubscriptions = defineCollection({
     siteUrl: z.string(),
     iconUrl: z.string().optional(),
     handle: z.string().optional(),
+    createdAt: z.string().optional(),
   }),
 });
 

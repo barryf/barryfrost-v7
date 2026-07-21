@@ -1,0 +1,39 @@
+---
+import Feed from '@/layouts/Feed.astro';
+import AuthorCard from '@/components/AuthorCard.astro';
+import RSSIcon from '@/components/icons/RSSIcon.astro';
+import JSONFeedIcon from '@/components/icons/JSONFeedIcon.astro';
+import { formatDateRelative, formatDateTitle, toISODate } from '@/lib/dates';
+import { getTimelineItems } from '@/lib/timeline';
+import { SECTIONS } from '@/lib/sections';
+
+const items = await getTimelineItems(Astro.site!);
+---
+<Feed {...SECTIONS.log} totalPages={1} basePath="/log" paginate={false}>
+  <Fragment slot="description">
+    A single timeline of my recent activity across the site and elsewhere, summarised and
+    linking to each canonical copy. Also available as
+    <a href="/log.xml" class="underline"><RSSIcon class="inline size-4 align-text-bottom mr-0.5" />RSS</a>
+    and
+    <a href="/log.json" class="underline"><JSONFeedIcon class="inline size-4 align-text-bottom mr-0.5" />JSON</a>.
+  </Fragment>
+  <ol class="mt-8">
+    {items.map((item) => (
+      <li class="h-entry mb-5">
+        <AuthorCard />
+        <div class="flex items-baseline gap-2 flex-wrap">
+          <span class="text-xs uppercase tracking-wide text-gray-400 dark:text-gray-500 shrink-0">{item.typeLabel}</span>
+          <a
+            class:list={[item.type === 'post' ? 'p-summary u-url' : 'p-name u-url', 'underline wrap-break-word']}
+            href={item.url}
+            rel={item.local ? undefined : 'noopener noreferrer'}
+          >{item.title}</a>
+        </div>
+        {item.summary && item.type !== 'post' && (
+          <p class="p-summary text-sm text-gray-600 dark:text-gray-400 mt-0.5 wrap-break-word">{item.summary}</p>
+        )}
+        <time class="dt-published text-sm text-gray-500 dark:text-gray-400" datetime={toISODate(item.date)} title={formatDateTitle(item.date)}>{formatDateRelative(item.date)}</time>
+      </li>
+    ))}
+  </ol>
+</Feed>

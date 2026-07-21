@@ -77,6 +77,9 @@ Paginated pages show `Title (Page N)` in both the h1 and the browser window titl
 | URL | Content |
 |---|---|
 | `/` | Curated homepage |
+| `/log` | Unified activity timeline — 50 most recent items across all collections (except music), summarised, each linking to its canonical copy; MF2 `h-feed` |
+| `/log.xml` | RSS for the timeline (summaries only) |
+| `/log.json` | JSON Feed v1.1 for the timeline (summaries only) |
 | `/articles` | Articles list |
 | `/articles/{slug}` | Individual article |
 | `/weeknotes` | Weeknotes grid — all entries, sorted by week number descending |
@@ -105,7 +108,7 @@ Removed from v6: `/page/{n}` (unified paginated feed), `/archives/`, `/tags/`.
 ## Layouts & Components
 
 - `Base.astro` — HTML shell, `max-w-2xl mx-auto px-4`, dark mode via `prefers-color-scheme`; renders `<header><SiteHeader /></header>`, `<main><slot /></main>`, and `<footer><SiteFooter /></footer>` on every page.
-- `SiteHeader.astro` — sitewide header: `h-card` (name, hidden `u-photo`/`p-locality`/`p-country-name`) plus a top nav linking to Posts, Weeknotes, Articles, Check-ins, Photos, Books, Films, Music, with the current section bolded. On the homepage the name renders as an `h1`; elsewhere it's a link back to `/`.
+- `SiteHeader.astro` — sitewide header: `h-card` (name, hidden `u-photo`/`p-locality`/`p-country-name`) plus a top nav linking to Log, Posts, Weeknotes, Articles, Check-ins, Photos, Books, Films, Music, with the current section bolded. On the homepage the name renders as an `h1`; elsewhere it's a link back to `/`.
 - `Feed.astro` — shared feed layout used by all list/paginated pages. Renders the `h-feed` wrapper, hidden `h-card p-author` MF2 author block, heading (with `(Page N)` suffix), optional named `description` slot, default slot for item content, and `<Pagination>` (suppressed via `paginate={false}` for books page 1). Props: `title`, `currentPage?`, `totalPages`, `basePath`, `paginate?`, `showDescription?` (set false on pages 2+ to hide the intro slot, since slots can't be conditionally passed).
 - `FilmFeed.astro` — extends `Feed.astro` for `/films` and `/films/by-rating`: adds date/rating sort toggle and renders `FilmCard` in a responsive grid (`grid-cols-1 sm:grid-cols-2 lg:grid-cols-3`)
 - `Post.astro` — individual article/weeknote with prose styles; "Posted in [Section] on [relative date]" (or "Posted on [relative date]") footer, followed by `Syndication` links when the post has `syndication` frontmatter. Optional `navAside` prop (set by weeknotes) moves the named `nav` slot into a right-hand column at `lg` and above; below that the columns collapse and the slot stacks under the body in source order. The columns align on `items-baseline` so the smaller aside text shares a baseline with the body's first line
@@ -202,6 +205,7 @@ Applied as static classes directly in Astro templates. No runtime JS required.
 
 - **Feed pages**: `h-feed` + `p-name` + hidden `h-card p-author` containing `u-photo`, `p-name`, `u-url`
 - **All cards**: `h-entry` with `dt-published`, `u-url`
+- **Log page** (`/log`): each timeline item is an `h-entry` (`<li>`) with a hidden `p-author` `AuthorCard`, `u-url` on the canonical link, `dt-published`, and a `p-name` (titled items) or `p-summary` (posts) lead plus an optional `p-summary` detail line
 - **ArticleCard**: `p-name`, `p-summary`; tags as `p-category`
 - **BlueskyCard**: `e-content` for rich text, `u-in-reply-to` on reply link, `u-photo` on embedded images
 - **CheckInCard**: nested `p-checkin h-card` with `p-name`, `p-latitude`, `p-longitude`, `p-street-address`; `p-rating` (hidden) when present
@@ -221,6 +225,20 @@ A single unified RSS feed and JSON feed carry both articles and weeknotes, inter
 | `/feed.json` | JSON Feed v1.1 — same content |
 
 `src/lib/feed-items.ts` (`getFeedItems`) is the shared source of truth: it merges both collections, filters `visibility: unlisted`, sorts by date descending, takes the latest 10, renders full content via `AstroContainer`, and **rewrites root-relative `src`/`href`/`srcset` URLs to absolute** so images (`astro:assets` `<Image>` and Markdown `![]()` both emit `/_astro/…` paths) resolve in feed readers. `trailingSlash: false` passed to `@astrojs/rss`. Advertised via `<link rel="alternate">` in `BaseHead.astro`; `/rss`, `/rss.xml`, `/index.xml`, `/feed` redirect to `/feed.xml` in `public/_redirects`.
+
+### Log (unified timeline)
+
+Separate from the blog feed above: a broader **activity log** spanning every collection except music.
+
+| URL | Content |
+|---|---|
+| `/log` | HTML timeline — 50 most recent items, MF2 `h-feed` |
+| `/log.xml` | RSS — same items, summaries only |
+| `/log.json` | JSON Feed v1.1 — same items, summaries only |
+
+`src/lib/timeline.ts` (`getTimelineItems(site)`) is the shared source of truth for all three: it merges `articles`, `weeknotes`, `blueskyPosts` (replies included), `check-ins`, `films`, `books`, `photos` and `standardSubscriptions`, filters `visibility: unlisted` (articles/weeknotes), normalises each to a `TimelineItem` (type, label, title, summary, canonical `url`, `local` flag, `date`), sorts by date descending and takes the latest 50. Canonical URLs reuse the per-type patterns from the card components (articles/weeknotes local and absolutised against `site`; posts→Bluesky, check-ins→Beaconbits/OSM, films→Popfeed, books→BookHive, photos→Grain, subscriptions→the publication's site). Items carry **summaries, not full content** — readers click through to the canonical copy. Music (`albums`, `scrobbles`) is deliberately excluded as too noisy. Named "Log" (not "Feed") to avoid colliding with the frozen `/feed.*` blog feeds. Advertised via a second pair of `<link rel="alternate">` tags in `BaseHead.astro`.
+
+> Subscriptions have no date in their own schema; the `site.standard.graph.subscription` record's `createdAt` is surfaced through `subscriptions.ts` + `standardSubscriptions` schema so they can be timeline-ordered (any lacking it are skipped).
 
 ## Favicon & Icons
 
