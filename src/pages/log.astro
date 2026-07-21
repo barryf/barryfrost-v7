@@ -85,12 +85,12 @@ const capitalise = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
                   </span>
                 </div>
                 {item.rating !== undefined ? (
-                  <p class="text-sm text-gray-600 dark:text-gray-400"><data class="p-rating" value={item.rating} title={`${item.rating}/10`}><StarRating rating={item.rating} /></data></p>
+                  <p class="mt-0.5 text-sm text-gray-600 dark:text-gray-400"><data class="p-rating" value={item.rating} title={`${item.rating}/10`}><StarRating rating={item.rating} /></data></p>
                 ) : item.summary && item.type !== 'post' && (
-                  <p class="p-summary text-sm text-gray-600 dark:text-gray-400 wrap-break-word">{item.summary}</p>
+                  <p class="p-summary mt-0.5 text-sm text-gray-600 dark:text-gray-400 wrap-break-word">{item.summary}</p>
                 )}
                 <time
-                  class:list={['dt-published block text-sm text-gray-500 dark:text-gray-400', !time && 'sr-only']}
+                  class:list={['dt-published block mt-0.5 text-sm text-gray-500 dark:text-gray-400', !time && 'sr-only']}
                   datetime={iso}
                   title={formatDateTitle(item.date)}
                 >{time ?? formatDateShort(item.date)}</time>
