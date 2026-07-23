@@ -32,7 +32,6 @@ Fetched at build time from `bsky.social` for DID `did:plc:j5ksi3y4tdtbp7vpsxsfya
 | `social.popfeed.feed.review` | `films.ts` | `/films` |
 | `buzz.bookhive.book` | `books.ts` | `/books` |
 | `social.grain.gallery` + `.gallery.item` + `.photo` | `photos.ts` | `/photos`, homepage recent photos |
-| `app.rocksky.album` | `albums.ts` | Currently unused — was the `/now` "Listening" section, orphaned when the Now page was removed (loader/collection + the `app.rocksky.album` poller watch can be dropped) |
 | `app.rocksky.scrobble` | `scrobbles.ts` | `/music` — Top Albums, Top Artists, Recently Played |
 | `site.standard.graph.subscription` | `subscriptions.ts` | `/blogroll` only |
 
@@ -243,7 +242,7 @@ Separate from the blog feed above: a broader **activity log** spanning every col
 | `/everything.xml` | RSS — same items, summaries only |
 | `/everything.json` | JSON Feed v1.1 — same items, summaries only |
 
-`src/lib/timeline.ts` (`getTimelineItems(site)`) is the shared source of truth for all three: it merges `articles`, `weeknotes`, `blueskyPosts` (replies included), `check-ins`, `films`, `books`, `photos` and `standardSubscriptions`, filters `visibility: unlisted` (articles/weeknotes), normalises each to a `TimelineItem` (type, label, title, summary, canonical `url`, `local` flag, `date`), sorts by date descending and takes the latest 50. Canonical URLs reuse the per-type patterns from the card components (articles/weeknotes local and absolutised against `site`; posts→Bluesky, check-ins→Beaconbits/OSM, films→Popfeed, books→BookHive, photos→Grain, subscriptions→the publication's site). Items carry **summaries, not full content** — readers click through to the canonical copy. Music (`albums`, `scrobbles`) is deliberately excluded as too noisy. The page/feeds live at `/everything*` (the header labels it "Everything"); the route slug stays distinct from the frozen `/feed.*` blog feeds, and `/log*` 301-redirect here (renamed from the earlier "Log"). Advertised via a second pair of `<link rel="alternate">` tags in `BaseHead.astro`.
+`src/lib/timeline.ts` (`getTimelineItems(site)`) is the shared source of truth for all three: it merges `articles`, `weeknotes`, `blueskyPosts` (replies included), `check-ins`, `films`, `books`, `photos` and `standardSubscriptions`, filters `visibility: unlisted` (articles/weeknotes), normalises each to a `TimelineItem` (type, label, title, summary, canonical `url`, `local` flag, `date`), sorts by date descending and takes the latest 50. Canonical URLs reuse the per-type patterns from the card components (articles/weeknotes local and absolutised against `site`; posts→Bluesky, check-ins→Beaconbits/OSM, films→Popfeed, books→BookHive, photos→Grain, subscriptions→the publication's site). Items carry **summaries, not full content** — readers click through to the canonical copy. Music (`scrobbles`) is deliberately excluded as too noisy. The page/feeds live at `/everything*` (the header labels it "Everything"); the route slug stays distinct from the frozen `/feed.*` blog feeds, and `/log*` 301-redirect here (renamed from the earlier "Log"). Advertised via a second pair of `<link rel="alternate">` tags in `BaseHead.astro`.
 
 > Subscriptions have no date in their own schema; the `site.standard.graph.subscription` record's `createdAt` is surfaced through `subscriptions.ts` + `standardSubscriptions` schema so they can be timeline-ordered (any lacking it are skipped).
 
@@ -299,7 +298,7 @@ A Cloudflare Worker that detects PDS changes by polling every 60 seconds, driven
 
 **Load.** Most minutes: one `getLatestCommit` call (~1.4k/day). On the minutes the rev has moved, a full paginated scan of the 10 watched collections — the two largest (`app.bsky.feed.post`, `com.barryfrost.checkin`) are ~1,300–1,400 records each, so a scan is ~30 `listRecords` calls total. Rev-changing writes are infrequent for a personal site, and even a scan every few minutes stays well under `bsky.social`'s per-IP limit of 3,000 requests per 5 minutes.
 
-Watched collections (`WATCHED_COLLECTIONS`): `app.bsky.feed.post`, `app.beaconbits.beacon`, `com.barryfrost.checkin`, `social.popfeed.feed.review`, `buzz.bookhive.book`, `site.standard.graph.subscription`, `social.grain.gallery`, `social.grain.gallery.item`, `social.grain.photo`, `app.rocksky.album`. `site.standard.document` is deliberately **not** watched — the build writes those records itself (`scripts/publish-standard-site.ts`), so watching them would loop.
+Watched collections (`WATCHED_COLLECTIONS`): `app.bsky.feed.post`, `app.beaconbits.beacon`, `com.barryfrost.checkin`, `social.popfeed.feed.review`, `buzz.bookhive.book`, `site.standard.graph.subscription`, `social.grain.gallery`, `social.grain.gallery.item`, `social.grain.photo`. `site.standard.document` is deliberately **not** watched — the build writes those records itself (`scripts/publish-standard-site.ts`), so watching them would loop.
 
 Required secrets: `DEPLOY_HOOK` (same Workers Builds deploy-hook URL as before), `NOTIFY_SECRET` (gates `/pending-notification`).
 

@@ -7,7 +7,6 @@ import { booksLoader } from './lib/loaders/books';
 import { subscriptionsLoader } from './lib/loaders/subscriptions';
 import { blogrollLoader } from './lib/loaders/blogroll';
 import { photosLoader } from './lib/loaders/photos';
-import { albumsLoader } from './lib/loaders/albums';
 import { scrobblesLoader } from './lib/loaders/scrobbles';
 
 const articles = defineCollection({
@@ -197,17 +196,6 @@ const photos = defineCollection({
   }),
 });
 
-const albums = defineCollection({
-  loader: albumsLoader(),
-  schema: z.object({
-    title: z.string(),
-    artist: z.string(),
-    coverUrl: z.string().optional(),
-    createdAt: z.string(),
-    uri: z.string(),
-  }),
-});
-
 const scrobbles = defineCollection({
   loader: scrobblesLoader(),
   schema: z.object({
@@ -234,6 +222,5 @@ export const collections = {
   blogroll,
   standardSubscriptions,
   photos,
-  albums,
   scrobbles,
 };

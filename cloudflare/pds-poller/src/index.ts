@@ -25,7 +25,6 @@ const WATCHED_COLLECTIONS = [
   'social.grain.gallery',
   'social.grain.gallery.item',
   'social.grain.photo',
-  'app.rocksky.album',
 ];
 
 // Human-friendly noun per watched collection, for the deploy notification the build
@@ -40,12 +39,11 @@ const COLLECTION_NOUNS: Record<string, string> = {
   'social.grain.gallery': 'gallery',
   'social.grain.gallery.item': 'gallery item',
   'social.grain.photo': 'photo',
-  'app.rocksky.album': 'album',
 };
 
-// Still watched (rebuilds still fire) but excluded from the notification summary — too
-// frequent to be worth a Pushover per event (e.g. every track listened to on Rocksky).
-const SILENT_COLLECTIONS = new Set(['app.rocksky.album']);
+// Collections still watched (rebuilds still fire) but excluded from the notification
+// summary — too frequent to be worth a Pushover per event. Currently empty.
+const SILENT_COLLECTIONS = new Set<string>([]);
 
 const LIST_RECORDS_PAGE_LIMIT = 100;
 
