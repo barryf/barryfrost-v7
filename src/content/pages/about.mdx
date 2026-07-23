@@ -3,14 +3,16 @@ title: About
 description: About Barry Frost.
 ---
 import Divider from '@/components/Divider.astro';
+import { Image } from 'astro:assets';
+import me from '@/assets/me.jpg';
 
-Hello, I'm Barry, and you're reading my personal website. You can find out about me on this page, or read about how this website was [built](/colophon).
+<Image src={me} alt="Man." class="float-right m-2 max-w-50 rounded-full shadow-lg" />Hello, I'm Barry, and you're reading my personal website.
 
 <Divider />
 
 I've been [working](/work) with product and technology teams for over 25 years. I started my career as a software engineer, and I continue to tinker with side projects in my spare time. For a while though, I've been leading software engineering teams and functions in companies large and small.
 
-I'm married with two sons. My wife teaches at the same primary school where the boys go, just a five-minute walk from home, while I work from home.
+I'm married with two sons. My wife teaches at the same primary school where the boys go, just a five-minute walk away, while I happily work from home.
 
 We currently live in a village in Hertfordshire, UK, but I grew up in [Chelmsford](https://www.chelmsfordforyou.co.uk/). After university at [Warwick](https://warwick.ac.uk/) in the West Midlands, I lived in Auckland, Wellington, Battersea, Wimbledon, Winchmore Hill, Twickenham, Windsor, and Virginia Water.
 
