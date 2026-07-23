@@ -9,6 +9,11 @@
 /index.xml /feed.xml 301
 /feed /feed.xml 301
 
+# Log renamed to Everything
+/log /everything 301
+/log.xml /everything.xml 301
+/log.json /everything.json 301
+
 # Travelblog
 /categories/travelblog /travelblog 301
 

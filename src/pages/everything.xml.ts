@@ -6,7 +6,7 @@ export async function GET(context: APIContext) {
   const items = await getTimelineItems(context.site!);
 
   return rss({
-    title: 'Barry Frost — Log',
+    title: 'Barry Frost — Everything',
     description: 'A timeline of recent activity across the site and elsewhere, by Barry Frost',
     site: context.site!,
     items: items.map((item) => ({

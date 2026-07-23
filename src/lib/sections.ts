@@ -12,10 +12,10 @@ export interface Section {
 }
 
 export const SECTIONS = {
-  log: {
-    title: 'Log',
+  everything: {
+    title: 'Everything',
     description:
-      "A single timeline of my recent activity — articles, weeknotes, posts, check-ins, films, books, photos and subscriptions — each linking to its canonical copy.",
+      "A single timeline of my recent activity - articles, weeknotes, posts, check-ins, films, books, photos and subscriptions - each linking to its canonical copy.",
   },
   articles: {
     title: 'Articles',
@@ -49,7 +49,7 @@ export const SECTIONS = {
   films: {
     title: 'Films',
     description:
-      "What I've watched and rated, originally posted on Letterboxd and synchronised to my Popfeed account.",
+      "What I've watched and rated, synchronised to my Popfeed account.",
   },
   travelblog: {
     title: 'Travelblog',
