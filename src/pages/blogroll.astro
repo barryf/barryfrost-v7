@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import Base from '@/layouts/Base.astro';
 import FollowCard from '@/components/FollowCard.astro';
 import Divider from '@/components/Divider.astro';
+import SectionHeading from '@/components/SectionHeading.astro';
 
 const [blogsRaw, publications] = await Promise.all([
   getCollection('blogroll'),
@@ -14,7 +15,7 @@ publications.sort((a, b) => a.data.name.localeCompare(b.data.name));
 ---
 <Base title="Blogroll" description="Blogs and publications I follow">
   <div data-pagefind-body>
-  <h1 class="mb-4 font-semibold text-black dark:text-white">Blogroll</h1>
+  <SectionHeading title="Blogroll" class="mb-4" />
 
   <div class="mb-8 text-gray-600 dark:text-gray-400">
     People with personal websites whose articles I read and subscribe to in

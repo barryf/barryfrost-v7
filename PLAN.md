@@ -32,7 +32,7 @@ Fetched at build time from `bsky.social` for DID `did:plc:j5ksi3y4tdtbp7vpsxsfya
 | `social.popfeed.feed.review` | `films.ts` | `/films` |
 | `buzz.bookhive.book` | `books.ts` | `/books` |
 | `social.grain.gallery` + `.gallery.item` + `.photo` | `photos.ts` | `/photos`, homepage recent photos |
-| `app.rocksky.album` | `albums.ts` | `/now` page "Listening" section only |
+| `app.rocksky.album` | `albums.ts` | Currently unused — was the `/now` "Listening" section, orphaned when the Now page was removed (loader/collection + the `app.rocksky.album` poller watch can be dropped) |
 | `app.rocksky.scrobble` | `scrobbles.ts` | `/music` — Top Albums, Top Artists, Recently Played |
 | `site.standard.graph.subscription` | `subscriptions.ts` | `/blogroll` only |
 
@@ -54,13 +54,13 @@ Each PDS loader implements `Loader` from `astro/loaders`:
 
 The homepage (`src/pages/index.astro`) is a curated view, not a unified feed. Sections rendered in order:
 
-1. **Intro** — short bio (h-card with name/location lives in the sitewide `SiteHeader`)
+1. **Intro** — short bio (h-card with name/location lives in the sitewide `SiteHeader`) plus a line on how the site is built (atproto/PDS)
 2. **Latest Weeknote** — title + emoji, truncated excerpt, link to all weeknotes
 3. **Recent Photos** — 8 most recent photo galleries in a scrollable flex row
-4. **Latest Post** — most recent non-reply Bluesky post, rendered with the shared `BlueskyCard` (so images, quotes, and external embeds appear as on `/posts`); passed `indexable={false}` to keep the post out of the Pagefind index, since it is already indexed on `/posts`
-5. **Featured Articles** — articles with `featured: true` frontmatter, sorted by date
+4. **Featured Articles** — articles with `featured: true` frontmatter, sorted by date
+5. **Latest Post** — most recent non-reply Bluesky post, rendered with the shared `BlueskyCard` (so images, quotes, and external embeds appear as on `/posts`); passed `indexable={false}` to keep the post out of the Pagefind index, since it is already indexed on `/posts`
 6. **Recent Check-ins** — 5 most recent check-ins as a compact list
-7. **Recent Media** — links to `/books`, `/films`, and `/music`
+7. **Everything directory** — closing index of the seven Everything sections (Posts, Photos, Check-ins, Books, Films, Music, Blogroll) as icon + link + one-line description, under a lead-in linking to `/everything`. Driven by `EVERYTHING_SECTIONS` in `src/lib/nav.ts` (parent entry skipped) + `SectionIcon`; gives Books/Films/Music/Blogroll their only homepage presence. Navigation, so it sits outside the `h-feed` wrapper
 
 Each section is separated by the `Divider` component (`❉ ❉ ❉`). Sections are omitted if no data is available.
 
@@ -77,9 +77,9 @@ Paginated pages show `Title (Page N)` in both the h1 and the browser window titl
 | URL | Content |
 |---|---|
 | `/` | Curated homepage |
-| `/log` | Unified activity timeline — 50 most recent items across all collections (except music), summarised, each linking to its canonical copy; MF2 `h-feed` |
-| `/log.xml` | RSS for the timeline (summaries only) |
-| `/log.json` | JSON Feed v1.1 for the timeline (summaries only) |
+| `/everything` | Unified activity timeline — 50 most recent items across all collections (except music), summarised, each linking to its canonical copy; MF2 `h-feed`. Labelled "Everything" in nav; `/log*` 301-redirect here |
+| `/everything.xml` | RSS for the timeline (summaries only) |
+| `/everything.json` | JSON Feed v1.1 for the timeline (summaries only) |
 | `/articles` | Articles list |
 | `/articles/{slug}` | Individual article |
 | `/weeknotes` | Weeknotes grid — all entries, sorted by week number descending |
@@ -93,7 +93,6 @@ Paginated pages show `Title (Page N)` in both the h1 and the browser window titl
 | `/photos` | Photo galleries list |
 | `/books` | Books — "Reading" and "Read" sections; two-column at lg |
 | `/music` | Music — Top Albums grid, Top Artists ranked list with bars, Recently Played tracks; all aggregated at build time from scrobbles |
-| `/now` | Now page |
 | `/work` | CV — career, education, skills from PDS records |
 | `/blogroll` | "Websites" (blogs followed via Readwise Reader) + "Publications" (Standard.site subscriptions via Standard Reader) |
 | `/search` | Pagefind search |
@@ -107,8 +106,11 @@ Removed from v6: `/page/{n}` (unified paginated feed), `/archives/`, `/tags/`.
 
 ## Layouts & Components
 
-- `Base.astro` — HTML shell, `max-w-2xl mx-auto px-4`, dark mode via `prefers-color-scheme`; renders `<header><SiteHeader /></header>`, `<main><slot /></main>`, and `<footer><SiteFooter /></footer>` on every page.
-- `SiteHeader.astro` — sitewide header: `h-card` (name, hidden `u-photo`/`p-locality`/`p-country-name`) plus a top nav linking to Log, Posts, Weeknotes, Articles, Check-ins, Photos, Books, Films, Music, with the current section bolded. On the homepage the name renders as an `h1`; elsewhere it's a link back to `/`.
+- `Base.astro` — HTML shell, full-bleed `m-4 sm:m-8` body (no centred max-width; reading columns are capped per-element via `max-w-140` in `global.css`), dark mode via `prefers-color-scheme`; renders `<header><SiteHeader /></header>`, `<main><slot /></main>`, and `<footer><SiteFooter /></footer>` on every page.
+- `SiteHeader.astro` — sitewide header: `h-card` (name, hidden `u-photo`/`p-locality`/`p-country-name`) plus a right-aligned top nav of just four links — About, Everything, Articles, Weeknotes. Each item has three states (`navState()` using `sectionGroupFor`): **bold, not a link** on its own landing page; **bold link** anywhere else in its section (a descendant, or — for the About/Everything hubs — any group page), so you can return to the hub; plain link otherwise. On the homepage the name renders as an `h1`; elsewhere it's a link back to `/`. The trace sections cut from here (Posts, Photos, Check-ins, Books, Films, Music, Blogroll) are reached via the Everything sub-nav (`SectionNav`) and the homepage closing directory.
+- `SectionHeading.astro` — shared page-heading row used by `Feed.astro` and every standalone section host (`music`, `blogroll`, `work`, `[...slug]`). Renders the `<h1>` (default slot appends e.g. the `(Page N)` suffix) alongside `SectionNav`. Stacks vertically (title then sub-nav, left-aligned) below `sm`; inline `flex items-baseline justify-between`, sub-nav right-aligned, at `sm` and up — so the sub-nav never wraps awkwardly under the title on narrow screens.
+- `SectionNav.astro` — right-aligned section sub-nav (text only, no icons), shown on member pages via `SectionHeading`. Two groups in `src/lib/nav.ts` (`sectionGroupFor(path)` prefix-matches so `/films/by-rating`, `/books/2` etc. resolve; `sectionNavItems(group)` returns the children **excluding** the hub, so there's no self-link): **Everything** (Posts, Photos, Check-ins, Books, Films, Music, Blogroll) and **About** (Work, Uses, Colophon, Follow, Contact). The active child is bold, non-link. Renders nothing off-group (e.g. articles, weeknotes, travelblog, home). Travelblog is deliberately not a member — it's linked from the About page body.
+- `SectionIcon.astro` — maps an Everything section slug to its service icon (Posts→Bluesky, Photos→Grain, Check-ins→CheckIn, Books→BookHive, Films→Popfeed, Music→Rocksky, Blogroll→StandardSite); used only by the homepage Everything directory (the sub-nav is text-only).
 - `Feed.astro` — shared feed layout used by all list/paginated pages. Renders the `h-feed` wrapper, hidden `h-card p-author` MF2 author block, heading (with `(Page N)` suffix), optional named `description` slot, default slot for item content, and `<Pagination>` (suppressed via `paginate={false}` for books page 1). Props: `title`, `currentPage?`, `totalPages`, `basePath`, `paginate?`, `showDescription?` (set false on pages 2+ to hide the intro slot, since slots can't be conditionally passed).
 - `FilmFeed.astro` — extends `Feed.astro` for `/films` and `/films/by-rating`: adds date/rating sort toggle and renders `FilmCard` in a responsive grid (`grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4`)
 - `Post.astro` — individual article/weeknote with prose styles; "Posted in [Section] on [relative date]" (or "Posted on [relative date]") footer, followed by `Syndication` links when the post has `syndication` frontmatter. Optional `navAside` prop (set by weeknotes) moves the named `nav` slot into a right-hand column at `lg` and above; below that the columns collapse and the slot stacks under the body in source order. The columns align on `items-baseline` so the smaller aside text shares a baseline with the body's first line
@@ -116,20 +118,20 @@ Removed from v6: `/page/{n}` (unified paginated feed), `/archives/`, `/tags/`.
 - `Divider.astro` — `⁂` separator; `my-8 text-xl`
 - `SiteFooter.astro` — footer nav (back-to-top, About, Colophon, Blogroll, Follow, Contact) + inline search form that submits to `/search`, plus a copyright/license line (CC BY-SA 4.0) and link to the GitHub source repo; rendered on every page
 Icon components in `src/components/icons/`:
-- `ArticleIcon.astro`, `WeeknoteIcon.astro` — document-text and calendar glyphs (Heroicons 16/solid) used as the `/log` timeline node icons for the two local content types that have no service logo
+- `ArticleIcon.astro`, `WeeknoteIcon.astro` — document-text and calendar glyphs (Heroicons 16/solid) used as the `/everything` timeline node icons for the two local content types that have no service logo
 - `BlueskyIcon.astro` — monochrome Bluesky butterfly SVG, `currentColor`, `-translate-y-px` to align with text baseline
 - `PdslsIcon.astro` — pdsls.dev graph SVG; links to the underlying PDS record on pdsls.dev
 - `GrainIcon.astro` — grain.social logo; used in the `/photos` feed description and wherever grain.social links appear
-- `BookHiveIcon.astro` — bookhive.buzz logo; used in the `/books` feed description and homepage Recent Media link
-- `PopfeedIcon.astro` — popfeed.social logo; used in the `/films` feed description and homepage Recent Media link
-- `RockskyIcon.astro` — rocksky music note icon; used in the homepage Recent Media link
+- `BookHiveIcon.astro` — bookhive.buzz logo; used in the `/books` feed description, `SectionIcon`, and homepage Everything directory
+- `PopfeedIcon.astro` — popfeed.social logo; used in the `/films` feed description, `SectionIcon`, and homepage Everything directory
+- `RockskyIcon.astro` — rocksky music note icon; used in `SectionIcon` and the homepage Everything directory
 - `RSSIcon.astro`, `JSONFeedIcon.astro`, `MF2Icon.astro`, `StandardSiteIcon.astro` — feed format icons; used on `/follow`
 - `SifaIcon.astro` — sifa.id logo; used on `/follow` for the work profile link
 - `MastodonIcon.astro`, `XIcon.astro`, `MediumIcon.astro`, `LinkedInIcon.astro`, `IndieNewsIcon.astro` — syndication-target logos used by `Syndication.astro` (Bluesky reuses `BlueskyIcon.astro`)
 
 All icons accept an optional `class` prop to override the default sizing/alignment.
 
-`StarRating.astro` renders a rating out of 10 as SVG stars (two rating points per star) — one filled star per whole star plus a trailing half-filled star, with no empty-star padding. The half is the outlined star path overlaid with a filled copy clipped by `clip-path: inset(0 50% 0 0)`; a CSS clip rather than an SVG `<clipPath>` so multiple ratings on one page can't collide on element ids. Used by `FilmCard`, `/log` and `/now`. The `/log` RSS and JSON feeds keep a plain-text `★★★½` summary (`toStars` in `src/lib/timeline.ts`), since SVG isn't usable there.
+`StarRating.astro` renders a rating out of 10 as SVG stars (two rating points per star) — one filled star per whole star plus a trailing half-filled star, with no empty-star padding. The half is the outlined star path overlaid with a filled copy clipped by `clip-path: inset(0 50% 0 0)`; a CSS clip rather than an SVG `<clipPath>` so multiple ratings on one page can't collide on element ids. Used by `FilmCard` and `/everything`. The `/everything` RSS and JSON feeds keep a plain-text `★★★½` summary (`toStars` in `src/lib/timeline.ts`), since SVG isn't usable there.
 
 The star glyph itself (Heroicons 24/outline) lives once as `STAR_PATH` in `src/lib/icons.ts`, shared by `StarRating` and the featured-article marker `StarIcon` so the two can't drift apart. `StarIcon` fills it solid; `StarRating` varies the fill per slot.
 
@@ -191,7 +193,7 @@ Static search via [Pagefind](https://pagefind.app). After `astro build`, `pagefi
 - Weeknotes (`/weeknotes/{N}`) — individual pages via `Post.astro`
 - Travelblog months (`/travelblog/{YYYY-MM}`) — one indexed page per month
 - Slash pages (about, colophon, etc.) via `[...slug].astro`
-- Static pages: `/now`, `/work`, `/music`
+- Static pages: `/work`, `/music`
 - Bluesky posts and photo galleries — indexed per card on feed/paginated pages (`data-pagefind-body` on each `BlueskyCard`/`PhotoCard` `<article>`); search results link to the feed page. The homepage's Latest Post reuses `BlueskyCard` with `indexable={false}`, which omits `data-pagefind-body` entirely — note the attribute must be *absent* (not `="false"`, which Pagefind still treats as a body marker), so the card renders it as `{indexable ? '' : undefined}`
 - Books — indexed per card (`data-pagefind-body` on `BookCard`), covering both the Reading and Read lists
 - Films — indexed via `FilmFeed.astro` on the by-date view only (`data-pagefind-body` gated to `sort === 'date'`); the `/films/by-rating` view is skipped to avoid indexing every film twice
@@ -210,7 +212,7 @@ Applied as static classes directly in Astro templates. No runtime JS required.
 
 - **Feed pages**: `h-feed` + `p-name` + hidden `h-card p-author` containing `u-photo`, `p-name`, `u-url`
 - **All cards**: `h-entry` with `dt-published`, `u-url`
-- **Log page** (`/log`): a vertical-line timeline grouped into Europe/London calendar days (continuous line via an absolutely-positioned rule). Day headings show a **day-granular relative date** (`formatDateRelativeDays` — "Today"/"Yesterday"/"N days ago", never hours; absolute short date beyond the 14-day cutoff), capitalised; grouping stays keyed on the absolute calendar day so the relative label can't split a day. Each item is an `h-entry` (`<li>`) whose node on the line is a circular badge holding the type's icon (`ring` matched to the page background so it masks the line); the text label is replaced by that icon. An optional non-link `titlePrefix` renders before the `u-url` link — the weeknote emoji (kept out of `p-name`) and `"Replied: "` on reply posts. MF2: hidden `p-author` `AuthorCard`, `u-url` on the canonical link, `dt-published` (visible clock time for timestamped items, `sr-only` for all-day), and a `p-name` (titled items) or `p-summary` (posts) lead plus an optional detail line — `p-rating` stars via `StarRating` for items carrying a `rating`, otherwise the plain-text `p-summary`. Type→icon: article→`ArticleIcon`, weeknote→`WeeknoteIcon`, post→`BlueskyIcon`, checkin→`CheckInIcon`, film→`PopfeedIcon`, book→`BookHiveIcon`, photo→`GrainIcon`, subscription→`StandardSiteIcon`
+- **Everything page** (`/everything`): a vertical-line timeline grouped into Europe/London calendar days (continuous line via an absolutely-positioned rule). Day headings show a **day-granular relative date** (`formatDateRelativeDays` — "Today"/"Yesterday"/"N days ago", never hours; absolute short date beyond the 14-day cutoff), capitalised; grouping stays keyed on the absolute calendar day so the relative label can't split a day. Each item is an `h-entry` (`<li>`) whose node on the line is a circular badge holding the type's icon (`ring` matched to the page background so it masks the line); the text label is replaced by that icon. An optional non-link `titlePrefix` renders before the `u-url` link — the weeknote emoji (kept out of `p-name`) and `"Replied: "` on reply posts. MF2: hidden `p-author` `AuthorCard`, `u-url` on the canonical link, `dt-published` (visible clock time for timestamped items, `sr-only` for all-day), and a `p-name` (titled items) or `p-summary` (posts) lead plus an optional detail line — `p-rating` stars via `StarRating` for items carrying a `rating`, otherwise the plain-text `p-summary`. Type→icon: article→`ArticleIcon`, weeknote→`WeeknoteIcon`, post→`BlueskyIcon`, checkin→`CheckInIcon`, film→`PopfeedIcon`, book→`BookHiveIcon`, photo→`GrainIcon`, subscription→`StandardSiteIcon`
 - **ArticleCard**: `p-name`, `p-summary`; tags as `p-category`
 - **BlueskyCard**: `e-content` for rich text, `u-in-reply-to` on reply link, `u-photo` on embedded images
 - **CheckInCard**: nested `p-checkin h-card` with `p-name`, `p-latitude`, `p-longitude`, `p-street-address`; `p-rating` (hidden) when present
@@ -231,17 +233,17 @@ A single unified RSS feed and JSON feed carry both articles and weeknotes, inter
 
 `src/lib/feed-items.ts` (`getFeedItems`) is the shared source of truth: it merges both collections, filters `visibility: unlisted`, sorts by date descending, takes the latest 10, renders full content via `AstroContainer`, and **rewrites root-relative `src`/`href`/`srcset` URLs to absolute** so images (`astro:assets` `<Image>` and Markdown `![]()` both emit `/_astro/…` paths) resolve in feed readers. `trailingSlash: false` passed to `@astrojs/rss`. Advertised via `<link rel="alternate">` in `BaseHead.astro`; `/rss`, `/rss.xml`, `/index.xml`, `/feed` redirect to `/feed.xml` in `public/_redirects`.
 
-### Log (unified timeline)
+### Everything (unified timeline)
 
 Separate from the blog feed above: a broader **activity log** spanning every collection except music.
 
 | URL | Content |
 |---|---|
-| `/log` | HTML timeline — 50 most recent items, MF2 `h-feed` |
-| `/log.xml` | RSS — same items, summaries only |
-| `/log.json` | JSON Feed v1.1 — same items, summaries only |
+| `/everything` | HTML timeline — 50 most recent items, MF2 `h-feed` |
+| `/everything.xml` | RSS — same items, summaries only |
+| `/everything.json` | JSON Feed v1.1 — same items, summaries only |
 
-`src/lib/timeline.ts` (`getTimelineItems(site)`) is the shared source of truth for all three: it merges `articles`, `weeknotes`, `blueskyPosts` (replies included), `check-ins`, `films`, `books`, `photos` and `standardSubscriptions`, filters `visibility: unlisted` (articles/weeknotes), normalises each to a `TimelineItem` (type, label, title, summary, canonical `url`, `local` flag, `date`), sorts by date descending and takes the latest 50. Canonical URLs reuse the per-type patterns from the card components (articles/weeknotes local and absolutised against `site`; posts→Bluesky, check-ins→Beaconbits/OSM, films→Popfeed, books→BookHive, photos→Grain, subscriptions→the publication's site). Items carry **summaries, not full content** — readers click through to the canonical copy. Music (`albums`, `scrobbles`) is deliberately excluded as too noisy. Named "Log" (not "Feed") to avoid colliding with the frozen `/feed.*` blog feeds. Advertised via a second pair of `<link rel="alternate">` tags in `BaseHead.astro`.
+`src/lib/timeline.ts` (`getTimelineItems(site)`) is the shared source of truth for all three: it merges `articles`, `weeknotes`, `blueskyPosts` (replies included), `check-ins`, `films`, `books`, `photos` and `standardSubscriptions`, filters `visibility: unlisted` (articles/weeknotes), normalises each to a `TimelineItem` (type, label, title, summary, canonical `url`, `local` flag, `date`), sorts by date descending and takes the latest 50. Canonical URLs reuse the per-type patterns from the card components (articles/weeknotes local and absolutised against `site`; posts→Bluesky, check-ins→Beaconbits/OSM, films→Popfeed, books→BookHive, photos→Grain, subscriptions→the publication's site). Items carry **summaries, not full content** — readers click through to the canonical copy. Music (`albums`, `scrobbles`) is deliberately excluded as too noisy. The page/feeds live at `/everything*` (the header labels it "Everything"); the route slug stays distinct from the frozen `/feed.*` blog feeds, and `/log*` 301-redirect here (renamed from the earlier "Log"). Advertised via a second pair of `<link rel="alternate">` tags in `BaseHead.astro`.
 
 > Subscriptions have no date in their own schema; the `site.standard.graph.subscription` record's `createdAt` is surfaced through `subscriptions.ts` + `standardSubscriptions` schema so they can be timeline-ordered (any lacking it are skipped).
 

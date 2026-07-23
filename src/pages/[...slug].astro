@@ -1,15 +1,14 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Base from '@/layouts/Base.astro';
+import SectionHeading from '@/components/SectionHeading.astro';
 
 export async function getStaticPaths() {
   const pages = await getCollection('pages');
-  return pages
-    .filter((entry) => entry.id !== 'now')
-    .map((entry) => ({
-      params: { slug: entry.id },
-      props: { entry },
-    }));
+  return pages.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
 }
 
 const { entry } = Astro.props;
@@ -17,7 +16,7 @@ const { Content } = await render(entry);
 ---
 <Base title={entry.data.title} description={entry.data.description}>
   <article data-pagefind-body>
-    <h1 class="mb-4 font-semibold text-black dark:text-white">{entry.data.title}</h1>
+    <SectionHeading title={entry.data.title} class="mb-4" />
     <div class="prose dark:prose-invert max-w-none">
       <Content />
     </div>

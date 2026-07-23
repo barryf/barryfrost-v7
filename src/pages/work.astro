@@ -2,6 +2,7 @@
 import Base from '@/layouts/Base.astro';
 import { formatMonthYear } from '@/lib/dates';
 import Divider from '@/components/Divider.astro';
+import SectionHeading from '@/components/SectionHeading.astro';
 import SifaIcon from '@/components/icons/SifaIcon.astro';
 import {
   getSelf,
@@ -44,10 +45,10 @@ const proficiencyLabel: Record<string, string> = {
 
 <Base title="Work" description="Barry Frost's work history, skills and projects">
   <div data-pagefind-body>
-  <h1 class="mb-4 font-semibold text-black dark:text-white">Work</h1>
+  <SectionHeading title="Work" class="mb-4" />
   <div class="mb-8">
     My career history, education, skills and languages, from my
-    <a href="https://sifa.id/p/barryfrost.com" class="underline text-nowrap"><SifaIcon class="inline size-4 align-text-bottom mx-1" />Sifa</a> profile.
+    <a href="https://sifa.id/p/barryfrost.com" class="underline text-nowrap"><SifaIcon class="inline size-4 align-text-bottom mx-1" />Sifa profile</a>.
   </div>
 
   <div class="mb-8 text-gray-600 dark:text-gray-400">

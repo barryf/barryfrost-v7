@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Base from '@/layouts/Base.astro';
 import Divider from '@/components/Divider.astro';
+import SectionHeading from '@/components/SectionHeading.astro';
 import { formatDateRelative, formatDateTitle, toISODate } from '@/lib/dates';
 
 const scrobbleEntries = await getCollection('scrobbles');
@@ -55,7 +56,7 @@ const rockskyUrl = 'https://rocksky.app/profile/barryfrost.com';
   description="Album and artist charts since I started scrobbling to my Rocksky account, plus recently played tracks."
 >
   <article data-pagefind-body>
-    <h1 class="mb-4 font-semibold text-black dark:text-white">Music</h1>
+    <SectionHeading title="Music" class="mb-4" />
 
     <div class="mb-8 text-gray-600 dark:text-gray-400">
       Album and artist charts since I started scrobbling to my

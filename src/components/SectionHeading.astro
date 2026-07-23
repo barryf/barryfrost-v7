@@ -1,0 +1,14 @@
+---
+import SectionNav from '@/components/SectionNav.astro';
+
+interface Props {
+  title?: string;
+  class?: string;
+}
+
+const { title, class: className } = Astro.props;
+---
+<div class:list={[className, 'flex flex-col gap-y-1 sm:flex-row sm:flex-wrap sm:items-baseline sm:justify-between sm:gap-x-4']}>
+  <h1 class="font-semibold text-black dark:text-white">{title}<slot /></h1>
+  <SectionNav />
+</div>

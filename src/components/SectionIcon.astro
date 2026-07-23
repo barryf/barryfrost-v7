@@ -1,0 +1,31 @@
+---
+import BlueskyIcon from '@/components/icons/BlueskyIcon.astro';
+import GrainIcon from '@/components/icons/GrainIcon.astro';
+import CheckInIcon from '@/components/icons/CheckInIcon.astro';
+import BookHiveIcon from '@/components/icons/BookHiveIcon.astro';
+import PopfeedIcon from '@/components/icons/PopfeedIcon.astro';
+import RockskyIcon from '@/components/icons/RockskyIcon.astro';
+import StandardSiteIcon from '@/components/icons/StandardSiteIcon.astro';
+
+interface Props {
+  slug: string;
+  class?: string;
+}
+
+const { slug, class: className } = Astro.props;
+
+// Maps an Everything section slug to its service icon. Mirrors the type→icon map in the
+// timeline (src/pages/everything.astro) so the two can't drift on shared services.
+const ICONS: Record<string, typeof BlueskyIcon> = {
+  posts: BlueskyIcon,
+  photos: GrainIcon,
+  'check-ins': CheckInIcon,
+  books: BookHiveIcon,
+  films: PopfeedIcon,
+  music: RockskyIcon,
+  blogroll: StandardSiteIcon,
+};
+
+const Icon = ICONS[slug];
+---
+{Icon && <Icon class={className} />}

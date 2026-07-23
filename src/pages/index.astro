@@ -9,6 +9,8 @@ import { weeknoteUrl } from '@/lib/urls';
 import PdslsIcon from '@/components/icons/PdslsIcon.astro';
 import AuthorCard from '@/components/AuthorCard.astro';
 import BlueskyCard from '@/components/posts/BlueskyCard.astro';
+import SectionIcon from '@/components/SectionIcon.astro';
+import { EVERYTHING_SECTIONS } from '@/lib/nav';
 
 const [weeknotes, photos, blueskyPosts, articles, checkIns] = await Promise.all([
   getCollection('weeknotes'),
@@ -43,6 +45,9 @@ const recentCheckIns = checkIns
   .sort((a, b) => new Date(b.data.createdAt).getTime() - new Date(a.data.createdAt).getTime())
   .slice(0, 5);
 
+// Everything directory — the trace sections (skip the /everything parent entry)
+const everythingSections = EVERYTHING_SECTIONS.filter(s => s.slug);
+
 ---
 <Base
   title="Barry Frost"
@@ -51,22 +56,14 @@ const recentCheckIns = checkIns
   <p class="mb-4">
       I'm a part-time software engineer and full-time technology leader with experience building teams, websites and apps.
       I live in a village in Hertfordshire, UK, with my wife and two sons.
-      <a href="/work" class="underline">Work</a>
-      <a href="/about" class="underline">About</a>
   </p>
 
   <p class="mb-4">
     This site is <a href="/colophon" class="underline">built</a> using
     <a class="underline" href="https://atproto.com" title="AT Protocol">atproto</a>.
-    Content is stored in my
+    Everything is stored in my
     <a class="underline text-nowrap" href={`https://pdsls.dev/at://${DID}`} rel="noopener noreferrer" aria-label="View on PDSls">
-      <PdslsIcon class="size-3 inline-block -translate-y-px mr-1" />PDS</a>
-      WIP
-  </p>
-
-  <p class="mb-4 flex gap-x-3 text-sm">
-    <a href="/now" class="underline">Now</a>
-    <a href="/uses" class="underline">Uses</a>
+      <PdslsIcon class="size-3 inline-block -translate-y-px mr-1" />PDS</a>.
   </p>
 
   <div class="h-feed">
@@ -136,17 +133,6 @@ const recentCheckIns = checkIns
     </>
   )}
 
-  {latestPost && (
-    <>
-      <Divider />
-      <h2 class="font-semibold text-black dark:text-white">Latest Post</h2>
-      <BlueskyCard entry={latestPost} indexable={false} />
-      <div class="mb-4 mt-1 text-sm">
-        <a href="/posts" class="underline">All Posts</a>
-      </div>
-    </>
-  )}
-
   {featuredArticles.length > 0 && (
     <>
       <Divider />
@@ -161,6 +147,17 @@ const recentCheckIns = checkIns
         ))}
       </ul>
       <div class="mb-4 text-sm"><a href="/articles" class="underline">All Articles</a></div>
+    </>
+  )}
+
+  {latestPost && (
+    <>
+      <Divider />
+      <h2 class="font-semibold text-black dark:text-white">Latest Post</h2>
+      <BlueskyCard entry={latestPost} indexable={false} />
+      <div class="mb-4 mt-1 text-sm">
+        <a href="/posts" class="underline">All Posts</a>
+      </div>
     </>
   )}
 
@@ -202,4 +199,15 @@ const recentCheckIns = checkIns
     </>
   )}
   </div>
+
+  <Divider />
+  <h2 class="mb-1 font-semibold text-black dark:text-white">Everything</h2>
+  <ul class="mb-4 flex flex-col gap-2">
+    {everythingSections.map(section => (
+      <li>
+        <a href={section.href} class="underline"><SectionIcon slug={section.slug!} class="size-4 inline-block -translate-y-px mr-1.5" />{section.label}</a>
+        <span class="text-sm ml-1 text-gray-500 dark:text-gray-400">{section.description}</span>
+      </li>
+    ))}
+  </ul>
 </Base>

@@ -1,21 +1,29 @@
 ---
 import { cleanPathname } from '@/lib/url';
+import { sectionGroupFor, SECTION_HUB } from '@/lib/nav';
 
 const links = [
-  { href: '/log', label: 'Log' },
-  { href: '/posts', label: 'Posts' },
-  { href: '/weeknotes', label: 'Weeknotes' },
+  { href: '/about', label: 'About' },
+  { href: '/everything', label: 'Everything' },
   { href: '/articles', label: 'Articles' },
-  { href: '/check-ins', label: 'Check-ins' },
-  { href: '/photos', label: 'Photos' },
-  { href: '/books', label: 'Books' },
-  { href: '/films', label: 'Films' },
-  { href: '/music', label: 'Music' },
+  { href: '/weeknotes', label: 'Weeknotes' },
 ];
 
 const path = cleanPathname(Astro.url.pathname);
-const isActive = (href: string) => path === href;
-const home = isActive('/');
+const home = path === '/';
+const group = sectionGroupFor(path);
+
+// A top-nav item is "in section" on its landing page, on a descendant, or — for the
+// About/Everything hubs — anywhere in that group. Bold throughout the section; still a
+// link unless you're on the landing page itself, so you can return to it.
+function navState(href: string) {
+  const exact = path === href;
+  const inSection = exact
+    || path.startsWith(`${href}/`)
+    || (href === SECTION_HUB.everything && group === 'everything')
+    || (href === SECTION_HUB.about && group === 'about');
+  return { exact, inSection };
+}
 ---
 <div class="mb-4 flex gap-x-4 w-full justify-between">
   <div class="h-card text-nowrap">
@@ -36,16 +44,21 @@ const home = isActive('/');
     <span class="p-country-name hidden">UK</span>
   </div>
   <nav>
-    <ul class="flex flex-wrap justify-end gap-x-3 gap-y-1 text-sm leading-loose">
-      {links.map(link => (
-        <li>
-          {isActive(link.href) ? (
-            <span class="font-semibold text-nowrap">{link.label}</span>
-          ) : (
-            <a href={link.href} class="underline text-nowrap">{link.label}</a>
-          )}
-        </li>
-      ))}
+    <ul class="flex flex-wrap justify-end gap-x-3">
+      {links.map(link => {
+        const { exact, inSection } = navState(link.href);
+        return (
+          <li>
+            {inSection && exact ? (
+              <span class="font-semibold text-nowrap">{link.label}</span>
+            ) : inSection ? (
+              <a href={link.href} class="font-semibold underline text-nowrap">{link.label}</a>
+            ) : (
+              <a href={link.href} class="underline text-nowrap">{link.label}</a>
+            )}
+          </li>
+        );
+      })}
     </ul>
   </nav>
 </div>
