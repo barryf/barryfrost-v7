@@ -37,6 +37,7 @@ export const ABOUT_SECTIONS: NavItem[] = [
   { href: '/work', label: 'Work' },
   { href: '/uses', label: 'Uses' },
   { href: '/colophon', label: 'Colophon' },
+  { href: '/travelblog', label: 'Travelblog' },
   { href: '/follow', label: 'Follow' },
   { href: '/contact', label: 'Contact' },
 ];
