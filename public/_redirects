@@ -7,12 +7,6 @@
 /rss /feed.xml 301
 /rss.xml /feed.xml 301
 /index.xml /feed.xml 301
-/feed /feed.xml 301
-
-# Log renamed to Everything
-/log /everything 301
-/log.xml /everything.xml 301
-/log.json /everything.json 301
 
 # Now page removed — its role is covered by /about and /everything
 /now /about 301
@@ -282,6 +276,7 @@
 /2026/06/week-253-scorching /weeknotes/week-253 301
 /2026/07/week-254-bed /weeknotes/week-254 301
 /2026/07/week-255-hill /weeknotes/week-255 301
+/2026/07/week-256-crayons /weeknotes/week-256 301
 
 # Article redirects (old /yyyy/mm/slug → /articles/slug)
 /2011/05/get-your-eyes-lasered /articles/get-your-eyes-lasered 301
