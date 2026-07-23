@@ -177,7 +177,7 @@ export async function getTimelineItems(site: URL): Promise<TimelineItem[]> {
     items.push({
       type: 'book',
       typeLabel: 'Book',
-      titlePrefix: isReading ? 'Reading' : 'Read',
+      titlePrefix: isReading ? 'Started' : 'Finished',
       title: data.title,
       summary: `by ${data.authors}`,
       url,
