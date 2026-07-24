@@ -8,6 +8,7 @@ Personal website for Barry Frost — statically generated, IndieWeb-compliant, d
 - **`@astrojs/mdx`** — MDX support; `.md` and `.mdx` files coexist in all content collections
 - **Tailwind CSS v4** — via `@tailwindcss/vite` plugin, `@tailwindcss/typography` for prose
 - **`@astrojs/rss`** — RSS feed generation
+- **`@astrojs/sitemap`** — sitemap generation; `astro.config.mjs` filters out `visibility: unlisted` articles/weeknotes (scanned from frontmatter at config load) plus `/search` and `/404`, and rewrites `.html` suffixes out of the emitted URLs
 - No SSR adapter; pure static build
 
 ## Content Sources
@@ -39,7 +40,9 @@ Fetched at build time from `bsky.social` for DID `did:plc:j5ksi3y4tdtbp7vpsxsfya
 >
 > This repo is the canonical home of the `com.barryfrost.checkin` lexicon doc: `lexicons/com/barryfrost/checkin.json`, published to the PDS as a `com.atproto.lexicon.schema` record via `npm run publish:lexicon` (the fsq2pds importer repo no longer keeps a copy). Records carry an optional `comment` field (the Swarm "shout" user comment); `check-ins.ts` exposes it in loader data, but no card/template renders it yet.
 
-Blogroll blogs come from `src/data/blogroll.json` (static JSON).
+Blogroll blogs come from `src/data/blogroll.json` (static JSON), passed through `blogrollLoader()` so favicons/avatars are materialised into R2 like any other image.
+
+`/work` is the exception to the table: it reads `id.sifa.profile.{self,position,education,project,skill,language}` records straight from the PDS via `src/lib/sifa.ts` (same `fetchAllRecords` helper) at page render, with no content collection and no loader.
 
 ### Loader pattern
 Each PDS loader implements `Loader` from `astro/loaders`:
@@ -61,7 +64,7 @@ The homepage (`src/pages/index.astro`) is a curated view, not a unified feed. Se
 6. **Recent Check-ins** — 5 most recent check-ins as a compact list
 7. **Everything directory** — closing index of the seven Everything sections (Posts, Photos, Check-ins, Books, Films, Music, Blogroll) as icon + link + one-line description, under a lead-in linking to `/everything`. Driven by `EVERYTHING_SECTIONS` in `src/lib/nav.ts` (parent entry skipped) + `SectionIcon`; gives Books/Films/Music/Blogroll their only homepage presence. Navigation, so it sits outside the `h-feed` wrapper
 
-Each section is separated by the `Divider` component (`❉ ❉ ❉`). Sections are omitted if no data is available.
+Each section is separated by the `Divider` component (`⁂`). Sections are omitted if no data is available.
 
 ## Pagination
 
@@ -105,7 +108,7 @@ Removed from v6: `/page/{n}` (unified paginated feed), `/archives/`, `/tags/`.
 
 ## Layouts & Components
 
-- `Base.astro` — HTML shell, full-bleed `m-4 sm:m-8` body (no centred max-width; reading columns are capped per-element via `max-w-140` in `global.css`), dark mode via `prefers-color-scheme`; renders `<header><SiteHeader /></header>`, `<main><slot /></main>`, and `<footer><SiteFooter /></footer>` on every page.
+- `Base.astro` — HTML shell, full-bleed `m-4 sm:m-8` body (no centred max-width; reading columns are capped per-element via `max-w-140` in `global.css`), dark mode via `prefers-color-scheme`; `lang="en-GB"`. Renders a visually-hidden "Skip to content" link (revealed on focus), then `<header><SiteHeader /></header>`, `<main id="main"><slot /></main>`, and `<footer><SiteFooter /></footer>` on every page.
 - `SiteHeader.astro` — sitewide header: `h-card` (name, hidden `u-photo`/`p-locality`/`p-country-name`) plus a right-aligned top nav of just four links — About, Everything, Articles, Weeknotes. Each item has three states (`navState()` using `sectionGroupFor`): **bold, not a link** on its own landing page; **bold link** anywhere else in its section (a descendant, or — for the About/Everything hubs — any group page), so you can return to the hub; plain link otherwise. On the homepage the name renders as an `h1`; elsewhere it's a link back to `/`. The trace sections cut from here (Posts, Photos, Check-ins, Books, Films, Music, Blogroll) are reached via the Everything sub-nav (`SectionNav`) and the homepage closing directory.
 - `SectionHeading.astro` — shared page-heading row used by `Feed.astro` and every standalone section host (`music`, `blogroll`, `work`, `[...slug]`). Renders the `<h1>` (default slot appends e.g. the `(Page N)` suffix) alongside `SectionNav`. Stacks vertically below `sm` (`flex-col-reverse`, so the right-aligned sub-nav sits above the title); inline `flex items-baseline justify-between`, sub-nav right-aligned, at `sm` and up — so the sub-nav never wraps awkwardly under the title on narrow screens.
 - `SectionNav.astro` — right-aligned section sub-nav (text only, no icons), shown on member pages via `SectionHeading`. Two groups in `src/lib/nav.ts` (`sectionGroupFor(path)` prefix-matches so `/films/by-rating`, `/books/2` etc. resolve; `sectionNavItems(group)` returns the children **excluding** the hub, so there's no self-link): **Everything** (Posts, Photos, Check-ins, Books, Films, Music, Blogroll) and **About** (Work, Uses, Colophon, Follow, Contact). The active child is bold, non-link. Renders nothing off-group (e.g. articles, weeknotes, travelblog, home). Travelblog is deliberately not a member — it's linked from the About page body.
@@ -115,9 +118,9 @@ Removed from v6: `/page/{n}` (unified paginated feed), `/archives/`, `/tags/`.
 - `Post.astro` — individual article/weeknote with prose styles; "Posted in [Section] on [relative date]" (or "Posted on [relative date]") footer, followed by `Syndication` links when the post has `syndication` frontmatter. Optional `navAside` prop (set by weeknotes) moves the named `nav` slot into a right-hand column at `lg` and above; below that the columns collapse and the slot stacks under the body in source order. The columns align on `items-baseline` so the smaller aside text shares a baseline with the body's first line
 - `Syndication.astro` — renders a post's `syndication` frontmatter URLs as icon + label links (`u-syndication`, `rel="syndication"`), prefixed with "and also on", after the timestamp in `Post.astro`. `serviceFor(url)` maps a URL's host to a known service (Bluesky, Mastodon, X/Twitter, Medium, LinkedIn, IndieNews) and its icon; an unrecognised host falls back to a bare hostname label with no icon
 - `Divider.astro` — `⁂` separator; `my-8 text-xl`
-- `SiteFooter.astro` — footer nav (back-to-top, About, Colophon, Blogroll, Follow, Contact) + inline search form that submits to `/search`, plus a copyright/license line (CC BY-SA 4.0) and link to the GitHub source repo; rendered on every page
+- `SiteFooter.astro` — `Divider`, an inline search form that submits to `/search`, and a copyright/licence line (CC BY-SA 4.0) with a link to the GitHub source repo; rendered on every page. The old footer nav (back-to-top, About, Colophon, Blogroll, Follow, Contact) was dropped when navigation moved into `SiteHeader` + `SectionNav`
 Icon components in `src/components/icons/`:
-- `ArticleIcon.astro`, `WeeknoteIcon.astro` — document-text and calendar glyphs (Heroicons 16/solid) used as the `/everything` timeline node icons for the two local content types that have no service logo
+- `ArticleIcon.astro`, `WeeknoteIcon.astro`, `CheckInIcon.astro` — document-text, calendar and map-pin glyphs (Heroicons 16/solid) used as `/everything` timeline node icons and, for check-ins, in `SectionIcon`; the content types with no service logo of their own
 - `BlueskyIcon.astro` — monochrome Bluesky butterfly SVG, `currentColor`, `-translate-y-px` to align with text baseline
 - `PdslsIcon.astro` — pdsls.dev graph SVG; links to the underlying PDS record on pdsls.dev
 - `GrainIcon.astro` — grain.social logo; used in the `/photos` feed description and wherever grain.social links appear
@@ -159,11 +162,12 @@ All visible `<time>` elements use `formatDateRelative` for display, with `title=
 
 Tailwind v4 with default palette. Work Sans as the primary font, self-hosted via Astro's Fonts API (downloaded from Google at build time; no runtime CDN request). `src/styles/global.css`:
 - Imports `@tailwindcss/typography` and sources `../content/**/*.{md,mdx}`
-- Sets `--font-sans` to `var(--font-work-sans)` (the CSS variable injected by `<Font cssVariable="--font-work-sans" />` from `astro:assets`)
+- Sets `--font-sans` to `var(--font-work-sans)` (the CSS variable injected by `<Font cssVariable="--font-work-sans" preload />` from `astro:assets`; weights 400/600, normal + italic) and `--font-mono` to `ui-monospace, monospace` — the system monospace face, so code needs no font download
 - Base `font-size: 16px` / `line-height: 26px`; `sm:` bumps to `18px` / `28px`
-- `p`, `blockquote`, `.prose p`, `.prose ul` capped at `max-w-140`
+- `p`, `blockquote`, `.prose p`, `.prose ul`, `.timeline li` capped at `max-w-140`
 - `.prose > :first-child > :first-child` — `margin-top: 0`. Typography only zeroes the top margin on `.prose > :first-child`, so a body opening with a list still leaks its first `li`'s margin upwards. That collapses away in normal flow but is contained once the column becomes a flex item (the weeknotes aside layout), which would otherwise drop the body a few pixels at that breakpoint
-- `.prose a` / `.underline` — `text-underline-offset: 15%`; hover colour `text-amber-600`
+- `.prose a` / `.underline` — `text-underline-offset: 15%`; hover colour `text-amber-700 dark:text-amber-600`
+- `.prose code::before` / `::after` — emptied, so inline code isn't wrapped in Typography's backticks
 - `.prose h2` — `font-size: inherit`, bold, `mb-4`, no top margin
 - `.prose h3` — `font-size: inherit`, normal weight, italic, `mb-4`, no top margin
 - `.prose h4` — `font-size: inherit`, normal weight, `mb-4`, no top margin
@@ -302,6 +306,13 @@ Watched collections (`WATCHED_COLLECTIONS`): `app.bsky.feed.post`, `app.beaconbi
 
 Required secrets: `DEPLOY_HOOK` (same Workers Builds deploy-hook URL as before), `NOTIFY_SECRET` (gates `/pending-notification`).
 
+### `check.yml`
+Runs `astro sync` then `npm run check` (`tsc` via `astro check`) on **every push, every branch**. It is the only thing in the pipeline that checks types — `astro build` strips them with esbuild, `tsx` runs the scripts, wrangler bundles the Worker.
+
+It **reports, it does not gate**: Workers Builds starts on the same push in parallel and never reads the Actions result, so a failure is a red X on the commit, not a blocked deploy. Gating inside the build isn't an option — a build can't tell a code push from a pds-poller content rebuild (same commit, no trigger reason exposed), so it would gate every content deploy too. Content deploys never run this job at all, which is correct: they can't introduce a type error.
+
+`astro sync` is a separate step because it runs the loaders against the PDS and other upstream APIs — keeping it separate means a network failure upstream reads as a sync failure rather than a phantom type error.
+
 ### `scaffold.yml`
 Manual `workflow_dispatch` for creating article/weeknote stubs. Inputs: `kind`, `title_or_topic`, `emoji`, `tags`, `date`. Runs `scripts/new-article.ts` or `scripts/new-weeknote.ts --no-git`, opens a draft PR via `peter-evans/create-pull-request`.
 
@@ -371,7 +382,8 @@ no network or R2 calls.
 
 ## Key Conventions
 
-- **Minimal JS** — `/check-ins` bundles Leaflet + Leaflet.markercluster via npm for the cluster map with fullscreen toggle; all other pages are JS-free
+- **Minimal JS** — two pages ship script of their own: `/check-ins` bundles Leaflet + Leaflet.markercluster via npm for the cluster map with fullscreen toggle (tiles from CARTO basemaps over OpenStreetMap data, light/dark variant chosen from `prefers-color-scheme`), and `/search` lazy-loads the Pagefind bundle. Every other page is JS-free apart from the sitewide analytics tag below
+- **Umami analytics** — `BaseHead.astro` emits a `defer`red `cloud.umami.is/script.js` tag on every page, gated on `!import.meta.env.DEV` so it never loads in dev. The only third-party runtime request the site makes
 - **No runtime JS elsewhere** — MF2, dark mode, and layout are pure HTML/CSS
 - **Local Markdown is canonical** — PDS documents are syndication targets, not source of truth
 - **Images pre-generated at build time** — fetched from source (PDS `getBlob` / remote URL), resized with `sharp`, stored as webp in R2 (`images.barryfrost.com`); served statically with no runtime resizing. Dev/error fallback uses direct source URLs.

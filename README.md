@@ -2,7 +2,7 @@
 
 The seventh iteration of [Barry Frost's](https://barryfrost.com) personal website — a statically generated, IndieWeb-compliant site built with [Astro 7](https://astro.build) and [Tailwind CSS v4](https://tailwindcss.com), deployed to Cloudflare.
 
-Live URL: `https://barryfrost.com`
+Live staging URL: `https://new.barryfrost.com` — v6 still serves `https://barryfrost.com`.
 
 See `PLAN.md` for the full architecture reference.
 
@@ -20,7 +20,7 @@ Articles, weeknotes, slash pages, and the archived 2000–2001 travelblog all li
 
 ### PDS records as syndication targets
 
-Other content types — Bluesky posts, check-ins, films, books, photos — are authored on third-party services that store records on an [AT Protocol PDS](https://atproto.com/guides/glossary#personal-data-server-pds). At build time, custom Astro content loaders in `src/lib/loaders/` fetch these records and populate the site's content collections.
+Other content types — Bluesky posts, check-ins, films, books, photos, music, subscriptions — are authored on third-party services that store records on an [AT Protocol PDS](https://atproto.com/guides/glossary#personal-data-server-pds). At build time, custom Astro content loaders in `src/lib/loaders/` fetch these records and populate the site's content collections. The `/work` CV reads `id.sifa.profile.*` records the same way, but directly via `src/lib/sifa.ts` rather than through a collection.
 
 This inverts the usual POSSE model: rather than the site publishing out to silos, it pulls in from open, user-owned data stores. The PDS becomes the system of record for content that originates elsewhere; the site becomes a unified, owned view of it.
 
@@ -34,7 +34,7 @@ Every page is marked up with [Microformats 2](https://microformats.org/wiki/micr
 
 ### Minimal JavaScript
 
-The only page that ships JS is `/check-ins`, which dynamically loads Leaflet and Leaflet.markercluster from a CDN to render a clustered map. Every other page is pure HTML and CSS, including dark mode (`prefers-color-scheme` only — no toggle, no flash).
+Only two pages ship JS of their own: `/check-ins` bundles Leaflet and Leaflet.markercluster (imported from npm, not a CDN) for the clustered map, and `/search` loads the Pagefind bundle to run queries in the browser. Every other page is pure HTML and CSS, including dark mode (`prefers-color-scheme` only — no toggle, no flash). The one script present on *every* page is the deferred Umami analytics tag, which is skipped in dev.
 
 ### Build-time images via R2
 
@@ -49,6 +49,7 @@ PDS records reference image blobs by CID. At build time these are fetched, resiz
 - **Astro 7** — static site generator with content collections and custom loaders
 - **Tailwind CSS v4** — via `@tailwindcss/vite`, plus `@tailwindcss/typography` for prose; Work Sans as the primary font
 - **`@astrojs/rss`** — RSS and JSON Feed generation for articles and weeknotes
+- **`@astrojs/sitemap`** — sitemap generation, excluding `unlisted` posts and utility pages
 - **Cloudflare Workers** — static asset hosting, PDS poller
 - **Pagefind** — static full-text search, indexed after build
 
@@ -72,7 +73,7 @@ src/
   content/          # local Markdown (articles, weeknotes, pages, travelblog)
   lib/
     loaders/        # AT Protocol content loaders (one per collection)
-    feed.ts         # paginateItems helper
+    feed.ts         # getFeedEntries helper + PAGE_SIZE
     pds.ts          # PDS fetch helpers
     image-store.ts  # build-time R2/sharp image pipeline
   components/
@@ -80,7 +81,7 @@ src/
     icons/          # BlueskyIcon, PdslsIcon, RSSIcon, ...
     Divider.astro
     SiteFooter.astro
-  layouts/          # Base, FilmFeed, Post
+  layouts/          # Base, Feed, FilmFeed, Post
   pages/            # routes
   styles/global.css
 cloudflare/
