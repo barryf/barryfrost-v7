@@ -70,3 +70,10 @@ p, blockquote, .prose p, .prose ul, .timeline li {
 .prose code::after {
   content: "";
 }
+
+.footnotes {
+  @apply text-sm;
+}
+.footnotes a {
+  @apply text-gray-500 text-gray-500;
+}
