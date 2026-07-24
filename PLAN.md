@@ -327,7 +327,7 @@ Images are pre-generated **at build time** and served from an R2 bucket at `imag
 - `remoteImage(url, opts)` — fetches from the URL directly
 
 Both functions:
-1. Compute a content-addressed R2 key: `blob/{cid}/{w}x{h}-{fit}-q{q}` or `ext/{sha256(url)[0:16]}/{w}x{h}-{fit}-q{q}`
+1. Compute a content-addressed R2 key: `blob/{w}x{h}-{fit}-q{q}/{cid}.webp` or `ext/{w}x{h}-{fit}-q{q}/{sha256(url)[0:16]}.webp`
 2. HEAD-check R2 — return `images.barryfrost.com/{key}` immediately if present (incrementality)
 3. Otherwise fetch source → resize with `sharp` → encode as webp → PUT to R2 → return URL
 4. On error or in dev (no R2 creds): return the direct source URL

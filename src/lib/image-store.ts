@@ -12,8 +12,8 @@
  * source URL — the image renders at original size but the build succeeds.
  *
  * Key scheme:
- *   PDS blobs   → blob/{cid}/{w}x{h}-{fit}-q{q}
- *   Remote URLs → ext/{sha256hex(url)[0..15]}/{w}x{h}-{fit}-q{q}
+ *   PDS blobs   → blob/{w}x{h}-{fit}-q{q}/{cid}.webp
+ *   Remote URLs → ext/{w}x{h}-{fit}-q{q}/{sha256hex(url)[0..15]}.webp
  */
 
 import { createHash } from 'node:crypto';
@@ -43,12 +43,12 @@ function dimSegment(opts: ImageOpts): string {
 }
 
 function blobKey(cid: string, opts: ImageOpts): string {
-  return `blob/${cid}/${dimSegment(opts)}`;
+  return `blob/${dimSegment(opts)}/${cid}.webp`;
 }
 
 function remoteKey(url: string, opts: ImageOpts): string {
   const hash = createHash('sha256').update(url).digest('hex').slice(0, 16);
-  return `ext/${hash}/${dimSegment(opts)}`;
+  return `ext/${dimSegment(opts)}/${hash}.webp`;
 }
 
 // ── sharp fit mapping ────────────────────────────────────────────────────────
