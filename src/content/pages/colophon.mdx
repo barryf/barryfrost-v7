@@ -31,7 +31,7 @@ I use each of the following services which store data in my PDS using their [lex
 - [Rocksky](https://pdsls.dev/at://did:plc:j5ksi3y4tdtbp7vpsxsfyask/app.rocksky.scrobble) - songs and albums I have scrobbled.
 - [Sifa](https://pdsls.dev/at://did:plc:j5ksi3y4tdtbp7vpsxsfyask/id.sifa.profile.self) - my professional work profile.
 
-But what about articles? They are the exception. I strongly considered using [Leaflet](https://leaflet.pub), [Offprint](https://offprint.app) or [Pckt](https://pckt.blog) - the main atproto long-form services - but I wanted more control over layout, performance and URLs. Instead, I decided to continue writing articles and weeknotes in Markdown and publish them on my website. I then publish copies as [Standard Site](https://standard.site) records on my PDS for reading services to use.
+But what about articles? They are (currently) the exception. I strongly considered using [Leaflet](https://leaflet.pub), [Offprint](https://offprint.app) or [Pckt](https://pckt.blog) - the main atproto long-form services - but I wanted more control over layout, performance and URLs. Instead, I decided to continue writing articles and weeknotes in Markdown and publish them on my website. I then publish copies as [Standard Site](https://standard.site) records on my PDS for reading services to use.
 
 <Divider />
 ## Build
@@ -51,7 +51,7 @@ Even with the hourly rebuilds, image transformations and storage, everything fit
 <Divider />
 ## Front-end
 
-[Performance is a feature](https://blog.codinghorror.com/performance-is-a-feature/), and I've tried to optimise download speed. Pages are static and delivered by Cloudflare's global CDN. There is very little JavaScript: [Leaflet.js](https://leafletjs.com) for maps, Pagefind on the search page, and [Umami](https://umami.is)[^2] for analytics. Fonts are [self-hosted](https://docs.astro.build/en/guides/fonts/)[^3] and preloaded. Images are pre-sized and optimised as efficient webp format, and pages preconnect to the images host.
+[Performance is a feature](https://blog.codinghorror.com/performance-is-a-feature/), and I've tried to optimise download speed. Pages are static and delivered by Cloudflare's global CDN. There is very little JavaScript: [Leaflet.js](https://leafletjs.com) for maps, Pagefind on the search page, and [Umami](https://umami.is)[^2] for analytics. Fonts are [self-hosted](https://docs.astro.build/en/guides/fonts/)[^3] and preloaded. Images are pre-sized and optimised in efficient webp format, and pages preconnect to the images host.
 
 Content on pages, articles, and weeknotes is authored in [Markdown](https://daringfireball.net/projects/markdown/), and [MDX](https://mdxjs.com) to use components like icons. Templates include [Microformats 2](https://microformats.io) markup - `h-feed`, `h-card` and `h-entry` - with relevant classes for [Post-Type Discovery](https://www.w3.org/TR/post-type-discovery/).
 

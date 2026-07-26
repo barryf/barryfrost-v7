@@ -54,16 +54,22 @@ const streamSections = STREAM_SECTIONS.filter(s => s.slug);
   description="Barry Frost is a part-time software engineer and full-time technology leader living in Hertfordshire, UK. Weeknotes, articles, photos, books, films and check-ins."
 >
   <p class="mt-8 mb-4">
-      I'm a part-time software engineer and full-time technology leader with experience building teams, websites and apps.
-      I live in a village in Hertfordshire, UK, with my wife and two sons.
+      I'm a part-time software engineer and full-time technology leader,
+      <br>with experience building teams, websites and apps.
   </p>
 
   <p class="mb-4">
-    This site is <a href="/colophon" class="underline">built</a> using
+    This is my <em>Atmospheric</em> personal website,
+    <a href="/colophon" class="underline">built</a> using
     <a class="underline" href="https://atproto.com" title="AT Protocol">atproto</a>.
-    Everything is stored in my
-    <a class="underline text-nowrap" href={`https://pdsls.dev/at://${DID}`} rel="noopener noreferrer" aria-label="View on PDSls">
-      <PdslsIcon class="size-3 inline-block -translate-y-px mr-1" />PDS</a>.
+    It brings together all my articles, posts, photos, check-ins, books, films, music,
+    and subscriptions, stored in my
+    <a class="underline text-nowrap" href={`https://pdsls.dev/at://${DID}`} rel="noopener noreferrer" aria-label="View on PDSls" title="Personal Data Server">
+    <PdslsIcon class="size-3 inline-block -translate-y-px mr-1" />PDS</a> back-end.
+  </p>
+  <p class="mb-4">
+    Read more <a href="/about" class="underline">about me</a> or
+    <a href="/colophon" class="underline">this website</a>.
   </p>
 
   <div class="h-feed">
