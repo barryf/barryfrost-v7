@@ -4,7 +4,7 @@ import { sectionGroupFor, SECTION_HUB } from '@/lib/nav';
 
 const links = [
   { href: '/about', label: 'About' },
-  { href: '/everything', label: 'Stream' },
+  { href: '/stream', label: 'Stream' },
   { href: '/articles', label: 'Articles' },
   { href: '/weeknotes', label: 'Weeknotes' },
 ];
@@ -14,13 +14,13 @@ const home = path === '/';
 const group = sectionGroupFor(path);
 
 // A top-nav item is "in section" on its landing page, on a descendant, or — for the
-// About/Everything hubs — anywhere in that group. Bold throughout the section; still a
+// About/Stream hubs — anywhere in that group. Bold throughout the section; still a
 // link unless you're on the landing page itself, so you can return to it.
 function navState(href: string) {
   const exact = path === href;
   const inSection = exact
     || path.startsWith(`${href}/`)
-    || (href === SECTION_HUB.everything && group === 'everything')
+    || (href === SECTION_HUB.stream && group === 'stream')
     || (href === SECTION_HUB.about && group === 'about');
   return { exact, inSection };
 }

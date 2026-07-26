@@ -8,7 +8,7 @@
 /rss.xml /feed.xml 301
 /index.xml /feed.xml 301
 
-# Now page removed — its role is covered by /about and /everything
+# Now page removed — its role is covered by /about and /stream
 /now /about 301
 
 # Travelblog

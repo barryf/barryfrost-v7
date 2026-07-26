@@ -14,8 +14,8 @@ interface Props {
 
 const { slug, class: className } = Astro.props;
 
-// Maps an Everything section slug to its service icon. Mirrors the type→icon map in the
-// timeline (src/pages/everything.astro) so the two can't drift on shared services.
+// Maps a Stream section slug to its service icon. Mirrors the type→icon map in the
+// timeline (src/pages/stream.astro) so the two can't drift on shared services.
 const ICONS: Record<string, typeof BlueskyIcon> = {
   posts: BlueskyIcon,
   photos: GrainIcon,

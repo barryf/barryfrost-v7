@@ -5,23 +5,23 @@ import { SECTIONS } from '@/lib/sections';
  * Section sub-navs. Two groups of pages each get a right-aligned sub-nav shown on every
  * member page, so the sections cut from the global header stay one-click reachable.
  *
- * - `everything` — the activity/trace sections (icons, reusing content-type logos)
+ * - `stream` — the activity/trace sections (icons, reusing content-type logos)
  * - `about` — the me-pages (text only, no service logos)
  *
  * The first entry of each group is the parent hub itself, bolded when active.
- * `slug` (Everything children only) keys the shared `SectionIcon` component.
+ * `slug` (Stream children only) keys the shared `SectionIcon` component.
  */
 export interface NavItem {
   href: string;
   label: string;
-  /** Icon key for SectionIcon; Everything children only. */
+  /** Icon key for SectionIcon; Stream children only. */
   slug?: string;
   /** One-line description for the homepage directory. */
   description?: string;
 }
 
-export const EVERYTHING_SECTIONS: NavItem[] = [
-  { href: '/everything', label: 'Everything' },
+export const STREAM_SECTIONS: NavItem[] = [
+  { href: '/stream', label: 'Stream' },
   { href: '/posts', label: 'Posts', slug: 'posts', description: SECTIONS.posts.description },
   { href: '/photos', label: 'Photos', slug: 'photos', description: SECTIONS.photos.description },
   { href: '/check-ins', label: 'Check-ins', slug: 'check-ins', description: SECTIONS['check-ins'].description },
@@ -41,16 +41,16 @@ export const ABOUT_SECTIONS: NavItem[] = [
   { href: '/contact', label: 'Contact' },
 ];
 
-export type SectionGroup = 'everything' | 'about';
+export type SectionGroup = 'stream' | 'about';
 
 const GROUPS: Record<SectionGroup, NavItem[]> = {
-  everything: EVERYTHING_SECTIONS,
+  stream: STREAM_SECTIONS,
   about: ABOUT_SECTIONS,
 };
 
 /** The hub landing page for each group — the first entry, and the top-nav link. */
 export const SECTION_HUB: Record<SectionGroup, string> = {
-  everything: '/everything',
+  stream: '/stream',
   about: '/about',
 };
 

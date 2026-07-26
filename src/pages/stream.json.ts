@@ -6,10 +6,10 @@ export async function GET(context: APIContext) {
 
   const feed = {
     version: 'https://jsonfeed.org/version/1.1',
-    title: 'Barry Frost — Everything',
+    title: 'Barry Frost — Stream',
     description: 'A timeline of recent activity across the site and elsewhere, by Barry Frost',
-    home_page_url: new URL('/everything', context.site).toString(),
-    feed_url: new URL('/everything.json', context.site).toString(),
+    home_page_url: new URL('/stream', context.site).toString(),
+    feed_url: new URL('/stream.json', context.site).toString(),
     language: 'en',
     authors: [{
       name: 'Barry Frost',

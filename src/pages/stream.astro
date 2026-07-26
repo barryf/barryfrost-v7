@@ -42,14 +42,14 @@ for (const item of items) {
 
 const capitalise = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 ---
-<Feed {...SECTIONS.everything} totalPages={1} basePath="/everything" paginate={false}>
+<Feed {...SECTIONS.stream} totalPages={1} basePath="/stream" paginate={false}>
   <Fragment slot="description">
     A timeline of my recent activity across this website and elsewhere, summarised and
     linked to each canonical copy. Also available as
     <span class="whitespace-nowrap"><MF2Icon class="inline size-4 align-text-bottom mr-0.5 -translate-y-1" />MF2 h-feed,</span>
-    <span class="whitespace-nowrap"><a href="/everything.xml" class="underline"><RSSIcon class="inline size-4 align-text-bottom mr-0.5" />RSS</a></span>
+    <span class="whitespace-nowrap"><a href="/stream.xml" class="underline"><RSSIcon class="inline size-4 align-text-bottom mr-0.5" />RSS</a></span>
     and
-    <span class="whitespace-nowrap"><a href="/everything.json" class="underline"><JSONFeedIcon class="inline size-4 align-text-bottom mr-0.5" />JSON Feed</a>.</span>
+    <span class="whitespace-nowrap"><a href="/stream.json" class="underline"><JSONFeedIcon class="inline size-4 align-text-bottom mr-0.5" />JSON Feed</a>.</span>
   </Fragment>
 
   <div class="relative mt-8">

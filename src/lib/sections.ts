@@ -12,8 +12,8 @@ export interface Section {
 }
 
 export const SECTIONS = {
-  everything: {
-    title: 'Everything',
+  stream: {
+    title: 'Stream',
     description:
       "A single timeline of my recent activity - articles, weeknotes, posts, check-ins, films, books, photos and subscriptions - each linking to its canonical copy.",
   },
