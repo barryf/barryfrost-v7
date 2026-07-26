@@ -7,8 +7,8 @@ const group = sectionGroupFor(path);
 const items = group ? sectionNavItems(group) : [];
 ---
 {items.length > 0 && (
-  <nav>
-    <ul class="flex flex-wrap justify-end gap-x-3 gap-y-1 text-sm">
+  <nav class="mb-4">
+    <ul class="flex flex-wrap gap-x-3 gap-y-1 text-sm">
       {items.map(item => (
         <li>
           {isActiveSection(path, item.href) ? (

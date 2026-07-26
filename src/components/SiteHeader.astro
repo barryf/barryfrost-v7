@@ -4,7 +4,7 @@ import { sectionGroupFor, SECTION_HUB } from '@/lib/nav';
 
 const links = [
   { href: '/about', label: 'About' },
-  { href: '/everything', label: 'Everything' },
+  { href: '/everything', label: 'Stream' },
   { href: '/articles', label: 'Articles' },
   { href: '/weeknotes', label: 'Weeknotes' },
 ];
@@ -25,7 +25,8 @@ function navState(href: string) {
   return { exact, inSection };
 }
 ---
-<div class="mb-4 flex gap-x-3 w-full justify-between">
+
+<div class="flex gap-x-3 mb-4">
   <div class="h-card text-nowrap">
     {home && (
       <h1>
@@ -43,8 +44,9 @@ function navState(href: string) {
     <span class="p-locality hidden">Hertfordshire</span>
     <span class="p-country-name hidden">UK</span>
   </div>
+  <div class="text-gray-500 dark:text-gray-400">•</div>
   <nav>
-    <ul class="flex flex-wrap justify-end gap-x-3">
+    <ul class="flex flex-wrap gap-x-3">
       {links.map(link => {
         const { exact, inSection } = navState(link.href);
         return (
