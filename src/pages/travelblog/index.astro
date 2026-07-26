@@ -4,6 +4,7 @@ import Base from '@/layouts/Base.astro';
 import { countryFlag, countryName } from '@/lib/flags';
 import { formatMonthKey } from '@/lib/dates';
 import { SECTIONS } from '@/lib/sections';
+import SectionHeading from '@/components/SectionHeading.astro';
 import { Image } from 'astro:assets';
 import harbour from '@/assets/travelblog/me-auckland-harbour.jpg';
 import milfordSound from '@/assets/travelblog/milford-sound.jpg';
@@ -18,7 +19,7 @@ const months = [...(await getCollection('travelblog'))].sort((a, b) =>
 );
 ---
 <Base title={SECTIONS.travelblog.title} description={SECTIONS.travelblog.description}>
-  <h1 class="mb-4 font-semibold text-black dark:text-white">Travelblog</h1>
+  <SectionHeading title="Travelblog" class="mb-4" />
 
   <div class="mb-8 flex gap-1 overflow-x-auto">
     <Image src={harbour} alt="A man in black shirt standing in front of Auckland harbour" class="h-48 w-32 shrink-0 rounded-l-xl object-cover object-[calc(50%+10px)_center]" />

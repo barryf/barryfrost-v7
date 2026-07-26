@@ -11,8 +11,10 @@ const items = group ? sectionNavItems(group) : [];
     <ul class="flex flex-wrap gap-x-3 gap-y-1 text-sm">
       {items.map(item => (
         <li>
-          {isActiveSection(path, item.href) ? (
+          {path === item.href ? (
             <span class="font-semibold text-nowrap">{item.label}</span>
+          ) : isActiveSection(path, item.href) ? (
+            <a href={item.href} class="font-semibold underline text-nowrap">{item.label}</a>
           ) : (
             <a href={item.href} class="underline text-nowrap">{item.label}</a>
           )}

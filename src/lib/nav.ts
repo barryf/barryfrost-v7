@@ -10,7 +10,6 @@ import { SECTIONS } from '@/lib/sections';
  *
  * The first entry of each group is the parent hub itself, bolded when active.
  * `slug` (Everything children only) keys the shared `SectionIcon` component.
- * Travelblog is intentionally absent — it's linked from the About page body instead.
  */
 export interface NavItem {
   href: string;
