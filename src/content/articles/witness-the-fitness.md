@@ -12,7 +12,7 @@ I've never had to give up smoking or needed to employ serious willpower, so ther
 
 ## Exercising
 
-<img src="https://barryf.s3.amazonaws.com/bike2.png" alt="York C202" style="float: right; padding: 0 0 10px 10px;" />
+![York C202 exercise bike](../../assets/bike2.png)
 
 So, firstly, exercise. I hate going to the gym. I've had spells of going a couple of times a week in the past but it never lasts. I end up spending more time driving, changing and showering then actually doing anything meaningful. The whole experience is a tedious time sink after a long day at work when I'd much rather be relaxing or at least spending the time productively.
 
@@ -42,10 +42,8 @@ And a key for me: I plan on having one naughty/reward day a week. I'm not going 
 
 ## Weighing myself
 
-<div style="float: right; margin: 0 0 10px 20px; width: 200px;">
-<img alt="Withings Wi-fi scales" src="https://barryf.s3.amazonaws.com/withings.png" style="margin-bottom: 10px;" />
-<img alt="Weightbot graph" src="https://barryf.s3.amazonaws.com/weightbot.png" />
-</div>
+![Withings Wi-fi scales](../../assets/withings.png)
+![Weightbot graph](../../assets/weightbot.png)
 
 And here's the fun part. Inspired by [Garrett Murray's Nerdy Adventures in Weight Loss](http://log.maniacalrage.net/post/5047120041/nerdy-adventures-in-weight-loss), I've bought myself a [Withings WiFi Body Scale](http://www.withings.com/en/bodyscale). When you weigh yourself your data is automatically sent to Withings' servers. You can then review your progress online or via their iPhone app. It's also compatible with [Tapbots](http://tapbots.com/)' excellent  [Weightbot](http://tapbots.com/software/weightbot/) which provides glossy charts like the one here.
 
