@@ -51,16 +51,7 @@ const dateConnector = isRelativeDate(date) ? '' : 'on ';
           <slot />
         </div>
         <div class="text-sm text-gray-500 dark:text-gray-400">
-          {section && sectionHref ? (
-            <Fragment>
-              Posted in <a href={sectionHref} class="underline">{section}</a>{' '}{dateConnector}<time class="dt-published" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatDateRelative(date)}</time>
-            </Fragment>
-          ) : (
-            <Fragment>
-              Posted {dateConnector}<time class="dt-published" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatDateRelative(date)}</time>
-            </Fragment>
-          )}
-          <Syndication urls={syndication} />
+          Posted{section && sectionHref && <Fragment> in <a href={sectionHref} class="underline">{section}</a></Fragment>} {dateConnector}<time class="dt-published" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatDateRelative(date)}</time><Syndication urls={syndication} />.
         </div>
       </div>
       <div class={asideColumnClass}>
