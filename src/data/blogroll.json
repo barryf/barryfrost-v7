@@ -9,6 +9,14 @@
     "url": "https://alicebartlett.co.uk"
   },
   {
+    "name": "Anna Shipman",
+    "url": "https://www.annashipman.co.uk"
+  },
+  {
+    "name": "Ben Balter",
+    "url": "https://ben.balter.com"
+  },
+  {
     "name": "Ben Werdmuller",
     "url": "https://werd.io/"
   },
@@ -17,12 +25,20 @@
     "url": "https://www.calumryan.com"
   },
   {
+    "name": "Gergely Orosz",
+    "url": "https://blog.pragmaticengineer.com"
+  },
+  {
     "name": "Giles Turnbull",
     "url": "https://gilest.org"
   },
   {
     "name": "Henrique Dias",
     "url": "https://hacdias.com/"
+  },
+  {
+    "name": "James Stanier",
+    "url": "https://theengineeringmanager.substack.com"
   },
   {
     "name": "Jamie Tanna",
@@ -38,6 +54,14 @@
     "url": "https://jim-nielsen.com/"
   },
   {
+    "name": "Joel Chippindale",
+    "url": "https://monkeysthumb.co.uk"
+  },
+  {
+    "name": "John Gruber",
+    "url": "https://daringfireball.net"
+  },
+  {
     "name": "Jon Hicks",
     "url": "https://hicks.design/journal/"
   },
@@ -49,6 +73,10 @@
     "name": "Manton Reece",
     "url": "https://www.manton.org",
     "avatar": "https://avatars.micro.blog/avatars/2025/22/3.jpg"
+  },
+  {
+    "name": "Matt Webb",
+    "url": "https://interconnected.org/home"
   },
   {
     "name": "Paul Robert Lloyd",
