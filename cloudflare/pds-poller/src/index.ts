@@ -17,7 +17,6 @@ const PDS_HOST = 'bsky.social';
 // records itself (scripts/publish-standard-site.ts), so watching them would loop.
 const WATCHED_COLLECTIONS = [
   'app.bsky.feed.post',
-  'app.beaconbits.beacon',
   'com.barryfrost.checkin',
   'social.popfeed.feed.review',
   'buzz.bookhive.book',
@@ -31,7 +30,6 @@ const WATCHED_COLLECTIONS = [
 // pipeline pulls from /pending-notification. Keys mirror WATCHED_COLLECTIONS.
 const COLLECTION_NOUNS: Record<string, string> = {
   'app.bsky.feed.post': 'post',
-  'app.beaconbits.beacon': 'beacon',
   'com.barryfrost.checkin': 'check-in',
   'social.popfeed.feed.review': 'review',
   'buzz.bookhive.book': 'book',

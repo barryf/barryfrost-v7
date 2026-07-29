@@ -136,7 +136,7 @@ export async function getTimelineItems(site: URL): Promise<TimelineItem[]> {
     const mapUrl = data.latitude && data.longitude
       ? `https://www.openstreetmap.org/?mlat=${data.latitude}&mlon=${data.longitude}&zoom=17`
       : undefined;
-    const url = data.sourceUrl ?? mapUrl ?? (data.uri ? pdslsUrl(data.uri) : absolute('/check-ins'));
+    const url = mapUrl ?? (data.uri ? pdslsUrl(data.uri) : absolute('/check-ins'));
     const place = [data.venueLocality, data.venueRegion].filter(Boolean).join(', ');
     items.push({
       type: 'checkin',

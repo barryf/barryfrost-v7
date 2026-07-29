@@ -61,10 +61,8 @@ const addrParts = [
       {data.longitude && <data class="p-longitude" value={data.longitude} />}
     </div>
   </div>
-  {data.rating !== undefined && <data class="p-rating hidden" value={data.rating} />}
   <div class="mb-4 text-gray-500 dark:text-gray-400">
     <time class="dt-published text-sm" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatDateRelative(date)}</time>
     {data.uri && <a class="ml-1 underline" href={pdslsUrl(data.uri)} rel="noopener noreferrer" aria-label="View on PDSls"><PdslsIcon /></a>}
-    {data.sourceUrl && <a href={data.sourceUrl} class="u-syndication text-sm ml-2 underline" rel="noopener noreferrer">Beaconbits</a>}
   </div>
 </article>

@@ -174,10 +174,9 @@ const streamSections = STREAM_SECTIONS.filter(s => s.slug);
       <h2 class="mb-1 font-semibold text-black dark:text-white">Recent Check-ins</h2>
       <ul class="mb-2 flex flex-col gap-2 leading-tight">
         {recentCheckIns.map(entry => {
-          const venueUrl = entry.data.venueUri
-            ?? (entry.data.latitude && entry.data.longitude
-              ? `https://www.openstreetmap.org/?mlat=${entry.data.latitude}&mlon=${entry.data.longitude}&zoom=17`
-              : null);
+          const venueUrl = entry.data.latitude && entry.data.longitude
+            ? `https://www.openstreetmap.org/?mlat=${entry.data.latitude}&mlon=${entry.data.longitude}&zoom=17`
+            : null;
           const date = new Date(entry.data.createdAt);
           return (
             <li class="h-entry">

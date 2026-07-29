@@ -29,7 +29,7 @@ Fetched at build time from `bsky.social` for DID `did:plc:j5ksi3y4tdtbp7vpsxsfya
 | Collection | Loader | Used in |
 |---|---|---|
 | `app.bsky.feed.post` | `bluesky.ts` | `/posts`, homepage latest post |
-| `app.beaconbits.beacon` + `com.barryfrost.checkin` | `check-ins.ts` | `/check-ins`, homepage recent check-ins |
+| `com.barryfrost.checkin` | `check-ins.ts` | `/check-ins`, homepage recent check-ins |
 | `social.popfeed.feed.review` | `films.ts` | `/films` |
 | `buzz.bookhive.book` | `books.ts` | `/books` |
 | `social.grain.gallery` + `.gallery.item` + `.photo` | `photos.ts` | `/photos`, homepage recent photos |
@@ -140,7 +140,7 @@ The star glyph itself (Heroicons 24/outline) lives once as `STAR_PATH` in `src/l
 Card components in `src/components/posts/`:
 - `ArticleCard` — title link, relative date with `title` attr
 - `BlueskyCard` — rich text, embedded image thumbnails (each links to a larger version), external embed thumbnails (e.g. GIFs) linking to the source URL with alt from the embed's description, quote posts via `BlueskyQuote`, relative date, Bluesky icon link, pdsls icon link. An `indexable` prop (default `true`) gates the `data-pagefind-body` attribute so the card can be reused off the canonical `/posts` list (e.g. the homepage) without duplicate search indexing
-- `CheckInCard` — venue name/category/address (name links to OpenStreetMap when lat/lon available), optional photo(s), relative date, pdsls icon link, optional Beaconbits link
+- `CheckInCard` — venue name/category/address (name links to OpenStreetMap when lat/lon available), optional photo(s), relative date, pdsls icon link
 - `FilmCard` — clickable poster linking to Popfeed, title, star rating, relative date, pdsls icon link
 - `BookCard` — clickable cover linking to BookHive, title, authors, "Started/Finished [relative date]", pdsls icon link
 - `PhotoCard` — horizontally scrollable thumbnails (multi) or side-by-side (single), title link to Grain gallery, relative date, pdsls icon link
@@ -246,7 +246,7 @@ Separate from the blog feed above: a broader **activity log** spanning every col
 | `/stream.xml` | RSS — same items, summaries only |
 | `/stream.json` | JSON Feed v1.1 — same items, summaries only |
 
-`src/lib/timeline.ts` (`getTimelineItems(site)`) is the shared source of truth for all three: it merges `articles`, `weeknotes`, `blueskyPosts` (replies included), `check-ins`, `films`, `books`, `photos` and `standardSubscriptions`, filters `visibility: unlisted` (articles/weeknotes), normalises each to a `TimelineItem` (type, label, title, summary, canonical `url`, `local` flag, `date`), sorts by date descending and takes the latest 50. Canonical URLs reuse the per-type patterns from the card components (articles/weeknotes local and absolutised against `site`; posts→Bluesky, check-ins→Beaconbits/OSM, films→Popfeed, books→BookHive, photos→Grain, subscriptions→the publication's site). Items carry **summaries, not full content** — readers click through to the canonical copy. Music (`scrobbles`) is deliberately excluded as too noisy. The page/feeds live at `/stream*` (the header labels it "Stream"); the route slug stays distinct from the frozen `/feed.*` blog feeds, and `/log*` 301-redirect here (renamed from the earlier "Log"). Advertised via a second pair of `<link rel="alternate">` tags in `BaseHead.astro`.
+`src/lib/timeline.ts` (`getTimelineItems(site)`) is the shared source of truth for all three: it merges `articles`, `weeknotes`, `blueskyPosts` (replies included), `check-ins`, `films`, `books`, `photos` and `standardSubscriptions`, filters `visibility: unlisted` (articles/weeknotes), normalises each to a `TimelineItem` (type, label, title, summary, canonical `url`, `local` flag, `date`), sorts by date descending and takes the latest 50. Canonical URLs reuse the per-type patterns from the card components (articles/weeknotes local and absolutised against `site`; posts→Bluesky, check-ins→OSM, films→Popfeed, books→BookHive, photos→Grain, subscriptions→the publication's site). Items carry **summaries, not full content** — readers click through to the canonical copy. Music (`scrobbles`) is deliberately excluded as too noisy. The page/feeds live at `/stream*` (the header labels it "Stream"); the route slug stays distinct from the frozen `/feed.*` blog feeds, and `/log*` 301-redirect here (renamed from the earlier "Log"). Advertised via a second pair of `<link rel="alternate">` tags in `BaseHead.astro`.
 
 > Subscriptions have no date in their own schema; the `site.standard.graph.subscription` record's `createdAt` is surfaced through `subscriptions.ts` + `standardSubscriptions` schema so they can be timeline-ordered (any lacking it are skipped).
 
@@ -302,7 +302,7 @@ A Cloudflare Worker that detects PDS changes by polling every 60 seconds, driven
 
 **Load.** Most minutes: one `getLatestCommit` call (~1.4k/day). On the minutes the rev has moved, a full paginated scan of the nine watched collections — the two largest (`app.bsky.feed.post`, `com.barryfrost.checkin`) are ~1,300–1,400 records each, so a scan is ~30 `listRecords` calls total. Rev-changing writes are infrequent for a personal site, and even a scan every few minutes stays well under `bsky.social`'s per-IP limit of 3,000 requests per 5 minutes.
 
-Watched collections (`WATCHED_COLLECTIONS`): `app.bsky.feed.post`, `app.beaconbits.beacon`, `com.barryfrost.checkin`, `social.popfeed.feed.review`, `buzz.bookhive.book`, `site.standard.graph.subscription`, `social.grain.gallery`, `social.grain.gallery.item`, `social.grain.photo`. `site.standard.document` is deliberately **not** watched — the build writes those records itself (`scripts/publish-standard-site.ts`), so watching them would loop.
+Watched collections (`WATCHED_COLLECTIONS`): `app.bsky.feed.post`, `com.barryfrost.checkin`, `social.popfeed.feed.review`, `buzz.bookhive.book`, `site.standard.graph.subscription`, `social.grain.gallery`, `social.grain.gallery.item`, `social.grain.photo`. `site.standard.document` is deliberately **not** watched — the build writes those records itself (`scripts/publish-standard-site.ts`), so watching them would loop.
 
 Required secrets: `DEPLOY_HOOK` (same Workers Builds deploy-hook URL as before), `NOTIFY_SECRET` (gates `/pending-notification`).
 

@@ -1,7 +1,5 @@
 import type { Loader } from 'astro/loaders';
 import { fetchAllRecords, rkeyFromUri, DID, PDS_HOST } from '@/lib/pds';
-
-const DID_SHORT = DID.replace('did:plc:', '');
 import { pdsImage } from '@/lib/image-store';
 import { mapLimit, RECORD_CONCURRENCY } from '@/lib/concurrency';
 
@@ -17,7 +15,6 @@ interface AddressDetails {
   locality?: string;
   region?: string;
   postalCode?: string;
-  country?: string;
 }
 
 interface CheckInPhoto {
@@ -26,9 +23,9 @@ interface CheckInPhoto {
 
 // Foursquare check-ins only carry a single comma-joined address string, e.g.
 // "30 High St, Welwyn, Hertfordshire, AL6 9EQ". Split it best-effort into
-// street / locality / region / postal-code to match the structured markup the
-// Beaconbits records provide. If the shape is unexpected, fall back to leaving
-// the whole blob as the street address so nothing is dropped.
+// street / locality / region / postal-code so the card can emit structured
+// markup. If the shape is unexpected, fall back to leaving the whole blob as
+// the street address so nothing is dropped.
 function splitAddressBlob(address: string): AddressDetails {
   const parts = address.split(',').map(p => p.trim()).filter(Boolean);
   if (parts.length >= 4) {
@@ -54,35 +51,6 @@ export function checkInsLoader(): Loader {
     async load({ store, logger, generateDigest }) {
       logger.info('Fetching check-ins');
       store.clear();
-
-      for await (const record of fetchAllRecords('app.beaconbits.beacon', DID, PDS_HOST)) {
-        const value = record.value as Record<string, unknown>;
-        const rkey = rkeyFromUri(record.uri);
-        const location = value.location as { latitude: string; longitude: string } | undefined;
-        const addr = value.addressDetails as AddressDetails | undefined;
-
-        store.set({
-          id: rkey,
-          data: {
-            venueName: value.venueName as string,
-            venueCategory: value.venueCategory as string | undefined,
-            venueStreet: addr?.street,
-            venueLocality: addr?.locality,
-            venueRegion: addr?.region,
-            venuePostalCode: addr?.postalCode,
-            venueCountry: addr?.country,
-            venueUri: value.venueUri as string | undefined,
-            latitude: location?.latitude,
-            longitude: location?.longitude,
-            rating: value.rating as number | undefined,
-            createdAt: value.createdAt as string,
-            uri: record.uri,
-            sourceUrl: `https://www.beaconbits.app/beacons/${DID_SHORT}/${rkey}`,
-            source: 'beaconbits' as const,
-          },
-          digest: generateDigest(record.cid),
-        });
-      }
 
       const checkinRecords = [];
       for await (const record of fetchAllRecords('com.barryfrost.checkin', DID, PDS_HOST)) {
@@ -126,7 +94,6 @@ export function checkInsLoader(): Loader {
             uri: record.uri,
             photoUrls: photoUrls.length > 0 ? photoUrls : undefined,
             photoFullUrls: photoFullUrls.length > 0 ? photoFullUrls : undefined,
-            source: 'foursquare' as const,
           },
           digest: generateDigest(record.cid),
         });
