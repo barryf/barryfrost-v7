@@ -4,81 +4,82 @@ description: How this website is made.
 ---
 import Divider from '@/components/Divider.astro';
 
-You're reading my new personal website, version 7.
+This is my personal website, version 7, built on top of [atproto](https://atproto.com). I wrote more about why I took this approach in [My Atmospheric personal website](/articles/atmospheric).
 
-I like to use rebuilding my website as a learning and development experience. [Last time](/articles/vibrancy), I tried lots of new (to me) technologies like Serverless, Node.js and the Architect Framework, and the website was deliberately tied to AWS.
-
-This time, I wanted to make a [static website](https://strapi.io/blog/what-is-a-static-website) for greater performance, to eliminate server costs, and to make it easily portable to another static host.
-
-Also, I wanted to practise using AI. Apart from tweaking layouts and text, I've forced myself to use [Claude Code](https://claude.com/product/claude-code) to write all the code. I've used multi-agents, asked Fable to orchestrate Sonnets, built full features on the iPhone app, and I've come away impressed. And by reading the code, I've improved my knowledge of TypeScript.
-
-The other biggest driver for me was to experiment with building my personal website on top of [atproto](https://atproto.com).
-
-<Divider />
 ## atproto
 
-The AT Protocol is an open protocol for building decentralised social websites and applications. A key concept is the [Personal Data Server](https://atproto.wiki/en/wiki/reference/core-architecture/pds) (PDS) where applications store your data in a server you control. Your data is freely accessible and owned by you.
-
-My idea was to take the photos, notes, check-ins, and other data stored in my PDS by other services, like Bluesky, and display it on my website. I would use APIs to fetch my collections from my PDS, aggregate them and create a website that rebuilt whenever I added or changed anything.
+The AT Protocol is an open protocol for building decentralised social websites and applications. A key concept is the [Personal Data Server](https://atproto.wiki/en/wiki/reference/core-architecture/pds) (PDS) where applications store your data in a server you control[^1]. Your data is freely accessible and owned by you.
 
 My PDS is my website's back-end.
 
-I use each of the following services which store data in my PDS using their [lexicons](https://atproto.com/guides/lexicon): predefined record types designed for interoperability. Here are the records they store via [PDSls](https://pdsls.dev):
+The following services store data in my PDS using their own [lexicons](https://atproto.com/guides/lexicon): predefined record types designed for interoperability. Here are the records they store visualised by [PDSls](https://pdsls.dev):
+
 - [Bluesky](https://pdsls.dev/at://did:plc:j5ksi3y4tdtbp7vpsxsfyask/app.bsky.feed.post) - notes, replies and simple photos.
-- [Grain](https://pdsls.dev/at://did:plc:j5ksi3y4tdtbp7vpsxsfyask/social.grain.gallery) - photo albums.
-- [BookHive](https://pdsls.dev/at://did:plc:j5ksi3y4tdtbp7vpsxsfyask/buzz.bookhive.book) - books I'm reading and have finished.
-- [Popfeed](https://pdsls.dev/at://did:plc:j5ksi3y4tdtbp7vpsxsfyask/social.popfeed.feed.review) - films I have watched and reviewed.
-- [Rocksky](https://pdsls.dev/at://did:plc:j5ksi3y4tdtbp7vpsxsfyask/app.rocksky.scrobble) - songs and albums I have scrobbled.
+- [Grain](https://pdsls.dev/at://did:plc:j5ksi3y4tdtbp7vpsxsfyask/social.grain.gallery) - photo galleries.
+- [BookHive](https://pdsls.dev/at://did:plc:j5ksi3y4tdtbp7vpsxsfyask/buzz.bookhive.book) - books I'm reading and those I've finished.
+- [Popfeed](https://pdsls.dev/at://did:plc:j5ksi3y4tdtbp7vpsxsfyask/social.popfeed.feed.review) - films I've watched and reviewed.
+- [Rocksky](https://pdsls.dev/at://did:plc:j5ksi3y4tdtbp7vpsxsfyask/app.rocksky.scrobble) - songs and albums I've scrobbled.
 - [Sifa](https://pdsls.dev/at://did:plc:j5ksi3y4tdtbp7vpsxsfyask/id.sifa.profile.self) - my professional work profile.
+- [Standard Site](https://pdsls.dev/at://did:plc:j5ksi3y4tdtbp7vpsxsfyask/site.standard.graph.subscription) - subscriptions to publications.
 
-But what about articles? They are (currently) the exception. I strongly considered using [Leaflet](https://leaflet.pub), [Offprint](https://offprint.app) or [Pckt](https://pckt.blog) - the main atproto long-form services - but I wanted more control over layout, performance and URLs. Instead, I decided to continue writing articles and weeknotes in Markdown and publish them on my website. I then publish copies as [Standard Site](https://standard.site) records on my PDS for reading services to use.
+Check-ins use a [custom lexicon](https://pdsls.dev/at://did:plc:j5ksi3y4tdtbp7vpsxsfyask/com.atproto.lexicon.schema/com.barryfrost.checkin) for my [Foursquare Swarm](https://swarmapp.com) data. A small service running on [Val Town](https://val.town) polls for new check-ins via the [Foursquare API](https://foursquare.com/developer/) and creates matching records in my PDS.
 
-<Divider />
+Articles are (currently) the exception. I wanted control over layout, performance and URLs, and I write all articles and weeknotes in Markdown. Copies are published as [Standard Site](https://standard.site) records on my PDS for reading services to use. My 2000-2001 [Travelblog](/travelblog) is also here, written in Markdown with one file per month.
+
+My atproto handle and identity is `barryfrost.com` which maps to my [DID](https://atproto.com/specs/did): `did:plc:j5ksi3y4tdtbp7vpsxsfyask`.
+
 ## Build
 
-I'm using [Astro 7](https://astro.build/blog/astro-7/) as the website generator, outputting static HTML without dynamic pages or a database. Data is fetched from my PDS at build time using content loaders working in parallel, along with Markdown files for articles and weeknotes.
+[Astro 7](https://astro.build/blog/astro-7/) is the website generator, outputting static HTML without dynamic pages or a database. Data is fetched from my PDS at build time using content loaders working in parallel, along with Markdown files for articles and weeknotes.
 
-[Cloudflare Workers](https://www.cloudflare.com/products/workers/) builds and hosts. For code and article changes I trigger an on-demand rebuild via a push to the [GitHub repo](https://github.com/barryf/barryfrost-v7). But for updates in my PDS, I have a small Worker that polls the API every minute via [cron](https://developers.cloudflare.com/workers/configuration/cron-triggers/), and fires a deploy hook if there has been a change in its watched collections. I also have a belt-and-braces hourly rebuild.
+[Cloudflare Workers](https://www.cloudflare.com/products/workers/) builds and hosts. For code and article changes, an on-demand rebuild is triggered via any push to the [GitHub repo](https://github.com/barryf/barryfrost-v7). But for updates in my PDS, a small Worker polls the API every minute via [cron](https://developers.cloudflare.com/workers/configuration/cron-triggers/), and fires a deploy hook if there has been a change in its watched collections. There is also a belt-and-braces hourly rebuild.
 
-Images aren't served from my PDS or hot-linked from an external origin[^1]. Any full-size photos, film posters, Bluesky images, and so on, are resized at build time using [sharp](https://npmx.dev/package/sharp), stored in a [Cloudflare R2](https://www.cloudflare.com/products/r2/) bucket in webp format using a content-addressable key filename. Images are processed just once, and served via Cloudflare's CDN.
+Images aren't served from my PDS or hot-linked from an external origin[^2]. Any full-size photos, film posters, Bluesky images, and so on, are resized at build time using [sharp](https://npmx.dev/package/sharp), stored in a [Cloudflare R2](https://www.cloudflare.com/products/r2/) bucket in webp format using a content-addressable key filename. Images are processed just once, and served via Cloudflare's CDN.
 
 [Pagefind](https://pagefind.app) is used for static full-text search. At build time, pages built as HTML by Astro are then processed and indexed, ready for the client-side [search](/search) page.
 
-For check-ins I wanted to continue using [Foursquare Swarm](https://swarmapp.com) on my phone. There are check-in services in the Atmosphere, but none are compatible with Swarm, so I decided to define my own [custom lexicon for check-ins](https://pdsls.dev/at://did:plc:j5ksi3y4tdtbp7vpsxsfyask/com.atproto.lexicon.schema/com.barryfrost.checkin). I have a small service running on [Val Town](https://val.town) that polls for new check-ins via the [Foursquare API](https://foursquare.com/developer/) and creates matching records in my PDS.
-
 Even with the hourly rebuilds, image transformations and storage, everything fits comfortably within Cloudflare's free tier.
 
-<Divider />
 ## Front-end
 
-[Performance is a feature](https://blog.codinghorror.com/performance-is-a-feature/), and I've tried to optimise download speed. Pages are static and delivered by Cloudflare's global CDN. There is very little JavaScript: [Leaflet.js](https://leafletjs.com) for maps, Pagefind on the search page, and [Umami](https://umami.is)[^2] for analytics. Fonts are [self-hosted](https://docs.astro.build/en/guides/fonts/)[^3] and preloaded. Images are pre-sized and optimised in efficient webp format, and pages preconnect to the images host.
+[Performance is a feature](https://blog.codinghorror.com/performance-is-a-feature/), and I've tried to optimise download speed. Pages are static and delivered by Cloudflare's global CDN. There is very little JavaScript: [Leaflet.js](https://leafletjs.com) for maps, Pagefind on the search page, and [Umami](https://umami.is)[^3] for analytics. Fonts are [self-hosted](https://docs.astro.build/en/guides/fonts/)[^4] and preloaded. Images are pre-sized and optimised in efficient webp format, and pages preconnect to the images host.
 
-Content on pages, articles, and weeknotes is authored in [Markdown](https://daringfireball.net/projects/markdown/), and [MDX](https://mdxjs.com) to use components like icons. Templates include [Microformats 2](https://microformats.io) markup - `h-feed`, `h-card` and `h-entry` - with relevant classes for [Post-Type Discovery](https://www.w3.org/TR/post-type-discovery/).
+Content on pages, articles, and weeknotes is authored in [Markdown](https://daringfireball.net/projects/markdown/), and [MDX](https://mdxjs.com) to use components like icons. Templates include [Microformats 2](https://microformats.io) markup - `h-feed`, `h-card` and `h-entry` - with relevant classes for [Post-Type Discovery](https://www.w3.org/TR/post-type-discovery/). There are `rel=me` links to my profiles on GitHub, Mastodon and Bluesky.
 
-I've split content into two channels that you can [follow](/follow): one for just my writing (articles and weeknotes) at `/feed.*`, or a firehose/everything feed at `/stream.*`. There are four methods for subscribing: [Standard Site](https://standard.site), [MF2](https://microformats.io), [RSS](https://aboutfeeds.com), and [JSON Feed](https://www.jsonfeed.org).
+I've split content into two channels that you can [follow](/follow): one for just my writing (articles and weeknotes) at `/feed.*`, or a firehose/everything feed at `/stream.*`. Feeds are available as [MF2](https://microformats.io), [RSS](https://aboutfeeds.com), and [JSON Feed](https://www.jsonfeed.org).
 
-[Cool URIs don't change](https://www.w3.org/Provider/Style/URI). Articles and weeknotes from my previous website are 301-redirected to their new home. Any legacy URLs for content I no longer maintain, e.g. bookmarks, are redirected to a static copy at *archive.barryfrost.com*.
+Articles and weeknotes are published as Standard Site [documents](https://standard.site/docs/lexicons/document/) in separate [publications](https://standard.site/docs/lexicons/publication/) with `<link>` tags for discovery.
 
-With accessibilty in mind, there is screen-reader friendly markup throughout, a skip link, machine-readable `<time>` values with every relative date, high-contrast AAA styles, and a dark mode that needs no JavaScript.
+[Cool URIs don't change](https://www.w3.org/Provider/Style/URI). Content from my previous website is 301-redirected to its new home. Any legacy URLs for content I no longer maintain, like bookmarks, are redirected to a static copy at *archive.barryfrost.com*.
 
-<Divider />
+With accessibility in mind, there is screen-reader friendly markup throughout, a skip link, machine-readable `<time>` values with every relative date, high-contrast AAA styles, and a dark mode that needs no JavaScript.
+
+No cookies are used. For security, headers define [HSTS](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Strict-Transport-Security), `nosniff`, a `Referrer-Policy`, and a `Permissions-Policy` denying camera, microphone, geolocation and payment.
+
 ## Design
 
-I continue to be a fan of [Tailwind 4](https://tailwindcss.com) for styling.
+This website is deliberately lo-fi. It uses spacing, not lines, to separate sections. Colour is used sparingly.
 
-Unlike the build, I've not used AI for the design. I experimented with [Claude Design](https://claude.com/product/design), but the outputs felt too manufactured, and not like something I would make.
-
-Instead, this website is deliberately lo-fi. I've used spacing, not lines, to separate sections. Colour is used sparingly.
+[Tailwind 4](https://tailwindcss.com) is used for styles.
 
 I discovered [Work Sans](https://weiweihuanghuang.github.io/Work-Sans/) and love its slightly-wide, [Grotesque](https://fonts.ilovetypography.com/category/grotesque) look. It's used for all non-code text, with body-sized headings that use the semi-bold weight for emphasis. [ui-monospace](https://www.w3.org/TR/css-fonts-4/#ui-monospace-def) is the default for code.
 
-The [Asterism](https://en.wikipedia.org/wiki/Asterism_(typography)) (⁂) symbol is used as a [dinkus](https://en.wikipedia.org/wiki/Dinkus) for section breaks, instead of horizontal rules. It's a traditional typographic ornament, which I think complements Work Sans nicely. It's also a fun nod towards [federation](https://symbol.fediverse.info/en).
+The [Asterism](https://en.wikipedia.org/wiki/Asterism_(typography)) (⁂) symbol is used as a [dinkus](https://en.wikipedia.org/wiki/Dinkus) for section breaks instead of horizontal rules. It's a traditional typographic ornament, which I think complements Work Sans nicely. It's also a fun nod towards [federation](https://symbol.fediverse.info/en) and the social web.
 
 Icons are SVGs sourced from [atmologos](https://tangled.org/cozylittle.house/atmologos) for the atproto services, and [Heroicons](https://heroicons.com) for generic symbols.
 
 An inverted dark scheme is used when specified by the operating system via `prefers-color-scheme`.
 
+## Source
+
+The website source code is [available on GitHub](https://github.com/barryf/barryfrost-v7) under the [MIT&nbsp;licence](https://opensource.org/license/mit).
+
+[Claude](https://claude.com/product/claude-code) wrote the code, but all content is written by me and is licensed under [Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/).
+
+*Last updated: <time datetime="2026-07-29">29 July 2026</time>.*
+
 <Divider />
-[^1]: With two small exceptions: [Blogroll](/blogroll) favicons fall back to *google.com/s2/favicons* when a subscription has no avatar, and the [check-ins](/check-ins) map pulls tile images from [CARTO](https://carto.com).
-[^2]: [Umami](https://umami.is) is a cookieless, privacy-respecting analytics service, but it's worth pointing out that anonymous usage data is sent to its cloud service.
-[^3]: Astro downloads Work Sans from [Google Fonts](https://fonts.google.com) at build time, so there's no runtime request to Google. This is as much for privacy as for performance.
+[^1]: I'm using Bluesky's shared PDS today, but my [DID](https://atproto.com/specs/did) and data are fully portable.
+[^2]: With two small exceptions: [Blogroll](/blogroll) favicons fall back to *google.com/s2/favicons* when a subscription has no avatar, and the [check-ins](/check-ins) map pulls tile images from [CARTO](https://carto.com).
+[^3]: [Umami](https://umami.is) is a cookieless, privacy-respecting analytics service, but it's worth pointing out that anonymous usage data is sent to its cloud service.
+[^4]: Astro downloads Work Sans from [Google Fonts](https://fonts.google.com) at build time, so there's no runtime request to Google. This is as much for privacy as for performance.
