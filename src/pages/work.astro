@@ -60,10 +60,8 @@ const proficiencyLabel: Record<string, string> = {
     )}
   </div>
 
-  <Divider />
-
   <section class="mb-8">
-    <h2 class="font-semibold mb-4 text-black dark:text-white">Career</h2>
+    <h2 class="font-semibold mb-4 text-black dark:text-white">Experience</h2>
     <ul class="space-y-8">
       {positions.map(pos => (
         <li>
@@ -83,7 +81,6 @@ const proficiencyLabel: Record<string, string> = {
   </section>
 
   {education.length > 0 && (
-    <Divider />
     <section class="mb-8">
       <h2 class="font-semibold mb-4 text-black dark:text-white">Education</h2>
       <ul class="space-y-4">
@@ -105,7 +102,6 @@ const proficiencyLabel: Record<string, string> = {
   )}
 
   {(skillsByCategory.technical.length > 0 || skillsByCategory.business.length > 0 || skillsByCategory.interpersonal.length > 0) && (
-    <Divider />
     <section class="mb-8">
       <h2 class="font-semibold mb-4 text-black dark:text-white">Skills</h2>
       <div class="space-y-4">
@@ -144,7 +140,6 @@ const proficiencyLabel: Record<string, string> = {
   )}
 
   {languages.length > 0 && (
-    <Divider />
     <section class="mb-8">
       <h2 class="font-semibold mb-4 text-black dark:text-white">Languages</h2>
       <ul class="space-y-2">
