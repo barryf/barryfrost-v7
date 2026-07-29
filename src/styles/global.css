@@ -23,6 +23,9 @@ html {
 p, blockquote, .prose p, .prose ul, .timeline li {
   @apply max-w-140;
 }
+article.post>p, article.post>ul, article.post>ol {
+  @apply ml-4;
+}
 
 /* Typography zeroes the top margin on `.prose > :first-child`, but not on that
    element's own first child — so a body starting with a list leaks the first
@@ -40,6 +43,10 @@ p, blockquote, .prose p, .prose ul, .timeline li {
 
 .underline:hover, .prose a:hover {
   @apply text-amber-700 dark:text-amber-600;
+}
+
+.prose li {
+  @apply marker:text-gray-400 dark:marker:text-gray-500;
 }
 
 .prose h2 {
