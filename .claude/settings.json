@@ -2,8 +2,8 @@
   "permissions": {
     "allow": [
       "Read",
-      "Write(src/**)",
-      "Write(public/**)",
+      "Edit(src/**)",
+      "Edit(public/**)",
       "Bash(npm run *)",
       "Bash(npm install *)",
       "Bash(git status)",
