@@ -3,15 +3,13 @@ title: Colophon
 description: How this website is made.
 ---
 
-This is my personal website, version 7, built on top of [atproto](https://atproto.com). I wrote more about atproto, and why I took this approach, in [My Atmospheric personal website](/articles/atmospheric).
+This is my personal website, version 7, built on top of [atproto](https://atproto.com). I wrote about why I took this approach, in [My Atmospheric personal website](/articles/atmospheric).
 
 ## Data
 
 The AT Protocol is an open protocol for building decentralised social websites and applications. A key concept is the [Personal Data Server](https://atproto.wiki/en/wiki/reference/core-architecture/pds) (PDS) where applications store your data in a server you control[^1]. Your data is freely accessible and owned by you.
 
-My PDS is my website's back-end.
-
-The following services store data in my PDS using their own [lexicons](https://atproto.com/guides/lexicon): predefined record types designed for interoperability. Here are the records they store visualised by [PDSls](https://pdsls.dev):
+My PDS is this website's back-end. The following services store data in my PDS using their own [lexicons](https://atproto.com/guides/lexicon): predefined record types designed for interoperability. Here are the records they store visualised by [PDSls](https://pdsls.dev):
 
 - [Bluesky](https://pdsls.dev/at://did:plc:j5ksi3y4tdtbp7vpsxsfyask/app.bsky.feed.post) - notes, replies and simple photos.
 - [Grain](https://pdsls.dev/at://did:plc:j5ksi3y4tdtbp7vpsxsfyask/social.grain.gallery) - photo galleries.
@@ -33,7 +31,7 @@ My atproto handle and identity is `barryfrost.com` which maps to my [DID](https:
 
 [Cloudflare Workers](https://www.cloudflare.com/products/workers/) builds and hosts. For code and article changes, an on-demand rebuild is triggered via any push to the [GitHub repo](https://github.com/barryf/barryfrost-v7). But for updates in my PDS, a small Worker polls the API every minute via [cron](https://developers.cloudflare.com/workers/configuration/cron-triggers/), and fires a deploy hook if there has been a change in its watched collections. There is also a belt-and-braces hourly rebuild.
 
-Disclosure: Claude Code writes the Worker and Astro code that I review and deploy.
+Disclosure: [Claude](https://claude.com/product/claude-code) writes the Worker and Astro code that I review and deploy.
 
 Images aren't served from my PDS or hot-linked from an external origin[^2]. Any full-size photos, film posters, Bluesky images, and so on, are resized at build time using [sharp](https://npmx.dev/package/sharp), stored in a [Cloudflare R2](https://www.cloudflare.com/products/r2/) bucket in webp format using a content-addressable key filename. Images are processed just once, and served via Cloudflare's CDN.
 
@@ -71,21 +69,17 @@ Icons are SVGs sourced from [atmologos](https://tangled.org/cozylittle.house/atm
 
 An inverted dark scheme is used when specified by the operating system via `prefers-color-scheme`.
 
-## Statistics
+## Next
 
-TODO: can Claude help here? e.g. Number of records, collections, pages, build time.
-
-## Unimplemented
-
-There are currently no comments, no Webmentions and no likes.
+There are currently no comments, no Webmentions and no likes. These are future improvements I'm considering.
 
 ## Source
 
 The website source code is [available on GitHub](https://github.com/barryf/barryfrost-v7) under the [MIT&nbsp;licence](https://opensource.org/license/mit).
 
-[Claude](https://claude.com/product/claude-code) wrote the code, but all content is written by me and is licensed under [Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/).
+All content and original images are licensed under [Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/).
 
-<div class="py-4 italic">Last updated: <time datetime="2026-07-29">29 July 2026</time>.</div>
+<div class="py-4 italic">Last updated: <time datetime="2026-08-04">4 August 2026</time>.</div>
 
 [^1]: I'm using Bluesky's shared PDS today, but my [DID](https://atproto.com/specs/did) and data are fully portable.
 [^2]: With two small exceptions: [Blogroll](/blogroll) favicons fall back to *google.com/s2/favicons* when a subscription has no avatar, and the [check-ins](/check-ins) map pulls tile images from [CARTO](https://carto.com).
