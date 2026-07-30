@@ -41,13 +41,13 @@ const asideColumnClass = navAside ? 'lg:w-64 lg:shrink-0' : '';
 const dateConnector = isRelativeDate(date) ? '' : 'on ';
 ---
 <Base title={title} description={description} standardRkey={standardRkey} standardPublication={standardPublication} publishedDate={date} ogImage={ogImage} ogImageAlt={ogImageAlt} ogImageWidth={ogImageWidth} ogImageHeight={ogImageHeight}>
-  <article class="h-entry post mt-8" data-pagefind-body>
+  <article class="h-entry mt-8" data-pagefind-body>
     <h1 class="p-name mb-4 text-black dark:text-white font-semibold">{title}</h1>
     <a class="u-url hidden" href={canonical}>{canonical}</a>
     <AuthorCard />
     <div class={columnsClass}>
       <div class={mainColumnClass}>
-        <div class="e-content prose dark:prose-invert max-w-none mb-8">
+        <div class="e-content post prose dark:prose-invert max-w-none mb-8">
           <slot />
         </div>
         <div class="text-sm text-gray-500 dark:text-gray-400">

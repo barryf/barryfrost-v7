@@ -21,7 +21,7 @@ const { page } = Astro.props;
 <Feed {...SECTIONS.photos} currentPage={page.currentPage} totalPages={page.lastPage} basePath="/photos" showDescription={page.currentPage === 1}>
   <Fragment slot="description">
     Photo galleries that I've uploaded to my
-    <a href="https://grain.social/profile/barryfrost.com" class="underline">
+    <a href="https://grain.social/profile/barryfrost.com" class="underline text-nowrap">
       <GrainIcon class="inline size-4 align-text-bottom mr-0.5" />Grain account</a>.
   </Fragment>
   <div class="mb-4 flex flex-col gap-y-8">

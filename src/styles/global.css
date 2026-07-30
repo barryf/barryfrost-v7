@@ -23,7 +23,7 @@ html {
 p, blockquote, .prose p, .prose ul, .timeline li {
   @apply max-w-140;
 }
-article.post>p, article.post>ul, article.post>ol {
+.post>p, .post>ul, .post>ol {
   @apply ml-4;
 }
 
