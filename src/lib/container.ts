@@ -9,7 +9,7 @@
 
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { loadRenderers } from 'astro:container';
-import { getContainerRenderer as mdxRenderer } from '@astrojs/mdx';
+import { getContainerRenderer as mdxRenderer } from '@astrojs/mdx/container-renderer';
 
 type Container = Awaited<ReturnType<typeof AstroContainer.create>>;
 
