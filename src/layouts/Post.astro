@@ -1,6 +1,7 @@
 ---
 import Base from './Base.astro';
 import { formatDateTitle, formatDateRelative, isRelativeDate, toISODate } from '@/lib/dates';
+import { cleanPathname } from '@/lib/url';
 import AuthorCard from '@/components/AuthorCard.astro';
 import Syndication from '@/components/Syndication.astro';
 
@@ -25,7 +26,10 @@ interface Props {
 }
 
 const { title, date, description, section, sectionHref, standardRkey, standardPublication, syndication, navAside, ogImage, ogImageAlt, ogImageWidth, ogImageHeight } = Astro.props;
-const canonical = new URL(Astro.url.pathname, Astro.site).href;
+// Must match BaseHead's rel=canonical exactly: build.format 'file' makes Astro.url.pathname
+// end in .html, and MF2 consumers (webmention.io, Bridgy, IndieNews) treat u-url as the
+// post's identity — a .html variant here would disagree with the canonical we publish.
+const canonical = new URL(cleanPathname(Astro.url.pathname), Astro.site).href;
 // Below lg the columns collapse and everything stacks in source order, so the
 // aside classes are additive — no separate stacked markup needed. items-baseline
 // lines the aside's first line up with the body's first line of text; the two
@@ -43,7 +47,9 @@ const dateConnector = isRelativeDate(date) ? '' : 'on ';
 <Base title={title} description={description} standardRkey={standardRkey} standardPublication={standardPublication} publishedDate={date} ogImage={ogImage} ogImageAlt={ogImageAlt} ogImageWidth={ogImageWidth} ogImageHeight={ogImageHeight}>
   <article class="h-entry mt-8" data-pagefind-body>
     <h1 class="p-name mb-4 text-black dark:text-white font-semibold">{title}</h1>
-    <a class="u-url hidden" href={canonical}>{canonical}</a>
+    {/* Empty text, as in SiteHeader's h-card: u-url reads the href, and any text here
+        would sit inside data-pagefind-body and pollute every search excerpt. */}
+    <a class="u-url hidden" href={canonical}></a>
     <AuthorCard />
     <div class={columnsClass}>
       <div class={mainColumnClass}>
