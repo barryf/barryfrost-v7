@@ -91,4 +91,4 @@ scripts/            # scaffolding & one-off import scripts
 
 ## Licence
 
-Code is licensed under [MIT](./LICENSE). My words and original images are licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+Code is licensed under [MIT](./LICENSE). My words and original images are licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).

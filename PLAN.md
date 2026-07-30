@@ -106,19 +106,30 @@ All type-specific list pages have `/{type}/{n}` pagination except `/weeknotes` (
 
 Removed from v6: `/page/{n}` (unified paginated feed), `/archives/`, `/tags/`.
 
+`public/_redirects` covers the v6 URLs that outlived their pages. v6 still serves `/archives`
+and `/all`, so both 301 to `/`; `/feed` joins `/rss`, `/rss.xml` and `/index.xml` pointing at
+`/feed.xml`. v6's tag pages live at `/categories/{tag}` — the two with a real v7 home are
+mapped explicitly (`/categories/travelblog`, `/categories/weeknotes`) and the rest fall
+through to `/categories/* → /search?q=:splat`, which carries the tag over as a search term
+rather than dropping the visitor on a bare page. The `/20*` wildcard sends every dated v6
+permalink not individually redirected above it to `archive.barryfrost.com`.
+
+Static rules must precede wildcards in the file. The current set is ~290 static and 2 dynamic,
+well inside Cloudflare's 2,000 static / 100 dynamic limits.
+
 ## Layouts & Components
 
 - `Base.astro` — HTML shell, full-bleed `m-4 sm:m-8` body (no centred max-width; reading columns are capped per-element via `max-w-140` in `global.css`), dark mode via `prefers-color-scheme`; `lang="en-GB"`. Renders a visually-hidden "Skip to content" link (revealed on focus), then `<header><SiteHeader /></header>`, `<main id="main"><slot /></main>`, and `<footer><SiteFooter /></footer>` on every page.
 - `SiteHeader.astro` — sitewide header: `h-card` (name, hidden `u-photo`/`p-locality`/`p-country-name`) plus a right-aligned top nav of just four links — About, Stream, Articles, Weeknotes. Each item has three states (`navState()` using `sectionGroupFor`): **bold, not a link** on its own landing page; **bold link** anywhere else in its section (a descendant, or — for the About/Stream hubs — any group page), so you can return to the hub; plain link otherwise. On the homepage the name renders as an `h1`; elsewhere it's a link back to `/`. The trace sections cut from here (Posts, Photos, Check-ins, Books, Films, Music, Blogroll) are reached via the Stream sub-nav (`SectionNav`) and the homepage closing directory.
 - `SectionHeading.astro` — shared page-heading row used by `Feed.astro` and every standalone section host (`music`, `blogroll`, `work`, `[...slug]`). Renders the `<h1>` (default slot appends e.g. the `(Page N)` suffix) alongside `SectionNav`. Stacks vertically below `sm` (`flex-col-reverse`, so the right-aligned sub-nav sits above the title); inline `flex items-baseline justify-between`, sub-nav right-aligned, at `sm` and up — so the sub-nav never wraps awkwardly under the title on narrow screens.
-- `SectionNav.astro` — right-aligned section sub-nav (text only, no icons), shown on member pages via `SectionHeading`. Two groups in `src/lib/nav.ts` (`sectionGroupFor(path)` prefix-matches so `/films/by-rating`, `/books/2` etc. resolve; `sectionNavItems(group)` returns the children **excluding** the hub, so there's no self-link): **Stream** (Posts, Photos, Check-ins, Books, Films, Music, Blogroll) and **About** (Work, Uses, Colophon, Travelblog, Follow, Contact). Each child has the same three states as the top nav: **bold, not a link** on its own landing page; **bold link** on a descendant (e.g. `/travelblog/2001-08`, `/photos/2`), so you can return to the child's hub; plain link otherwise. Renders nothing off-group (e.g. articles, weeknotes, home).
+- `SectionNav.astro` — right-aligned section sub-nav (text only, no icons), shown on member pages via `SectionHeading`. Two groups in `src/lib/nav.ts` (`sectionGroupFor(path)` prefix-matches so `/films/by-rating`, `/books/2` etc. resolve; `sectionNavItems(group)` returns the children **excluding** the hub, so there's no self-link): **Stream** (Posts, Photos, Check-ins, Books, Films, Music, Blogroll) and **About** (Work, Colophon, Travelblog, Follow, Contact). Each child has the same three states as the top nav: **bold, not a link** on its own landing page; **bold link** on a descendant (e.g. `/travelblog/2001-08`, `/photos/2`), so you can return to the child's hub; plain link otherwise. Renders nothing off-group (e.g. articles, weeknotes, home).
 - `SectionIcon.astro` — maps a Stream section slug to its service icon (Posts→Bluesky, Photos→Grain, Check-ins→CheckIn, Books→BookHive, Films→Popfeed, Music→Rocksky, Blogroll→StandardSite); used only by the homepage Stream directory (the sub-nav is text-only).
 - `Feed.astro` — shared feed layout used by all list/paginated pages. Renders the `h-feed` wrapper, hidden `h-card p-author` MF2 author block, heading (with `(Page N)` suffix), optional named `description` slot, default slot for item content, and `<Pagination>` (suppressed via `paginate={false}` for books page 1). Props: `title`, `currentPage?`, `totalPages`, `basePath`, `paginate?`, `showDescription?` (set false on pages 2+ to hide the intro slot, since slots can't be conditionally passed).
 - `FilmFeed.astro` — extends `Feed.astro` for `/films` and `/films/by-rating`: adds date/rating sort toggle and renders `FilmCard` in a responsive grid (`grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4`)
 - `Post.astro` — individual article/weeknote with prose styles; "Posted in [Section] on [relative date]" (or "Posted on [relative date]") footer, followed by `Syndication` links when the post has `syndication` frontmatter. Optional `navAside` prop (set by weeknotes) moves the named `nav` slot into a right-hand column at `lg` and above; below that the columns collapse and the slot stacks under the body in source order. The columns align on `items-baseline` so the smaller aside text shares a baseline with the body's first line
 - `Syndication.astro` — renders a post's `syndication` frontmatter URLs as icon + label links (`u-syndication`, `rel="syndication"`), prefixed with "and also on", after the timestamp in `Post.astro`. `serviceFor(url)` maps a URL's host to a known service (Bluesky, Mastodon, X/Twitter, Medium, LinkedIn, IndieNews) and its icon; an unrecognised host falls back to a bare hostname label with no icon
 - `Divider.astro` — `⁂` separator; `my-8 text-xl`
-- `SiteFooter.astro` — `Divider`, an inline search form that submits to `/search`, and a copyright/licence line (CC BY-SA 4.0) with a link to the GitHub source repo; rendered on every page. The old footer nav (back-to-top, About, Colophon, Blogroll, Follow, Contact) was dropped when navigation moved into `SiteHeader` + `SectionNav`
+- `SiteFooter.astro` — `Divider`, an inline search form that submits to `/search`, and a copyright/licence line (CC BY 4.0) with a link to the GitHub source repo; rendered on every page. The old footer nav (back-to-top, About, Colophon, Blogroll, Follow, Contact) was dropped when navigation moved into `SiteHeader` + `SectionNav`
 Icon components in `src/components/icons/`:
 - `ArticleIcon.astro`, `WeeknoteIcon.astro`, `CheckInIcon.astro` — document-text, calendar and map-pin glyphs (Heroicons 16/solid) used as `/stream` timeline node icons and, for check-ins, in `SectionIcon`; the content types with no service logo of their own
 - `BlueskyIcon.astro` — monochrome Bluesky butterfly SVG, `currentColor`, `-translate-y-px` to align with text baseline
@@ -215,6 +226,10 @@ Applied as static classes directly in Astro templates. No runtime JS required.
 
 - **Feed pages**: `h-feed` + `p-name` + hidden `h-card p-author` containing `u-photo`, `p-name`, `u-url`
 - **All cards**: `h-entry` with `dt-published`, `u-url`
+- **Article/weeknote pages** (`Post.astro`): `h-entry` with a hidden `u-url` anchor carrying the
+  canonical URL. That anchor is deliberately **empty** — `u-url` reads the `href`, and it sits
+  inside `data-pagefind-body`, so any text would be indexed and show up in the search excerpt of
+  every post. Its href goes through `cleanPathname()` so it matches `rel=canonical` exactly
 - **Stream page** (`/stream`): a vertical-line timeline grouped into Europe/London calendar days (continuous line via an absolutely-positioned rule). Day headings show a **day-granular relative date** (`formatDateRelativeDays` — "Today"/"Yesterday"/"N days ago", never hours; absolute short date beyond the 14-day cutoff), capitalised; grouping stays keyed on the absolute calendar day so the relative label can't split a day. Each item is an `h-entry` (`<li>`) whose node on the line is a circular badge holding the type's icon (`ring` matched to the page background so it masks the line); the text label is replaced by that icon. An optional non-link `titlePrefix` renders before the `u-url` link — the weeknote emoji (kept out of `p-name`) and `"Replied: "` on reply posts. MF2: hidden `p-author` `AuthorCard`, `u-url` on the canonical link, `dt-published` (visible clock time for timestamped items, `sr-only` for all-day), and a `p-name` (titled items) or `p-summary` (posts) lead plus an optional detail line — `p-rating` stars via `StarRating` for items carrying a `rating`, otherwise the plain-text `p-summary`. Type→icon: article→`ArticleIcon`, weeknote→`WeeknoteIcon`, post→`BlueskyIcon`, checkin→`CheckInIcon`, film→`PopfeedIcon`, book→`BookHiveIcon`, photo→`GrainIcon`, subscription→`StandardSiteIcon`
 - **ArticleCard**: `p-name`, `p-summary`; tags as `p-category`
 - **BlueskyCard**: `e-content` for rich text, `u-in-reply-to` on reply link, `u-photo` on embedded images
@@ -267,6 +282,28 @@ All icon files in `public/` are derived from `public/barryfrost.jpg` (192×192 p
 
 `BaseHead.astro` normalises `Astro.url.pathname` before building canonical/og:url: `/index.html` → `/`, strips `.html` suffix on other paths (required because `build.format: 'file'`).
 
+`cleanPathname()` (`src/lib/url.ts`) is that normaliser, and **anything emitting a post's own
+absolute URL must go through it** — not just the `<head>`. `Post.astro`'s MF2 `u-url` is the
+other caller: it previously built its href from the raw `Astro.url.pathname`, so every article
+and weeknote advertised a `.html` URL to microformats consumers while `rel=canonical` said
+otherwise, and XRay duly reported the `.html` form as the post's identity. Since webmention.io,
+Bridgy and IndieNews all key off `u-url`, the two must agree.
+
+## Response headers
+
+`public/_headers` is served by Cloudflare Workers static assets (`astro preview` ignores it —
+use the "Workers Preview" entry in `.claude/launch.json`, which runs `wrangler dev`, to see it
+applied). It sets `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, HSTS, a
+long immutable `Cache-Control` for `/_astro/*`, and a Content-Security-Policy.
+
+The CSP is `default-src 'none'` with four deliberate loosenings, each documented in the file
+itself: `'unsafe-inline'` for scripts (`/search` and `/check-ins` ship inline scripts, and
+hashes can't be regenerated into a static file per build), `'wasm-unsafe-eval'` (Pagefind's
+index is WebAssembly), `'unsafe-inline'` for styles (Astro inlines critical CSS; Leaflet sets
+inline style attributes at runtime), and a broad `img-src https:` — `image-store.ts` falls back
+to the direct source URL whenever R2 materialisation fails, and that origin may be any PDS,
+AppView or CDN, so an allowlist would break images unpredictably.
+
 ## Deployment
 
 **Cloudflare Workers Static Assets + Workers Builds**
@@ -300,7 +337,7 @@ A Cloudflare Worker that detects PDS changes by polling every 60 seconds, driven
 
 **Hourly fallback rebuild.** A second `0 * * * *` cron POSTs the deploy hook unconditionally, direct from the top-level `scheduled()` handler (bypassing the DO). This is belt-and-braces for a build that failed for a reason the deploy hook can't see (e.g. the PDS unreachable at build time) — the full-map diff above means there's no longer a detection blind spot for it to paper over. Distinguished from the minute poll via `event.cron`.
 
-**Load.** Most minutes: one `getLatestCommit` call (~1.4k/day). On the minutes the rev has moved, a full paginated scan of the nine watched collections — the two largest (`app.bsky.feed.post`, `com.barryfrost.checkin`) are ~1,300–1,400 records each, so a scan is ~30 `listRecords` calls total. Rev-changing writes are infrequent for a personal site, and even a scan every few minutes stays well under `bsky.social`'s per-IP limit of 3,000 requests per 5 minutes.
+**Load.** Most minutes: one `getLatestCommit` call (~1.4k/day). On the minutes the rev has moved, a full paginated scan of the eight watched collections — the two largest (`app.bsky.feed.post`, `com.barryfrost.checkin`) are ~1,300–1,400 records each, so a scan is ~30 `listRecords` calls total. Rev-changing writes are infrequent for a personal site, and even a scan every few minutes stays well under `bsky.social`'s per-IP limit of 3,000 requests per 5 minutes.
 
 Watched collections (`WATCHED_COLLECTIONS`): `app.bsky.feed.post`, `com.barryfrost.checkin`, `social.popfeed.feed.review`, `buzz.bookhive.book`, `site.standard.graph.subscription`, `social.grain.gallery`, `social.grain.gallery.item`, `social.grain.photo`. `site.standard.document` is deliberately **not** watched — the build writes those records itself (`scripts/publish-standard-site.ts`), so watching them would loop.
 
@@ -420,7 +457,11 @@ Both CLIs accept `--no-git` (or `CI=true`) to skip git/gh operations — used by
 - Week numbers are sequential integers starting at 1 (not ISO weeks)
 - Filename: `{N}.md` — e.g. `244.md`; URL is `/weeknotes/week-{N}` (no title slug; the `week-` prefix keeps numeric IDs distinct from `/{type}/{n}` pagination URLs)
 - Required frontmatter: `title`, `date`, `week` (unquoted integer). `emoji` optional but conventional
-- Title format: `"Week {N} - {Topic}"` (hyphen with surrounding spaces)
+- Title format: `"Week {N} - {Topic}"` (hyphen with surrounding spaces), always quoted. Weeks
+  1–46 originally used a colon (`"Week 25: Hibernation"`); all 257 now follow the hyphen form
+- Bodies are a mix of CRLF and LF line endings. Anything rewriting these files in bulk must
+  preserve them byte-for-byte (in Python, open with `newline=""`) or it will produce a diff
+  touching every line of 227 files instead of the lines it meant to change
 
 ## Adding a New PDS Content Type
 
@@ -444,6 +485,7 @@ Both CLIs accept `--no-git` (or `CI=true`) to skip git/gh operations — used by
 | `scripts/assign-standard-rkeys.ts` | One-time: write `standardRkey` TIDs into article/weeknote frontmatter (`npm run standard:rkeys`) |
 | `scripts/publish-standard-site.ts` | Upsert `site.standard.document` records + Bluesky card posts (`npm run publish:standard`) |
 | `scripts/publish-lexicon.ts` | Upsert the canonical `com.barryfrost.checkin` lexicon doc to the PDS (`npm run publish:lexicon`) |
+| `scripts/normalise-weeknote-titles.py` | One-time: rewrite `Week {N}: {Topic}` frontmatter titles to the `Week {N} - {Topic}` convention (weeks 1–46). Dry-run by default, `--apply` to write |
 
 ## Standard.site Publishing
 
