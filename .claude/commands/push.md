@@ -11,8 +11,6 @@ Review all uncommitted changes in the working tree, then:
    ```
    git commit -m "$(cat <<'EOF'
    <message>
-
-   Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
    EOF
    )"
    ```
