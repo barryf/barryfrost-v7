@@ -304,6 +304,12 @@ inline style attributes at runtime), and a broad `img-src https:` — `image-sto
 to the direct source URL whenever R2 materialisation fails, and that origin may be any PDS,
 AppView or CDN, so an allowlist would break images unpredictably.
 
+The allowlisted hosts are all analytics: `cloud.umami.is` / `gateway.umami.is`, plus
+`static.cloudflareinsights.com` and `cloudflareinsights.com` for Cloudflare Web Analytics.
+That last pair is easy to miss when reasoning about the policy, because nothing in this repo
+requests it — Cloudflare injects the beacon into the response at the edge, so the CSP has to
+admit a script the markup never mentions.
+
 ## Deployment
 
 **Cloudflare Workers Static Assets + Workers Builds**
@@ -420,7 +426,8 @@ no network or R2 calls.
 ## Key Conventions
 
 - **Minimal JS** — two pages ship script of their own: `/check-ins` bundles Leaflet + Leaflet.markercluster via npm for the cluster map with fullscreen toggle (tiles from CARTO basemaps over OpenStreetMap data, light/dark variant chosen from `prefers-color-scheme`), and `/search` lazy-loads the Pagefind bundle. Every other page is JS-free apart from the sitewide analytics tag below
-- **Umami analytics** — `BaseHead.astro` emits a `defer`red `cloud.umami.is/script.js` tag on every page, gated on `!import.meta.env.DEV` so it never loads in dev. The only third-party runtime request the site makes
+- **Umami analytics** — `BaseHead.astro` emits a `defer`red `cloud.umami.is/script.js` tag on every page, gated on `!import.meta.env.DEV` so it never loads in dev; events go to `gateway.umami.is`. The only third-party script the site's *own* markup requests
+- **Two further third-party requests the markup doesn't ask for** — Cloudflare Web Analytics is injected at the edge (a beacon from `static.cloudflareinsights.com` reporting to `cloudflareinsights.com/cdn-cgi/rum`), and `/blogroll` hot-links `www.google.com/s2/favicons` for any blog whose favicon failed to materialise into R2. Both must be allowed in the CSP; disabling Web Analytics in the Cloudflare dashboard would remove the first
 - **No runtime JS elsewhere** — MF2, dark mode, and layout are pure HTML/CSS
 - **Local Markdown is canonical** — PDS documents are syndication targets, not source of truth
 - **Images pre-generated at build time** — fetched from source (PDS `getBlob` / remote URL), resized with `sharp`, stored as webp in R2 (`images.barryfrost.com`); served statically with no runtime resizing. Dev/error fallback uses direct source URLs.

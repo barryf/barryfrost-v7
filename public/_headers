@@ -11,12 +11,19 @@
 #     AppView or CDN host, so an origin allowlist would break images unpredictably.
 #     Blogroll favicons hot-link www.google.com for the same reason.
 # Everything else defaults to 'none'.
+#
+# Third-party origins, all of them analytics: cloud.umami.is serves the Umami tag and
+# gateway.umami.is receives its events. Cloudflare Web Analytics is injected into the
+# response by the edge rather than by our own markup — it loads a beacon from
+# static.cloudflareinsights.com which POSTs to https://cloudflareinsights.com/cdn-cgi/rum,
+# so both hosts have to be allowed or the injected script is blocked on every page.
+# Turning Web Analytics off in the Cloudflare dashboard would remove the need for both.
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
   Strict-Transport-Security: max-age=31536000; includeSubDomains
-  Content-Security-Policy: default-src 'none'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://cloud.umami.is; style-src 'self' 'unsafe-inline'; img-src 'self' https: data:; font-src 'self'; connect-src 'self' https://cloud.umami.is https://gateway.umami.is; worker-src 'self'; manifest-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+  Content-Security-Policy: default-src 'none'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://cloud.umami.is https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' https: data:; font-src 'self'; connect-src 'self' https://cloud.umami.is https://gateway.umami.is https://cloudflareinsights.com; worker-src 'self'; manifest-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
 
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
