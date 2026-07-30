@@ -57,7 +57,7 @@ Each PDS loader implements `Loader` from `astro/loaders`:
 The homepage (`src/pages/index.astro`) is a curated view, not a unified feed. Sections rendered in order:
 
 1. **Intro** — short bio (h-card with name/location lives in the sitewide `SiteHeader`) plus a line on how the site is built (atproto/PDS)
-2. **Latest Weeknote** — title + emoji, truncated excerpt, link to all weeknotes
+2. **Latest Weeknote** — emoji + title, truncated excerpt, link to all weeknotes. As on `/stream` and `/weeknotes`, the emoji sits outside the link and outside `p-name` — only the title is linked
 3. **Recent Photos** — 8 most recent photo galleries in a scrollable flex row
 4. **Featured Articles** — articles with `featured: true` frontmatter, sorted by date
 5. **Latest Post** — most recent non-reply Bluesky post, rendered with the shared `BlueskyCard` (so images, quotes, and external embeds appear as on `/posts`); passed `indexable={false}` to keep the post out of the Pagefind index, since it is already indexed on `/posts`

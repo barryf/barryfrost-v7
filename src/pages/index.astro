@@ -83,8 +83,7 @@ const streamSections = STREAM_SECTIONS.filter(s => s.slug);
       <div class="h-entry">
         <AuthorCard />
         <h3>
-          <a href={weeknoteUrl(latestWeeknote.id)} class="p-name u-url underline">
-            {latestWeeknote.data.emoji && `${latestWeeknote.data.emoji} `}{latestWeeknote.data.title}</a>
+          {latestWeeknote.data.emoji && <span>{latestWeeknote.data.emoji} </span>}<a href={weeknoteUrl(latestWeeknote.id)} class="p-name u-url underline">{latestWeeknote.data.title}</a>
         </h3>
         <p class="e-content">
           {latestWeeknote.body && (
