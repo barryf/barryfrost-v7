@@ -12,6 +12,13 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "preview"],
       "port": 4321
+    },
+    {
+      "// ": "Serves dist through the Worker runtime, so public/_headers (CSP, caching) actually applies — `astro preview` ignores it.",
+      "name": "Workers Preview",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["wrangler", "dev", "--port", "8787"],
+      "port": 8787
     }
   ]
 }
