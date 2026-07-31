@@ -1,18 +1,38 @@
 ---
 import Divider from '@/components/Divider.astro';
+import { cleanPathname } from '@/lib/url';
+import { isCurrentPage } from '@/lib/nav';
+
+const links = [
+  { href: '/colophon', label: 'Colophon' },
+  { href: '/blogroll', label: 'Blogroll' },
+  { href: '/follow', label: 'Follow' },
+  { href: '/contact', label: 'Contact' },
+]
+
+const path = cleanPathname(Astro.url.pathname);
 ---
 <Divider />
 <footer>
-  <form action="/search" method="get" class="mb-4">
-    <input
-      type="search"
-      name="q"
-      placeholder="Search…"
-      aria-label="Search"
-      autocomplete="off"
-      class="w-40 text-sm rounded border border-gray-400 dark:border-gray-600 bg-white dark:bg-black text-gray-900 dark:text-gray-100 placeholder-gray-600 dark:placeholder-gray-400 px-2 py-0.5 focus:outline-none focus:ring-1 focus:ring-gray-400 dark:focus:ring-gray-600"
-    />
-  </form>
+  <div class="mb-4 text-sm flex gap-x-3 gap-y-2 flex-wrap items-center">
+    <form action="/search" method="get">
+      <input
+        type="search"
+        name="q"
+        placeholder="Search…"
+        aria-label="Search"
+        autocomplete="off"
+        class="w-40 text-sm rounded border border-gray-400 dark:border-gray-600 bg-white dark:bg-black text-gray-900 dark:text-gray-100 placeholder-gray-600 dark:placeholder-gray-400 px-2 py-0.5 focus:outline-none focus:ring-1 focus:ring-gray-400 dark:focus:ring-gray-600"
+      />
+    </form>
+    {links.map(link => (
+      isCurrentPage(path, link.href) ? (
+        <span class="font-semibold text-nowrap">{link.label}</span>
+      ) : (
+        <a href={link.href} class="underline text-nowrap">{link.label}</a>
+      )
+    ))}
+  </div>
   <p class="text-xs">
     Words and original images &copy; by
     <a href="https://barryfrost.com/" class="underline text-nowrap">Barry Frost</a>

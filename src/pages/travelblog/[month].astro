@@ -4,7 +4,6 @@ import Base from '@/layouts/Base.astro';
 import { countryFlag, countryName } from '@/lib/flags';
 import { formatMonthKey } from '@/lib/dates';
 import Divider from '@/components/Divider.astro';
-import SectionNav from '@/components/SectionNav.astro';
 
 export async function getStaticPaths() {
   const months = [...(await getCollection('travelblog'))].sort((a, b) =>
@@ -22,10 +21,12 @@ const month = formatMonthKey(entry.id);
 const { countries = [], intro } = entry.data;
 ---
 <Base title={`Travelblog: ${month}`} description={intro}>
-  <SectionNav />
   <article class="h-entry" data-pagefind-body>
     <header class="mb-12">
-      <h1 class="mt-8 p-name font-semibold text-black dark:text-white">{month}</h1>
+      <h1 class="mt-8">
+        <a href="/travelblog" class="underline">Travelblog</a> -
+        <span class="p-name font-semibold text-black dark:text-white">{month}</span>
+      </h1>
       {countries.length ? (
         <p class="mt-4 flex flex-wrap gap-x-3 gap-y-1 text-sm text-gray-500 dark:text-gray-400">
           {countries.map((code) => (

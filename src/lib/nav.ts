@@ -1,20 +1,13 @@
-import { cleanPathname } from '@/lib/url';
 import { SECTIONS } from '@/lib/sections';
 
 /**
- * Section sub-navs. Two groups of pages each get a right-aligned sub-nav shown on every
- * member page, so the sections cut from the global header stay one-click reachable.
- *
- * - `stream` — the activity/trace sections (icons, reusing content-type logos)
- * - `about` — the me-pages (text only, no service logos)
- *
- * The first entry of each group is the parent hub itself, bolded when active.
- * `slug` (Stream children only) keys the shared `SectionIcon` component.
+ * The trace sections, listed as a directory on the homepage.
+ * `slug` keys the shared `SectionIcon` component.
  */
 export interface NavItem {
   href: string;
   label: string;
-  /** Icon key for SectionIcon; Stream children only. */
+  /** Icon key for SectionIcon. */
   slug?: string;
   /** One-line description for the homepage directory. */
   description?: string;
@@ -31,48 +24,11 @@ export const STREAM_SECTIONS: NavItem[] = [
   { href: '/blogroll', label: 'Blogroll', slug: 'blogroll', description: 'The blogs and publications I read and subscribe to.' },
 ];
 
-export const ABOUT_SECTIONS: NavItem[] = [
-  { href: '/about', label: 'About' },
-  { href: '/work', label: 'Work' },
-  { href: '/colophon', label: 'Colophon' },
-  { href: '/travelblog', label: 'Travelblog' },
-  { href: '/follow', label: 'Follow' },
-  { href: '/contact', label: 'Contact' },
-];
-
-export type SectionGroup = 'stream' | 'about';
-
-const GROUPS: Record<SectionGroup, NavItem[]> = {
-  stream: STREAM_SECTIONS,
-  about: ABOUT_SECTIONS,
-};
-
-/** The hub landing page for each group — the first entry, and the top-nav link. */
-export const SECTION_HUB: Record<SectionGroup, string> = {
-  stream: '/stream',
-  about: '/about',
-};
-
-/** Sub-nav items for a group: the children, excluding the hub itself. */
-export function sectionNavItems(group: SectionGroup): NavItem[] {
-  return GROUPS[group].filter(item => item.href !== SECTION_HUB[group]);
-}
-
-/** Match by base-path prefix so children like /books/2 and /films/by-rating still resolve. */
-function inGroup(path: string, items: NavItem[]): boolean {
-  return items.some(({ href }) => path === href || path.startsWith(`${href}/`));
-}
-
-/** Which sub-nav (if any) a page belongs to. Pass a cleaned pathname. */
-export function sectionGroupFor(pathname: string): SectionGroup | null {
-  const path = cleanPathname(pathname);
-  for (const group of Object.keys(GROUPS) as SectionGroup[]) {
-    if (inGroup(path, GROUPS[group])) return group;
-  }
-  return null;
-}
-
-/** Is `href` the active section for the current `path` (base-path prefix match)? */
-export function isActiveSection(path: string, href: string): boolean {
-  return path === href || path.startsWith(`${href}/`);
+/**
+ * Is `href` the page we're on? Exact match only — no section membership — except that
+ * a paginated listing (`/books/2`) counts as its own first page.
+ */
+export function isCurrentPage(path: string, href: string): boolean {
+  if (path === href) return true;
+  return path.startsWith(`${href}/`) && /^\d+$/.test(path.slice(href.length + 1));
 }

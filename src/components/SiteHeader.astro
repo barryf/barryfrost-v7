@@ -1,66 +1,70 @@
 ---
 import { cleanPathname } from '@/lib/url';
-import { sectionGroupFor, SECTION_HUB } from '@/lib/nav';
+import { isCurrentPage } from '@/lib/nav';
 
-const links = [
+const links1 = [
   { href: '/about', label: 'About' },
-  { href: '/stream', label: 'Stream' },
   { href: '/articles', label: 'Articles' },
   { href: '/weeknotes', label: 'Weeknotes' },
 ];
 
+const links2 = [
+  { href: '/stream', label: 'Stream' },
+  { href: '/posts', label: 'Posts' },
+  { href: '/photos', label: 'Photos' },
+  { href: '/check-ins', label: 'Check-ins' },
+  { href: '/books', label: 'Books' },
+  { href: '/films', label: 'Films' },
+  { href: '/music', label: 'Music' },
+  { href: '/work', label: 'Work' },
+];
+
 const path = cleanPathname(Astro.url.pathname);
 const home = path === '/';
-const group = sectionGroupFor(path);
-
-// A top-nav item is "in section" on its landing page, on a descendant, or — for the
-// About/Stream hubs — anywhere in that group. Bold throughout the section; still a
-// link unless you're on the landing page itself, so you can return to it.
-function navState(href: string) {
-  const exact = path === href;
-  const inSection = exact
-    || path.startsWith(`${href}/`)
-    || (href === SECTION_HUB.stream && group === 'stream')
-    || (href === SECTION_HUB.about && group === 'about');
-  return { exact, inSection };
-}
 ---
 
-<div class="flex gap-x-3 mb-4">
-  <div class="h-card text-nowrap">
-    {home && (
-      <h1>
-        <a class="u-url hidden" href="https://barryfrost.com" rel="me"></a>
-        <span class="p-name font-semibold text-black dark:text-white">Barry Frost</span>
-      </h1>
-    ) || (
-      <p>
-        <a href="/" class="u-url underline" rel="me">
-          <span class="p-name">Barry Frost</span>
-        </a>
-      </p>
-    )}
-    <img src="/barryfrost.jpg" class="u-photo hidden" alt="Photo of Barry Frost" />
-    <span class="p-locality hidden">Hertfordshire</span>
-    <span class="p-country-name hidden">UK</span>
-  </div>
-  <div>⁂</div>
-  <nav>
-    <ul class="flex flex-wrap gap-x-3">
-      {links.map(link => {
-        const { exact, inSection } = navState(link.href);
-        return (
-          <li>
-            {inSection && exact ? (
-              <span class="font-semibold text-nowrap">{link.label}</span>
-            ) : inSection ? (
-              <a href={link.href} class="font-semibold underline text-nowrap">{link.label}</a>
-            ) : (
-              <a href={link.href} class="underline text-nowrap">{link.label}</a>
-            )}
-          </li>
-        );
-      })}
-    </ul>
-  </nav>
-</div>
+<nav>
+  <ul class="mb-2 flex gap-x-3 gap-y-2 text-sm">
+    <li class="h-card text-nowrap">
+      {home && (
+        <h1>
+          <a class="u-url hidden" href="https://barryfrost.com" rel="me"></a>
+          <span class="p-name font-semibold text-black dark:text-white">Barry Frost</span>
+        </h1>
+      ) || (
+        <p>
+          <a href="/" class="u-url underline" rel="me">
+            <span class="p-name">Barry Frost</span>
+          </a>
+        </p>
+      )}
+      <img src="/barryfrost.jpg" class="u-photo hidden" alt="Photo of Barry Frost" />
+      <span class="p-locality hidden">Hertfordshire</span>
+      <span class="p-country-name hidden">UK</span>
+    </li>
+    <li>⁂</li>
+    {links1.map(link => (
+      <li>
+        {isCurrentPage(path, link.href) ? (
+          <span class="font-semibold text-nowrap">{link.label}</span>
+        ) : (
+          <a href={link.href} class="underline text-nowrap">{link.label}</a>
+        )}
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<nav>
+  <ul class="mb-4 flex flex-wrap gap-x-3 gap-y-2 text-sm">
+    {links2.map(link => (
+      <li>
+        {isCurrentPage(path, link.href) ? (
+          <span class="font-semibold text-nowrap">{link.label}</span>
+        ) : (
+          <a href={link.href} class="underline text-nowrap">{link.label}</a>
+        )}
+      </li>
+    ))}
+  </ul>
+</nav>

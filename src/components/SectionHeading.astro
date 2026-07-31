@@ -1,6 +1,4 @@
 ---
-import SectionNav from '@/components/SectionNav.astro';
-
 interface Props {
   title?: string;
   class?: string;
@@ -9,6 +7,5 @@ interface Props {
 const { title, class: className } = Astro.props;
 ---
 <div class:list={[className, '']}>
-  <SectionNav />
   <h1 class="mt-8 font-semibold text-black dark:text-white">{title}<slot /></h1>
 </div>
