@@ -495,7 +495,7 @@ Both CLIs accept `--no-git` (or `CI=true`) to skip git/gh operations — used by
 | `scripts/export-notes-csv.ts` | Export all v6 `post-type: note` records to CSV for review before Bluesky import |
 | `scripts/import-notes-bsky.ts` | Import approved notes from CSV to PDS as `app.bsky.feed.post` records |
 | `scripts/delete-imported-notes-bsky.ts` | Delete all records previously imported by `import-notes-bsky.ts` |
-| `scripts/create-standard-publications.ts` | One-time: create the two `site.standard.publication` records (`npm run standard:pubs`) |
+| `scripts/create-standard-publications.ts` | Upsert the two `site.standard.publication` records — name, description, theme, icon (`npm run standard:pubs`) |
 | `scripts/assign-standard-rkeys.ts` | One-time: write `standardRkey` TIDs into article/weeknote frontmatter (`npm run standard:rkeys`) |
 | `scripts/publish-standard-site.ts` | Upsert `site.standard.document` records + Bluesky card posts (`npm run publish:standard`) |
 | `scripts/publish-lexicon.ts` | Upsert the canonical `com.barryfrost.checkin` lexicon doc to the PDS (`npm run publish:lexicon`) |
@@ -515,12 +515,25 @@ targets.
   generated). Weeknote titles are prefixed with the emoji.
 - **Config**: `src/lib/standard-site.ts` holds the DID + publication AT-URIs (single source
   of truth). The `/.well-known/site.standard.publication/{articles,weeknotes}` endpoints and
-  the per-page `<link rel="site.standard.document">` verification tags derive from it.
+  the per-page verification `<link>` tags derive from it.
+- **Verification tags**: document pages carry both `<link rel="site.standard.document">` and
+  `<link rel="site.standard.publication">`; the publication root pages (`/articles`,
+  `/weeknotes`) carry the publication tag alone. Bluesky requires the tag on publication home
+  pages too — without it, it renders no enhanced link card for *any* post in that publication.
+  `/articles/{n}` deliberately omits it, since only page 1 is the publication root.
+- **Publication icon**: both publications share the site's existing 512x512 PWA icon
+  (`public/icon-512.png`), uploaded once per run as the `icon` blob. Without it Bluesky has no
+  avatar for the link card and falls back to the theme colours and the publication's initial.
 - **Identity/idempotency**: each post carries a stable TID `standardRkey` in frontmatter;
   the publisher is `putRecord`-idempotent and treats the existing record's `bskyPostRef` as
   the "already posted to Bluesky" guard, so re-runs never double-post.
 - **Bluesky**: first publish of a doc creates a companion post with a rich link card back to
-  the page; its strong-ref is stored in `bskyPostRef`.
+  the page; its strong-ref is stored in `bskyPostRef`. The post's `app.bsky.embed.external`
+  carries `associatedRefs` (document + publication strong refs) so Bluesky builds the card
+  straight from the records instead of crawling the page. Those are strong refs, so a new post
+  writes the document record **twice** — once to mint the ref, once to store `bskyPostRef`.
+  The ref going stale on that second write is expected: Bluesky snapshots records at index
+  time, so an already-embedded card never reflects later edits (their "puppy problem").
 - **Cover image**: mirrors the web's OG rule (a post's first body image, or none) — the
   publisher fetches the post's own live page and lifts its rendered `og:image` (rather than
   re-parsing Markdown, which can't resolve MDX `<Image>`/content-hashed asset URLs the way
@@ -538,6 +551,9 @@ resolves once v7 serves that domain — so do **not** start this on staging.
 
 1. `npm run standard:pubs` — creates the two publication records. Paste the printed AT-URIs
    into `PUBLICATIONS.articles.uri` / `PUBLICATIONS.weeknotes.uri` in `src/lib/standard-site.ts`.
+   Once those URIs are set the script updates the records in place under their original rkeys
+   (so `.well-known` values stay correct), making it the source of truth for publication name,
+   description, theme and icon — re-run it after editing any of those.
 2. `npm run standard:rkeys` — writes `standardRkey`s into all publishable (non-`unlisted`)
    article/weeknote frontmatter. Review `git diff` and commit.
 3. Deploy, so `barryfrost.com` serves the `.well-known` files and per-page `<link>` tags.
