@@ -13,10 +13,9 @@ import {
   DID,
   DOCUMENT_COLLECTION,
   documentUri,
-  STAGING_ORIGIN,
 } from '../../src/lib/standard-site.js';
 
-export { PUBLICATIONS, DID, DOCUMENT_COLLECTION, documentUri, STAGING_ORIGIN };
+export { PUBLICATIONS, DID, DOCUMENT_COLLECTION, documentUri };
 
 export const DESCRIPTION_MAX_CHARS = 280;
 export const BSKY_MAX_GRAPHEMES = 300;
@@ -400,10 +399,6 @@ export async function resolveBskyPostRef(session: Session, url: string): Promise
 // `wrangler deploy` (see scripts/release.ts), so the simplest correct source is the already-
 // rendered live page's own <meta property="og:image">.
 
-export function stagingUrl(entry: Entry): string {
-  return `${STAGING_ORIGIN}/${entry.collection}/${entry.slug}`;
-}
-
 /** Downscale/recompress to fit under the 1MB blob limit, mirroring
  *  scripts/import-grain-photos.ts's encodePhoto ladder. Returns null if it never fits. */
 export async function encodeCoverUnder1MB(srcBytes: Buffer): Promise<Buffer | null> {
@@ -435,7 +430,7 @@ export function extractOgImage(html: string): string | undefined {
 /** Read-only peek at a post's live page for its og:image URL (absolute), or undefined if the
  *  page isn't up yet or the post has no body image. Safe to call in --dry-run: no writes. */
 export async function fetchOgImageUrl(entry: Entry): Promise<string | undefined> {
-  const pageUrl = stagingUrl(entry);
+  const pageUrl = canonicalUrl(entry);
   try {
     const pageRes = await fetch(pageUrl);
     if (!pageRes.ok) {
