@@ -79,7 +79,7 @@ The website source code is [available on GitHub](https://github.com/barryf/barry
 
 All content and original images are licensed under [Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/).
 
-<div class="py-4 italic">Last updated: <time datetime="2026-08-04">4 August 2026</time>.</div>
+<div class="py-4 italic">Last updated: <time datetime="2026-08-03">3 August 2026</time>.</div>
 
 [^1]: I'm using Bluesky's shared PDS today, but my [DID](https://atproto.com/specs/did) and data are fully portable.
 [^2]: With two small exceptions: [Blogroll](/blogroll) favicons fall back to *google.com/s2/favicons* when a subscription has no avatar, and the [check-ins](/check-ins) map pulls tile images from [CARTO](https://carto.com).
