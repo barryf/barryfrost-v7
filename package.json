@@ -27,7 +27,6 @@
     "aws4fetch": "^1.0.20",
     "leaflet": "^1.9.4",
     "leaflet.markercluster": "^1.5.3",
-    "sharp": "^0.34.5",
     "tailwindcss": "^4.2.4",
     "vite": "^8.0.0"
   },
