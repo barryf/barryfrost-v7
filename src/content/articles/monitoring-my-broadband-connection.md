@@ -1,6 +1,7 @@
 ---
 title: "Monitoring my broadband connection"
 date: 2013-11-09
+standardRkey: 3beqgr3dk2222
 ---
 
 My home internet connection quality seems to yoyo from day to day. Our area is yet to receive so-called "superfast" broadband and I'm stuck with somewhere between 0.5-2Mbit/s depending on contention. Frustrating.

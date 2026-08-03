@@ -28,11 +28,11 @@ export interface PublicationConfig {
 export const PUBLICATIONS: Record<'articles' | 'weeknotes', PublicationConfig> = {
   articles: {
     url: `${SITE_ORIGIN}/articles`,
-    uri: '',
+    uri: 'at://did:plc:j5ksi3y4tdtbp7vpsxsfyask/site.standard.publication/3ms6nt2pxna2e',
   },
   weeknotes: {
     url: `${SITE_ORIGIN}/weeknotes`,
-    uri: '',
+    uri: 'at://did:plc:j5ksi3y4tdtbp7vpsxsfyask/site.standard.publication/3ms6nt2xzap2v',
   },
 };
 

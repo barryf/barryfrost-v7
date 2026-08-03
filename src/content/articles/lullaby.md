@@ -9,6 +9,7 @@ tags:
 syndication:
   - https://twitter.com/barryf/status/946706289018785793
   - https://medium.com/@barryf/making-a-looping-lullaby-box-311673d1d692
+standardRkey: 3f3hxc6ss2222
 ---
 
 My wife and I are expecting our second baby in the new year. Our first, now a toddler, loved his [Ewan The Dream Sheep](https://www.sweetdreamers.co.uk/product/ewan-the-dream-sheep/) at night, especially its gentle harp lullaby music, but the short duration (20 minutes) meant we were frequently restarting the music to help him fully drift off.

@@ -8,6 +8,7 @@ tags:
 syndication:
   - https://twitter.com/barryf/status/867477079180414976
   - https://news.indieweb.org/en/barryfrost.com/2017/05/acquiescence
+standardRkey: 3ekbb6kuk2222
 ---
 
 [IndieAuth](https://indieweb.org/IndieAuth) is a method for using your own domain name to sign in to other sites and tools. It's one of the key parts of [Micropub](https://micropub.net), the (newly) [W3C recommended](https://www.w3.org/blog/news/archives/6326) standard for posting to your site. [IndieAuth.com](https://indieauth.com/) is the original and one of the very few public implementations of an IndieAuth server that you can use, but recently I've been having [problems](https://github.com/aaronpk/IndieAuth.com/issues/148) getting it to work with my site's SSL setup.

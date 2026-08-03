@@ -5,6 +5,7 @@ tags:
   - micropublish
   - indieauth
   - indieweb
+standardRkey: 3hqg7dg3k2222
 ---
 
 Yesterday I pushed a new release of [Micropublish](https://micropublish.net) to include recent updates for clients to the [IndieAuth specification](https://indieauth.spec.indieweb.org/), as summarised in [Aaron Parecki](https://aaronparecki.com)'s [IndieAuth 2020 write-up](https://aaronparecki.com/2020/12/03/1/indieauth-2020).

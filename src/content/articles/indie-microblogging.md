@@ -6,6 +6,7 @@ tags:
   - micro.blog
 syndication:
   - https://twitter.com/barryf/status/823970313893511169
+standardRkey: 3eatja3kk2222
 ---
 
 I've just backed [Manton Reece](http://www.manton.org)'s ["Indie Microblogging: owning your short-form writing"](https://www.kickstarter.com/projects/manton/indie-microblogging-owning-your-short-form-writing) Kickstarter project. It's a book and upcoming micro blogging platform ([Micro.blog](http://micro.blog)) that dovetails neatly with my thoughts and work on the [IndieWeb](https://indieweb.org).

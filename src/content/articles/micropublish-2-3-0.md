@@ -3,6 +3,7 @@ title: "Micropublish v2.3.0"
 date: 2020-10-12
 tags:
   - micropublish
+standardRkey: 3hlhrxg2c2222
 ---
 
 I've pushed a biggish update to [Micropublish](https://micropublish.net) to bring it to [v2.3.0](https://github.com/barryf/micropublish/releases/tag/v2.3.0). It includes some of the stable and experimental [Micropub extensions](https://indieweb.org/Micropub-extensions) discussed in the IndieWeb [pop-up session](https://indieweb.org/2020/Pop-ups/Micropub) I joined earlier this year.

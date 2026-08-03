@@ -8,6 +8,7 @@ tags:
   - venntrodev
 syndication:
   - https://medium.com/@barryf/how-we-make-remote-working-work-dc0d4a0282cb
+standardRkey: 3evsvpvms2222
 ---
 
 ![Our remote team](../../assets/remoters.jpg)

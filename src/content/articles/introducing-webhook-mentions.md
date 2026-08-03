@@ -8,6 +8,7 @@ tags:
   - jekyll
 syndication:
   - https://twitter.com/barryf/status/758767801523904513
+standardRkey: 3dsovcelk2222
 ---
 
 Webhook Mentions is a very simple Ruby app I've built that sends [Webmentions](http://webmention.net) to any links in new/updated posts in a [Jekyll](https://jekyllrb.com)-powered [GitHub Pages](https://pages.github.com) site marked up with [Microformats 2 h-entry markup](http://microformats.org/wiki/microformats2#h-entry).

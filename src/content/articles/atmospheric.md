@@ -7,6 +7,7 @@ tags:
   - atproto
   - indieweb
   - personal
+standardRkey: 3ms56w4p22222
 ---
 
 When I post on [Bluesky](https://bsky.app/profile/barryfrost.com), upload photos to [Grain](https://grain.social/profile/barryfrost.com), finish reading a book on [BookHive](https://bookhive.buzz/profile/barryfrost.com), listen to an album with [Rocksky](https://rocksky.app/profile/barryfrost.com) or rate a film on [Popfeed](https://popfeed.social/profile/did:plc:j5ksi3y4tdtbp7vpsxsfyask), within a minute this activity also appears on my website.

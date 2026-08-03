@@ -2,6 +2,7 @@
 title: "The recruitment threesome"
 date: 2011-05-25
 featured: true
+standardRkey: 3763tlfxc2222
 ---
 
 An employer, a candidate and a recruiter. Sometimes recruitment is direct, but often it involves each of the three parties jumping into bed together. Despite early enthusiasm the end result can frequently be disappointing and unsatisfying. It doesn't have to be this way.

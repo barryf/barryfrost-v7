@@ -7,6 +7,7 @@ tags:
   - ios
 syndication:
   - https://mastodon.social/@barryf/111377054725317823
+standardRkey: 3kdn54f7s2222
 ---
 
 Following the recent [trend](https://defaults.rknight.me/) of posting your default apps, here are mine:

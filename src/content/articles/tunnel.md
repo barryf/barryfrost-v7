@@ -9,6 +9,7 @@ tags:
   - dev
 syndication:
   - https://mastodon.social/@barryf/110004888458182990
+standardRkey: 3jqmmbloc2222
 ---
 
 I found this handy tip via @wesbos. You can create a temporary tunnel to localhost on your machine using [Cloudflare](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-guide/local/).

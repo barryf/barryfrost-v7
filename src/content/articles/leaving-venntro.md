@@ -8,6 +8,7 @@ tags:
 syndication:
   - https://twitter.com/barryf/status/981141346068193280
   - https://www.linkedin.com/feed/update/urn:li:activity:6386909799560413184
+standardRkey: 3fcwtlnm22222
 ---
 
 After ten happy, successful and highly educational years, I've decided to leave my role as [Chief Technology Officer](https://www.linkedin.com/in/barryfrost) at [Venntro](https://venntro.com) this month. After so long with the company I felt the need to shake myself out of my comfort zone and look for a fresh challenge.

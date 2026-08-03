@@ -2,6 +2,7 @@
 title: "Witness the fitness"
 date: 2011-06-19
 featured: true
+standardRkey: 37a2pagi22222
 ---
 
 I'm 32, unfit and getting a bit tubby. I drive to work, sit at a computer for most of the day and eat/drink what I like. This lifestyle has got me through my twenties intact, but it's time to change. I'd like to lose a bit of the flab that I've gained and generally feel fitter and healthier.

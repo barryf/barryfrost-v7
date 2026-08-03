@@ -10,6 +10,7 @@ tags:
 syndication:
   - https://medium.com/@barryf/using-json-in-postgres-with-ruby-and-sequel-897304158374
   - https://twitter.com/barryf/status/917858023191842818
+standardRkey: 3ev6ryjws2222
 ---
 
 With its fast, built-in support for JSON, it's worth considering Postgres for storing and querying your JSON data. Instead of using a specialised document server, Postgres may be the right choice for your application.

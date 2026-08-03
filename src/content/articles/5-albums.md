@@ -5,6 +5,7 @@ featured: true
 tags:
   - music
   - personal
+standardRkey: 3mpzcdbas2222
 ---
 
 Here are _five albums that shaped me_, inspired by [Olly's post](https://olly.world/5-albums)

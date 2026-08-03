@@ -2,6 +2,7 @@
 title: "UX London: Products, People and Platforms"
 date: 2014-06-04
 featured: true
+standardRkey: 3buyxbnqs2222
 ---
 
 The [2014 UX London conference][uxlondon] was held at the end of last week in Greenwich, promising three days of "inspiration, education and skills development for user experience designers" focused around products, people and platforms. Here are my highlights of the talks and workshops I attended.

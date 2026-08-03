@@ -5,6 +5,7 @@ tags:
   - indieweb
   - micropub
   - micropublish
+standardRkey: 3e6x5zyik2222
 ---
 
 Today I pushed a rebuild of my [Micropub](https://micropub.net) client, Micropublish, live to [https://micropublish.net](https://micropublish.net). The [source](https://github.com/barryf/micropublish) is on GitHub.
