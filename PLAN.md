@@ -36,6 +36,12 @@ Fetched at build time from `bsky.social` for DID `did:plc:j5ksi3y4tdtbp7vpsxsfya
 | `app.rocksky.scrobble` | `scrobbles.ts` | `/music` — Top Albums, Top Artists, Recently Played |
 | `site.standard.graph.subscription` | `subscriptions.ts` | `/blogroll` only |
 
+`bluesky.ts` drops syndicated weeknote posts — the site already publishes those weeknotes
+itself, so `/posts` carries only original posts and replies. A post is treated as a weeknote
+if its text or its link-card URI holds a weeknote URL (`/weeknotes/week-{N}` or the older
+`/{YYYY}/{MM}/week-{N}-{slug}`), or its text opens with `Week {N}` after any leading emoji.
+The card URI is the load-bearing check: posts written by the publisher carry no text at all.
+
 > **Note on `com.barryfrost.checkin`:** The site route and code use `check-in` (hyphenated), but the AT Protocol NSID cannot follow suit — the spec only allows `[a-zA-Z0-9]` in NSID name segments (no hyphens). The NSID is therefore intentionally kept as `com.barryfrost.checkin`.
 >
 > This repo is the canonical home of the `com.barryfrost.checkin` lexicon doc: `lexicons/com/barryfrost/checkin.json`, published to the PDS as a `com.atproto.lexicon.schema` record via `npm run publish:lexicon` (the fsq2pds importer repo no longer keeps a copy). Records carry an optional `comment` field (the Swarm "shout" user comment); `check-ins.ts` exposes it in loader data, but no card/template renders it yet.

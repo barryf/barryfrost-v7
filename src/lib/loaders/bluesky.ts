@@ -30,6 +30,22 @@ interface BlueskyEmbed {
 
 const APPVIEW_HOST = 'public.api.bsky.app';
 
+/**
+ * Weeknotes syndicated to Bluesky duplicate what the site already publishes, so they are
+ * dropped from the posts feed. The shape has drifted over time: titles picked up a leading
+ * emoji, and the permalink moved out of the post text into a link card. Match either the
+ * title or a weeknote URL, on both the current `/weeknotes/week-N` path and the older
+ * `/YYYY/MM/week-N-slug` one.
+ */
+const WEEKNOTE_TITLE = /^\P{L}*Week \d+\b/iu;
+const WEEKNOTE_URL = /barryfrost\.com\/(?:weeknotes\/|\d{4}\/\d{2}\/)week-\d+/i;
+
+function isWeeknotePost(text: string, externalUri: string | undefined): boolean {
+  return WEEKNOTE_TITLE.test(text)
+    || WEEKNOTE_URL.test(text)
+    || (externalUri !== undefined && WEEKNOTE_URL.test(externalUri));
+}
+
 interface AppViewPostView {
   uri: string;
   cid: string;
@@ -141,7 +157,9 @@ export function blueskyLoader(): Loader {
         const value = record.value as Record<string, unknown>;
         const rkey = rkeyFromUri(record.uri);
 
-        if (/^Week \d+/i.test(value.text as string)) return;
+        const embed = value.embed as BlueskyEmbed | undefined;
+        const externalUri = embed?.external?.uri ?? embed?.media?.external?.uri;
+        if (isWeeknotePost(value.text as string, externalUri)) return;
 
         let reply: { parentUri: string; parentHandle: string; parentRkey: string } | null = null;
         const replyRef = value.reply as { parent?: { uri?: string } } | undefined;
@@ -162,7 +180,6 @@ export function blueskyLoader(): Loader {
           };
         }
 
-        const embed = value.embed as BlueskyEmbed | undefined;
         const { urls: imageUrls, largeUrls: imageLargeUrls, alts: imageAlts } = await extractImages(embed);
 
         const external = await extractExternal(embed);
