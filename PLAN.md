@@ -266,15 +266,16 @@ Separate from the blog feed above: a broader **activity log** spanning every col
 
 ## Favicon & Icons
 
-All icon files in `public/` are derived from `public/barryfrost.jpg` (192×192 portrait):
+All icon files in `public/` are derived from `src/assets/me.jpg` (512×512 portrait) by `scripts/generate-icons.ts` — run `npx tsx scripts/generate-icons.ts` after changing the source photo:
 
 | File | Size | Purpose |
 |---|---|---|
 | `favicon.ico` | 32×32 | Legacy browsers |
-| `favicon.svg` | — | Modern browsers |
+| `favicon.svg` | 32×32 PNG in an SVG wrapper | Modern browsers |
 | `apple-touch-icon.png` | 180×180 | iOS home screen |
 | `icon-192.png` | 192×192 | Android / PWA |
 | `icon-512.png` | 512×512 | Android PWA splash |
+| `barryfrost.jpg` | 192×192 | `u-photo` (header, author card) and JSON feed avatar |
 | `site.webmanifest` | — | PWA metadata |
 
 ## Canonical URLs
