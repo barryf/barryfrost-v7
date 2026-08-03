@@ -24,7 +24,7 @@ const excluded = new Set([
 ]);
 
 export default defineConfig({
-  site: 'https://new.barryfrost.com',
+  site: 'https://barryfrost.com',
   output: 'static',
   build: {
     format: 'file',
