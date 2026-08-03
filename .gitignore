@@ -34,3 +34,6 @@ public/images/
 # Import progress trackers (local state)
 scripts/imported-grain-photos.json
 scripts/imported-notes-bsky.json
+
+# Import intermediate — regenerate with `tsx scripts/export-notes-csv.ts`
+scripts/notes-to-import.csv
