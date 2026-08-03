@@ -19,7 +19,6 @@ import {
 export { PUBLICATIONS, DID, DOCUMENT_COLLECTION, PUBLICATION_COLLECTION, documentUri };
 
 export const DESCRIPTION_MAX_CHARS = 280;
-export const BSKY_MAX_GRAPHEMES = 300;
 export const COVER_MAX_BLOB_BYTES = 1_000_000;
 
 export type CollectionName = keyof typeof PUBLICATIONS;
@@ -267,15 +266,6 @@ export interface BlueskyPost {
   };
 }
 
-export function blueskyPostText(entry: Entry): string {
-  const base = entry.collection === 'weeknotes' && entry.data.emoji
-    ? `${entry.data.emoji} ${entry.data.title ?? ''}`.trim()
-    : entry.data.title ?? '';
-  return [...base].length > BSKY_MAX_GRAPHEMES
-    ? [...base].slice(0, BSKY_MAX_GRAPHEMES - 1).join('') + '…'
-    : base;
-}
-
 /** `associatedRefs` points Bluesky straight at this post's Standard Site records so the
  *  enhanced link card is built from them rather than from a crawl of the page. Bluesky
  *  snapshots the records at index time (their "puppy problem"), so a ref going stale after
@@ -286,7 +276,9 @@ export function buildBlueskyPost(
   const plaintext = toPlaintext(entry.body);
   return {
     $type: 'app.bsky.feed.post',
-    text: blueskyPostText(entry),
+    // No post text: the link card already leads with the emoji and title, so anything here
+    // just repeats it. Bluesky renders an embed-only post as the card alone.
+    text: '',
     createdAt: new Date().toISOString(),
     langs: ['en'],
     embed: {

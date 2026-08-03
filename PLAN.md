@@ -534,7 +534,9 @@ targets.
   the publisher is `putRecord`-idempotent and treats the existing record's `bskyPostRef` as
   the "already posted to Bluesky" guard, so re-runs never double-post.
 - **Bluesky**: first publish of a doc creates a companion post with a rich link card back to
-  the page; its strong-ref is stored in `bskyPostRef`. The post's `app.bsky.embed.external`
+  the page; its strong-ref is stored in `bskyPostRef`. The post itself has **no text** — the
+  card already leads with the emoji and title, so any text just repeats it and Bluesky renders
+  an embed-only post as the card alone. The post's `app.bsky.embed.external`
   carries `associatedRefs` (document + publication strong refs) so Bluesky builds the card
   straight from the records instead of crawling the page. Those are strong refs, so a new post
   writes the document record **twice** — once to mint the ref, once to store `bskyPostRef`.

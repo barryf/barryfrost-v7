@@ -13,7 +13,7 @@
 // Usage:
 //   npm run publish:standard -- [--backfill] [--dry-run] [--only <slug>] [--collection <name>]
 import {
-  readEntries, isPublishable, buildDocumentRecord, buildBlueskyPost, blueskyPostText,
+  readEntries, isPublishable, buildDocumentRecord, buildBlueskyPost,
   documentContentSignature, canonicalUrl, DOCUMENT_COLLECTION, PUBLICATIONS, documentUri,
   createSession, getRecord, putRecord, createRecord, resolveBskyPostRef, getPublicationRef,
   resolveCoverImage, fetchOgImageUrl,
@@ -104,7 +104,7 @@ async function processEntry(entry: Entry, args: Args, session: Session | null): 
 
   if (args.dryRun) {
     if (wantNewPost) {
-      console.log(`    would post to Bluesky: ${JSON.stringify(blueskyPostText(entry))} → card ${canonicalUrl(entry)}`);
+      console.log(`    would post to Bluesky: card-only → ${canonicalUrl(entry)}`);
       console.log(`    would attach associatedRefs: ${documentUri(rkey)} + ${PUBLICATIONS[entry.collection].uri}`);
     }
     console.log(`${label} (dry-run)`);
