@@ -25,6 +25,7 @@ export type CollectionName = keyof typeof PUBLICATIONS;
 
 export interface Frontmatter {
   title?: string;
+  description?: string;
   date?: string;
   week?: number;
   emoji?: string;
@@ -47,7 +48,7 @@ export interface Entry {
 // A deliberately small parser for the frontmatter shapes this repo authors (scalars,
 // simple `- item` lists). Avoids pulling in a YAML dependency for our own controlled data.
 
-const SCALAR_KEYS = new Set(['title', 'date', 'week', 'emoji', 'visibility', 'standardRkey']);
+const SCALAR_KEYS = new Set(['title', 'description', 'date', 'week', 'emoji', 'visibility', 'standardRkey']);
 const LIST_KEYS = new Set(['tags', 'syndication']);
 
 function unquote(v: string): string {
@@ -130,6 +131,17 @@ export function toPlaintext(body: string): string {
 export function truncateDescription(plaintext: string, max = DESCRIPTION_MAX_CHARS): string {
   const collapsed = plaintext.replace(/\s+/g, ' ').trim();
   return collapsed.length <= max ? collapsed : collapsed.slice(0, max).trimEnd();
+}
+
+/** An authored `description` in frontmatter wins; otherwise fall back to the first 280
+ *  plaintext chars. Mirrors the web's own precedence (`entry.data.description ||
+ *  social.description` in the [slug] routes) so the record, the Bluesky card and the
+ *  page's meta description all agree. */
+export function documentDescription(entry: Entry): string | undefined {
+  const authored = entry.data.description?.trim();
+  if (authored) return authored;
+  const plaintext = toPlaintext(entry.body);
+  return plaintext ? truncateDescription(plaintext) : undefined;
 }
 
 /** Weeknotes prepend the emoji to the title; articles use the title as-is. */
@@ -225,10 +237,9 @@ export function buildDocumentRecord(
       text: { $type: 'at.markpub.text', markdown },
     },
   };
-  if (plaintext) {
-    record.textContent = plaintext;
-    record.description = truncateDescription(plaintext);
-  }
+  if (plaintext) record.textContent = plaintext;
+  const description = documentDescription(entry);
+  if (description) record.description = description;
   if (entry.data.tags?.length) record.tags = entry.data.tags;
   if (coverImage) record.coverImage = coverImage;
   if (bskyPostRef) record.bskyPostRef = bskyPostRef;
@@ -273,7 +284,6 @@ export interface BlueskyPost {
 export function buildBlueskyPost(
   entry: Entry, thumb?: unknown, associatedRefs?: StrongRef[],
 ): BlueskyPost {
-  const plaintext = toPlaintext(entry.body);
   return {
     $type: 'app.bsky.feed.post',
     // No post text: the link card already leads with the emoji and title, so anything here
@@ -286,7 +296,7 @@ export function buildBlueskyPost(
       external: {
         uri: canonicalUrl(entry),
         title: documentTitle(entry),
-        description: truncateDescription(plaintext),
+        description: documentDescription(entry) ?? '',
         ...(thumb ? { thumb } : {}),
         ...(associatedRefs?.length ? { associatedRefs } : {}),
       },

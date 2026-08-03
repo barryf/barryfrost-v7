@@ -517,8 +517,11 @@ so weeknotes use `/week-{N}`. Local Markdown stays canonical; the PDS records ar
 targets.
 
 - **Content**: full body embedded via the community `at.markpub.markdown` lexicon, plus a
-  plaintext `textContent`; `description` is a hard truncation of the first 280 chars (never
-  generated). Weeknote titles are prefixed with the emoji.
+  plaintext `textContent`. `description` uses the frontmatter `description` when one is
+  authored, else a hard truncation of the first 280 plaintext chars — never generated. That
+  precedence (`documentDescription()` in `scripts/lib/standard-site.ts`) mirrors the web's own
+  `entry.data.description || social.description`, so the record, the Bluesky card and the
+  page's meta description always agree. Weeknote titles are prefixed with the emoji.
 - **Config**: `src/lib/standard-site.ts` holds the DID + publication AT-URIs (single source
   of truth). The `/.well-known/site.standard.publication/{articles,weeknotes}` endpoints and
   the per-page verification `<link>` tags derive from it.
