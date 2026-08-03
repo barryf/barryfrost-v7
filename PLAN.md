@@ -148,7 +148,7 @@ All icons accept an optional `class` prop to override the default sizing/alignme
 The star glyph itself (Heroicons 24/outline) lives once as `STAR_PATH` in `src/lib/icons.ts`, shared by `StarRating` and the featured-article marker `StarIcon` so the two can't drift apart. `StarIcon` fills it solid; `StarRating` varies the fill per slot.
 
 Card components in `src/components/posts/`:
-- `ArticleCard` — title link, relative date with `title` attr
+- `ArticleCard` — title link, relative date with `title` attr, capitalised ("Today"/"Yesterday") because the date starts its own line
 - `BlueskyCard` — rich text, embedded image thumbnails (each links to a larger version), external embed thumbnails (e.g. GIFs) linking to the source URL with alt from the embed's description, quote posts via `BlueskyQuote`, relative date, Bluesky icon link, pdsls icon link. An `indexable` prop (default `true`) gates the `data-pagefind-body` attribute so the card can be reused off the canonical `/posts` list (e.g. the homepage) without duplicate search indexing
 - `CheckInCard` — venue name/category/address (name links to OpenStreetMap when lat/lon available), optional photo(s), relative date, pdsls icon link
 - `FilmCard` — clickable poster linking to Popfeed, title, star rating, relative date, pdsls icon link
