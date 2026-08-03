@@ -2,7 +2,7 @@
 
 The seventh iteration of [Barry Frost's](https://barryfrost.com) personal website — a statically generated, IndieWeb-compliant site built with [Astro 7](https://astro.build) and [Tailwind CSS v4](https://tailwindcss.com), deployed to Cloudflare.
 
-Live staging URL: `https://new.barryfrost.com` — v6 still serves `https://barryfrost.com`.
+Live at [`https://barryfrost.com`](https://barryfrost.com).
 
 See `PLAN.md` for the full architecture reference.
 
