@@ -4,15 +4,18 @@
 // `standardRkey`, and only putRecord when the content changed. A companion Bluesky post
 // (rich link card) is created once, on a document's first publish in incremental mode, and
 // its strong-ref is stored in `bskyPostRef` — the presence of that ref prevents any second
-// post. In --backfill mode no new Bluesky posts are created; an existing bsky.app URL from
-// the file's `syndication` frontmatter is reused as the ref where present.
+// post. That post's external embed carries `associatedRefs` (document + publication) so
+// Bluesky renders the enhanced Standard Site card, which is why a new post writes the
+// document record twice: once to mint the ref, once to store `bskyPostRef`. In --backfill
+// mode no new Bluesky posts are created; an existing bsky.app URL from the file's
+// `syndication` frontmatter is reused as the ref where present.
 //
 // Usage:
 //   npm run publish:standard -- [--backfill] [--dry-run] [--only <slug>] [--collection <name>]
 import {
-  readEntries, isPublishable, buildDocumentRecord, buildBlueskyPost,
-  documentContentSignature, canonicalUrl, DOCUMENT_COLLECTION, PUBLICATIONS,
-  createSession, getRecord, putRecord, createRecord, resolveBskyPostRef,
+  readEntries, isPublishable, buildDocumentRecord, buildBlueskyPost, blueskyPostText,
+  documentContentSignature, canonicalUrl, DOCUMENT_COLLECTION, PUBLICATIONS, documentUri,
+  createSession, getRecord, putRecord, createRecord, resolveBskyPostRef, getPublicationRef,
   resolveCoverImage, fetchOgImageUrl,
   type CollectionName, type Entry, type Session, type StrongRef, type BlobRef,
 } from './lib/standard-site.js';
@@ -82,15 +85,6 @@ async function processEntry(entry: Entry, args: Args, session: Session | null): 
   // Create a fresh Bluesky post only when publishing new/changed content in incremental
   // mode with no ref available from an existing record or syndication.
   const wantNewPost = needsWrite && !bskyRef && !args.backfill;
-  if (wantNewPost) {
-    const post = buildBlueskyPost(entry);
-    if (args.dryRun) {
-      console.log(`    would post to Bluesky: ${JSON.stringify(post.text)} → card ${canonicalUrl(entry)}`);
-    } else if (session) {
-      bskyRef = await createRecord(session, 'app.bsky.feed.post', post as unknown as Record<string, unknown>);
-      console.log(`    posted to Bluesky: ${bskyRef.uri}`);
-    }
-  }
 
   if (args.dryRun && !existingCover) {
     console.log(coverPreviewUrl
@@ -98,16 +92,39 @@ async function processEntry(entry: Entry, args: Args, session: Session | null): 
       : `    no body image — no coverImage`);
   }
 
-  const record = buildDocumentRecord(entry, bskyRef, coverImage);
-  if (existing) record.updatedAt = new Date().toISOString();
-
   const action: Action = existing ? 'update' : 'create';
+  const label = `  ${action === 'create' ? '+ create' : '~ update'} ${entry.collection}/${entry.slug}`;
+
+  const writeDocument = async (ref: StrongRef | undefined): Promise<StrongRef | null> => {
+    const record = buildDocumentRecord(entry, ref, coverImage);
+    if (existing) record.updatedAt = new Date().toISOString();
+    if (!session) return null;
+    return await putRecord(session, DOCUMENT_COLLECTION, rkey, record as unknown as Record<string, unknown>);
+  };
+
   if (args.dryRun) {
-    console.log(`  ${action === 'create' ? '+ create' : '~ update'} ${entry.collection}/${entry.slug} (dry-run)`);
-  } else if (session) {
-    await putRecord(session, DOCUMENT_COLLECTION, rkey, record as unknown as Record<string, unknown>);
-    console.log(`  ${action === 'create' ? '+ create' : '~ update'} ${entry.collection}/${entry.slug}`);
+    if (wantNewPost) {
+      console.log(`    would post to Bluesky: ${JSON.stringify(blueskyPostText(entry))} → card ${canonicalUrl(entry)}`);
+      console.log(`    would attach associatedRefs: ${documentUri(rkey)} + ${PUBLICATIONS[entry.collection].uri}`);
+    }
+    console.log(`${label} (dry-run)`);
+    return action;
   }
+  if (!session) return action;
+
+  if (wantNewPost) {
+    // The post's associatedRefs need the document's strong ref, so the record has to land
+    // first; the ref comes back from that write and the record is re-put with bskyPostRef.
+    const docRef = await writeDocument(undefined);
+    const pubRef = await getPublicationRef(session, entry.collection);
+    const refs = [docRef, pubRef].filter((r): r is StrongRef => !!r);
+    const post = buildBlueskyPost(entry, undefined, refs);
+    bskyRef = await createRecord(session, 'app.bsky.feed.post', post as unknown as Record<string, unknown>);
+    console.log(`    posted to Bluesky: ${bskyRef.uri} (associatedRefs: ${refs.length})`);
+  }
+
+  await writeDocument(bskyRef);
+  console.log(label);
   return action;
 }
 

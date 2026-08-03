@@ -12,10 +12,11 @@ import {
   PUBLICATIONS,
   DID,
   DOCUMENT_COLLECTION,
+  PUBLICATION_COLLECTION,
   documentUri,
 } from '../../src/lib/standard-site.js';
 
-export { PUBLICATIONS, DID, DOCUMENT_COLLECTION, documentUri };
+export { PUBLICATIONS, DID, DOCUMENT_COLLECTION, PUBLICATION_COLLECTION, documentUri };
 
 export const DESCRIPTION_MAX_CHARS = 280;
 export const BSKY_MAX_GRAPHEMES = 300;
@@ -259,7 +260,10 @@ export interface BlueskyPost {
   langs: string[];
   embed: {
     $type: 'app.bsky.embed.external';
-    external: { uri: string; title: string; description: string; thumb?: unknown };
+    external: {
+      uri: string; title: string; description: string; thumb?: unknown;
+      associatedRefs?: StrongRef[];
+    };
   };
 }
 
@@ -272,7 +276,13 @@ export function blueskyPostText(entry: Entry): string {
     : base;
 }
 
-export function buildBlueskyPost(entry: Entry, thumb?: unknown): BlueskyPost {
+/** `associatedRefs` points Bluesky straight at this post's Standard Site records so the
+ *  enhanced link card is built from them rather than from a crawl of the page. Bluesky
+ *  snapshots the records at index time (their "puppy problem"), so a ref going stale after
+ *  a later putRecord is expected and harmless. Order is document then publication. */
+export function buildBlueskyPost(
+  entry: Entry, thumb?: unknown, associatedRefs?: StrongRef[],
+): BlueskyPost {
   const plaintext = toPlaintext(entry.body);
   return {
     $type: 'app.bsky.feed.post',
@@ -286,9 +296,30 @@ export function buildBlueskyPost(entry: Entry, thumb?: unknown): BlueskyPost {
         title: documentTitle(entry),
         description: truncateDescription(plaintext),
         ...(thumb ? { thumb } : {}),
+        ...(associatedRefs?.length ? { associatedRefs } : {}),
       },
     },
   };
+}
+
+/** Strong ref for a publication record, read from the PDS (the config holds only the URI).
+ *  Memoised per collection — every entry in a run shares one lookup. */
+const publicationRefCache = new Map<CollectionName, StrongRef | null>();
+
+export async function getPublicationRef(
+  session: Session, collection: CollectionName,
+): Promise<StrongRef | null> {
+  if (publicationRefCache.has(collection)) return publicationRefCache.get(collection)!;
+  const uri = PUBLICATIONS[collection].uri;
+  const rkey = uri.split('/').pop();
+  let ref: StrongRef | null = null;
+  if (rkey) {
+    const rec = await getRecord(session, PUBLICATION_COLLECTION, rkey);
+    if (rec) ref = { uri: rec.uri, cid: rec.cid };
+    else console.warn(`[associatedRefs] publication record not found for ${collection}: ${uri}`);
+  }
+  publicationRefCache.set(collection, ref);
+  return ref;
 }
 
 // ─── AT Protocol client (com.atproto.repo.* over XRPC) ──────────────────────────
