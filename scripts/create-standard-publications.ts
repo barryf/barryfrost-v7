@@ -20,7 +20,12 @@ import {
 const ICON_PATH = join('public', 'icon-512.png');
 
 // Light-mode palette from src/styles/global.css / Base.astro.
+//
+// The top-level `$type` is load-bearing: Bluesky drops a publication whose basicTheme
+// carries no type tag, and then renders no enhanced link card for any document under it.
+// Every publication in the wild that sets basicTheme sets this too.
 const THEME = {
+  $type: 'site.standard.theme.basic',
   background: { $type: 'site.standard.theme.color#rgb', r: 255, g: 255, b: 255 }, // white
   foreground: { $type: 'site.standard.theme.color#rgb', r: 75, g: 85, b: 99 },    // gray-600
   accent: { $type: 'site.standard.theme.color#rgb', r: 217, g: 119, b: 6 },       // amber-600

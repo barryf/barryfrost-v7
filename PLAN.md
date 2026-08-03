@@ -530,6 +530,11 @@ targets.
 - **Publication icon**: both publications share the site's existing 512x512 PWA icon
   (`public/icon-512.png`), uploaded once per run as the `icon` blob. Without it Bluesky has no
   avatar for the link card and falls back to the theme colours and the publication's initial.
+- **`$type` on nested objects**: `basicTheme` needs `$type: site.standard.theme.basic` as well
+  as the per-colour `site.standard.theme.color#rgb`. Bluesky drops a publication whose
+  `basicTheme` has no type tag, and then renders no enhanced card for any document under it —
+  silently, and with no signal from the Standard.site validators, which only check field
+  presence. Symptom: `isitstandard.site` passes every check while `cardyb` returns no `view`.
 - **Identity/idempotency**: each post carries a stable TID `standardRkey` in frontmatter;
   the publisher is `putRecord`-idempotent and treats the existing record's `bskyPostRef` as
   the "already posted to Bluesky" guard, so re-runs never double-post.
