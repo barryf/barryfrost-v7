@@ -1,11 +1,23 @@
-// One-time: create the two site.standard.publication records (Articles + Weeknotes).
+// Upsert the two site.standard.publication records (Articles + Weeknotes).
 //
-// After running, paste the printed AT-URIs into src/lib/standard-site.ts
-// (PUBLICATIONS.<key>.uri). The /.well-known verification endpoints and the per-page
-// verification <link> tags are generated from that config, so there's nothing else to edit.
+// On first run the records are created — paste the printed AT-URIs into
+// src/lib/standard-site.ts (PUBLICATIONS.<key>.uri). Once a URI is set, re-running updates
+// that record in place, so this file stays the source of truth for each publication's name,
+// description, theme and icon. The /.well-known verification endpoints and the per-page
+// verification <link> tags are generated from the same config, so there's nothing else to
+// edit. Re-running is safe: the rkey never changes, so verification keeps matching.
 //
 // Usage: npm run standard:pubs [-- --dry-run]
-import { PUBLICATIONS, createSession, createRecord, type CollectionName } from './lib/standard-site.js';
+import { readFileSync } from 'fs';
+import { join } from 'path';
+import {
+  PUBLICATIONS, PUBLICATION_COLLECTION, createSession, createRecord, putRecord, uploadBlob,
+  type BlobRef, type CollectionName, type Session,
+} from './lib/standard-site.js';
+
+/** The site's own PWA icon — square and 512x512, comfortably inside the lexicon's
+ *  "at least 256x256" and 1MB limits, so it needs no re-encoding. */
+const ICON_PATH = join('public', 'icon-512.png');
 
 // Light-mode palette from src/styles/global.css / Base.astro.
 const THEME = {
@@ -26,7 +38,7 @@ const META: Record<CollectionName, { name: string; description: string }> = {
   },
 };
 
-function publicationRecord(collection: CollectionName) {
+function publicationRecord(collection: CollectionName, icon?: BlobRef) {
   return {
     $type: 'site.standard.publication',
     url: PUBLICATIONS[collection].url,
@@ -34,7 +46,16 @@ function publicationRecord(collection: CollectionName) {
     description: META[collection].description,
     basicTheme: THEME,
     preferences: { showInDiscover: true },
+    ...(icon ? { icon } : {}),
   };
+}
+
+/** Upload the shared icon once and reuse the blob for both publications. */
+async function uploadIcon(session: Session): Promise<BlobRef> {
+  const bytes = readFileSync(join(process.cwd(), ICON_PATH));
+  const blob = await uploadBlob(session, bytes, 'image/png');
+  console.log(`Uploaded ${ICON_PATH} (${bytes.length} bytes) as publication icon\n`);
+  return blob;
 }
 
 async function main() {
@@ -45,19 +66,25 @@ async function main() {
     for (const c of collections) {
       console.log(`\n# ${c}\n${JSON.stringify(publicationRecord(c), null, 2)}`);
     }
-    console.log('\n(dry run — no records created)');
+    console.log(`\n(dry run — no writes; each record would also carry an icon blob from ${ICON_PATH})`);
     return;
   }
 
   const session = await createSession();
   console.log(`Authenticated as ${session.did}\n`);
+  const icon = await uploadIcon(session);
 
   for (const c of collections) {
-    if (PUBLICATIONS[c].uri) {
-      console.log(`⚠ ${c}: PUBLICATIONS.${c}.uri already set (${PUBLICATIONS[c].uri}). Skipping to avoid a duplicate.`);
+    const uri = PUBLICATIONS[c].uri;
+    const record = publicationRecord(c, icon);
+    if (uri) {
+      // Update in place — same rkey, so the .well-known value stays correct.
+      const rkey = uri.split('/').pop()!;
+      await putRecord(session, PUBLICATION_COLLECTION, rkey, record);
+      console.log(`~ ${c} publication updated:\n    ${uri}\n`);
       continue;
     }
-    const ref = await createRecord(session, 'site.standard.publication', publicationRecord(c));
+    const ref = await createRecord(session, PUBLICATION_COLLECTION, record);
     console.log(`✓ ${c} publication created:`);
     console.log(`    ${ref.uri}`);
     console.log(`    → paste into PUBLICATIONS.${c}.uri in src/lib/standard-site.ts\n`);
