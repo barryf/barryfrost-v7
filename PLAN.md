@@ -195,6 +195,13 @@ import myPhoto from '../../assets/photo.jpg';
 <Image src={myPhoto} alt="..." class="float-right ml-8 rounded" />
 ```
 
+Omit `width`/`height` where possible — Astro then serves the image at its intrinsic size and
+CSS scales it down, which stays sharp on retina. **If you do set an explicit `width`, set it to
+the CSS display size and add `densities={[2, 3]}`**, otherwise Astro emits a single image at
+that width with no `srcset` and it upscales (and blurs) on any DPR > 1. The `w-*` class and the
+`width` prop must agree: `class="w-30"` is 120px, so `width={120} densities={[2, 3]}`. Note this
+is the opposite convention to `image-store.ts`, where you pass 2× the display size yourself.
+
 `Caption.astro` renders a small muted line (`text-xs text-gray-600 dark:text-gray-400 -mt-5 mb-8`) directly under an `<Image />` for a photo caption — used in the travelblog archive.
 
 ## Search

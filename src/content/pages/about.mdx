@@ -6,7 +6,7 @@ import Divider from '@/components/Divider.astro';
 import { Image } from 'astro:assets';
 import me from '@/assets/me.jpg';
 
-<Image src={me} alt="A smiling man with grey beard in a blue shirt and jacket" width="160" height="160" class="w-30 rounded float-left mr-4 mb-2" />Hello, I'm Barry, and you're reading my personal website.
+<Image src={me} alt="A smiling man with grey beard in a blue shirt and jacket" width={120} height={120} densities={[2, 3]} quality={90} class="w-30 rounded float-left mr-4 mb-2" />Hello, I'm Barry, and you're reading my personal website.
 
 I've been [working](/work) with product and technology teams for over 25&nbsp;years. I started as a software engineer, and I still tinker with side projects for fun. These days I lead engineering, as CTO or VP&nbsp;Engineering, in companies large and small. I enjoy helping teams that need process and structure, and getting them back to shipping.
 
