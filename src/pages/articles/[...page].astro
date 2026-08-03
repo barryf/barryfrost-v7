@@ -21,7 +21,7 @@ interface Props {
 
 const { page } = Astro.props;
 ---
-<Feed {...SECTIONS.articles} currentPage={page.currentPage} totalPages={page.lastPage} basePath="/articles" showDescription={page.currentPage === 1}>
+<Feed {...SECTIONS.articles} currentPage={page.currentPage} totalPages={page.lastPage} basePath="/articles" showDescription={page.currentPage === 1} standardPublication={page.currentPage === 1 ? 'articles' : undefined}>
   <Fragment slot="description">
     Long-form notes on technology, leadership, life and making things.
     <StarIcon class="size-3 inline-block -translate-y-px" /> marks a featured

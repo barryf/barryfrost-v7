@@ -13,7 +13,7 @@ function titleWord(title: string): string {
   return title.replace(/^Week \d+\s*[-:]\s*/i, '');
 }
 ---
-<Base title={SECTIONS.weeknotes.title} description={SECTIONS.weeknotes.description}>
+<Base title={SECTIONS.weeknotes.title} description={SECTIONS.weeknotes.description} standardPublication="weeknotes">
   <div class="h-feed">
     <AuthorCard />
     <h1 class="mt-8 mb-4 font-semibold text-black dark:text-white">Weeknotes</h1>

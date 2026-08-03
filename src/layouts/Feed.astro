@@ -3,6 +3,7 @@ import Base from './Base.astro';
 import Pagination from '@/components/Pagination.astro';
 import AuthorCard from '@/components/AuthorCard.astro';
 import SectionHeading from '@/components/SectionHeading.astro';
+import type { PUBLICATIONS } from '@/lib/standard-site';
 
 interface Props {
   title: string;
@@ -17,13 +18,15 @@ interface Props {
   paginate?: boolean;
   /** Set false to hide the description slot, e.g. on pages after the first. */
   showDescription?: boolean;
+  /** Set on the publication's root page only — emits the site.standard.publication link. */
+  standardPublication?: keyof typeof PUBLICATIONS;
 }
 
-const { title, description, currentPage = 1, totalPages, basePath, paginate = true, showDescription = true } = Astro.props;
+const { title, description, currentPage = 1, totalPages, basePath, paginate = true, showDescription = true, standardPublication } = Astro.props;
 const pageTitle = currentPage > 1 ? `${title} (Page ${currentPage})` : title;
 const hasDescription = Astro.slots.has('description') && showDescription;
 ---
-<Base title={pageTitle} description={description}>
+<Base title={pageTitle} description={description} standardPublication={standardPublication}>
   <div class="h-feed">
     <AuthorCard />
     <SectionHeading title={title} class={hasDescription ? 'mb-4' : 'mb-8'}>
