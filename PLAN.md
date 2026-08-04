@@ -263,6 +263,8 @@ A single unified RSS feed and JSON feed carry both articles and weeknotes, inter
 
 `src/lib/feed-items.ts` (`getFeedItems`) is the shared source of truth: it merges both collections, filters `visibility: unlisted`, sorts by date descending, takes the latest 10, renders full content via `AstroContainer`, and **rewrites root-relative `src`/`href`/`srcset` URLs to absolute** so images (`astro:assets` `<Image>` and Markdown `![]()` both emit `/_astro/…` paths) resolve in feed readers. Weeknote titles keep their emoji prefix (`🚣 Week 258 - Rowboat`), as everywhere else on the site. `trailingSlash: false` passed to `@astrojs/rss`. Advertised via `<link rel="alternate">` in `BaseHead.astro`; `/rss`, `/rss.xml`, `/index.xml`, `/feed` redirect to `/feed.xml` in `public/_redirects`.
 
+Both RSS feeds carry a channel-level `<image>` pointing at `/barryfrost.jpg`, the same avatar the JSON feeds advertise as the author's. `@astrojs/rss` has no option for it, so `rssChannelImage()` in `src/lib/feed.ts` builds the element and it is passed as channel `customData`. Per the RSS spec the image's `<title>`/`<link>` repeat the channel's own, so the link drops its trailing slash to match `trailingSlash: false`. The optional `<width>`/`<height>` are omitted: the source is 192×192 and the spec caps width at 144, so no accurate value is also a legal one.
+
 ### Stream (unified timeline)
 
 Separate from the blog feed above: a broader **activity log** spanning every collection except music.
