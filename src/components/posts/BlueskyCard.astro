@@ -34,19 +34,25 @@ const date = new Date(data.createdAt);
   <p class="e-content mb-1 wrap-break-word" set:html={html} />
   {data.quotedPost && <BlueskyQuote quotedPost={data.quotedPost as any} />}
   {images.length > 0 && (
-    <div class="flex flex-wrap gap-2 mt-2 mb-1">
-      {images.map((url, i) => (
-        <a href={largeImages[i] ?? url} class="block" aria-label={alts[i] || 'Post image'}>
-          <img
-            src={url}
-            alt={alts[i] ?? ''}
-            class="u-photo w-auto max-w-full rounded"
-            style="height:6rem"
-            loading="lazy"
-            decoding="async"
-          />
-        </a>
-      ))}
+    <div class="overflow-x-auto mt-2 mb-1">
+      <div class="flex gap-1">
+        {images.map((url, i) => (
+          <a href={largeImages[i] ?? url} class="flex-none" aria-label={alts[i] || 'Post image'}>
+            <img
+              src={url}
+              alt={alts[i] ?? ''}
+              width="120"
+              height="120"
+              class:list={["u-photo size-30 aspect-square object-cover",
+                i === 0 && "rounded-l-xl",
+                i === images.length - 1 && "rounded-r-xl"
+              ]}
+              loading="lazy"
+              decoding="async"
+            />
+          </a>
+        ))}
+      </div>
     </div>
   )}
   {external && external.thumbUrl && (

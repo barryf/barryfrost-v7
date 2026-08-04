@@ -73,7 +73,7 @@ async function extractImages(embed: BlueskyEmbed | undefined): Promise<{ urls: s
     const link = img.image?.ref?.$link;
     if (!link) return null;
     const [url, largeUrl] = await Promise.all([
-      pdsImage(link, { width: 192, height: 192, fit: 'contain' }),
+      pdsImage(link, { width: 240, height: 240, fit: 'cover' }),
       pdsImage(link, { width: 1600, fit: 'scale-down' }),
     ]);
     return { url, largeUrl, alt: img.alt ?? '' };
