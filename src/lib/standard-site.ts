@@ -40,3 +40,8 @@ export const PUBLICATIONS: Record<'articles' | 'weeknotes', PublicationConfig> =
 export function documentUri(rkey: string): string {
   return `at://${DID}/${DOCUMENT_COLLECTION}/${rkey}`;
 }
+
+/** Standard Reader's web view of a document record — the readable face of the at:// URI. */
+export function standardReaderUrl(rkey: string): string {
+  return `https://standard-reader.app/a/${DID}/${rkey}`;
+}

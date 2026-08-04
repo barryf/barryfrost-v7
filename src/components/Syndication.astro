@@ -5,10 +5,14 @@ import XIcon from '@/components/icons/XIcon.astro';
 import MediumIcon from '@/components/icons/MediumIcon.astro';
 import LinkedInIcon from '@/components/icons/LinkedInIcon.astro';
 import IndieNewsIcon from '@/components/icons/IndieNewsIcon.astro';
+import StandardSiteIcon from '@/components/icons/StandardSiteIcon.astro';
+import { standardReaderUrl } from '@/lib/standard-site';
 
 interface Props {
   /** Syndication URLs from post frontmatter. */
   urls?: string[];
+  /** rkey of the post's site.standard.document record, if it has been published. */
+  standardRkey?: string;
 }
 
 // Renders as a trailing clause mid-sentence, so it brings its own leading space
@@ -33,11 +37,14 @@ function serviceFor(url: string): Service {
   return { label: host };
 }
 
-const { urls = [] } = Astro.props;
+const { urls = [], standardRkey } = Astro.props;
 const services = urls.map((url) => ({ url, ...serviceFor(url) }));
+const standardHref = standardRkey ? standardReaderUrl(standardRkey) : undefined;
 ---
-{services.length > 0 && (
-  <span> and also on {services.map(({ url, label, Icon }, i) => (
-    <Fragment>{i > 0 && ' '}<a href={url} class="u-syndication underline whitespace-nowrap" rel="syndication noopener noreferrer">{Icon && <Icon class="size-3 inline-block mr-1 -translate-y-px" />}{label}</a></Fragment>
+{(services.length > 0 || standardHref) && (
+  <span> and also on {standardHref && (
+    <a href={standardHref} class="underline whitespace-nowrap" rel="noopener noreferrer" title="Read on Standard Reader"><StandardSiteIcon class="size-3 inline-block mr-1 -translate-y-px" />Standard Site</a>
+  )}{services.map(({ url, label, Icon }, i) => (
+    <Fragment>{(i > 0 || standardHref) && ' '}<a href={url} class="u-syndication underline whitespace-nowrap" rel="syndication noopener noreferrer">{Icon && <Icon class="size-3 inline-block mr-1 -translate-y-px" />}{label}</a></Fragment>
   ))}</span>
 )}

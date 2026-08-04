@@ -131,8 +131,8 @@ well inside Cloudflare's 2,000 static / 100 dynamic limits.
 - `SectionIcon.astro` — maps a Stream section slug to its service icon (Posts→Bluesky, Photos→Grain, Check-ins→CheckIn, Books→BookHive, Films→Popfeed, Music→Rocksky, Blogroll→StandardSite); used only by the homepage Stream directory.
 - `Feed.astro` — shared feed layout used by all list/paginated pages. Renders the `h-feed` wrapper, hidden `h-card p-author` MF2 author block, heading (with `(Page N)` suffix), optional named `description` slot, default slot for item content, and `<Pagination>` (suppressed via `paginate={false}` for books page 1). Props: `title`, `currentPage?`, `totalPages`, `basePath`, `paginate?`, `showDescription?` (set false on pages 2+ to hide the intro slot, since slots can't be conditionally passed).
 - `FilmFeed.astro` — extends `Feed.astro` for `/films` and `/films/by-rating`: adds date/rating sort toggle and renders `FilmCard` in a responsive grid (`grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4`)
-- `Post.astro` — individual article/weeknote with prose styles; "Posted in [Section] on [relative date]" (or "Posted on [relative date]") footer, followed by `Syndication` links when the post has `syndication` frontmatter. Optional `navAside` prop (set by weeknotes) moves the named `nav` slot into a right-hand column at `lg` and above; below that the columns collapse and the slot stacks under the body in source order. The columns align on `items-baseline` so the smaller aside text shares a baseline with the body's first line
-- `Syndication.astro` — renders a post's `syndication` frontmatter URLs as icon + label links (`u-syndication`, `rel="syndication"`), prefixed with "and also on", after the timestamp in `Post.astro`. `serviceFor(url)` maps a URL's host to a known service (Bluesky, Mastodon, X/Twitter, Medium, LinkedIn, IndieNews) and its icon; an unrecognised host falls back to a bare hostname label with no icon
+- `Post.astro` — individual article/weeknote with prose styles; "Posted in [Section] on [relative date]" (or "Posted on [relative date]") footer, followed by `Syndication` links when the post has `syndication` or `standardRkey` frontmatter. Optional `navAside` prop (set by weeknotes) moves the named `nav` slot into a right-hand column at `lg` and above; below that the columns collapse and the slot stacks under the body in source order. The columns align on `items-baseline` so the smaller aside text shares a baseline with the body's first line
+- `Syndication.astro` — renders a post's `syndication` frontmatter URLs as icon + label links (`u-syndication`, `rel="syndication"`), prefixed with "and also on", after the timestamp in `Post.astro`. `serviceFor(url)` maps a URL's host to a known service (Bluesky, Mastodon, X/Twitter, Medium, LinkedIn, IndieNews) and its icon; an unrecognised host falls back to a bare hostname label with no icon. A post with a `standardRkey` also leads the list with a "Standard Site" link to its Standard Reader page (`standardReaderUrl()`); the clause renders for a `standardRkey` alone, with no other syndication targets. That link is deliberately **not** `u-syndication` — Standard Reader is a viewer for the record, not the syndicated copy itself, which the head's `<link rel="site.standard.document">` already advertises as an `at://` URI
 - `Divider.astro` — `⁂` separator; `my-8 text-xl`
 - `SiteFooter.astro` — `Divider`, then a wrapping row holding the search form (submits to `/search`) and the secondary links — Colophon, Blogroll, Follow, Contact — followed by a copyright/licence line (CC BY 4.0) with a link to the GitHub source repo; rendered on every page. Links use the same two states as the header, via the same `isCurrentPage()`
 Icon components in `src/components/icons/`:
@@ -143,7 +143,7 @@ Icon components in `src/components/icons/`:
 - `BookHiveIcon.astro` — bookhive.buzz logo; used in the `/books` feed description, `SectionIcon`, and homepage Stream directory
 - `PopfeedIcon.astro` — popfeed.social logo; used in the `/films` feed description, `SectionIcon`, and homepage Stream directory
 - `RockskyIcon.astro` — rocksky music note icon; used in `SectionIcon` and the homepage Stream directory
-- `RSSIcon.astro`, `JSONFeedIcon.astro`, `MF2Icon.astro`, `StandardSiteIcon.astro` — feed format icons; used on `/follow`
+- `RSSIcon.astro`, `JSONFeedIcon.astro`, `MF2Icon.astro`, `StandardSiteIcon.astro` — feed format icons; used on `/follow`. `StandardSiteIcon` doubles as the `SectionIcon`/Stream mark for subscriptions and as the Standard Reader link's icon in `Syndication.astro`
 - `SifaIcon.astro` — sifa.id logo; used on `/follow` for the work profile link
 - `MastodonIcon.astro`, `XIcon.astro`, `MediumIcon.astro`, `LinkedInIcon.astro`, `IndieNewsIcon.astro` — syndication-target logos used by `Syndication.astro` (Bluesky reuses `BlueskyIcon.astro`)
 
@@ -451,7 +451,7 @@ no network or R2 calls.
 - **`build.format: 'file'`** — generates `about.html` not `about/index.html`
 - **`compressHTML: false`** — keeps HTML readable
 - **`featured: true`** frontmatter on articles — surfaces them on the homepage
-- **`syndication`** frontmatter (array of URLs) on articles/weeknotes — the POSSE targets a post was cross-posted to; rendered as icon + label links after the timestamp on the post page (`Syndication.astro`)
+- **`syndication`** frontmatter (array of URLs) on articles/weeknotes — the POSSE targets a post was cross-posted to; rendered as icon + label links after the timestamp on the post page (`Syndication.astro`), alongside the Standard Reader link derived from `standardRkey`
 
 ## Authoring New Content
 
@@ -526,7 +526,9 @@ targets.
   page's meta description always agree. Weeknote titles are prefixed with the emoji.
 - **Config**: `src/lib/standard-site.ts` holds the DID + publication AT-URIs (single source
   of truth). The `/.well-known/site.standard.publication/{articles,weeknotes}` endpoints and
-  the per-page verification `<link>` tags derive from it.
+  the per-page verification `<link>` tags derive from it, as do `documentUri()` (the record's
+  `at://` URI) and `standardReaderUrl()` (its human-readable view at
+  `standard-reader.app/a/{did}/{rkey}`, linked from each post's "also on" line).
 - **Verification tags**: document pages carry both `<link rel="site.standard.document">` and
   `<link rel="site.standard.publication">`; the publication root pages (`/articles`,
   `/weeknotes`) carry the publication tag alone. Bluesky requires the tag on publication home
