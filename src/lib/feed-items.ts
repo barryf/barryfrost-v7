@@ -79,8 +79,10 @@ export async function getFeedItems(site: URL): Promise<FeedItem[]> {
       const html = await container.renderToString(Content);
       const path = section === 'weeknotes' ? weeknoteUrl(entry.id) : `/${section}/${entry.id}`;
       const url = new URL(path, site).href;
+      // Weeknote titles carry their emoji prefix everywhere else on the site, so keep it here too.
+      const emoji = section === 'weeknotes' ? entry.data.emoji : undefined;
       return {
-        title: entry.data.title,
+        title: emoji ? `${emoji} ${entry.data.title}` : entry.data.title,
         link: url,
         id: url,
         url,

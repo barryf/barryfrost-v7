@@ -1,5 +1,5 @@
 import type { APIContext } from 'astro';
-import { getTimelineItems } from '@/lib/timeline';
+import { getTimelineItems, timelineFeedTitle } from '@/lib/timeline';
 
 export async function GET(context: APIContext) {
   const items = await getTimelineItems(context.site!);
@@ -17,7 +17,7 @@ export async function GET(context: APIContext) {
       avatar: new URL('/barryfrost.jpg', context.site).toString(),
     }],
     items: items.map((item) => {
-      const title = `${item.typeLabel}: ${item.title}`;
+      const title = timelineFeedTitle(item);
       return {
         id: item.id,
         url: item.url,

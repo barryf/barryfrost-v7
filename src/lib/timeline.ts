@@ -37,6 +37,17 @@ export interface TimelineItem {
 /** How many items the unified timeline shows / feeds carry. */
 const LIMIT = 50;
 
+/**
+ * Feed title for a timeline item, e.g. "Watched: Casino Royale". Mirrors the
+ * stream page, which labels an item with `titlePrefix` rather than `typeLabel`.
+ */
+export function timelineFeedTitle(item: TimelineItem): string {
+  const prefix = item.titlePrefix?.trim();
+  if (!prefix) return item.title;
+  // A weeknote emoji reads as part of its title, not as a label for it.
+  return item.type === 'weeknote' ? `${prefix} ${item.title}` : `${prefix}: ${item.title}`;
+}
+
 /** Truncate plain text (e.g. a Bluesky post) on a word boundary. */
 function truncateText(text: string, maxLen = 140): string {
   const collapsed = text.replace(/\s+/g, ' ').trim();
