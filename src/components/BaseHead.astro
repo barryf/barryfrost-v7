@@ -70,6 +70,11 @@ const ogImageURL = ogImage ? new URL(ogImage, Astro.site) : undefined;
 <link rel="alternate" type="application/feed+json" title="Barry Frost (JSON Feed)" href="/feed.json" />
 <link rel="alternate" type="application/rss+xml" title="Barry Frost — Stream (RSS)" href="/stream.xml" />
 <link rel="alternate" type="application/feed+json" title="Barry Frost — Stream (JSON Feed)" href="/stream.json" />
+{/* Bridgy's POSSE-post-discovery crawls this to map syndicated copies back to originals.
+    The home page's h-feed only exposes the latest weeknote, and the Bluesky cards posted
+    by publish-standard-site carry no link in their text — so u-syndication on /stream's
+    entries is the only trail back. */}
+<link rel="feed" type="text/html" href="/stream" />
 <link rel="me" href="https://github.com/barryf" />
 <link rel="me" href="https://mastodon.social/@barryf" />
 <link rel="me atproto" href="https://bsky.app/profile/barryfrost.com" />

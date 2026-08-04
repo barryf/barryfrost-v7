@@ -252,6 +252,14 @@ Applied as static classes directly in Astro templates. No runtime JS required.
 
 `BaseHead.astro` also emits IndieWeb discovery `<link>` tags in `<head>`: `rel="me"` (GitHub, Mastodon), `rel="me atproto"`, plus `webmention`, `microsub`, `authorization_endpoint` and `token_endpoint` for IndieAuth.
 
+It also emits `rel="feed"` pointing at `/stream`, which Bridgy crawls for POSSE-post-discovery
+— matching a syndicated Bluesky/Mastodon copy back to the post it came from so responses can be
+backfed as webmentions. The home page's own `h-feed` carries only the latest weeknote plus the
+selected articles, and the card-only Bluesky posts written by `publish-standard-site` have empty
+`text` and no link facet, so `/stream`'s eight-plus weeknotes and their `u-syndication` links are
+the only reliable trail back. Its off-site entries (`bsky.app`, `grain.social`, `bookhive.buzz`)
+are ignored by Bridgy, which only follows `u-url`s on the site's own domain.
+
 ## Feeds
 
 A single unified RSS feed and JSON feed carry both articles and weeknotes, interleaved by date. One feed URL (matching v6) means existing subscribers keep receiving posts when v7 takes over the apex domain.
