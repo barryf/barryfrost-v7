@@ -110,13 +110,30 @@ export function cleanMarkdown(body: string): string {
     .trim();
 }
 
+/** A reference-style link definition line: `[ref]: https://…` (optional title). Older posts
+ *  collect these at the foot of the body, where they are markup, not prose. */
+const LINK_DEFINITION = String.raw`^[ \t]{0,3}\[([^\]]+)\]:[ \t]*\S+.*$`;
+
 /** Flatten markdown to readable plaintext for textContent (paragraph breaks kept). */
 export function toPlaintext(body: string): string {
-  return cleanMarkdown(body)
+  const decoded = cleanMarkdown(body)
     .replace(/```[\s\S]*?```/g, ' ')          // fenced code blocks
-    .replace(/`([^`]+)`/g, '$1')               // inline code
+    .replace(/`([^`]+)`/g, '$1');              // inline code
+
+  // Reference-style links. Labels are collected first so bare `[ref]` shortcut usages can be
+  // unwrapped without touching square brackets that are just prose.
+  const labels = new Set(
+    [...decoded.matchAll(new RegExp(LINK_DEFINITION, 'gm'))].map((m) => m[1].toLowerCase()),
+  );
+
+  return decoded
+    .replace(new RegExp(LINK_DEFINITION, 'gm'), '') // [ref]: url definition lines
     .replace(/!\[[^\]]*\]\([^)]*\)/g, '')      // images
     .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')  // links → link text
+    .replace(/!\[[^\]]*\]\[[^\]]*\]/g, '')     // reference-style images
+    .replace(/\[([^\]]+)\]\[[^\]]*\]/g, '$1') // [text][ref] and [text][] → link text
+    .replace(/\[([^\]]+)\]/g, (m, text: string) => // [ref] shortcut → link text
+      labels.has(text.toLowerCase()) ? text : m)
     .replace(/^\s{0,3}#{1,6}\s+/gm, '')        // headings
     .replace(/^\s{0,3}>\s?/gm, '')             // blockquotes
     .replace(/^\s{0,3}([-*+]|\d+\.)\s+/gm, '') // list markers
