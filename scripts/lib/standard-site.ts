@@ -425,6 +425,69 @@ export async function resolveBskyPostRef(session: Session, url: string): Promise
   return existing ? { uri: existing.uri, cid: existing.cid } : null;
 }
 
+// ─── Relative body images ───────────────────────────────────────────────────────
+//
+// A few older posts reference images as Astro-relative paths (`![alt](../../assets/foo.jpg)`)
+// which only resolve at build time — the site serves them from /_astro/<stem>.<hash>.<ext>.
+// Syndicated verbatim they break for every external consumer, so, as with coverImage, we read
+// the already-rendered live page and swap each relative path for its absolute built URL.
+
+const RELATIVE_IMAGE = String.raw`(!\[[^\]]*\]\(\s*)(\.{1,2}/[^)\s]+)`;
+
+/** 'a/b/remoters.jpg' → 'remoters'. Astro emits /_astro/<stem>.<hash>.<ext>, so the source
+ *  filename's stem is what ties a markdown path to its built asset. */
+function assetStem(path: string): string {
+  return (path.split('/').pop() ?? path).replace(/\.[^.]+$/, '');
+}
+
+export function hasRelativeImages(markdown: string): boolean {
+  return new RegExp(RELATIVE_IMAGE).test(markdown);
+}
+
+/** Index a rendered page's built asset URLs (absolute) by source stem. */
+export function extractBuiltAssets(html: string, pageUrl: string): Map<string, string> {
+  const assets = new Map<string, string>();
+  for (const m of html.matchAll(/src="(\/_astro\/([^."/]+)\.[^"]+)"/g)) {
+    if (!assets.has(m[2])) assets.set(m[2], new URL(m[1], pageUrl).toString());
+  }
+  return assets;
+}
+
+/** Rewrite Astro-relative image paths to the absolute URLs the live page serves. Read-only
+ *  (safe under --dry-run) and never throws: an unreachable page or an unmatched image leaves
+ *  that markdown untouched with a warning, rather than failing the publish. */
+export async function resolveRelativeImages(entry: Entry, markdown: string): Promise<string> {
+  if (!hasRelativeImages(markdown)) return markdown;
+  const pageUrl = canonicalUrl(entry);
+  let assets: Map<string, string>;
+  try {
+    const res = await fetch(pageUrl);
+    if (!res.ok) {
+      console.warn(`[images] page fetch failed ${res.status}: ${pageUrl} — keeping relative paths`);
+      return markdown;
+    }
+    assets = extractBuiltAssets(await res.text(), pageUrl);
+  } catch (err) {
+    console.warn(`[images] error fetching page for ${pageUrl}:`, err);
+    return markdown;
+  }
+  return markdown.replace(new RegExp(RELATIVE_IMAGE, 'g'), (match, prefix: string, path: string) => {
+    const url = assets.get(assetStem(path));
+    if (!url) {
+      console.warn(`[images] no built asset for ${path} on ${pageUrl} — keeping relative path`);
+      return match;
+    }
+    return `${prefix}${url}`;
+  });
+}
+
+/** An entry whose body carries absolute image URLs, so everything derived from it — record
+ *  markdown, content signature, Bluesky post — is portable off-site. */
+export async function withResolvedImages(entry: Entry): Promise<Entry> {
+  const body = await resolveRelativeImages(entry, entry.body);
+  return body === entry.body ? entry : { ...entry, body };
+}
+
 // ─── Cover image (site.standard.document coverImage) ────────────────────────────
 //
 // Mirrors the web's OG image rule (src/lib/social.ts: first body image, or none) without

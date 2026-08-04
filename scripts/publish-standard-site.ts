@@ -16,7 +16,7 @@ import {
   readEntries, isPublishable, buildDocumentRecord, buildBlueskyPost,
   documentContentSignature, canonicalUrl, DOCUMENT_COLLECTION, PUBLICATIONS, documentUri,
   createSession, getRecord, putRecord, createRecord, resolveBskyPostRef, getPublicationRef,
-  resolveCoverImage, fetchOgImageUrl,
+  resolveCoverImage, fetchOgImageUrl, withResolvedImages,
   type CollectionName, type Entry, type Session, type StrongRef, type BlobRef,
 } from './lib/standard-site.js';
 
@@ -45,7 +45,10 @@ function bskyUrlFromSyndication(entry: Entry): string | undefined {
 
 type Action = 'create' | 'update' | 'skip';
 
-async function processEntry(entry: Entry, args: Args, session: Session | null): Promise<Action> {
+async function processEntry(source: Entry, args: Args, session: Session | null): Promise<Action> {
+  // Build-time-only image paths are resolved against the live page before anything reads the
+  // body, so the record, its signature and the Bluesky post all agree on absolute URLs.
+  const entry = await withResolvedImages(source);
   const rkey = entry.data.standardRkey!;
   const existing = session ? await getRecord(session, DOCUMENT_COLLECTION, rkey) : null;
   const existingRef = existing?.value.bskyPostRef as StrongRef | undefined;
