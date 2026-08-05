@@ -55,7 +55,7 @@ const date = new Date(data.createdAt);
       </div>
     </div>
   )}
-  {external && external.thumbUrl && (
+  {external && (external.thumbUrl ? (
     <div class="flex mt-2 mb-1">
       <a href={external.uri} rel="noopener noreferrer" class="block" title={external.title || undefined}>
         <img
@@ -68,7 +68,12 @@ const date = new Date(data.createdAt);
         />
       </a>
     </div>
-  )}
+  ) : (
+    <div class="mt-2 mb-1 text-sm">
+      <a class="underline" href={external.uri} rel="noopener noreferrer">{external.title || external.uri}</a>
+      {external.description && <p class="text-gray-500 dark:text-gray-400">{external.description}</p>}
+    </div>
+  ))}
   <div class="text-sm text-gray-500 dark:text-gray-400">
     <time class="dt-published mr-1" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatDateRelative(date)}</time>
     <a class="u-url underline" href={blueskyUrl} rel="noopener noreferrer" aria-label="View on Bluesky"><BlueskyIcon /></a>
