@@ -6,6 +6,7 @@ tags:
   - radio
   - homepod
 standardRkey: 3msc7txmk2222
+featured: true
 ---
 
 This may be a fairly niche topic for those in the UK, but it’s a hack I now use daily so I thought I’d share.
