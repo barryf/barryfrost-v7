@@ -36,11 +36,21 @@ Fetched at build time from `bsky.social` for DID `did:plc:j5ksi3y4tdtbp7vpsxsfya
 | `app.rocksky.scrobble` | `scrobbles.ts` | `/music` — Top Albums, Top Artists, Recently Played |
 | `site.standard.graph.subscription` | `subscriptions.ts` | `/blogroll` only |
 
-`bluesky.ts` drops syndicated weeknote posts — the site already publishes those weeknotes
-itself, so `/posts` carries only original posts and replies. A post is treated as a weeknote
-if its text or its link-card URI holds a weeknote URL (`/weeknotes/week-{N}` or the older
-`/{YYYY}/{MM}/week-{N}-{slug}`), or its text opens with `Week {N}` after any leading emoji.
-The card URI is the load-bearing check: posts written by the publisher carry no text at all.
+`bluesky.ts` drops syndicated weeknote and article posts — the site already publishes those
+itself, so `/posts` carries only original posts and replies. A post is dropped if its text
+holds a weeknote URL (`/weeknotes/week-{N}` or the older `/{YYYY}/{MM}/week-{N}-{slug}`) or
+opens with `Week {N}` after any leading emoji, or if it has **no text of its own** and its
+link-card URI points at a weeknote or an `/articles/{slug}` page — the shape written by
+`scripts/publish-standard-site.ts`.
+
+Two deliberate asymmetries. Articles are never matched on post text, only on the card URI: a
+post whose text links to an article is ordinary commentary, sometimes written years later, and
+belongs in the feed. And the card check requires empty text, so a syndication card with
+something written above it stays — a bare card is a copy of the site's own page, the same card
+with commentary is a post in its own right.
+
+A final guard drops any record with nothing to draw — no text, images, quote or link card —
+rather than emitting a blank card.
 
 > **Note on `com.barryfrost.checkin`:** The site route and code use `check-in` (hyphenated), but the AT Protocol NSID cannot follow suit — the spec only allows `[a-zA-Z0-9]` in NSID name segments (no hyphens). The NSID is therefore intentionally kept as `com.barryfrost.checkin`.
 >

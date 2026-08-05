@@ -31,19 +31,47 @@ interface BlueskyEmbed {
 const APPVIEW_HOST = 'public.api.bsky.app';
 
 /**
- * Weeknotes syndicated to Bluesky duplicate what the site already publishes, so they are
- * dropped from the posts feed. The shape has drifted over time: titles picked up a leading
- * emoji, and the permalink moved out of the post text into a link card. Match either the
- * title or a weeknote URL, on both the current `/weeknotes/week-N` path and the older
- * `/YYYY/MM/week-N-slug` one.
+ * Weeknotes and articles syndicated to Bluesky duplicate what the site already publishes at
+ * `/weeknotes` and `/articles`, so they are dropped from the posts feed.
+ *
+ * The weeknote shape has drifted over time: titles picked up a leading emoji, and the
+ * permalink moved out of the post text into a link card. Match either the title or a weeknote
+ * URL, on both the current `/weeknotes/week-N` path and the older `/YYYY/MM/week-N-slug` one.
+ *
+ * Articles are matched on the link-card URI only, never on the post text. Only the syndication
+ * posts written by `scripts/publish-standard-site.ts` carry an article link card, whereas a
+ * post whose *text* links to an article is ordinary commentary — often years later — and
+ * belongs in the feed.
+ *
+ * A link card is only treated as syndication when the post has no text of its own. A bare card
+ * is just a copy of the site's own page, but the same card with something written above it is a
+ * post in its own right and stays.
  */
 const WEEKNOTE_TITLE = /^\P{L}*Week \d+\b/iu;
 const WEEKNOTE_URL = /barryfrost\.com\/(?:weeknotes\/|\d{4}\/\d{2}\/)week-\d+/i;
+const ARTICLE_URL = /barryfrost\.com\/articles\//i;
 
-function isWeeknotePost(text: string, externalUri: string | undefined): boolean {
-  return WEEKNOTE_TITLE.test(text)
-    || WEEKNOTE_URL.test(text)
-    || (externalUri !== undefined && WEEKNOTE_URL.test(externalUri));
+function isOwnContentSyndication(text: string, externalUri: string | undefined): boolean {
+  if (WEEKNOTE_TITLE.test(text) || WEEKNOTE_URL.test(text)) return true;
+  if (externalUri === undefined || text.trim() !== '') return false;
+  return WEEKNOTE_URL.test(externalUri) || ARTICLE_URL.test(externalUri);
+}
+
+/**
+ * Whether a post has anything BlueskyCard will actually draw — text, images, a quote or a
+ * link card. A record with none of those (Bluesky itself has no way to compose one) would
+ * render as a blank card, so it is dropped rather than shown.
+ */
+function isRenderable(post: {
+  text: string;
+  imageUrls: string[];
+  external: object | null;
+  quotedPost: object | null;
+}): boolean {
+  return post.text.trim() !== ''
+    || post.imageUrls.length > 0
+    || post.quotedPost !== null
+    || post.external !== null;
 }
 
 interface AppViewPostView {
@@ -159,7 +187,7 @@ export function blueskyLoader(): Loader {
 
         const embed = value.embed as BlueskyEmbed | undefined;
         const externalUri = embed?.external?.uri ?? embed?.media?.external?.uri;
-        if (isWeeknotePost(value.text as string, externalUri)) return;
+        if (isOwnContentSyndication(value.text as string, externalUri)) return;
 
         let reply: { parentUri: string; parentHandle: string; parentRkey: string } | null = null;
         const replyRef = value.reply as { parent?: { uri?: string } } | undefined;
@@ -188,6 +216,8 @@ export function blueskyLoader(): Loader {
         const quotedPost = quoteRef
           ? await hydrateQuotedPost(quoteRef.uri, quoteRef.cid)
           : null;
+
+        if (!isRenderable({ text: value.text as string, imageUrls, external, quotedPost })) return;
 
         store.set({
           id: rkey,
