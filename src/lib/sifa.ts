@@ -1,4 +1,4 @@
-import { fetchAllRecords, DID, PDS_HOST } from './pds';
+import { fetchAllRecords, fetchWithRetry, DID, PDS_HOST } from './pds';
 
 export interface SifaSelf {
   headline?: string;
@@ -16,6 +16,7 @@ export interface SifaPosition {
   startedAt: string;
   endedAt?: string;
   description?: string;
+  entityRef?: string;
 }
 
 export interface SifaEducation {
@@ -31,6 +32,7 @@ export interface SifaCertification {
   issuedAt?: string;
   expiresAt?: string;
   credentialUrl?: string;
+  entityRef?: string;
 }
 
 export interface SifaProject {
@@ -97,6 +99,62 @@ export async function getSkills(): Promise<SifaSkill[]> {
 
 export async function getLanguages(): Promise<SifaLanguage[]> {
   return collectAll<SifaLanguage>('id.sifa.profile.language');
+}
+
+const WIKIDATA_ENTITY = /wikidata\.org\/entity\/(Q\d+)$/;
+const SIFA_COMPANY = /^https:\/\/sifa\.id\/company\//;
+
+interface WikidataEntityData {
+  entities?: Record<string, {
+    claims?: Record<string, { mainsnak?: { datavalue?: { value?: unknown } } }[]>;
+  }>;
+}
+
+/**
+ * Sifa identifies a company by `entityRef`, which is either a Wikidata entity URI
+ * or a sifa.id company page — neither of them the company's own site. Both sources
+ * do expose that site though: Wikidata as claim P856 ("official website"), and
+ * sifa.id as `url` on the application/ld+json it content-negotiates for the path.
+ */
+async function fetchEntityUrl(ref: string): Promise<string | undefined> {
+  const wikidata = ref.match(WIKIDATA_ENTITY);
+  if (wikidata) {
+    const qid = wikidata[1];
+    const res = await fetchWithRetry(`https://www.wikidata.org/wiki/Special:EntityData/${qid}.json`);
+    if (!res.ok) return undefined;
+    const data = await res.json() as WikidataEntityData;
+    const value = data.entities?.[qid]?.claims?.P856?.[0]?.mainsnak?.datavalue?.value;
+    return typeof value === 'string' ? value : undefined;
+  }
+
+  if (SIFA_COMPANY.test(ref)) {
+    const res = await fetchWithRetry(ref);
+    if (!res.ok) return undefined;
+    const data = await res.json() as { url?: string };
+    return data.url;
+  }
+
+  return undefined;
+}
+
+/**
+ * Resolve `entityRef`s to company websites, deduplicated so a company held across
+ * several positions costs one lookup. Best-effort by design: these are third-party
+ * sources outside the PDS, so an unreachable one means an unlinked company name
+ * rather than a failed build.
+ */
+export async function resolveEntityUrls(refs: (string | undefined)[]): Promise<Map<string, string>> {
+  const unique = [...new Set(refs.filter((ref): ref is string => Boolean(ref)))];
+  const urls = new Map<string, string>();
+  await Promise.all(unique.map(async ref => {
+    try {
+      const url = await fetchEntityUrl(ref);
+      if (url) urls.set(ref, url);
+    } catch {
+      // Leave it unlinked.
+    }
+  }));
+  return urls;
 }
 
 export function formatLocation(self: SifaSelf | undefined): string | undefined {

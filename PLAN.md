@@ -60,6 +60,8 @@ Blogroll blogs come from `src/data/blogroll.json` (static JSON), passed through 
 
 `/work` is the exception to the table: it reads `id.sifa.profile.{self,position,education,certification,project,skill,language}` records straight from the PDS via `src/lib/sifa.ts` (same `fetchAllRecords` helper) at page render, with no content collection and no loader. The `self` record supplies both the headline and the longer `about` text (plain text with blank-line paragraph breaks) rendered as the page's About section; `certification` records render as Credentials, linked to `credentialUrl` where one is set.
 
+Company and authority names link to the company's own website, which Sifa doesn't store directly: `position` and `certification` records carry an `entityRef` that is either a Wikidata entity URI or a `sifa.id/company/…` page. `resolveEntityUrls()` in `src/lib/sifa.ts` dereferences both — Wikidata via `Special:EntityData/<QID>.json` claim P856 ("official website"), sifa.id via the `application/ld+json` it content-negotiates for that path — deduplicating by ref so a company held across several positions costs one lookup. These are the only build-time reads outside the PDS, so resolution is best-effort: any failure leaves the name unlinked rather than aborting the build.
+
 ### Loader pattern
 Each PDS loader implements `Loader` from `astro/loaders`:
 - `store.clear()` at the start (full refresh each build)
