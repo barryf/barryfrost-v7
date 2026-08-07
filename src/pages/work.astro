@@ -7,20 +7,24 @@ import {
   getSelf,
   getPositions,
   getEducation,
+  getCertifications,
   getSkills,
   getLanguages,
   parseYM,
 } from '@/lib/sifa';
 
-const [self, positions, education, skills, languages] = await Promise.all([
+const [self, positions, education, certifications, skills, languages] = await Promise.all([
   getSelf(),
   getPositions(),
   getEducation(),
+  getCertifications(),
   getSkills(),
   getLanguages(),
 ]);
 
 const headline = self?.headline;
+// The Sifa `about` field is plain text with blank-line paragraph breaks.
+const about = self?.about?.trim().split(/\n\s*\n/).map(p => p.trim()).filter(Boolean) ?? [];
 
 type SkillCategory = 'technical' | 'business' | 'interpersonal';
 const skillsByCategory = skills.reduce<Record<SkillCategory, string[]>>(
@@ -46,18 +50,21 @@ const proficiencyLabel: Record<string, string> = {
   <div data-pagefind-body>
   <SectionHeading title="Work" class="mb-4" />
   <div class="mb-8">
-    My career history, education, skills and languages, from my
+    My career history, education, credentials, skills and languages, from my
     <a href="https://sifa.id/p/barryfrost.com" class="underline text-nowrap"><SifaIcon class="inline size-4 align-text-bottom mx-1" />Sifa profile</a>.
     Connect with me on Sifa or on
     <a href="https://linkedin.com/in/barryfrost" class="underline">LinkedIn</a>.
   </div>
 
-  <div class="mb-8 text-gray-600 dark:text-gray-400">
-    {headline && (
-      <h2 class="font-semibold mb-4 text-black dark:text-white">Headline</h2>
-      <p class="mb-4">{headline}</p>
-    )}
-  </div>
+  {(headline || about.length > 0) && (
+    <section class="mb-8">
+      <h2 class="font-semibold mb-4 text-black dark:text-white">About</h2>
+      <div class="space-y-4">
+        {headline && <p class="font-medium text-gray-700 dark:text-gray-300">{headline}</p>}
+        {about.map(para => <p>{para}</p>)}
+      </div>
+    </section>
+  )}
 
   <section class="mb-8">
     <h2 class="font-semibold mb-4 text-black dark:text-white">Experience</h2>
@@ -97,6 +104,29 @@ const proficiencyLabel: Record<string, string> = {
             </li>
           ))}
         </ul>
+    </section>
+  )}
+
+  {certifications.length > 0 && (
+    <section class="mb-8">
+      <h2 class="font-semibold mb-4 text-black dark:text-white">Credentials</h2>
+      <ul class="space-y-4">
+        {certifications.map(cert => (
+          <li>
+            <span class="font-semibold">
+              {cert.credentialUrl
+                ? <a href={cert.credentialUrl} class="underline">{cert.name}</a>
+                : cert.name}
+            </span>
+            <p class="text-sm text-gray-700 dark:text-gray-300 mt-0.5">{cert.authority}</p>
+            {cert.issuedAt && (
+              <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
+                {formatMonthYear(parseYM(cert.issuedAt))}{cert.expiresAt ? `–${formatMonthYear(parseYM(cert.expiresAt))}` : ''}
+              </p>
+            )}
+          </li>
+        ))}
+      </ul>
     </section>
   )}
 

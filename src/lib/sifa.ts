@@ -2,6 +2,7 @@ import { fetchAllRecords, DID, PDS_HOST } from './pds';
 
 export interface SifaSelf {
   headline?: string;
+  about?: string;
   location?: {
     city?: string;
     region?: string;
@@ -22,6 +23,14 @@ export interface SifaEducation {
   degree: string;
   fieldOfStudy?: string;
   endedAt?: string;
+}
+
+export interface SifaCertification {
+  name: string;
+  authority: string;
+  issuedAt?: string;
+  expiresAt?: string;
+  credentialUrl?: string;
 }
 
 export interface SifaProject {
@@ -70,6 +79,12 @@ export async function getCurrentPosition(): Promise<SifaPosition | undefined> {
 
 export async function getEducation(): Promise<SifaEducation[]> {
   return collectAll<SifaEducation>('id.sifa.profile.education');
+}
+
+export async function getCertifications(): Promise<SifaCertification[]> {
+  const certifications = await collectAll<SifaCertification>('id.sifa.profile.certification');
+  // Newest first; undated certifications sort last.
+  return certifications.sort((a, b) => (b.issuedAt ?? '').localeCompare(a.issuedAt ?? ''));
 }
 
 export async function getProjects(): Promise<SifaProject[]> {

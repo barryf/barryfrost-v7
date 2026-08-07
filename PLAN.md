@@ -58,7 +58,7 @@ rather than emitting a blank card.
 
 Blogroll blogs come from `src/data/blogroll.json` (static JSON), passed through `blogrollLoader()` so favicons/avatars are materialised into R2 like any other image.
 
-`/work` is the exception to the table: it reads `id.sifa.profile.{self,position,education,project,skill,language}` records straight from the PDS via `src/lib/sifa.ts` (same `fetchAllRecords` helper) at page render, with no content collection and no loader.
+`/work` is the exception to the table: it reads `id.sifa.profile.{self,position,education,certification,project,skill,language}` records straight from the PDS via `src/lib/sifa.ts` (same `fetchAllRecords` helper) at page render, with no content collection and no loader. The `self` record supplies both the headline and the longer `about` text (plain text with blank-line paragraph breaks) rendered as the page's About section; `certification` records render as Credentials, linked to `credentialUrl` where one is set.
 
 ### Loader pattern
 Each PDS loader implements `Loader` from `astro/loaders`:
