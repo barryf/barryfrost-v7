@@ -10,7 +10,6 @@ import {
   getCertifications,
   getSkills,
   getLanguages,
-  resolveEntityUrls,
   parseYM,
 } from '@/lib/sifa';
 
@@ -21,12 +20,6 @@ const [self, positions, education, certifications, skills, languages] = await Pr
   getCertifications(),
   getSkills(),
   getLanguages(),
-]);
-
-// Company websites, resolved from the `entityRef` each position/certification carries.
-const entityUrls = await resolveEntityUrls([
-  ...positions.map(pos => pos.entityRef),
-  ...certifications.map(cert => cert.entityRef),
 ]);
 
 const headline = self?.headline;
@@ -76,15 +69,11 @@ const proficiencyLabel: Record<string, string> = {
   <section class="mb-8">
     <h2 class="font-semibold mb-4 text-black dark:text-white">Experience</h2>
     <ul class="space-y-8">
-      {positions.map(pos => {
-        const companyUrl = pos.entityRef && entityUrls.get(pos.entityRef);
-        return (
+      {positions.map(pos => (
         <li>
           <div>
             <span class="font-semibold">{pos.title}</span>
-            <span class="text-gray-600 dark:text-gray-400"> · {
-              companyUrl ? <a href={companyUrl} class="underline">{pos.company}</a> : pos.company
-            }</span>
+            <span class="text-gray-600 dark:text-gray-400"> · {pos.company}</span>
           </div>
           <p class="text-sm text-gray-500 dark:text-gray-400">
             {formatMonthYear(parseYM(pos.startedAt))}–{pos.endedAt ? formatMonthYear(parseYM(pos.endedAt)) : 'Present'}
@@ -93,8 +82,7 @@ const proficiencyLabel: Record<string, string> = {
             <p class="mt-2 text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{pos.description.trim()}</p>
           )}
         </li>
-        );
-      })}
+      ))}
     </ul>
   </section>
 
@@ -123,26 +111,21 @@ const proficiencyLabel: Record<string, string> = {
     <section class="mb-8">
       <h2 class="font-semibold mb-4 text-black dark:text-white">Credentials</h2>
       <ul class="space-y-4">
-        {certifications.map(cert => {
-          const authorityUrl = cert.entityRef && entityUrls.get(cert.entityRef);
-          return (
+        {certifications.map(cert => (
           <li>
             <span>
               {cert.credentialUrl
                 ? <a href={cert.credentialUrl} class="underline">{cert.name}</a>
                 : cert.name}
             </span>
-            <p class="text-sm text-gray-700 dark:text-gray-300 mt-0.5">{
-              authorityUrl ? <a href={authorityUrl} class="underline">{cert.authority}</a> : cert.authority
-            }</p>
+            <p class="text-sm text-gray-700 dark:text-gray-300 mt-0.5">{cert.authority}</p>
             {cert.issuedAt && (
               <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
                 {formatMonthYear(parseYM(cert.issuedAt))}{cert.expiresAt ? `–${formatMonthYear(parseYM(cert.expiresAt))}` : ''}
               </p>
             )}
           </li>
-          );
-        })}
+        ))}
       </ul>
     </section>
   )}
