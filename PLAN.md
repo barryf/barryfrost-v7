@@ -523,7 +523,7 @@ Both CLIs accept `--no-git` (or `CI=true`) to skip git/gh operations — used by
 | `scripts/delete-imported-notes-bsky.ts` | Delete all records previously imported by `import-notes-bsky.ts` |
 | `scripts/create-standard-publications.ts` | Upsert the two `site.standard.publication` records — name, description, theme, icon (`npm run standard:pubs`) |
 | `scripts/assign-standard-rkeys.ts` | One-time: write `standardRkey` TIDs into article/weeknote frontmatter (`npm run standard:rkeys`) |
-| `scripts/publish-standard-site.ts` | Upsert `site.standard.document` records + Bluesky card posts (`npm run publish:standard`) |
+| `scripts/publish-standard-site.ts` | Upsert `site.standard.document` records + Bluesky card posts; `--sync-syndication` reconciles `bskyPostRef` with `syndication` frontmatter (`npm run publish:standard`) |
 | `scripts/publish-lexicon.ts` | Upsert the canonical `com.barryfrost.checkin` lexicon doc to the PDS (`npm run publish:lexicon`) |
 | `scripts/normalise-weeknote-titles.py` | One-time: rewrite `Week {N}: {Topic}` frontmatter titles to the `Week {N} - {Topic}` convention (weeks 1–46). Dry-run by default, `--apply` to write |
 
@@ -563,6 +563,23 @@ targets.
 - **Identity/idempotency**: each post carries a stable TID `standardRkey` in frontmatter;
   the publisher is `putRecord`-idempotent and treats the existing record's `bskyPostRef` as
   the "already posted to Bluesky" guard, so re-runs never double-post.
+- **Syndication precedence**: local Markdown is canonical, so a `bsky.app` URL authored in
+  `syndication` frontmatter outranks the record's `bskyPostRef` — deleting a card post and
+  linking its replacement is all it takes to repoint the record on the next run. An authored
+  URL that no longer resolves is reported and ignored rather than overwriting a live ref.
+  The reverse direction is opt-in: `--sync-syndication` writes a record's ref back into
+  frontmatter when the file has no `bsky.app` link, for posts whose card post was created by
+  a CI run that had no way to commit to the repo. `release.ts` passes no flags, so CI never
+  takes that path; run it locally after a deploy and commit the diff. Frontmatter edits are
+  string surgery on the raw file (`editFrontmatter`), never a `parseFrontmatter` round
+  trip — that parser only knows `SCALAR_KEYS`/`LIST_KEYS` and would drop `featured` et al.
+- **`bskyPost: false`** frontmatter suppresses the companion card post. `--sync-syndication`
+  sets it on any document whose `bskyPostRef` points at a **deleted** post with no authored
+  URL to replace it, and clears the dead ref at the same time. Both halves are needed: the
+  ref is the only "already posted" guard, so clearing it alone would let a later content
+  edit republish a years-old article to the top of the Bluesky feed. Six documents from the
+  3 Aug 2026 batch were deleted by hand after a card-rendering fault; two were re-posted
+  manually (frontmatter wins, refs repointed), four are suppressed this way.
 - **Bluesky**: first publish of a doc creates a companion post with a rich link card back to
   the page; its strong-ref is stored in `bskyPostRef`. The post itself has **no text** — the
   card already leads with the emoji and title, so any text just repeats it and Bluesky renders

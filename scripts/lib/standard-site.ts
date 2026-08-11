@@ -8,6 +8,7 @@
 import { readdirSync, readFileSync, statSync } from 'fs';
 import { join, extname, relative } from 'path';
 import sharp from 'sharp';
+import { HANDLE } from '../../src/lib/pds.js';
 import {
   PUBLICATIONS,
   DID,
@@ -33,6 +34,9 @@ export interface Frontmatter {
   visibility?: string;
   syndication?: string[];
   standardRkey?: string;
+  /** `false` suppresses the companion Bluesky card post — set when a card post was deleted
+   *  deliberately, so no later content edit silently republishes an old piece. */
+  bskyPost?: boolean;
 }
 
 export interface Entry {
@@ -48,7 +52,7 @@ export interface Entry {
 // A deliberately small parser for the frontmatter shapes this repo authors (scalars,
 // simple `- item` lists). Avoids pulling in a YAML dependency for our own controlled data.
 
-const SCALAR_KEYS = new Set(['title', 'description', 'date', 'week', 'emoji', 'visibility', 'standardRkey']);
+const SCALAR_KEYS = new Set(['title', 'description', 'date', 'week', 'emoji', 'visibility', 'standardRkey', 'bskyPost']);
 const LIST_KEYS = new Set(['tags', 'syndication']);
 
 function unquote(v: string): string {
@@ -90,10 +94,58 @@ export function parseFrontmatter(raw: string): { data: Frontmatter; body: string
     currentListKey = null;
     if (!SCALAR_KEYS.has(key)) continue;
     if (key === 'week') data.week = parseInt(value, 10);
+    else if (key === 'bskyPost') data.bskyPost = value === 'true';
     else (data as Record<string, string>)[key] = unquote(value);
   }
   void currentListKey;
   return { data, body };
+}
+
+// ─── Frontmatter writing ────────────────────────────────────────────────────────
+
+/** Rewrite a file's frontmatter lines in place, leaving the body byte-identical.
+ *
+ *  Deliberately string surgery on the raw file rather than a parse-and-reserialise round
+ *  trip: `parseFrontmatter` only understands SCALAR_KEYS/LIST_KEYS, so re-emitting from its
+ *  output would silently drop every other authored key (`featured`, `image`, …). */
+function editFrontmatter(raw: string, edit: (lines: string[]) => string[] | null): string {
+  const match = /^(---\r?\n)([\s\S]*?)(\r?\n---\r?\n?)/.exec(raw);
+  if (!match) return raw;
+  const [full, open, block, close] = match;
+  const updated = edit(block.split(/\r?\n/));
+  if (!updated) return raw;
+  const eol = block.includes('\r\n') ? '\r\n' : '\n';
+  // Sliced, not String.replace — `$&`/`$1` in body text would be interpreted.
+  return open + updated.join(eol) + close + raw.slice(full.length);
+}
+
+/** Append a URL to a file's `syndication` frontmatter, creating the block if absent. */
+export function addSyndicationUrl(raw: string, url: string): string {
+  return editFrontmatter(raw, (lines) => {
+    if (lines.some((l) => l.includes(url))) return null;
+    const start = lines.findIndex((l) => /^syndication:\s*$/.test(l));
+    // Convention across the archive: `syndication` is the last frontmatter key.
+    if (start === -1) return [...lines, 'syndication:', `  - ${url}`];
+    let end = start + 1;
+    while (end < lines.length && /^\s+-\s+/.test(lines[end])) end++;
+    return [...lines.slice(0, end), `  - ${url}`, ...lines.slice(end)];
+  });
+}
+
+/** Set `bskyPost: false`, replacing any existing value for the key. */
+export function setBskyPostFalse(raw: string): string {
+  return editFrontmatter(raw, (lines) => {
+    const at = lines.findIndex((l) => /^bskyPost:\s*/.test(l));
+    if (at !== -1) {
+      if (lines[at] === 'bskyPost: false') return null;
+      return lines.map((l, i) => (i === at ? 'bskyPost: false' : l));
+    }
+    // Ahead of any `syndication` block, so the scalar keys stay grouped.
+    const before = lines.findIndex((l) => /^syndication:\s*$/.test(l));
+    return before === -1
+      ? [...lines, 'bskyPost: false']
+      : [...lines.slice(0, before), 'bskyPost: false', ...lines.slice(before)];
+  });
 }
 
 // ─── Content extraction ─────────────────────────────────────────────────────────
@@ -434,7 +486,14 @@ export async function uploadBlob(session: Session, bytes: Buffer, mimeType: stri
   return data.blob;
 }
 
-/** Resolve a bsky.app post URL (…/profile/<handle-or-did>/post/<rkey>) to a strong ref. */
+/** Strong ref → the bsky.app permalink form used in `syndication` frontmatter. */
+export function bskyUrlFromRef(ref: StrongRef): string {
+  return `https://bsky.app/profile/${HANDLE}/post/${ref.uri.split('/').pop()}`;
+}
+
+/** Resolve a bsky.app post URL (…/profile/<handle-or-did>/post/<rkey>) to a strong ref.
+ *  Returns null when the post no longer exists, which is what makes it usable as a
+ *  liveness check before trusting either side of a syndication mismatch. */
 export async function resolveBskyPostRef(session: Session, url: string): Promise<StrongRef | null> {
   const m = /\/post\/([a-z0-9]+)\/?$/i.exec(url);
   if (!m) return null;

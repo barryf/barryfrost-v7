@@ -20,6 +20,7 @@ const articles = defineCollection({
     featured: z.boolean().optional(),
     standardRkey: z.string().optional(),
     syndication: z.array(z.string().url()).optional(),
+    bskyPost: z.boolean().optional(),
   }),
 });
 
@@ -35,6 +36,7 @@ const weeknotes = defineCollection({
     visibility: z.string().optional(),
     standardRkey: z.string().optional(),
     syndication: z.array(z.string().url()).optional(),
+    bskyPost: z.boolean().optional(),
   }),
 });
 

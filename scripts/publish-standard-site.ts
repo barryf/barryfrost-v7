@@ -10,29 +10,40 @@
 // mode no new Bluesky posts are created; an existing bsky.app URL from the file's
 // `syndication` frontmatter is reused as the ref where present.
 //
+// Local Markdown stays canonical, so an authored bsky.app URL in `syndication` frontmatter
+// always wins over the record's `bskyPostRef` — that is how a hand-replaced Bluesky post
+// repoints a stale ref. --sync-syndication additionally closes the reverse gap, writing a
+// record's ref back into frontmatter for posts whose card post was created by a CI run that
+// had no way to commit to the repo. It is opt-in precisely so CI never takes that path.
+//
 // Usage:
-//   npm run publish:standard -- [--backfill] [--dry-run] [--only <slug>] [--collection <name>]
+//   npm run publish:standard -- [--backfill] [--dry-run] [--sync-syndication]
+//                               [--only <slug>] [--collection <name>]
+import { readFileSync, writeFileSync } from 'fs';
 import {
   readEntries, isPublishable, buildDocumentRecord, buildBlueskyPost,
   documentContentSignature, canonicalUrl, DOCUMENT_COLLECTION, PUBLICATIONS, documentUri,
   createSession, getRecord, putRecord, createRecord, resolveBskyPostRef, getPublicationRef,
-  resolveCoverImage, fetchOgImageUrl, withResolvedImages,
+  resolveCoverImage, fetchOgImageUrl, withResolvedImages, addSyndicationUrl, setBskyPostFalse,
+  bskyUrlFromRef,
   type CollectionName, type Entry, type Session, type StrongRef, type BlobRef,
 } from './lib/standard-site.js';
 
 interface Args {
   backfill: boolean;
   dryRun: boolean;
+  syncSyndication: boolean;
   only?: string;
   collection?: CollectionName;
 }
 
 function parseArgs(argv: string[]): Args {
-  const args: Args = { backfill: false, dryRun: false };
+  const args: Args = { backfill: false, dryRun: false, syncSyndication: false };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === '--backfill') args.backfill = true;
     else if (a === '--dry-run') args.dryRun = true;
+    else if (a === '--sync-syndication') args.syncSyndication = true;
     else if (a === '--only') args.only = argv[++i];
     else if (a === '--collection') args.collection = argv[++i] as CollectionName;
   }
@@ -57,11 +68,20 @@ async function processEntry(source: Entry, args: Args, session: Session | null):
   const desiredNoRef = buildDocumentRecord(entry);
   const contentChanged = !existing || documentContentSignature(existing.value) !== documentContentSignature(desiredNoRef);
 
-  // Resolve the Bluesky ref we should end up with (without posting yet).
+  // Resolve the Bluesky ref we should end up with (without posting yet). Frontmatter is the
+  // canonical side: an authored URL that still resolves overrides the record's ref, so
+  // deleting a card post and linking its replacement is enough to correct `bskyPostRef`. An
+  // authored URL that no longer resolves is reported and ignored rather than clobbering.
   let bskyRef: StrongRef | undefined = existingRef;
-  if (!bskyRef) {
-    const syndicationUrl = bskyUrlFromSyndication(entry);
-    if (syndicationUrl && session) bskyRef = (await resolveBskyPostRef(session, syndicationUrl)) ?? undefined;
+  const authoredUrl = bskyUrlFromSyndication(entry);
+  if (authoredUrl && session && (!existingRef || bskyUrlFromRef(existingRef) !== authoredUrl)) {
+    const resolved = await resolveBskyPostRef(session, authoredUrl);
+    if (resolved) {
+      if (existingRef) console.log(`    repoint bskyPostRef → ${authoredUrl} (record had ${bskyUrlFromRef(existingRef)})`);
+      bskyRef = resolved;
+    } else {
+      console.warn(`    ! frontmatter bsky URL does not resolve: ${authoredUrl}${existingRef ? ' — keeping the record ref' : ''}`);
+    }
   }
 
   // Resolve the coverImage we should end up with — attached once, then sticky (like bskyRef).
@@ -77,9 +97,34 @@ async function processEntry(source: Entry, args: Args, session: Session | null):
   }
   const willAttachCover = !!coverImage || !!coverPreviewUrl;
 
-  const needsWrite = contentChanged
-    || (!!bskyRef && !!existing && !existingRef)
-    || (willAttachCover && !!existing);
+  // The reverse direction: a record ref the frontmatter doesn't know about. Runs before the
+  // skip below, since the steady state for these is a record that needs no write at all.
+  let suppressPost = source.data.bskyPost === false;
+  if (args.syncSyndication && bskyRef && !authoredUrl && session) {
+    const url = bskyUrlFromRef(bskyRef);
+    if (await resolveBskyPostRef(session, url)) {
+      if (args.dryRun) console.log(`    would add to frontmatter: ${url}`);
+      else {
+        writeFileSync(source.filePath, addSyndicationUrl(readFileSync(source.filePath, 'utf-8'), url));
+        console.log(`    frontmatter += ${url}`);
+      }
+    } else {
+      // The post is gone and no authored URL replaces it: drop the dead ref, and record the
+      // deliberate absence in frontmatter so a later content edit can't republish an old
+      // post — clearing the ref alone would remove the only "already posted" guard.
+      bskyRef = undefined;
+      suppressPost = true;
+      if (args.dryRun) console.log(`    would clear dead bskyPostRef (${url}) and set bskyPost: false`);
+      else {
+        writeFileSync(source.filePath, setBskyPostFalse(readFileSync(source.filePath, 'utf-8')));
+        console.log(`    cleared dead bskyPostRef (${url}); frontmatter bskyPost: false`);
+      }
+    }
+  }
+
+  // Compares both directions, so clearing a ref counts as a change, not just gaining one.
+  const refChanged = !!existing && (existingRef?.uri ?? null) !== (bskyRef?.uri ?? null);
+  const needsWrite = contentChanged || refChanged || (willAttachCover && !!existing);
   if (!needsWrite) {
     console.log(`  = skip   ${entry.collection}/${entry.slug}`);
     return 'skip';
@@ -87,7 +132,7 @@ async function processEntry(source: Entry, args: Args, session: Session | null):
 
   // Create a fresh Bluesky post only when publishing new/changed content in incremental
   // mode with no ref available from an existing record or syndication.
-  const wantNewPost = needsWrite && !bskyRef && !args.backfill;
+  const wantNewPost = needsWrite && !bskyRef && !args.backfill && !suppressPost;
 
   if (args.dryRun && !existingCover) {
     console.log(coverPreviewUrl
