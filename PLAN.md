@@ -164,7 +164,7 @@ All icons accept an optional `class` prop to override the default sizing/alignme
 The star glyph itself (Heroicons 24/outline) lives once as `STAR_PATH` in `src/lib/icons.ts`, shared by `StarRating` and the featured-article marker `StarIcon` so the two can't drift apart. `StarIcon` fills it solid; `StarRating` varies the fill per slot.
 
 Card components in `src/components/posts/`:
-- `ArticleCard` — title link, relative date with `title` attr, capitalised ("Today"/"Yesterday") because the date starts its own line
+- `ArticleCard` — title link, relative date with `title` attr
 - `BlueskyCard` — rich text, embedded image thumbnails in a horizontally scrollable square strip matching the homepage photo strip (`size-30 aspect-square object-cover`, `gap-1`, `rounded-l-xl`/`rounded-r-xl` on the first/last, each linking to a larger version), external embed thumbnails (e.g. GIFs) linking to the source URL with alt from the embed's description — a thumbless external embed instead renders as a small title link plus its description, since the raw PDS record for a Standard Site card carries no thumb blob (the AppView synthesises one from the `associatedRefs`, but the site reads records directly), quote posts via `BlueskyQuote`, relative date, Bluesky icon link, pdsls icon link. An `indexable` prop (default `true`) gates the `data-pagefind-body` attribute so the card can be reused off the canonical `/posts` list (e.g. the homepage) without duplicate search indexing
 - `CheckInCard` — venue name/category/address (name links to OpenStreetMap when lat/lon available), optional photo(s), relative date, pdsls icon link
 - `FilmCard` — clickable poster linking to Popfeed, title, star rating, relative date, pdsls icon link
@@ -173,10 +173,13 @@ Card components in `src/components/posts/`:
 
 All visible `<time>` elements use `formatDateRelative` for display, with `title={formatDateTitle(date)}` for the full date on hover and `datetime={toISODate(date)}` for machine readability. Hidden microformat-only `<time>` tags (e.g. the homepage photo/article/check-in lists) keep the absolute `formatDateShort` value.
 
+Wherever the date stands alone as its own label — every card above except `BookCard`, plus the homepage weeknote and check-in lists, `/music` and the `/stream` day headings — the relative phrase is wrapped in `capitaliseDate` so it reads "Today"/"Yesterday" rather than "today". The two mid-sentence uses (`Post.astro`'s "Posted … today." footer and `BookCard`'s "Started today") stay lowercase.
+
 ## Date Formatting
 
 `src/lib/dates.ts` exports:
 - `formatDateRelative(date, now?)` — relative time ("today", "yesterday", "3 days ago", "5 hours ago") for dates within 14 days; falls back to `formatDateShort` beyond that. All-day (midnight-UTC) dates compare by whole Europe/London calendar days; timestamped dates resolve down to the second. Computed at build time — safe because the site rebuilds at least hourly. Used for every visible displayed date.
+- `capitaliseDate(label)` — uppercases the first character of a formatted date. `Intl.RelativeTimeFormat` returns "today"/"yesterday" lowercase, which is right mid-sentence but wrong for a standalone label; call sites opt in rather than the formatter deciding.
 - `formatDate(date)` — "22 April 2026" (Europe/London). Used only inside `formatDateTitle`.
 - `formatDateTitle(date)` — for `title` attributes: "22 April 2026" for date-only (or midnight-UTC) values; "22 April 2026 13:45:12 (GMT+1)" for timestamped values, using Europe/London time and offset.
 - `formatDateShort(date)` — "22 Apr 2026". Used as the `formatDateRelative` fallback beyond the 14-day cutoff and for the hidden microformat-only `<time>` tags.

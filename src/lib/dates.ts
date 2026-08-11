@@ -17,6 +17,12 @@ export function formatDateShort(date: Date): string {
 
 const RELATIVE_CUTOFF_DAYS = 14;
 
+// Intl returns relative phrases lowercase ("today", "yesterday"). Capitalise when the
+// date stands alone as a label; leave it as-is mid-sentence ("Posted today").
+export function capitaliseDate(label: string): string {
+  return label.charAt(0).toUpperCase() + label.slice(1);
+}
+
 // Whole-calendar-day difference in Europe/London (negative = in the past).
 function calendarDayDiff(from: Date, to: Date): number {
   const dayNumber = (d: Date) => {

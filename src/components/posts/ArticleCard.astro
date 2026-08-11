@@ -1,5 +1,5 @@
 ---
-import { formatDateRelative, formatDateTitle, toISODate } from '@/lib/dates';
+import { capitaliseDate, formatDateRelative, formatDateTitle, toISODate } from '@/lib/dates';
 import AuthorCard from '@/components/AuthorCard.astro';
 import StarIcon from '@/components/icons/StarIcon.astro';
 
@@ -19,11 +19,9 @@ const { entry } = Astro.props;
 const { data } = entry;
 const url = `/articles/${entry.id}`;
 
-// The date starts its own line, so "today"/"yesterday" need a capital.
-const capitalise = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 ---
 <li class="h-entry mb-4">
   <div><a class="p-name u-url underline" href={url}>{data.featured && (<><StarIcon class="mr-1 size-3 inline-block -translate-y-px" /><span class="sr-only">Featured: </span></>)}{data.title}</a></div>
-  <time class="dt-published text-sm text-gray-500 dark:text-gray-400" datetime={toISODate(data.date)} title={formatDateTitle(data.date)}>{capitalise(formatDateRelative(data.date))}</time>
+  <time class="dt-published text-sm text-gray-500 dark:text-gray-400" datetime={toISODate(data.date)} title={formatDateTitle(data.date)}>{capitaliseDate(formatDateRelative(data.date))}</time>
   <AuthorCard />
 </li>

@@ -13,7 +13,7 @@ import PopfeedIcon from '@/components/icons/PopfeedIcon.astro';
 import BookHiveIcon from '@/components/icons/BookHiveIcon.astro';
 import GrainIcon from '@/components/icons/GrainIcon.astro';
 import StandardSiteIcon from '@/components/icons/StandardSiteIcon.astro';
-import { formatDateRelativeDays, formatDateShort, formatDateTitle, toISODate } from '@/lib/dates';
+import { capitaliseDate, formatDateRelativeDays, formatDateShort, formatDateTitle, toISODate } from '@/lib/dates';
 import { getTimelineItems, type TimelineItem, type TimelineType } from '@/lib/timeline';
 import { SECTIONS } from '@/lib/sections';
 
@@ -40,7 +40,6 @@ for (const item of items) {
   else groups.push({ key, date: item.date, items: [item] });
 }
 
-const capitalise = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 ---
 <Feed {...SECTIONS.stream} totalPages={1} basePath="/stream" paginate={false}>
   <Fragment slot="description">
@@ -53,7 +52,7 @@ const capitalise = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
     {groups.map((group) => (
       <section>
         <h2 class="relative pl-0 py-2 text-sm bg-white dark:bg-black font-semibold text-black dark:text-white">
-          {capitalise(formatDateRelativeDays(group.date))}
+          {capitaliseDate(formatDateRelativeDays(group.date))}
         </h2>
         <ol class="timeline">
           {group.items.map((item) => {

@@ -1,5 +1,5 @@
 ---
-import { formatDateRelative, formatDateTitle, toISODate } from '@/lib/dates';
+import { capitaliseDate, formatDateRelative, formatDateTitle, toISODate } from '@/lib/dates';
 import { DID, pdslsUrl } from '@/lib/pds';
 import PdslsIcon from '@/components/icons/PdslsIcon.astro';
 import AuthorCard from '@/components/AuthorCard.astro';
@@ -57,7 +57,7 @@ const date = new Date(data.createdAt);
     </a>
     {data.description && <p class="e-content text-sm text-gray-600 dark:text-gray-400 mt-0.5">{data.description}</p>}
     <div class="text-gray-500 dark:text-gray-400">
-      <time class="dt-published text-sm mr-1" datetime={toISODate(date)} title={formatDateTitle(date)}>{formatDateRelative(date)}</time>
+      <time class="dt-published text-sm mr-1" datetime={toISODate(date)} title={formatDateTitle(date)}>{capitaliseDate(formatDateRelative(date))}</time>
       <a class="underline" href={pdslsUrl(`at://${DID}/social.grain.gallery/${data.galleryRkey}`)} rel="noopener noreferrer" aria-label="View on PDSls"><PdslsIcon /></a>
     </div>
   </div>
