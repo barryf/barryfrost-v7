@@ -3,6 +3,7 @@ import { getCollection, render } from 'astro:content';
 import Post from '@/layouts/Post.astro';
 import { plainExcerpt } from '@/lib/excerpt';
 import { socialMeta } from '@/lib/social';
+import { resolveSyndication } from '@/lib/syndication';
 import { weeknoteUrl } from '@/lib/urls';
 
 export async function getStaticPaths() {
@@ -46,6 +47,7 @@ const social = await socialMeta(entry);
 const description = entry.data.description || social.description;
 const { emoji } = entry.data;
 const title = emoji ? `${emoji} ${entry.data.title}` : entry.data.title;
+const syndication = await resolveSyndication(entry.data.syndication, entry.data.standardRkey);
 ---
 <Post
   title={title}
@@ -55,7 +57,7 @@ const title = emoji ? `${emoji} ${entry.data.title}` : entry.data.title;
   sectionHref="/weeknotes"
   standardRkey={entry.data.standardRkey}
   standardPublication="weeknotes"
-  syndication={entry.data.syndication}
+  syndication={syndication}
   navAside
   ogImage={social.image}
   ogImageAlt={social.imageAlt}

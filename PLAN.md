@@ -35,6 +35,7 @@ Fetched at build time from `bsky.social` for DID `did:plc:j5ksi3y4tdtbp7vpsxsfya
 | `social.grain.gallery` + `.gallery.item` + `.photo` | `photos.ts` | `/photos`, homepage recent photos |
 | `app.rocksky.scrobble` | `scrobbles.ts` | `/music` — Top Albums, Top Artists, Recently Played |
 | `site.standard.graph.subscription` | `subscriptions.ts` | `/blogroll` only |
+| `site.standard.document` | `standard-documents.ts` | Bluesky syndication links on post pages + `/stream` |
 
 `bluesky.ts` drops syndicated weeknote and article posts — the site already publishes those
 itself, so `/posts` carries only original posts and replies. A post is dropped if its text
@@ -51,6 +52,15 @@ with commentary is a post in its own right.
 
 A final guard drops any record with nothing to draw — no text, images, quote or link card —
 rather than emitting a blank card.
+
+`standard-documents.ts` is the other half of that story. Those same card posts are dropped from
+`/posts`, but each one is still a syndicated copy worth linking from the post it announces —
+and `publish-standard-site.ts` already records its strong-ref as `bskyPostRef` on the
+`site.standard.document`. The loader reads that collection and stores just `rkey → bskyUrl` for
+the records carrying a ref (documents without one are skipped, so they cost nothing), which
+`src/lib/syndication.ts` then resolves against a post's `standardRkey`. A failed fetch warns
+and yields an empty store rather than throwing: these links are an enrichment, not content, so
+a PDS blip should cost the links, not the build.
 
 > **Note on `com.barryfrost.checkin`:** The site route and code use `check-in` (hyphenated), but the AT Protocol NSID cannot follow suit — the spec only allows `[a-zA-Z0-9]` in NSID name segments (no hyphens). The NSID is therefore intentionally kept as `com.barryfrost.checkin`.
 >
@@ -142,7 +152,7 @@ well inside Cloudflare's 2,000 static / 100 dynamic limits.
 - `Feed.astro` — shared feed layout used by all list/paginated pages. Renders the `h-feed` wrapper, hidden `h-card p-author` MF2 author block, heading (with `(Page N)` suffix), optional named `description` slot, default slot for item content, and `<Pagination>` (suppressed via `paginate={false}` for books page 1). Props: `title`, `currentPage?`, `totalPages`, `basePath`, `paginate?`, `showDescription?` (set false on pages 2+ to hide the intro slot, since slots can't be conditionally passed).
 - `FilmFeed.astro` — extends `Feed.astro` for `/films` and `/films/by-rating`: adds date/rating sort toggle and renders `FilmCard` in a responsive grid (`grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4`)
 - `Post.astro` — individual article/weeknote with prose styles; "Posted in [Section] on [relative date]" (or "Posted on [relative date]") footer, followed by `Syndication` links when the post has `syndication` or `standardRkey` frontmatter. Optional `navAside` prop (set by weeknotes) moves the named `nav` slot into a right-hand column at `lg` and above; below that the columns collapse and the slot stacks under the body in source order. The columns align on `items-baseline` so the smaller aside text shares a baseline with the body's first line
-- `Syndication.astro` — renders a post's `syndication` frontmatter URLs as icon + label links (`u-syndication`, `rel="syndication"`), prefixed with "and also on", after the timestamp in `Post.astro`. `serviceFor(url)` maps a URL's host to a known service (Bluesky, Mastodon, X/Twitter, Medium, LinkedIn, IndieNews) and its icon; an unrecognised host falls back to a bare hostname label with no icon. A post with a `standardRkey` also leads the list with a "Standard Site" link to its Standard Reader page (`standardReaderUrl()`); the clause renders for a `standardRkey` alone, with no other syndication targets. That link is deliberately **not** `u-syndication` — Standard Reader is a viewer for the record, not the syndicated copy itself, which the head's `<link rel="site.standard.document">` already advertises as an `at://` URI
+- `Syndication.astro` — renders a post's syndication URLs as icon + label links (`u-syndication`, `rel="syndication"`), prefixed with "and also on", after the timestamp in `Post.astro`. The list comes from `resolveSyndication()` (`src/lib/syndication.ts`) — `syndication` frontmatter plus the Bluesky card post recorded on the document record, see below. `serviceFor(url)` maps a URL's host to a known service (Bluesky, Mastodon, X/Twitter, Medium, LinkedIn, IndieNews) and its icon; an unrecognised host falls back to a bare hostname label with no icon. A post with a `standardRkey` also leads the list with a "Standard Site" link to its Standard Reader page (`standardReaderUrl()`); the clause renders for a `standardRkey` alone, with no other syndication targets. That link is deliberately **not** `u-syndication` — Standard Reader is a viewer for the record, not the syndicated copy itself, which the head's `<link rel="site.standard.document">` already advertises as an `at://` URI
 - `Divider.astro` — `⁂` separator; `my-8 text-xl`
 - `SiteFooter.astro` — `Divider`, then a wrapping row holding the search form (submits to `/search`) and the secondary links — Colophon, Blogroll, Follow, Contact — followed by a copyright/licence line (CC BY 4.0) with a link to the GitHub source repo; rendered on every page. Links use the same two states as the header, via the same `isCurrentPage()`
 Icon components in `src/components/icons/`:
@@ -255,7 +265,7 @@ Applied as static classes directly in Astro templates. No runtime JS required.
   canonical URL. That anchor is deliberately **empty** — `u-url` reads the `href`, and it sits
   inside `data-pagefind-body`, so any text would be indexed and show up in the search excerpt of
   every post. Its href goes through `cleanPathname()` so it matches `rel=canonical` exactly
-- **Stream page** (`/stream`): a vertical-line timeline grouped into Europe/London calendar days (continuous line via an absolutely-positioned rule). Day headings show a **day-granular relative date** (`formatDateRelativeDays` — "Today"/"Yesterday"/"N days ago", never hours; absolute short date beyond the 14-day cutoff), capitalised; grouping stays keyed on the absolute calendar day so the relative label can't split a day. Each item is an `h-entry` (`<li>`) whose node on the line is a circular badge holding the type's icon (`ring` matched to the page background so it masks the line); the text label is replaced by that icon. An optional non-link `titlePrefix` renders before the `u-url` link — the weeknote emoji (kept out of `p-name`) and `"Replied: "` on reply posts. MF2: hidden `p-author` `AuthorCard`, `u-url` on the canonical link, `dt-published` (visible clock time for timestamped items, `sr-only` for all-day), and a `p-name` (titled items) or `p-summary` (posts) lead plus an optional detail line — `p-rating` stars via `StarRating` for items carrying a `rating`, otherwise the plain-text `p-summary`. Type→icon: article→`ArticleIcon`, weeknote→`WeeknoteIcon`, post→`BlueskyIcon`, checkin→`CheckInIcon`, film→`PopfeedIcon`, book→`BookHiveIcon`, photo→`GrainIcon`, subscription→`StandardSiteIcon`
+- **Stream page** (`/stream`): a vertical-line timeline grouped into Europe/London calendar days (continuous line via an absolutely-positioned rule). Day headings show a **day-granular relative date** (`formatDateRelativeDays` — "Today"/"Yesterday"/"N days ago", never hours; absolute short date beyond the 14-day cutoff), capitalised; grouping stays keyed on the absolute calendar day so the relative label can't split a day. Each item is an `h-entry` (`<li>`) whose node on the line is a circular badge holding the type's icon (`ring` matched to the page background so it masks the line); the text label is replaced by that icon. An optional non-link `titlePrefix` renders before the `u-url` link — the weeknote emoji (kept out of `p-name`) and `"Replied: "` on reply posts. MF2: hidden `p-author` `AuthorCard`, `u-url` on the canonical link, `dt-published` (visible clock time for timestamped items, `sr-only` for all-day), a `p-name` (titled items) or `p-summary` (posts) lead plus an optional detail line — `p-rating` stars via `StarRating` for items carrying a `rating`, otherwise the plain-text `p-summary`. Type→icon: article→`ArticleIcon`, weeknote→`WeeknoteIcon`, post→`BlueskyIcon`, checkin→`CheckInIcon`, film→`PopfeedIcon`, book→`BookHiveIcon`, photo→`GrainIcon`, subscription→`StandardSiteIcon`
 - **ArticleCard**: `p-name`, `p-summary`; tags as `p-category`
 - **BlueskyCard**: `e-content` for rich text, `u-in-reply-to` on reply link, `u-photo` on embedded images
 - **CheckInCard**: nested `p-checkin h-card` with `p-name`, `p-latitude`, `p-longitude`, `p-street-address`; `p-rating` (hidden) when present
@@ -381,7 +391,7 @@ A Cloudflare Worker that detects PDS changes by polling every 60 seconds, driven
 
 **Load.** Most minutes: one `getLatestCommit` call (~1.4k/day). On the minutes the rev has moved, a full paginated scan of the eight watched collections — the two largest (`app.bsky.feed.post`, `com.barryfrost.checkin`) are ~1,300–1,400 records each, so a scan is ~30 `listRecords` calls total. Rev-changing writes are infrequent for a personal site, and even a scan every few minutes stays well under `bsky.social`'s per-IP limit of 3,000 requests per 5 minutes.
 
-Watched collections (`WATCHED_COLLECTIONS`): `app.bsky.feed.post`, `com.barryfrost.checkin`, `social.popfeed.feed.review`, `buzz.bookhive.book`, `site.standard.graph.subscription`, `social.grain.gallery`, `social.grain.gallery.item`, `social.grain.photo`. `site.standard.document` is deliberately **not** watched — the build writes those records itself (`scripts/publish-standard-site.ts`), so watching them would loop.
+Watched collections (`WATCHED_COLLECTIONS`): `app.bsky.feed.post`, `com.barryfrost.checkin`, `social.popfeed.feed.review`, `buzz.bookhive.book`, `site.standard.graph.subscription`, `social.grain.gallery`, `social.grain.gallery.item`, `social.grain.photo`. `site.standard.document` is deliberately **not** watched — the build writes those records itself (`scripts/publish-standard-site.ts`), so watching them would loop. It doesn't need to be: the build *reads* that collection for `bskyPostRef` (`standard-documents.ts`), and the ref lands in the same run that creates the `app.bsky.feed.post` it points at, so the watched post is what triggers the rebuild that picks it up.
 
 Required secrets: `DEPLOY_HOOK` (same Workers Builds deploy-hook URL as before), `NOTIFY_SECRET` (gates `/pending-notification`).
 
@@ -472,7 +482,7 @@ no network or R2 calls.
 - **`build.format: 'file'`** — generates `about.html` not `about/index.html`
 - **`compressHTML: false`** — keeps HTML readable
 - **`featured: true`** frontmatter on articles — surfaces them on the homepage
-- **`syndication`** frontmatter (array of URLs) on articles/weeknotes — the POSSE targets a post was cross-posted to; rendered as icon + label links after the timestamp on the post page (`Syndication.astro`), alongside the Standard Reader link derived from `standardRkey`
+- **`syndication`** frontmatter (array of URLs) on articles/weeknotes — the POSSE targets a post was cross-posted to; rendered as icon + label links after the timestamp on the post page (`Syndication.astro`), alongside the Standard Reader link derived from `standardRkey`. Only needed for targets the site doesn't post to itself: the Bluesky card post is read from the PDS at build time (`resolveSyndication()`), so nothing published from v7 onwards has to name it here
 
 ## Authoring New Content
 
@@ -570,12 +580,15 @@ targets.
   `syndication` frontmatter outranks the record's `bskyPostRef` — deleting a card post and
   linking its replacement is all it takes to repoint the record on the next run. An authored
   URL that no longer resolves is reported and ignored rather than overwriting a live ref.
-  The reverse direction is opt-in: `--sync-syndication` writes a record's ref back into
-  frontmatter when the file has no `bsky.app` link, for posts whose card post was created by
-  a CI run that had no way to commit to the repo. `release.ts` passes no flags, so CI never
-  takes that path; run it locally after a deploy and commit the diff. Frontmatter edits are
-  string surgery on the raw file (`editFrontmatter`), never a `parseFrontmatter` round
-  trip — that parser only knows `SCALAR_KEYS`/`LIST_KEYS` and would drop `featured` et al.
+  The reverse direction no longer needs a commit at all: `standard-documents.ts` reads
+  `bskyPostRef` back at build time, so a post with no `bsky.app` link in its frontmatter shows
+  the card post anyway (`resolveSyndication()` — frontmatter still wins where it exists, which
+  is why the ~101 backfilled posts render exactly what they name). The loop closes on its own,
+  because `app.bsky.feed.post` **is** a watched collection: minting the card post is itself the
+  change the poller redeploys on, and that build picks the ref up. `--sync-syndication` remains
+  for its other job below. Frontmatter edits are string surgery on the raw file
+  (`editFrontmatter`), never a `parseFrontmatter` round trip — that parser only knows
+  `SCALAR_KEYS`/`LIST_KEYS` and would drop `featured` et al.
 - **`bskyPost: false`** frontmatter suppresses the companion card post. `--sync-syndication`
   sets it on any document whose `bskyPostRef` points at a **deleted** post with no authored
   URL to replace it, and clears the dead ref at the same time. Both halves are needed: the

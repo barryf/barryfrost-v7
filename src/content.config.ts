@@ -8,6 +8,7 @@ import { subscriptionsLoader } from './lib/loaders/subscriptions';
 import { blogrollLoader } from './lib/loaders/blogroll';
 import { photosLoader } from './lib/loaders/photos';
 import { scrobblesLoader } from './lib/loaders/scrobbles';
+import { standardDocumentsLoader } from './lib/loaders/standard-documents';
 
 const articles = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: 'src/content/articles' }),
@@ -206,6 +207,15 @@ const scrobbles = defineCollection({
   }),
 });
 
+// Bluesky card posts minted by scripts/publish-standard-site.ts, keyed by the same rkey
+// the posts carry in `standardRkey`. See @/lib/syndication.
+const standardDocuments = defineCollection({
+  loader: standardDocumentsLoader(),
+  schema: z.object({
+    bskyUrl: z.string(),
+  }),
+});
+
 export const collections = {
   articles,
   weeknotes,
@@ -217,6 +227,7 @@ export const collections = {
   books,
   blogroll,
   standardSubscriptions,
+  standardDocuments,
   photos,
   scrobbles,
 };
