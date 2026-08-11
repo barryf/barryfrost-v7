@@ -89,6 +89,14 @@ for (const item of items) {
                   datetime={iso}
                   title={formatDateTitle(item.date)}
                 >{time ?? formatDateShort(item.date)}</time>
+                {/* Bridgy's POSSE-post-discovery reads these to map a syndicated copy back to
+                    its original here. Hidden rather than rendered: the timeline already links
+                    the canonical copy, and each entry's syndicated copies are of no use to a
+                    reader scanning it. Parsers see them regardless — mf2 parsing works on the
+                    markup, not on what's painted. */}
+                {item.syndication?.map((url) => (
+                  <a class="u-syndication" href={url} rel="syndication noopener noreferrer" hidden>{url}</a>
+                ))}
               </li>
             );
           })}

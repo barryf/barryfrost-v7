@@ -2,6 +2,7 @@ import { getCollection } from 'astro:content';
 import { DID, HANDLE, pdslsUrl } from '@/lib/pds';
 import { weeknoteUrl } from '@/lib/urls';
 import { plainExcerpt } from '@/lib/excerpt';
+import { resolveSyndication } from '@/lib/syndication';
 
 export type TimelineType =
   | 'article'
@@ -29,6 +30,8 @@ export interface TimelineItem {
   url: string;
   /** Whether the canonical copy lives on this site (no rel=noopener needed). */
   local: boolean;
+  /** Syndicated copies of a local item, for u-syndication. See @/lib/syndication. */
+  syndication?: string[];
   date: Date;
   /** Stable feed id (= url). */
   id: string;
@@ -107,6 +110,7 @@ export async function getTimelineItems(site: URL): Promise<TimelineItem[]> {
       summary: entry.data.description ?? plainExcerpt(entry.body ?? ''),
       url,
       local: true,
+      syndication: await resolveSyndication(entry.data.syndication, entry.data.standardRkey),
       date: entry.data.date,
       id: url,
     });
@@ -123,6 +127,7 @@ export async function getTimelineItems(site: URL): Promise<TimelineItem[]> {
       summary: entry.data.description ?? plainExcerpt(entry.body ?? ''),
       url,
       local: true,
+      syndication: await resolveSyndication(entry.data.syndication, entry.data.standardRkey),
       date: entry.data.date,
       id: url,
     });
