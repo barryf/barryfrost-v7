@@ -7,6 +7,8 @@ tags:
   - homepod
 standardRkey: 3msc7txmk2222
 featured: true
+syndication:
+  - https://bsky.app/profile/barryfrost.com/post/3msdhx36cl423
 ---
 
 This may be a fairly niche topic for those in the UK, but it’s a hack I now use daily so I thought I’d share.
