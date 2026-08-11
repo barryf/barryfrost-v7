@@ -491,13 +491,20 @@ export function bskyUrlFromRef(ref: StrongRef): string {
   return `https://bsky.app/profile/${HANDLE}/post/${ref.uri.split('/').pop()}`;
 }
 
+/** The rkey out of a bsky.app permalink — the only part that identifies the post. Compare
+ *  URLs on this, never as strings: the host varies (`staging.bsky.app` in 2023-era
+ *  frontmatter) and the profile segment may be either a handle or a DID. */
+export function bskyRkeyFromUrl(url: string): string | null {
+  return /\/post\/([a-z0-9]+)\/?$/i.exec(url)?.[1] ?? null;
+}
+
 /** Resolve a bsky.app post URL (…/profile/<handle-or-did>/post/<rkey>) to a strong ref.
  *  Returns null when the post no longer exists, which is what makes it usable as a
  *  liveness check before trusting either side of a syndication mismatch. */
 export async function resolveBskyPostRef(session: Session, url: string): Promise<StrongRef | null> {
-  const m = /\/post\/([a-z0-9]+)\/?$/i.exec(url);
-  if (!m) return null;
-  const existing = await getRecord(session, 'app.bsky.feed.post', m[1]);
+  const rkey = bskyRkeyFromUrl(url);
+  if (!rkey) return null;
+  const existing = await getRecord(session, 'app.bsky.feed.post', rkey);
   return existing ? { uri: existing.uri, cid: existing.cid } : null;
 }
 

@@ -25,7 +25,7 @@ import {
   documentContentSignature, canonicalUrl, DOCUMENT_COLLECTION, PUBLICATIONS, documentUri,
   createSession, getRecord, putRecord, createRecord, resolveBskyPostRef, getPublicationRef,
   resolveCoverImage, fetchOgImageUrl, withResolvedImages, addSyndicationUrl, setBskyPostFalse,
-  bskyUrlFromRef,
+  bskyUrlFromRef, bskyRkeyFromUrl,
   type CollectionName, type Entry, type Session, type StrongRef, type BlobRef,
 } from './lib/standard-site.js';
 
@@ -74,7 +74,8 @@ async function processEntry(source: Entry, args: Args, session: Session | null):
   // authored URL that no longer resolves is reported and ignored rather than clobbering.
   let bskyRef: StrongRef | undefined = existingRef;
   const authoredUrl = bskyUrlFromSyndication(entry);
-  if (authoredUrl && session && (!existingRef || bskyUrlFromRef(existingRef) !== authoredUrl)) {
+  const authoredRkey = authoredUrl ? bskyRkeyFromUrl(authoredUrl) : null;
+  if (authoredUrl && session && (!existingRef || existingRef.uri.split('/').pop() !== authoredRkey)) {
     const resolved = await resolveBskyPostRef(session, authoredUrl);
     if (resolved) {
       if (existingRef) console.log(`    repoint bskyPostRef → ${authoredUrl} (record had ${bskyUrlFromRef(existingRef)})`);
