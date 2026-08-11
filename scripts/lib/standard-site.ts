@@ -107,44 +107,60 @@ export function parseFrontmatter(raw: string): { data: Frontmatter; body: string
  *
  *  Deliberately string surgery on the raw file rather than a parse-and-reserialise round
  *  trip: `parseFrontmatter` only understands SCALAR_KEYS/LIST_KEYS, so re-emitting from its
- *  output would silently drop every other authored key (`featured`, `image`, …). */
-function editFrontmatter(raw: string, edit: (lines: string[]) => string[] | null): string {
+ *  output would silently drop every other authored key (`featured`, `image`, …).
+ *
+ *  Splits on \n alone, so a CRLF line keeps its \r as part of the string and any line the
+ *  edit doesn't touch is written back byte-identical. Much of this archive has mixed
+ *  endings within a single frontmatter block, and rejoining on one chosen EOL rewrote
+ *  lines nobody asked to change. `edit` receives the prevailing carriage return ('\r' or
+ *  '') to suffix onto lines it inserts, so new lines match their neighbours. */
+function editFrontmatter(raw: string, edit: (lines: string[], cr: string) => string[] | null): string {
   const match = /^(---\r?\n)([\s\S]*?)(\r?\n---\r?\n?)/.exec(raw);
   if (!match) return raw;
   const [full, open, block, close] = match;
-  const updated = edit(block.split(/\r?\n/));
+  const lines = block.split('\n');
+  // Majority vote over the lines that carry an ending — every line but the last, whose own
+  // ending lives in `close`.
+  const carried = lines.length - 1;
+  const cr = carried > 0 && lines.filter((l) => l.endsWith('\r')).length * 2 >= carried ? '\r' : '';
+  // Lend the last line the prevailing ending so every element is uniform for the edit —
+  // otherwise appending after it would leave it the only line missing one. Taken back below.
+  lines[carried] += cr;
+  const updated = edit(lines, cr);
   if (!updated) return raw;
-  const eol = block.includes('\r\n') ? '\r\n' : '\n';
+  const out = [...updated];
+  out[out.length - 1] = out[out.length - 1].replace(/\r$/, '');
   // Sliced, not String.replace — `$&`/`$1` in body text would be interpreted.
-  return open + updated.join(eol) + close + raw.slice(full.length);
+  return open + out.join('\n') + close + raw.slice(full.length);
 }
 
 /** Append a URL to a file's `syndication` frontmatter, creating the block if absent. */
 export function addSyndicationUrl(raw: string, url: string): string {
-  return editFrontmatter(raw, (lines) => {
+  return editFrontmatter(raw, (lines, cr) => {
     if (lines.some((l) => l.includes(url))) return null;
     const start = lines.findIndex((l) => /^syndication:\s*$/.test(l));
     // Convention across the archive: `syndication` is the last frontmatter key.
-    if (start === -1) return [...lines, 'syndication:', `  - ${url}`];
+    if (start === -1) return [...lines, `syndication:${cr}`, `  - ${url}${cr}`];
     let end = start + 1;
     while (end < lines.length && /^\s+-\s+/.test(lines[end])) end++;
-    return [...lines.slice(0, end), `  - ${url}`, ...lines.slice(end)];
+    return [...lines.slice(0, end), `  - ${url}${cr}`, ...lines.slice(end)];
   });
 }
 
 /** Set `bskyPost: false`, replacing any existing value for the key. */
 export function setBskyPostFalse(raw: string): string {
-  return editFrontmatter(raw, (lines) => {
+  return editFrontmatter(raw, (lines, cr) => {
     const at = lines.findIndex((l) => /^bskyPost:\s*/.test(l));
     if (at !== -1) {
-      if (lines[at] === 'bskyPost: false') return null;
-      return lines.map((l, i) => (i === at ? 'bskyPost: false' : l));
+      // Anchored test rather than string equality — the line may carry a trailing \r.
+      if (/^bskyPost:\s*false\s*$/.test(lines[at])) return null;
+      return lines.map((l, i) => (i === at ? `bskyPost: false${cr}` : l));
     }
     // Ahead of any `syndication` block, so the scalar keys stay grouped.
     const before = lines.findIndex((l) => /^syndication:\s*$/.test(l));
     return before === -1
-      ? [...lines, 'bskyPost: false']
-      : [...lines.slice(0, before), 'bskyPost: false', ...lines.slice(before)];
+      ? [...lines, `bskyPost: false${cr}`]
+      : [...lines.slice(0, before), `bskyPost: false${cr}`, ...lines.slice(before)];
   });
 }
 
