@@ -32,31 +32,15 @@ function calendarDayDiff(from: Date, to: Date): number {
   return dayNumber(to) - dayNumber(from);
 }
 
-// "2 days ago" / "3 hours ago" for recent dates; the absolute short date once older
-// than the cutoff. Relative to build time — safe because the site rebuilds hourly.
+// "2 days ago" / "today" for recent dates; the absolute short date once older than the
+// cutoff. Always whole-calendar-day (Europe/London) granularity — never hours or minutes,
+// even for timestamped values. Relative to build time, and the site only rebuilds hourly,
+// so "2 minutes ago" would sit there stale for up to an hour; "today" stays true all day.
 export function formatDateRelative(date: Date, now: Date = new Date()): string {
+  const days = calendarDayDiff(now, date);
+  if (Math.abs(days) > RELATIVE_CUTOFF_DAYS) return formatDateShort(date);
   const rtf = new Intl.RelativeTimeFormat('en-GB', { numeric: 'auto' });
-
-  // All-day dates: compare by whole calendar days so a post from today reads "today",
-  // not "14 hours ago".
-  if (isMidnightUTC(date)) {
-    const days = calendarDayDiff(now, date);
-    if (Math.abs(days) > RELATIVE_CUTOFF_DAYS) return formatDateShort(date);
-    return rtf.format(days, 'day');
-  }
-
-  const diffMs = date.getTime() - now.getTime(); // negative = past
-  if (Math.abs(diffMs) > RELATIVE_CUTOFF_DAYS * 86_400_000) return formatDateShort(date);
-
-  const sign = diffMs < 0 ? -1 : 1;
-  const abs = Math.abs(diffMs);
-  const sec = Math.round(abs / 1000);
-  if (sec < 60) return rtf.format(sign * sec, 'second');
-  const min = Math.round(abs / 60_000);
-  if (min < 60) return rtf.format(sign * min, 'minute');
-  const hr = Math.round(abs / 3_600_000);
-  if (hr < 24) return rtf.format(sign * hr, 'hour');
-  return rtf.format(sign * Math.round(abs / 86_400_000), 'day');
+  return rtf.format(days, 'day');
 }
 
 // True when formatDateRelative renders a relative phrase ("today", "3 days ago")
@@ -64,20 +48,7 @@ export function formatDateRelative(date: Date, now: Date = new Date()): string {
 // Mirrors the branch selection in formatDateRelative so callers can adjust surrounding
 // copy (e.g. "Posted 3 days ago" vs "Posted on 22 Apr 2026").
 export function isRelativeDate(date: Date, now: Date = new Date()): boolean {
-  if (isMidnightUTC(date)) {
-    return Math.abs(calendarDayDiff(now, date)) <= RELATIVE_CUTOFF_DAYS;
-  }
-  return Math.abs(date.getTime() - now.getTime()) <= RELATIVE_CUTOFF_DAYS * 86_400_000;
-}
-
-// Like formatDateRelative but always at whole-calendar-day (Europe/London) granularity —
-// never hours or minutes — so it reads as a date even for timestamped values. Falls back
-// to the absolute short date beyond the cutoff. Used for the /stream day-group headings.
-export function formatDateRelativeDays(date: Date, now: Date = new Date()): string {
-  const days = calendarDayDiff(now, date);
-  if (Math.abs(days) > RELATIVE_CUTOFF_DAYS) return formatDateShort(date);
-  const rtf = new Intl.RelativeTimeFormat('en-GB', { numeric: 'auto' });
-  return rtf.format(days, 'day');
+  return Math.abs(calendarDayDiff(now, date)) <= RELATIVE_CUTOFF_DAYS;
 }
 
 export function formatMonthYear(date: Date): string {

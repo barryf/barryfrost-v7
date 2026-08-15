@@ -13,7 +13,7 @@ import PopfeedIcon from '@/components/icons/PopfeedIcon.astro';
 import BookHiveIcon from '@/components/icons/BookHiveIcon.astro';
 import GrainIcon from '@/components/icons/GrainIcon.astro';
 import StandardSiteIcon from '@/components/icons/StandardSiteIcon.astro';
-import { capitaliseDate, formatDateRelativeDays, formatDateShort, formatDateTitle, toISODate } from '@/lib/dates';
+import { capitaliseDate, formatDateRelative, formatDateShort, formatDateTitle, toISODate } from '@/lib/dates';
 import { getTimelineItems, type TimelineItem, type TimelineType } from '@/lib/timeline';
 import { SECTIONS } from '@/lib/sections';
 
@@ -52,7 +52,7 @@ for (const item of items) {
     {groups.map((group) => (
       <section>
         <h2 class="relative pl-0 py-2 text-sm bg-white dark:bg-black font-semibold text-black dark:text-white">
-          {capitaliseDate(formatDateRelativeDays(group.date))}
+          {capitaliseDate(formatDateRelative(group.date))}
         </h2>
         <ol class="timeline">
           {group.items.map((item) => {
