@@ -37,3 +37,6 @@ scripts/imported-notes-bsky.json
 
 # Import intermediate — regenerate with `tsx scripts/export-notes-csv.ts`
 scripts/notes-to-import.csv
+
+# Obsidian used to write weeknotes
+.obsidian/
