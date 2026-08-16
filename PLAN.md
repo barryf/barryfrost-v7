@@ -50,6 +50,12 @@ belongs in the feed. And the card check requires empty text, so a syndication ca
 something written above it stays — a bare card is a copy of the site's own page, the same card
 with commentary is a post in its own right.
 
+That empty-text rule is why weeknotes need the two text rules as well: their announcement posts
+carry a title line and permalink (see Standard.site Publishing below), so the empty-text card
+check can't catch them. Both text rules do, independently — the title match tolerates the
+leading emoji via `\P{L}*`, and the URL match sees the permalink in the text. Articles keep
+relying on the card check alone, which is sound because they are no longer auto-posted at all.
+
 A final guard drops any record with nothing to draw — no text, images, quote or link card —
 rather than emitting a blank card.
 
@@ -278,9 +284,9 @@ Applied as static classes directly in Astro templates. No runtime JS required.
 It also emits `rel="feed"` pointing at `/stream`, which Bridgy crawls for POSSE-post-discovery
 — matching a syndicated Bluesky/Mastodon copy back to the post it came from so responses can be
 backfed as webmentions. The home page's own `h-feed` carries only the latest weeknote plus the
-selected articles, and the card-only Bluesky posts written by `publish-standard-site` have empty
-`text` and no link facet, so `/stream`'s eight-plus weeknotes and their `u-syndication` links are
-the only reliable trail back. Its off-site entries (`bsky.app`, `grain.social`, `bookhive.buzz`)
+selected articles, so `/stream`'s eight-plus weeknotes and their `u-syndication` links are the
+most reliable trail back — the weeknote announcement posts now carry a permalink link facet of
+their own, but nothing else `publish-standard-site` writes does. Its off-site entries (`bsky.app`, `grain.social`, `bookhive.buzz`)
 are ignored by Bridgy, which only follows `u-url`s on the site's own domain.
 
 ## Feeds
@@ -536,7 +542,7 @@ Both CLIs accept `--no-git` (or `CI=true`) to skip git/gh operations — used by
 | `scripts/delete-imported-notes-bsky.ts` | Delete all records previously imported by `import-notes-bsky.ts` |
 | `scripts/create-standard-publications.ts` | Upsert the two `site.standard.publication` records — name, description, theme, icon (`npm run standard:pubs`) |
 | `scripts/assign-standard-rkeys.ts` | One-time: write `standardRkey` TIDs into article/weeknote frontmatter (`npm run standard:rkeys`) |
-| `scripts/publish-standard-site.ts` | Upsert `site.standard.document` records + Bluesky card posts; `--sync-syndication` reconciles `bskyPostRef` with `syndication` frontmatter (`npm run publish:standard`) |
+| `scripts/publish-standard-site.ts` | Upsert `site.standard.document` records + weeknote Bluesky card posts (articles are posted by hand); `--sync-syndication` reconciles `bskyPostRef` with `syndication` frontmatter (`npm run publish:standard`) |
 | `scripts/publish-lexicon.ts` | Upsert the canonical `com.barryfrost.checkin` lexicon doc to the PDS (`npm run publish:lexicon`) |
 | `scripts/normalise-weeknote-titles.py` | One-time: rewrite `Week {N}: {Topic}` frontmatter titles to the `Week {N} - {Topic}` convention (weeks 1–46). Dry-run by default, `--apply` to write |
 
@@ -596,10 +602,21 @@ targets.
   edit republish a years-old article to the top of the Bluesky feed. Six documents from the
   3 Aug 2026 batch were deleted by hand after a card-rendering fault; two were re-posted
   manually (frontmatter wins, refs repointed), four are suppressed this way.
-- **Bluesky**: first publish of a doc creates a companion post with a rich link card back to
-  the page; its strong-ref is stored in `bskyPostRef`. The post itself has **no text** — the
-  card already leads with the emoji and title, so any text just repeats it and Bluesky renders
-  an embed-only post as the card alone. The post's `app.bsky.embed.external`
+- **Bluesky**: first publish of a **weeknote** creates a companion post with a rich link card
+  back to the page; its strong-ref is stored in `bskyPostRef`. Articles are deliberately never
+  auto-posted — each one gets a hand-written post with whatever framing the piece deserves, and
+  its URL goes into `syndication` frontmatter like any other target, from where the next
+  publisher run resolves it into `bskyPostRef`.
+- **Weeknote post text**: `{emoji} Week {N} - {Title} {url}` on the first line, then
+  `@weeknotes-bot.bsky.social #weeknotes` — the mention and hashtag syndicate the weeknote to
+  weeknotes.club. The permalink duplicates what the link card already points at on purpose: it
+  is the fallback for clients that don't render the card. All three are `facets`
+  (`#link`/`#mention`/`#tag`) so they're clickable, which means the mention handle has to be
+  resolved to a DID first (`com.atproto.identity.resolveHandle`, once per run); a handle that
+  won't resolve degrades to plain text rather than failing the publish. Facet offsets are UTF-8
+  **byte** offsets and the leading emoji puts those out of step with string indices from the
+  first character, so `buildWeeknotePostText()` accumulates the text segment by segment and
+  measures as it grows instead of searching the finished string. The post's `app.bsky.embed.external`
   carries `associatedRefs` (document + publication strong refs) so Bluesky builds the card
   straight from the records instead of crawling the page. Those are strong refs, so a new post
   writes the document record **twice** — once to mint the ref, once to store `bskyPostRef`.

@@ -34,9 +34,10 @@ const APPVIEW_HOST = 'public.api.bsky.app';
  * Weeknotes and articles syndicated to Bluesky duplicate what the site already publishes at
  * `/weeknotes` and `/articles`, so they are dropped from the posts feed.
  *
- * The weeknote shape has drifted over time: titles picked up a leading emoji, and the
- * permalink moved out of the post text into a link card. Match either the title or a weeknote
- * URL, on both the current `/weeknotes/week-N` path and the older `/YYYY/MM/week-N-slug` one.
+ * The weeknote shape has drifted over time: titles picked up a leading emoji, the permalink
+ * moved out of the post text into a link card, and then back into the text alongside the card
+ * as a fallback for clients that don't render it. Match either the title or a weeknote URL, on
+ * both the current `/weeknotes/week-N` path and the older `/YYYY/MM/week-N-slug` one.
  *
  * Articles are matched on the link-card URI only, never on the post text. Only the syndication
  * posts written by `scripts/publish-standard-site.ts` carry an article link card, whereas a
