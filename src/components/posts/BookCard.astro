@@ -19,10 +19,16 @@ interface Props {
       uri: string;
     }
   }
+  /** 'lg' gives a bigger cover, used for the books I'm currently reading. */
+  size?: 'sm' | 'lg';
 }
 
-const { entry } = Astro.props;
+const { entry, size = 'sm' } = Astro.props;
 const { data } = entry;
+const coverClass = size === 'lg' ? 'u-photo w-24 object-cover rounded' : 'u-photo w-15 object-cover rounded';
+const coverWidth = size === 'lg' ? '96' : '60';
+// Covers are stored 2:3 (see the books loader), so reserve that ratio while loading.
+const coverHeight = size === 'lg' ? '144' : '90';
 const bookhiveUrl = data.hiveId ? `https://bookhive.buzz/books/${data.hiveId}` : '';
 const isReading = data.status === 'buzz.bookhive.defs#reading';
 const dateLabel = isReading ? 'Started' : 'Finished';
@@ -40,9 +46,9 @@ const date = new Date(dateStr);
           <img
             src={data.coverUrl}
             alt={`Cover for ${data.title}`}
-            width="60"
-            height="80"
-            class="u-photo w-15 object-cover rounded"
+            width={coverWidth}
+            height={coverHeight}
+            class={coverClass}
             loading="lazy"
             decoding="async"
           />
@@ -51,9 +57,9 @@ const date = new Date(dateStr);
         <img
           src={data.coverUrl}
           alt={`Cover for ${data.title}`}
-          width="60"
-          height="80"
-          class="u-photo w-15 object-cover rounded"
+          width={coverWidth}
+          height={coverHeight}
+          class={coverClass}
           loading="lazy"
           decoding="async"
         />

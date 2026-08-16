@@ -21,7 +21,7 @@ export function booksLoader(): Loader {
         const identifiers = value.identifiers as { isbn10?: string; isbn13?: string; goodreadsId?: string } | undefined;
         const cover = value.cover as { ref?: { $link?: string }; mimeType?: string } | undefined;
         const coverUrl = cover?.ref?.$link
-          ? await pdsImage(cover.ref.$link, { width: 96, height: 144, fit: 'cover' })
+          ? await pdsImage(cover.ref.$link, { width: 192, height: 288, fit: 'cover' })
           : undefined;
 
         store.set({
