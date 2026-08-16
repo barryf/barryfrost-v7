@@ -2,9 +2,11 @@
 //
 // The PDS record is the source of truth: for each post we getRecord by its frontmatter
 // `standardRkey`, and only putRecord when the content changed. A companion Bluesky post
-// (rich link card) is created once, on a document's first publish in incremental mode, and
+// (rich link card) is created once, on a weeknote's first publish in incremental mode, and
 // its strong-ref is stored in `bskyPostRef` — the presence of that ref prevents any second
-// post. That post's external embed carries `associatedRefs` (document + publication) so
+// post. Articles are never auto-posted: they get a hand-written post instead, whose URL goes
+// into `syndication` frontmatter like any other. That post's external embed carries
+// `associatedRefs` (document + publication) so
 // Bluesky renders the enhanced Standard Site card, which is why a new post writes the
 // document record twice: once to mint the ref, once to store `bskyPostRef`. In --backfill
 // mode no new Bluesky posts are created; an existing bsky.app URL from the file's
@@ -21,11 +23,11 @@
 //                               [--only <slug>] [--collection <name>]
 import { readFileSync, writeFileSync } from 'fs';
 import {
-  readEntries, isPublishable, buildDocumentRecord, buildBlueskyPost,
+  readEntries, isPublishable, buildDocumentRecord, buildBlueskyPost, buildWeeknotePostText,
   documentContentSignature, canonicalUrl, DOCUMENT_COLLECTION, PUBLICATIONS, documentUri,
   createSession, getRecord, putRecord, createRecord, resolveBskyPostRef, getPublicationRef,
   resolveCoverImage, fetchOgImageUrl, withResolvedImages, addSyndicationUrl, setBskyPostFalse,
-  bskyUrlFromRef, bskyRkeyFromUrl,
+  bskyUrlFromRef, bskyRkeyFromUrl, resolveDidForHandle, WEEKNOTES_BOT_HANDLE,
   type CollectionName, type Entry, type Session, type StrongRef, type BlobRef,
 } from './lib/standard-site.js';
 
@@ -52,6 +54,16 @@ function parseArgs(argv: string[]): Args {
 
 function bskyUrlFromSyndication(entry: Entry): string | undefined {
   return entry.data.syndication?.find((u) => /bsky\.app\/.+\/post\//.test(u));
+}
+
+/** The weeknotes bot's DID, resolved once per run and shared by every post's mention facet. */
+let botDid: string | null | undefined;
+async function weeknotesBotDid(): Promise<string | null> {
+  if (botDid === undefined) {
+    botDid = await resolveDidForHandle(WEEKNOTES_BOT_HANDLE);
+    if (!botDid) console.warn(`    ! ${WEEKNOTES_BOT_HANDLE} did not resolve — mention posts as plain text`);
+  }
+  return botDid;
 }
 
 type Action = 'create' | 'update' | 'skip';
@@ -132,8 +144,10 @@ async function processEntry(source: Entry, args: Args, session: Session | null):
   }
 
   // Create a fresh Bluesky post only when publishing new/changed content in incremental
-  // mode with no ref available from an existing record or syndication.
-  const wantNewPost = needsWrite && !bskyRef && !args.backfill && !suppressPost;
+  // mode with no ref available from an existing record or syndication. Weeknotes only —
+  // articles are posted to Bluesky by hand, with whatever framing the piece deserves.
+  const wantNewPost = needsWrite && !bskyRef && !args.backfill && !suppressPost
+    && entry.collection === 'weeknotes';
 
   if (args.dryRun && !existingCover) {
     console.log(coverPreviewUrl
@@ -153,7 +167,9 @@ async function processEntry(source: Entry, args: Args, session: Session | null):
 
   if (args.dryRun) {
     if (wantNewPost) {
-      console.log(`    would post to Bluesky: card-only → ${canonicalUrl(entry)}`);
+      const { text } = buildWeeknotePostText(entry, await weeknotesBotDid());
+      console.log(`    would post to Bluesky → ${canonicalUrl(entry)}`);
+      console.log(`      ${text.replace(/\n+/g, ' / ')}`);
       console.log(`    would attach associatedRefs: ${documentUri(rkey)} + ${PUBLICATIONS[entry.collection].uri}`);
     }
     console.log(`${label} (dry-run)`);
@@ -167,7 +183,7 @@ async function processEntry(source: Entry, args: Args, session: Session | null):
     const docRef = await writeDocument(undefined);
     const pubRef = await getPublicationRef(session, entry.collection);
     const refs = [docRef, pubRef].filter((r): r is StrongRef => !!r);
-    const post = buildBlueskyPost(entry, undefined, refs);
+    const post = buildBlueskyPost(entry, undefined, refs, await weeknotesBotDid());
     bskyRef = await createRecord(session, 'app.bsky.feed.post', post as unknown as Record<string, unknown>);
     console.log(`    posted to Bluesky: ${bskyRef.uri} (associatedRefs: ${refs.length})`);
   }

@@ -348,9 +348,23 @@ export function documentContentSignature(r: DocumentRecord | Record<string, unkn
   });
 }
 
+export const WEEKNOTES_BOT_HANDLE = 'weeknotes-bot.bsky.social';
+export const WEEKNOTES_TAG = 'weeknotes';
+
+export interface Facet {
+  index: { byteStart: number; byteEnd: number };
+  features: FacetFeature[];
+}
+
+export type FacetFeature =
+  | { $type: 'app.bsky.richtext.facet#mention'; did: string }
+  | { $type: 'app.bsky.richtext.facet#link'; uri: string }
+  | { $type: 'app.bsky.richtext.facet#tag'; tag: string };
+
 export interface BlueskyPost {
   $type: 'app.bsky.feed.post';
   text: string;
+  facets?: Facet[];
   createdAt: string;
   langs: string[];
   embed: {
@@ -362,18 +376,65 @@ export interface BlueskyPost {
   };
 }
 
+/** Resolve a handle to its DID, or null when it doesn't resolve. Facets carry DIDs, not
+ *  handles, so a mention has to be resolved before it can be linked. */
+export async function resolveDidForHandle(handle: string): Promise<string | null> {
+  const params = new URLSearchParams({ handle });
+  const res = await fetch(`https://public.api.bsky.app/xrpc/com.atproto.identity.resolveHandle?${params}`);
+  if (!res.ok) return null;
+  const data = await res.json() as { did?: string };
+  return data.did ?? null;
+}
+
+/** Text and facets for a weeknote's card post: emoji, title and permalink, above the mention
+ *  and hashtag that feed weeknotes.club. The permalink repeats what the link card already
+ *  points at, deliberately — it is the fallback for clients that don't render the card.
+ *
+ *  Facet offsets are UTF-8 byte offsets, and both the emoji and the titles' curly quotes
+ *  push those out of step with the string's own indices, so the text is accumulated segment
+ *  by segment and measured as it grows rather than searched after the fact. A `mentionDid`
+ *  of null (the handle didn't resolve) leaves the mention as plain text instead of failing
+ *  the publish — the hashtag still carries the post to the feed. */
+export function buildWeeknotePostText(
+  entry: Entry, mentionDid: string | null,
+): { text: string; facets: Facet[] } {
+  const facets: Facet[] = [];
+  let text = '';
+  const append = (segment: string, feature?: FacetFeature) => {
+    const byteStart = Buffer.byteLength(text);
+    text += segment;
+    if (feature) facets.push({ index: { byteStart, byteEnd: Buffer.byteLength(text) }, features: [feature] });
+  };
+
+  const url = canonicalUrl(entry);
+  append(`${documentTitle(entry)} `);
+  append(url, { $type: 'app.bsky.richtext.facet#link', uri: url });
+  append('\n\n');
+  append(`@${WEEKNOTES_BOT_HANDLE}`,
+    mentionDid ? { $type: 'app.bsky.richtext.facet#mention', did: mentionDid } : undefined);
+  append(' ');
+  append(`#${WEEKNOTES_TAG}`, { $type: 'app.bsky.richtext.facet#tag', tag: WEEKNOTES_TAG });
+
+  return { text, facets };
+}
+
 /** `associatedRefs` points Bluesky straight at this post's Standard Site records so the
  *  enhanced link card is built from them rather than from a crawl of the page. Bluesky
  *  snapshots the records at index time (their "puppy problem"), so a ref going stale after
- *  a later putRecord is expected and harmless. Order is document then publication. */
+ *  a later putRecord is expected and harmless. Order is document then publication.
+ *
+ *  Only weeknotes are auto-posted, and they carry the mention/hashtag text above the card.
+ *  Anything else posts card-only (an embed-only post renders as the card alone). */
 export function buildBlueskyPost(
-  entry: Entry, thumb?: unknown, associatedRefs?: StrongRef[],
+  entry: Entry, thumb?: unknown, associatedRefs?: StrongRef[], mentionDid: string | null = null,
 ): BlueskyPost {
+  const { text, facets } = entry.collection === 'weeknotes'
+    ? buildWeeknotePostText(entry, mentionDid)
+    : { text: '', facets: [] };
   return {
     $type: 'app.bsky.feed.post',
-    // No post text: the link card already leads with the emoji and title, so anything here
-    // just repeats it. Bluesky renders an embed-only post as the card alone.
-    text: '',
+    text,
+    ...(facets.length ? { facets } : {}),
     createdAt: new Date().toISOString(),
     langs: ['en'],
     embed: {
