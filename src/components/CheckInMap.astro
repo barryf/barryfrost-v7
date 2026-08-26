@@ -58,11 +58,19 @@ const { checkIns } = Astro.props;
             .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
+  // CARTO now require an API key on their basemaps; keyless tiles come back with
+  // an "API key required" watermark burnt into the PNG. The key is public by
+  // necessity — the browser fetches the tiles — so it is inlined into this
+  // bundle at build time from PUBLIC_CARTO_BASEMAP_KEY. Builds without it (dev,
+  // PRs) fall back to bare URLs: watermarked tiles, but a working map.
+  const cartoKey = import.meta.env.PUBLIC_CARTO_BASEMAP_KEY ?? '';
+
   function initMap() {
     const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const tileUrl = dark
-      ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-      : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+    const style = dark ? 'dark_all' : 'light_all';
+    const tileUrl =
+      'https://{s}.basemaps.cartocdn.com/' + style + '/{z}/{x}/{y}{r}.png' +
+      (cartoKey ? '?key=' + encodeURIComponent(cartoKey) : '');
 
     const map = L.map('check-in-map');
     L.tileLayer(tileUrl, {
