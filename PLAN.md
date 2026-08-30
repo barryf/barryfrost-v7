@@ -409,7 +409,7 @@ It **reports, it does not gate**: Workers Builds starts on the same push in para
 `astro sync` is a separate step because it runs the loaders against the PDS and other upstream APIs — keeping it separate means a network failure upstream reads as a sync failure rather than a phantom type error.
 
 ### `scaffold.yml`
-Manual `workflow_dispatch` for creating article/weeknote stubs. Inputs: `kind`, `title_or_topic`, `emoji`, `tags`, `date`. Runs `scripts/new-article.ts` or `scripts/new-weeknote.ts --no-git`, opens a draft PR via `peter-evans/create-pull-request`.
+Manual `workflow_dispatch` for creating article/weeknote stubs. Inputs: `kind`, `title_or_topic`, `emoji`, `tags`, `date`. Runs `scripts/new-article.ts` or `scripts/new-weeknote.ts --no-git`, opens a PR via `peter-evans/create-pull-request`.
 
 Required secrets: `GH_PAT`
 
@@ -499,7 +499,7 @@ npm run new:article -- --title "Some Title" [--tags "foo,bar"] [--date YYYY-MM-D
 npm run new:weeknote -- --topic "Sofa" [--emoji "🛋️"] [--tags "foo,bar"] [--date YYYY-MM-DD]
 ```
 
-Both commands: verify working tree is clean on `main`, create a `content/...` branch, write the stub, commit, push, open a draft PR via `gh`.
+Both commands: verify working tree is clean on `main`, create a `content/...` branch, write the stub, commit, push, open a PR via `gh`.
 
 ### Shared implementation
 

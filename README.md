@@ -64,7 +64,7 @@ npm run new:article  -- --title "Some Title"
 npm run new:weeknote -- --topic "Sofa"
 ```
 
-The scaffolding scripts create a stub Markdown file on a new branch, commit it, push, and open a draft PR — usable from the local CLI or via the `scaffold.yml` workflow for authoring from any device.
+The scaffolding scripts create a stub Markdown file on a new branch, commit it, push, and open a PR — usable from the local CLI or via the `scaffold.yml` workflow for authoring from any device.
 
 ## Layout
 

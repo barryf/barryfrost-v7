@@ -73,7 +73,6 @@ if (!noGit) {
     'gh',
     [
       'pr', 'create',
-      '--draft',
       '--title', `content: article — ${title}`,
       '--body', 'New article stub. Edit the body and merge when ready.',
       '--head', branch,

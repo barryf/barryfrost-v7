@@ -77,7 +77,6 @@ if (!noGit) {
     'gh',
     [
       'pr', 'create',
-      '--draft',
       '--title', `content: weeknote ${week} — ${topicStr}`,
       '--body', 'New weeknote stub. Edit the body and merge when ready.',
       '--head', branch,

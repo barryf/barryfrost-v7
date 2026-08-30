@@ -1,6 +1,6 @@
 name: New post
 
-# Creates a stub article or weeknote and opens a draft PR.
+# Creates a stub article or weeknote and opens a PR.
 # The PR triggers Cloudflare Workers Builds, which deploys a preview and posts
 # the URL as a PR comment. This requires GH_PAT (a personal access token with
 # repo scope) — PRs opened with the default GITHUB_TOKEN do not fire
@@ -64,7 +64,7 @@ jobs:
           TAGS:  ${{ inputs.tags }}
           DATE:  ${{ inputs.date }}
 
-      - name: Open draft PR
+      - name: Open PR
         # Must stay in step with actions/checkout above — create-pull-request v6
         # is incompatible with checkout v6+.
         uses: peter-evans/create-pull-request@v8
@@ -79,5 +79,5 @@ jobs:
             Scaffolded via workflow_dispatch (`${{ inputs.kind }}`).
 
             Edit the body below the frontmatter, then merge when ready.
-          draft: true
+          draft: false
           delete-branch: false
