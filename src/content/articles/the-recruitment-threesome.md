@@ -1,7 +1,6 @@
 ---
 title: "The recruitment threesome"
 date: 2011-05-25
-featured: true
 standardRkey: 3763tlfxc2222
 ---
 

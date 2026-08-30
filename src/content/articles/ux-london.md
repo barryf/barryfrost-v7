@@ -1,7 +1,6 @@
 ---
 title: "UX London: Products, People and Platforms"
 date: 2014-06-04
-featured: true
 standardRkey: 3buyxbnqs2222
 ---
 
