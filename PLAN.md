@@ -376,7 +376,9 @@ Build command: `npm run build` (`astro build` + `pagefind`). Deploy command: `np
 
 `wrangler.toml` also declares `[build] command = "npm run build"`. wrangler runs this before both `deploy` and `versions upload`, so **PR-preview builds** (whose deploy command is a bare `npx wrangler versions upload`) produce `./dist` too — without it the preview upload fails with "assets.directory … does not exist". This `[build]` hook is the single source of the build for both paths: `release.ts` does *not* build explicitly before `wrangler deploy` (doing so built the whole site twice, ~2x deploy time), it relies on the hook firing during deploy just as previews do.
 
-Required build env vars (set in CF Workers Builds): `PUSHOVER_TOKEN`, `PUSHOVER_USER`, `NOTIFY_SECRET`, `R2_ACCOUNT_ID`, `R2_BUCKET`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `IMAGES_BASE_URL`
+Required build env vars (set in CF Workers Builds): `PUSHOVER_TOKEN`, `PUSHOVER_USER`, `NOTIFY_SECRET`, `R2_ACCOUNT_ID`, `R2_BUCKET`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `IMAGES_BASE_URL`, `PUBLIC_CARTO_BASEMAP_KEY`
+
+`PUBLIC_CARTO_BASEMAP_KEY` is the odd one out: the `PUBLIC_` prefix is what makes Astro inline it into the `/check-ins` client bundle, so unlike the others it is *not* a secret — the browser fetches the tiles, so the key ships in the JS by necessity. It is domain-scoped by CARTO and free (5M tile requests/month). Builds without it still succeed and still render a map; the tiles just come back watermarked.
 
 ### PDS poller — `cloudflare/pds-poller`
 A Cloudflare Worker that detects PDS changes by polling every 60 seconds, driven by a `* * * * *` cron trigger.
@@ -477,7 +479,7 @@ no network or R2 calls.
 
 ## Key Conventions
 
-- **Minimal JS** — two pages ship script of their own: `/check-ins` bundles Leaflet + Leaflet.markercluster via npm for the cluster map with fullscreen toggle (tiles from CARTO basemaps over OpenStreetMap data, light/dark variant chosen from `prefers-color-scheme`), and `/search` lazy-loads the Pagefind bundle. Every other page is JS-free apart from the sitewide analytics tag below
+- **Minimal JS** — two pages ship script of their own: `/check-ins` bundles Leaflet + Leaflet.markercluster via npm for the cluster map with fullscreen toggle (tiles from CARTO basemaps over OpenStreetMap data, light/dark variant chosen from `prefers-color-scheme`, authenticated with `PUBLIC_CARTO_BASEMAP_KEY`), and `/search` lazy-loads the Pagefind bundle. Every other page is JS-free apart from the sitewide analytics tag below
 - **Umami analytics** — `BaseHead.astro` emits a `defer`red `cloud.umami.is/script.js` tag on every page, gated on `!import.meta.env.DEV` so it never loads in dev; events go to `gateway.umami.is`. The only third-party script the site's *own* markup requests
 - **Two further third-party requests the markup doesn't ask for** — Cloudflare Web Analytics is injected at the edge (a beacon from `static.cloudflareinsights.com` reporting to `cloudflareinsights.com/cdn-cgi/rum`), and `/blogroll` hot-links `www.google.com/s2/favicons` for any blog whose favicon failed to materialise into R2. Both must be allowed in the CSP; disabling Web Analytics in the Cloudflare dashboard would remove the first
 - **No runtime JS elsewhere** — MF2, dark mode, and layout are pure HTML/CSS
