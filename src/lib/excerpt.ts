@@ -17,6 +17,7 @@ function stripMdx(body: string): string {
 
 export function truncateBody(body: string, maxLen = 280): string {
   const text = stripMdx(body)
+    .replace(/!\[.*?\]\(.*?\)/g, '')
     .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
     .replace(/\*\*([^*]+)\*\*/g, '$1')
     .replace(/^\s*[-*]\s+/gm, '')
