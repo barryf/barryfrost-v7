@@ -31,15 +31,19 @@ const { title, date, description, section, sectionHref, standardRkey, standardPu
 // post's identity — a .html variant here would disagree with the canonical we publish.
 const canonical = new URL(cleanPathname(Astro.url.pathname), Astro.site).href;
 // Below lg the columns collapse and everything stacks in source order, so the
-// aside classes are additive — no separate stacked markup needed. items-baseline
-// lines the aside's first line up with the body's first line of text; the two
-// columns use different font sizes, so matching box tops would leave the smaller
-// aside text sitting visibly high.
-const columnsClass = navAside ? 'lg:flex lg:items-baseline lg:gap-20' : '';
+// aside classes are additive — no separate stacked markup needed. items-start
+// pins the aside to the top of the body whatever the body starts with;
+// items-baseline would take the main column's baseline from a leading image's
+// bottom edge and push the aside down the height of the image.
+const columnsClass = navAside ? 'lg:flex lg:items-start lg:gap-20' : '';
 // Body text is already capped at max-w-140, so cap the column to match rather
 // than letting flex-1 stretch it and strand the aside at the far right.
 const mainColumnClass = navAside ? 'min-w-0 lg:flex-1 lg:max-w-140' : '';
-const asideColumnClass = navAside ? 'lg:w-64 lg:shrink-0' : '';
+// The columns use different font sizes, so flush box tops would leave the
+// smaller aside text sitting visibly high: pt-1 (0.25rem) is half the leading
+// difference between the prose body and the text-sm aside, which lands their
+// first baselines together as items-baseline used to for text-led posts.
+const asideColumnClass = navAside ? 'lg:w-64 lg:shrink-0 lg:pt-1' : '';
 // Drop "on" for relative phrasing ("Posted 3 days ago") but keep it for absolute
 // dates ("Posted on 22 Apr 2026").
 const dateConnector = isRelativeDate(date) ? '' : 'on ';
