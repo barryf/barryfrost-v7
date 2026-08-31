@@ -5,7 +5,7 @@
 //
 // Usage: npm run standard:rkeys [-- --dry-run]
 import { readFileSync, writeFileSync } from 'fs';
-import { genTid } from './lib/scaffold.js';
+import { genUniqueTid, usedRkeys } from './lib/scaffold.js';
 import { readEntries, isPublishable, type CollectionName, type Entry } from './lib/standard-site.js';
 
 /** Insert `standardRkey: <rkey>` as the last line of the frontmatter block. */
@@ -32,8 +32,12 @@ function main() {
   }
 
   console.log(`${pending.length} file(s) need a standardRkey:\n`);
+  // One set for the whole pass, grown as each rkey is minted, so files sharing a date can't
+  // collide with each other or with an rkey an earlier run already wrote to frontmatter.
+  const taken = usedRkeys();
   for (const entry of pending) {
-    const rkey = genTid(new Date(entry.data.date ?? Date.now()));
+    const rkey = genUniqueTid(new Date(entry.data.date ?? Date.now()), taken);
+    taken.add(rkey);
     console.log(`  ${entry.collection}/${entry.slug} → ${rkey}`);
     if (!dryRun) {
       const updated = insertRkey(readFileSync(entry.filePath, 'utf-8'), rkey);

@@ -543,8 +543,8 @@ Both CLIs accept `--no-git` (or `CI=true`) to skip git/gh operations — used by
 | `scripts/import-notes-bsky.ts` | Import approved notes from CSV to PDS as `app.bsky.feed.post` records |
 | `scripts/delete-imported-notes-bsky.ts` | Delete all records previously imported by `import-notes-bsky.ts` |
 | `scripts/create-standard-publications.ts` | Upsert the two `site.standard.publication` records — name, description, theme, icon (`npm run standard:pubs`) |
-| `scripts/assign-standard-rkeys.ts` | One-time: write `standardRkey` TIDs into article/weeknote frontmatter (`npm run standard:rkeys`) |
-| `scripts/publish-standard-site.ts` | Upsert `site.standard.document` records + weeknote Bluesky card posts (articles are posted by hand); `--sync-syndication` reconciles `bskyPostRef` with `syndication` frontmatter (`npm run publish:standard`) |
+| `scripts/assign-standard-rkeys.ts` | One-time: write unique `standardRkey` TIDs into article/weeknote frontmatter (`npm run standard:rkeys`) |
+| `scripts/publish-standard-site.ts` | Upsert `site.standard.document` records + weeknote Bluesky card posts (articles are posted by hand); refuses to run while two posts share a `standardRkey`; `--sync-syndication` reconciles `bskyPostRef` with `syndication` frontmatter (`npm run publish:standard`) |
 | `scripts/publish-lexicon.ts` | Upsert the canonical `com.barryfrost.checkin` lexicon doc to the PDS (`npm run publish:lexicon`) |
 | `scripts/normalise-weeknote-titles.py` | One-time: rewrite `Week {N}: {Topic}` frontmatter titles to the `Week {N} - {Topic}` convention (weeks 1–46). Dry-run by default, `--apply` to write |
 
@@ -584,6 +584,19 @@ targets.
 - **Identity/idempotency**: each post carries a stable TID `standardRkey` in frontmatter;
   the publisher is `putRecord`-idempotent and treats the existing record's `bskyPostRef` as
   the "already posted to Bluesky" guard, so re-runs never double-post.
+- **rkey uniqueness**: that identity only holds while no two posts share an rkey. TIDs are
+  minted from the frontmatter date, which is day-granular, and `genTid`'s clock-ID
+  disambiguation is module-level state that lives for one process — so two posts dated the
+  same day (a late weeknote published alongside the next one) drew byte-identical rkeys from
+  separate scaffold runs. Weeks 261 and 262 collided that way: publishing 262 read 261's
+  record as its own, inherited its `coverImage` and `bskyPostRef` — suppressing 262's Bluesky
+  post, since a ref reads as "already posted" — and overwrote 261's content. Scaffolding now
+  mints with `genUniqueTid` (`scripts/lib/scaffold.ts`), which skips any rkey already claimed
+  in content frontmatter, and `publish-standard-site.ts` refuses to run at all while a
+  duplicate exists — the clash is invisible from inside `processEntry`, where a shared record
+  is indistinguishable from a legitimate edit. Two scaffold runs opened before either merges
+  can still mint the same rkey, both branching from the same content; the publisher's guard is
+  what catches that.
 - **Syndication precedence**: local Markdown is canonical, so a `bsky.app` URL authored in
   `syndication` frontmatter outranks the record's `bskyPostRef` — deleting a card post and
   linking its replacement is all it takes to repoint the record on the next run. An authored

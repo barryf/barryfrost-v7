@@ -1,4 +1,5 @@
-import { existsSync, readdirSync, writeFileSync } from 'fs';
+import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'fs';
+import { extname, join } from 'path';
 
 // ─── TID generation ───────────────────────────────────────────────────────────
 // AT Protocol TIDs are 13-char base32-sortable-encoded 64-bit values:
@@ -6,6 +7,11 @@ import { existsSync, readdirSync, writeFileSync } from 'fs';
 //   bits  9–0:  clock ID (disambiguates records sharing a timestamp)
 // Historically-dated TIDs place backfilled records in the correct chronological
 // position. Module-level state keeps a batch of generated TIDs strictly increasing.
+//
+// That state lives for one process only, so `genTid` alone cannot see rkeys minted by an
+// earlier run: two posts sharing a frontmatter date (a late weeknote published alongside the
+// next one) get byte-identical TIDs from separate scaffold runs. Mint with `genUniqueTid`,
+// which rejects any TID already claimed in content frontmatter.
 
 const BASE32 = '234567abcdefghijklmnopqrstuvwxyz';
 let _lastTidMicros = 0n;
@@ -33,6 +39,50 @@ export function genTid(date: Date = new Date()): string {
     n >>= 5n;
   }
   return result;
+}
+
+// ─── rkey collision avoidance ─────────────────────────────────────────────────
+// A TID is only an identity if nothing else holds it. `standardRkey` frontmatter is the
+// full record of which TIDs this repo has handed out, so it is the set to mint against —
+// the PDS is not consulted, keeping scaffolding offline and fast.
+
+const RKEY_COLLECTIONS = ['articles', 'weeknotes'];
+
+function markdownFiles(dir: string): string[] {
+  const out: string[] = [];
+  for (const name of readdirSync(dir)) {
+    const full = join(dir, name);
+    if (statSync(full).isDirectory()) out.push(...markdownFiles(full));
+    else if (['.md', '.mdx'].includes(extname(name))) out.push(full);
+  }
+  return out;
+}
+
+/** Every `standardRkey` already claimed in article/weeknote frontmatter. */
+export function usedRkeys(contentRoot = join(process.cwd(), 'src/content')): Set<string> {
+  const used = new Set<string>();
+  for (const collection of RKEY_COLLECTIONS) {
+    const dir = join(contentRoot, collection);
+    if (!existsSync(dir)) continue;
+    for (const file of markdownFiles(dir)) {
+      const frontmatter = /^---\r?\n([\s\S]*?)\r?\n---/.exec(readFileSync(file, 'utf-8'))?.[1];
+      const rkey = frontmatter && /^standardRkey:\s*(\S+)/m.exec(frontmatter)?.[1];
+      if (rkey) used.add(rkey);
+    }
+  }
+  return used;
+}
+
+/**
+ * A TID for `date` that no post already holds. Repeat `genTid` calls bump the clock ID, so
+ * each retry yields the next TID for the same timestamp — a second post dated the same day
+ * lands immediately after the first and the pair still sorts chronologically. Pass `taken`
+ * to mint several in one pass, adding each result to the set as you go.
+ */
+export function genUniqueTid(date: Date = new Date(), taken: Set<string> = usedRkeys()): string {
+  let tid = genTid(date);
+  while (taken.has(tid)) tid = genTid(date);
+  return tid;
 }
 
 export function slugify(s: string): string {

@@ -6,7 +6,7 @@ import {
   nextWeekNumber,
   renderWeeknoteFrontmatter,
   writeStub,
-  genTid,
+  genUniqueTid,
 } from './lib/scaffold.js';
 
 function parseArgs(argv: string[]): Record<string, string | true> {
@@ -49,7 +49,7 @@ const title = `Week ${week} - ${topicStr}`;
 const filePath = join(weeknotesDir, `${week}.md`);
 const branch = `content/weeknote-${week}-${slugify(topicStr)}`;
 
-const standardRkey = genTid(new Date(date));
+const standardRkey = genUniqueTid(new Date(date));
 const frontmatter = renderWeeknoteFrontmatter({ week, title, date, emoji, tags, standardRkey });
 
 if (!noGit) {

@@ -193,8 +193,42 @@ async function processEntry(source: Entry, args: Args, session: Session | null):
   return action;
 }
 
+const ALL_COLLECTIONS = Object.keys(PUBLICATIONS) as CollectionName[];
+
+/**
+ * Two posts sharing a `standardRkey` share a record. Publishing the second reads the first's
+ * record as its own `existing`: it inherits that post's `coverImage` and `bskyPostRef` — so
+ * `wantNewPost` stays false and no Bluesky post is ever created — and then overwrites the
+ * first post's content. From inside `processEntry` that is indistinguishable from a
+ * legitimate edit, so the clash has to be caught here, before anything is written.
+ *
+ * Checked across every collection whatever `--collection`/`--only` narrow this run to: the
+ * clash is a property of the content, and the record it would eat may belong to a post this
+ * run isn't touching.
+ */
+function assertNoDuplicateRkeys(): void {
+  const byRkey = new Map<string, string[]>();
+  for (const c of ALL_COLLECTIONS) {
+    for (const entry of readEntries(c).filter(isPublishable)) {
+      if (!entry.data.standardRkey) continue;
+      const posts = byRkey.get(entry.data.standardRkey) ?? [];
+      posts.push(`${entry.collection}/${entry.slug}`);
+      byRkey.set(entry.data.standardRkey, posts);
+    }
+  }
+  const clashes = [...byRkey].filter(([, posts]) => posts.length > 1);
+  if (!clashes.length) return;
+
+  console.error('Duplicate standardRkey — refusing to publish, one record cannot hold two posts:');
+  for (const [rkey, posts] of clashes) console.error(`  ${rkey}  ${posts.join(', ')}`);
+  console.error('\nGive all but one post in each group a fresh rkey — `genUniqueTid` in');
+  console.error('scripts/lib/scaffold.ts mints one that nothing else holds — then re-run.');
+  process.exit(1);
+}
+
 async function main() {
   const args = parseArgs(process.argv.slice(2));
+  assertNoDuplicateRkeys();
   const collections: CollectionName[] = args.collection ? [args.collection] : ['articles', 'weeknotes'];
 
   // Publications must exist (URIs pasted into src/lib/standard-site.ts) before real writes.
