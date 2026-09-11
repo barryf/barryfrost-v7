@@ -80,7 +80,7 @@ Blogroll blogs come from `src/data/blogroll.json` (static JSON), passed through 
 Each PDS loader implements `Loader` from `astro/loaders`:
 - `store.clear()` at the start (full refresh each build)
 - Iterates `fetchAllRecords(collection, DID, PDS_HOST)` from `src/lib/pds.ts`
-- All PDS/atproto reads go through `fetchWithRetry` in `src/lib/pds.ts`, which retries transient failures (429/500/502/503/504 and network errors) with exponential backoff before giving up. `bsky.social`'s shared PDS intermittently 500s on valid requests, and without retries a single blip aborts the whole build.
+- All PDS/atproto reads go through `fetchWithRetry` in `src/lib/pds.ts`, which retries transient failures (429/500/502/503/504 and network errors, dropped keep-alive sockets included) with exponential backoff before giving up. `bsky.social`'s shared PDS intermittently 500s on valid requests, and without retries a single blip aborts the whole build. It takes an optional `RequestInit`, so the Standard.site publisher's writes share it too — see Standard.site Publishing for which of those may and may not be retried.
 - Materialises images at build time via `pdsImage(cid, opts)` / `remoteImage(url, opts)` from `src/lib/image-store.ts` — fetches the source directly (PDS `getBlob` or remote URL), resizes with `sharp`, and stores as webp in R2. Returns an `images.barryfrost.com` URL on success, or the direct source URL on error/dev. Pass dimensions at 2× the CSS display size for retina (e.g. `width: 192` for a 96px display slot). Accepts `fit: 'cover'` (default) or `fit: 'contain'` to preserve aspect ratio.
 - Stores entries with `generateDigest(record.cid)` for change detection
 
@@ -584,6 +584,16 @@ targets.
 - **Identity/idempotency**: each post carries a stable TID `standardRkey` in frontmatter;
   the publisher is `putRecord`-idempotent and treats the existing record's `bskyPostRef` as
   the "already posted to Bluesky" guard, so re-runs never double-post.
+- **Retry safety**: every PDS call in `scripts/lib/standard-site.ts` goes through
+  `fetchWithRetry` *except* `createRecord`. A run makes a few hundred sequential XRPC calls,
+  and a keep-alive socket the PDS closes between two of them surfaces as `UND_ERR_SOCKET:
+  other side closed` — which aborted a production run mid-syndication before the reads and
+  idempotent writes were wrapped. Retrying is safe for reads, for `putRecord` (keyed on an
+  rkey we chose) and for `uploadBlob` (content-addressed, and uncommitted until some record
+  references it). It is **not** safe for `createRecord`: that mints the one-and-only Bluesky
+  card post, and a retry after a write that landed but lost its response would post twice —
+  the exact thing `bskyPostRef` exists to prevent. Failing the run is the safe direction,
+  because nothing records a ref and the next run restarts that entry cleanly.
 - **rkey uniqueness**: that identity only holds while no two posts share an rkey. TIDs are
   minted from the frontmatter date, which is day-granular, and `genTid`'s clock-ID
   disambiguation is module-level state that lives for one process — so two posts dated the
