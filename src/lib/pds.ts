@@ -9,14 +9,21 @@ const RETRYABLE_STATUSES = new Set([429, 500, 502, 503, 504]);
  * fetch with exponential backoff for transient failures.
  *
  * bsky.social's shared PDS intermittently returns 500s (and the odd 429/503) on
- * otherwise-valid requests. Without retries a single blip aborts the whole build,
- * so we retry retryable statuses and network errors with backoff (0.5s, 1s, 2s)
- * before giving up. Genuine 4xx responses (e.g. 400/404) are returned immediately.
+ * otherwise-valid requests, and a long run of sequential calls also meets the occasional
+ * dropped keep-alive socket (`UND_ERR_SOCKET: other side closed`). Without retries a single
+ * blip aborts the whole build, so we retry retryable statuses and network errors with
+ * backoff (0.5s, 1s, 2s) before giving up. Genuine 4xx responses (e.g. 400/404) are
+ * returned immediately.
+ *
+ * `init` makes this usable for writes too, but only *idempotent* ones: putRecord keys on an
+ * rkey we chose, and an uploadBlob is content-addressed and uncommitted until some record
+ * references it, so repeating either is harmless. Never wrap a createRecord in it — a retry
+ * after a request that landed but whose response was lost would create a second record.
  */
-export async function fetchWithRetry(url: string, attempts = 4): Promise<Response> {
+export async function fetchWithRetry(url: string, init?: RequestInit, attempts = 4): Promise<Response> {
   for (let i = 0; ; i++) {
     try {
-      const res = await fetch(url);
+      const res = await fetch(url, init);
       if (res.ok || i >= attempts - 1 || !RETRYABLE_STATUSES.has(res.status)) return res;
     } catch (err) {
       if (i >= attempts - 1) throw err;

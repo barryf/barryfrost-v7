@@ -8,7 +8,7 @@
 import { readdirSync, readFileSync, statSync } from 'fs';
 import { join, extname, relative } from 'path';
 import sharp from 'sharp';
-import { HANDLE } from '../../src/lib/pds.js';
+import { HANDLE, fetchWithRetry } from '../../src/lib/pds.js';
 import {
   PUBLICATIONS,
   DID,
@@ -380,7 +380,7 @@ export interface BlueskyPost {
  *  handles, so a mention has to be resolved before it can be linked. */
 export async function resolveDidForHandle(handle: string): Promise<string | null> {
   const params = new URLSearchParams({ handle });
-  const res = await fetch(`https://public.api.bsky.app/xrpc/com.atproto.identity.resolveHandle?${params}`);
+  const res = await fetchWithRetry(`https://public.api.bsky.app/xrpc/com.atproto.identity.resolveHandle?${params}`);
   if (!res.ok) return null;
   const data = await res.json() as { did?: string };
   return data.did ?? null;
@@ -487,7 +487,7 @@ export function loadDotEnv(): Record<string, string> {
 }
 
 async function resolvePds(handle: string): Promise<string> {
-  const res = await fetch(`https://bsky.social/xrpc/com.atproto.repo.describeRepo?repo=${encodeURIComponent(handle)}`);
+  const res = await fetchWithRetry(`https://bsky.social/xrpc/com.atproto.repo.describeRepo?repo=${encodeURIComponent(handle)}`);
   if (!res.ok) throw new Error(`describeRepo failed: ${res.status}`);
   const data = await res.json() as { didDoc?: { service?: { serviceEndpoint?: string }[] } };
   const endpoint = data.didDoc?.service?.[0]?.serviceEndpoint;
@@ -503,7 +503,7 @@ export async function createSession(): Promise<Session> {
     throw new Error('BSKY_HANDLE and BSKY_APP_PASSWORD must be set (env or .env)');
   }
   const pds = await resolvePds(handle);
-  const res = await fetch(`${pds}/xrpc/com.atproto.server.createSession`, {
+  const res = await fetchWithRetry(`${pds}/xrpc/com.atproto.server.createSession`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ identifier: handle, password }),
@@ -518,7 +518,7 @@ export async function getRecord(
   session: Session, collection: string, rkey: string,
 ): Promise<{ uri: string; cid: string; value: Record<string, unknown> } | null> {
   const params = new URLSearchParams({ repo: session.did, collection, rkey });
-  const res = await fetch(`${session.pds}/xrpc/com.atproto.repo.getRecord?${params}`, {
+  const res = await fetchWithRetry(`${session.pds}/xrpc/com.atproto.repo.getRecord?${params}`, {
     headers: { Authorization: `Bearer ${session.jwt}` },
   });
   if (res.status === 400 || res.status === 404) return null;
@@ -529,7 +529,7 @@ export async function getRecord(
 export async function putRecord(
   session: Session, collection: string, rkey: string, record: Record<string, unknown>,
 ): Promise<StrongRef> {
-  const res = await fetch(`${session.pds}/xrpc/com.atproto.repo.putRecord`, {
+  const res = await fetchWithRetry(`${session.pds}/xrpc/com.atproto.repo.putRecord`, {
     method: 'POST',
     headers: { Authorization: `Bearer ${session.jwt}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({ repo: session.did, collection, rkey, record }),
@@ -543,6 +543,10 @@ export async function createRecord(
 ): Promise<StrongRef> {
   const body: Record<string, unknown> = { repo: session.did, collection, record };
   if (rkey) body.rkey = rkey;
+  // Bare fetch on purpose — see fetchWithRetry's note. This mints the one-and-only Bluesky
+  // card post, and a retry after a write that landed but lost its response would post twice.
+  // Failing the run instead is the safe direction: nothing records a ref, so the next run
+  // starts the entry over.
   const res = await fetch(`${session.pds}/xrpc/com.atproto.repo.createRecord`, {
     method: 'POST',
     headers: { Authorization: `Bearer ${session.jwt}`, 'Content-Type': 'application/json' },
@@ -553,7 +557,7 @@ export async function createRecord(
 }
 
 export async function uploadBlob(session: Session, bytes: Buffer, mimeType: string): Promise<BlobRef> {
-  const res = await fetch(`${session.pds}/xrpc/com.atproto.repo.uploadBlob`, {
+  const res = await fetchWithRetry(`${session.pds}/xrpc/com.atproto.repo.uploadBlob`, {
     method: 'POST',
     headers: { Authorization: `Bearer ${session.jwt}`, 'Content-Type': mimeType },
     body: new Uint8Array(bytes),
