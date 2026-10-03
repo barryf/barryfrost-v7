@@ -100,7 +100,7 @@ Each section is separated by the `Divider` component (`⁂`). Sections are omitt
 
 ## Pagination
 
-Each paginated section is a single rest-param route (`src/pages/{type}/[...page].astro`) using Astro's built-in `paginate()` from `getStaticPaths` and the standard `Page` prop: page 1 renders at the bare section URL (`/posts`), page N at `/posts/{n}`. Default page size is 20 (`PAGE_SIZE` in `src/lib/feed.ts`); articles use 10, films 40.
+Each paginated section is a single rest-param route (`src/pages/{type}/[...page].astro`) using Astro's built-in `paginate()` from `getStaticPaths` and the standard `Page` prop: page 1 renders at the bare section URL (`/articles`), page N at `/articles/{n}`. The exception is `/posts`, whose pages 2+ live at `/posts/page/{n}` (the route maps `paginate()`'s params to `page/{n}`, and `Feed`/`Pagination` take a `pageBasePath`) because `/posts/{n}` is reserved for legacy post-number redirects. Default page size is 20 (`PAGE_SIZE` in `src/lib/feed.ts`); articles use 10, films 40.
 
 `src/lib/feed.ts` exports `getFeedEntries(collection, opts?)` — fetches a collection, optionally filters and sorts (default: `createdAt` desc). Slicing into pages belongs to `paginate()`.
 
@@ -120,7 +120,7 @@ Paginated pages show `Title (Page N)` in both the h1 and the browser window titl
 | `/weeknotes/week-{N}` | Individual weeknote with "Previously this week" aside and prev/next nav, shown in a right-hand column on wide viewports |
 | `/feed.xml` | Unified RSS feed (articles + weeknotes, latest 10, full content) |
 | `/feed.json` | Unified JSON Feed v1.1 (same as RSS) |
-| `/posts` | Bluesky posts list |
+| `/posts` | Bluesky posts list; pages 2+ at `/posts/page/{n}` |
 | `/check-ins` | Check-ins list with Leaflet cluster map |
 | `/films` | Films grid, sorted by watched date; 40 per page |
 | `/films/by-rating` | Films grid sorted by rating descending |
@@ -146,7 +146,12 @@ through to `/categories/* → /search?q=:splat`, which carries the tag over as a
 rather than dropping the visitor on a bare page. The `/20*` wildcard sends every dated v6
 permalink not individually redirected above it to `archive.barryfrost.com`.
 
-Static rules must precede wildcards in the file. The current set is ~290 static and 2 dynamic,
+v6 also redirected 59 post numbers from an even earlier site (`/posts/{n}`, e.g. `/posts/1` →
+`/2013/09/baker-1`); these are static rules pointing straight at `archive.barryfrost.com`.
+A `/posts/:page → /posts/page/:page` wildcard catches old posts-list page links; static rules
+win over it, so a number that is also a legacy post goes to the archive.
+
+Static rules must precede wildcards in the file. The current set is ~350 static and 3 dynamic,
 well inside Cloudflare's 2,000 static / 100 dynamic limits.
 
 ## Layouts & Components
