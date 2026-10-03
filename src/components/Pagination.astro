@@ -3,13 +3,15 @@ interface Props {
   currentPage: number;
   totalPages: number;
   basePath?: string;
+  /** Prefix for pages 2+, when they don't live directly under basePath. */
+  pageBasePath?: string;
 }
 
-const { currentPage, totalPages, basePath = '' } = Astro.props;
+const { currentPage, totalPages, basePath = '', pageBasePath = basePath } = Astro.props;
 
 function pageUrl(page: number): string {
   if (page === 1) return basePath || '/';
-  return `${basePath}/${page}`;
+  return `${pageBasePath}/${page}`;
 }
 
 const pages = Array.from({ length: totalPages }, (_, i) => i + 1);

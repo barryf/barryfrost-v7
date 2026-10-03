@@ -15,6 +15,8 @@ interface Props {
   currentPage?: number;
   totalPages: number;
   basePath: string;
+  /** Prefix for pages 2+; defaults to basePath. */
+  pageBasePath?: string;
   paginate?: boolean;
   /** Set false to hide the description slot, e.g. on pages after the first. */
   showDescription?: boolean;
@@ -22,7 +24,7 @@ interface Props {
   standardPublication?: keyof typeof PUBLICATIONS;
 }
 
-const { title, description, currentPage = 1, totalPages, basePath, paginate = true, showDescription = true, standardPublication } = Astro.props;
+const { title, description, currentPage = 1, totalPages, basePath, pageBasePath, paginate = true, showDescription = true, standardPublication } = Astro.props;
 const pageTitle = currentPage > 1 ? `${title} (Page ${currentPage})` : title;
 const hasDescription = Astro.slots.has('description') && showDescription;
 ---
@@ -39,5 +41,5 @@ const hasDescription = Astro.slots.has('description') && showDescription;
     )}
     <slot />
   </div>
-  {paginate && <Pagination currentPage={currentPage} totalPages={totalPages} basePath={basePath} />}
+  {paginate && <Pagination currentPage={currentPage} totalPages={totalPages} basePath={basePath} pageBasePath={pageBasePath} />}
 </Base>

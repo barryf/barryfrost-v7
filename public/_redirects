@@ -309,9 +309,74 @@
 /2023/03/tunnel /articles/tunnel 301
 /2023/11/app-defaults-in-late-2023 /articles/app-defaults-in-late-2023 301
 
+# Legacy post numbers from a previous site — v6 redirected these;
+# posts list pagination lives at /posts/page/N to avoid clashing
+/posts/1 https://archive.barryfrost.com/2013/09/baker-1 301
+/posts/11 https://archive.barryfrost.com/2013/09/baker-11 301
+/posts/13 https://archive.barryfrost.com/2013/09/baker-13 301
+/posts/16 https://archive.barryfrost.com/2013/09/baker-16 301
+/posts/20 https://archive.barryfrost.com/2013/09/baker-20 301
+/posts/24 https://archive.barryfrost.com/2013/09/baker-24 301
+/posts/25 https://archive.barryfrost.com/2013/09/baker-25 301
+/posts/26 https://archive.barryfrost.com/2013/09/baker-26 301
+/posts/27 https://archive.barryfrost.com/2013/09/baker-27 301
+/posts/28 https://archive.barryfrost.com/2013/09/baker-28 301
+/posts/29 https://archive.barryfrost.com/2013/09/baker-29 301
+/posts/33 https://archive.barryfrost.com/2013/09/baker-33 301
+/posts/34 https://archive.barryfrost.com/2013/09/baker-34 301
+/posts/35 https://archive.barryfrost.com/2013/09/baker-35 301
+/posts/36 https://archive.barryfrost.com/2013/09/baker-36 301
+/posts/37 https://archive.barryfrost.com/2013/09/baker-37 301
+/posts/38 https://archive.barryfrost.com/2013/10/baker-38 301
+/posts/39 https://archive.barryfrost.com/2013/10/baker-39 301
+/posts/41 https://archive.barryfrost.com/2013/10/baker-41 301
+/posts/42 https://archive.barryfrost.com/2013/10/baker-42 301
+/posts/44 https://archive.barryfrost.com/2013/10/baker-44 301
+/posts/45 https://archive.barryfrost.com/2013/10/baker-45 301
+/posts/51 https://archive.barryfrost.com/2013/10/baker-51 301
+/posts/53 https://archive.barryfrost.com/2013/10/baker-53 301
+/posts/57 https://archive.barryfrost.com/2013/10/baker-57 301
+/posts/59 https://archive.barryfrost.com/2013/10/baker-59 301
+/posts/60 https://archive.barryfrost.com/2013/10/baker-60 301
+/posts/61 https://archive.barryfrost.com/2013/10/baker-61 301
+/posts/62 https://archive.barryfrost.com/2013/11/baker-62 301
+/posts/63 https://archive.barryfrost.com/2013/11/baker-63 301
+/posts/64 https://archive.barryfrost.com/2013/11/baker-64 301
+/posts/65 https://archive.barryfrost.com/2013/11/baker-65 301
+/posts/66 https://archive.barryfrost.com/2013/11/baker-66 301
+/posts/67 https://archive.barryfrost.com/2013/11/baker-67 301
+/posts/71 https://archive.barryfrost.com/2013/12/baker-71 301
+/posts/73 https://archive.barryfrost.com/2013/12/baker-73 301
+/posts/79 https://archive.barryfrost.com/2014/01/baker-79 301
+/posts/80 https://archive.barryfrost.com/2014/01/baker-80 301
+/posts/82 https://archive.barryfrost.com/2014/01/baker-82 301
+/posts/83 https://archive.barryfrost.com/2014/02/baker-83 301
+/posts/84 https://archive.barryfrost.com/2014/02/baker-84 301
+/posts/87 https://archive.barryfrost.com/2014/02/baker-87 301
+/posts/89 https://archive.barryfrost.com/2014/03/baker-89 301
+/posts/90 https://archive.barryfrost.com/2014/03/baker-90 301
+/posts/91 https://archive.barryfrost.com/2014/03/baker-91 301
+/posts/92 https://archive.barryfrost.com/2014/03/baker-92 301
+/posts/93 https://archive.barryfrost.com/2014/03/baker-93 301
+/posts/96 https://archive.barryfrost.com/2014/04/baker-96 301
+/posts/97 https://archive.barryfrost.com/2014/04/baker-97 301
+/posts/99 https://archive.barryfrost.com/2014/05/baker-99 301
+/posts/100 https://archive.barryfrost.com/2014/05/baker-100 301
+/posts/101 https://archive.barryfrost.com/2014/05/baker-101 301
+/posts/103 https://archive.barryfrost.com/2014/06/baker-103 301
+/posts/104 https://archive.barryfrost.com/2014/08/baker-104 301
+/posts/105 https://archive.barryfrost.com/2014/08/baker-105 301
+/posts/108 https://archive.barryfrost.com/2014/09/baker-108 301
+/posts/109 https://archive.barryfrost.com/2014/09/baker-109 301
+/posts/110 https://archive.barryfrost.com/2014/11/baker-110 301
+/posts/111 https://archive.barryfrost.com/2014/11/baker-111 301
+
 # WILDCARD REDIRECTS
 
 /categories/* /search?q=:splat 301
+
+# Posts list pagination moved from /posts/N; legacy post numbers above win
+/posts/:page /posts/page/:page 301
 
 # Redirect archived barryfrost.com posts to archive.barryfrost.com
 /20* https://archive.barryfrost.com/20:splat 301

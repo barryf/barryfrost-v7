@@ -9,7 +9,12 @@ import { SECTIONS } from '@/lib/sections';
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
   const entries = await getFeedEntries('blueskyPosts');
-  return paginate(entries, { pageSize: PAGE_SIZE });
+  // Pages 2+ live at /posts/page/N because /posts/N redirects legacy post numbers
+  // to archive.barryfrost.com (see public/_redirects).
+  return paginate(entries, { pageSize: PAGE_SIZE }).map(path => ({
+    ...path,
+    params: { page: path.params.page ? `page/${path.params.page}` : undefined },
+  }));
 }
 
 interface Props {
@@ -18,7 +23,7 @@ interface Props {
 
 const { page } = Astro.props;
 ---
-<Feed {...SECTIONS.posts} currentPage={page.currentPage} totalPages={page.lastPage} basePath="/posts" showDescription={page.currentPage === 1}>
+<Feed {...SECTIONS.posts} currentPage={page.currentPage} totalPages={page.lastPage} basePath="/posts" pageBasePath="/posts/page" showDescription={page.currentPage === 1}>
   <Fragment slot="description">
     Short posts, links and replies that I've published on my
     <a href="https://bsky.app/profile/barryfrost.com" class="underline">
