@@ -70,9 +70,9 @@ a PDS blip should cost the links, not the build.
 
 > **Note on `com.barryfrost.checkin`:** The site route and code use `check-in` (hyphenated), but the AT Protocol NSID cannot follow suit — the spec only allows `[a-zA-Z0-9]` in NSID name segments (no hyphens). The NSID is therefore intentionally kept as `com.barryfrost.checkin`.
 >
-> This repo is the canonical home of the `com.barryfrost.checkin` lexicon doc: `lexicons/com/barryfrost/checkin.json`, published to the PDS as a `com.atproto.lexicon.schema` record via `npm run publish:lexicon` (the fsq2pds importer repo no longer keeps a copy). Records carry an optional `comment` field (the Swarm "shout" user comment); `check-ins.ts` exposes it in loader data, but no card/template renders it yet.
+> This repo is the canonical home of the `com.barryfrost.checkin` lexicon doc: `lexicons/com/barryfrost/checkin.json`, published to the PDS as a `com.atproto.lexicon.schema` record via `npm run publish:lexicon` (the fsq2pds importer repo no longer keeps a copy). Records carry an optional `comment` field (the Swarm "shout" user comment); `check-ins.ts` exposes it in loader data, `CheckInCard` renders it as an italic `e-content` line, and `/stream` uses it as the check-in's summary in place of the address.
 
-Blogroll blogs come from `src/data/blogroll.json` (static JSON), passed through `blogrollLoader()` so favicons/avatars are materialised into R2 like any other image.
+Blogroll blogs come from `src/data/blogroll.json` (static JSON), passed through `blogrollLoader()`. Only entries with an explicit `avatar` (currently 3 of 25) have it materialised into R2 via `remoteImage()`; every other blog hot-links `www.google.com/s2/favicons?domain={host}&sz=96` directly.
 
 `/work` is the exception to the table: it reads `id.sifa.profile.{self,position,education,certification,project,skill,language}` records straight from the PDS via `src/lib/sifa.ts` (same `fetchAllRecords` helper) at page render, with no content collection and no loader. The `self` record supplies both the headline and the longer `about` text (plain text with blank-line paragraph breaks) rendered as the page's About section; `certification` records render as Credentials, linked to `credentialUrl` where one is set.
 
@@ -81,7 +81,7 @@ Each PDS loader implements `Loader` from `astro/loaders`:
 - `store.clear()` at the start (full refresh each build)
 - Iterates `fetchAllRecords(collection, DID, PDS_HOST)` from `src/lib/pds.ts`
 - All PDS/atproto reads go through `fetchWithRetry` in `src/lib/pds.ts`, which retries transient failures (429/500/502/503/504 and network errors, dropped keep-alive sockets included) with exponential backoff before giving up. `bsky.social`'s shared PDS intermittently 500s on valid requests, and without retries a single blip aborts the whole build. It takes an optional `RequestInit`, so the Standard.site publisher's writes share it too — see Standard.site Publishing for which of those may and may not be retried.
-- Materialises images at build time via `pdsImage(cid, opts)` / `remoteImage(url, opts)` from `src/lib/image-store.ts` — fetches the source directly (PDS `getBlob` or remote URL), resizes with `sharp`, and stores as webp in R2. Returns an `images.barryfrost.com` URL on success, or the direct source URL on error/dev. Pass dimensions at 2× the CSS display size for retina (e.g. `width: 192` for a 96px display slot). Accepts `fit: 'cover'` (default) or `fit: 'contain'` to preserve aspect ratio.
+- Materialises images at build time via `pdsImage(cid, opts)` / `remoteImage(url, opts)` from `src/lib/image-store.ts` — fetches the source directly (PDS `getBlob` or remote URL), resizes with `sharp`, and stores as webp in R2. Returns an `images.barryfrost.com` URL on success, or the direct source URL on error/dev. Pass dimensions at 2× the CSS display size for retina (e.g. `width: 192` for a 96px display slot). Accepts `fit: 'cover'` (default), `fit: 'contain'` to preserve aspect ratio (Grain photos), or `fit: 'scale-down'` to cap the width without enlarging (Bluesky post images and link-card thumbs); the `Fit` type also lists `crop`/`pad`, which nothing uses.
 - Stores entries with `generateDigest(record.cid)` for change detection
 
 ## Homepage
@@ -111,7 +111,7 @@ Paginated pages show `Title (Page N)` in both the h1 and the browser window titl
 | URL | Content |
 |---|---|
 | `/` | Curated homepage |
-| `/stream` | Unified activity timeline — 50 most recent items across all collections (except music), summarised, each linking to its canonical copy; MF2 `h-feed`. Labelled "Stream" in nav; `/log*` 301-redirect here |
+| `/stream` | Unified activity timeline — 50 most recent items across all collections (except music), summarised, each linking to its canonical copy; MF2 `h-feed`. Labelled "Stream" in nav |
 | `/stream.xml` | RSS for the timeline (summaries only) |
 | `/stream.json` | JSON Feed v1.1 for the timeline (summaries only) |
 | `/articles` | Articles list |
@@ -132,9 +132,9 @@ Paginated pages show `Title (Page N)` in both the h1 and the browser window titl
 | `/search` | Pagefind search |
 | `/{slug}` | Slash pages (about, colophon, etc.) |
 | `/travelblog` | Archived 2000–2001 travel blog — horizontal photo strip, then an index listing each month with its countries and a one-line summary |
-| `/travelblog/{YYYY-MM}` | A month's posts on one page (e.g. `/travelblog/2001-08`), under `###` date headings; countries shown as flag + name; prev/next month nav. Heading is `Travelblog - {month}`, the first part linking back to `/travelblog` — the only route back now that Travelblog is absent from the sitewide nav; only the month carries `p-name` |
+| `/travelblog/{YYYY-MM}` | A month's posts on one page (e.g. `/travelblog/2001-08`), under `###` date headings; countries shown as flag + name; prev/next month nav. Heading is `Travelblog - {month}`, the first part linking back to `/travelblog` — the only route back from a month now that Travelblog is absent from the sitewide nav; only the month carries `p-name` |
 
-All type-specific list pages have `/{type}/{n}` pagination except `/weeknotes` (all on one page). `/books` splits Reading/Finished on page 1; Finished continues to `/books/{n}`. Both are stacked full-width grids separated by a `Divider`, columned like the blogroll but one step narrower each side of it (Reading `grid-cols-1 sm:2 lg:3 2xl:4` with `lg` covers, Finished `grid-cols-1 sm:2 md:3 xl:4 2xl:5`) — Finished outgrows Reading many times over, so a side-by-side split left one column stranded. Weeknote permalinks carry a `week-` prefix (`weeknoteUrl()` in `src/lib/urls.ts`) so their numeric IDs don't collide with the `/{type}/{n}` pattern.
+All type-specific list pages have `/{type}/{n}` pagination except `/weeknotes` (all on one page) and `/posts` (`/posts/page/{n}`, see Pagination); `/films/by-rating` paginates as `/films/by-rating/{n}`. `/books` splits Reading/Finished on page 1; Finished continues to `/books/{n}`. Both are stacked full-width grids separated by a `Divider`, columned like the blogroll but one step narrower each side of it (Reading `grid-cols-1 sm:2 lg:3 2xl:4` with `lg` covers, Finished `grid-cols-1 sm:2 md:3 xl:4 2xl:5`) — Finished outgrows Reading many times over, so a side-by-side split left one column stranded. Weeknote permalinks carry a `week-` prefix (`weeknoteUrl()` in `src/lib/urls.ts`) so their numeric IDs don't collide with the `/{type}/{n}` pattern.
 
 Removed from v6: `/page/{n}` (unified paginated feed), `/archives/`, `/tags/`.
 
@@ -157,14 +157,18 @@ well inside Cloudflare's 2,000 static / 100 dynamic limits.
 ## Layouts & Components
 
 - `Base.astro` — HTML shell, full-bleed `m-4 sm:m-8` body (no centred max-width; reading columns are capped per-element via `max-w-140` in `global.css`), dark mode via `prefers-color-scheme`; `lang="en-GB"`. Renders a visually-hidden "Skip to content" link (revealed on focus), then `<header><SiteHeader /></header>`, `<main id="main"><slot /></main>`, and `<footer><SiteFooter /></footer>` on every page.
-- `SiteHeader.astro` — sitewide header, and the site's only navigation layer. Two `<nav>` rows, both `text-sm`: the first is the `h-card` (name, hidden `u-photo`/`p-locality`/`p-country-name`), a `⁂`, then About, Articles, Weeknotes; the second is the trace sections — Stream, Posts, Photos, Check-ins, Books, Films, Music, Work. On the homepage the name renders as an `h1`; elsewhere it's a link back to `/`. Every link has two states only: **bold, not a link** on the page you're on, plain underlined link everywhere else — no section highlighting, so `/articles/atmospheric` bolds nothing. `isCurrentPage()` in `src/lib/nav.ts` does the match: exact, plus a trailing all-digits segment so paginated listings (`/books/2`) still bold their own item. Travelblog is reachable only from the `/travelblog/{month}` heading and the sitemap.
+- `SiteHeader.astro` — sitewide header, and the site's only navigation layer. Two `<nav>` rows, both `text-sm`: the first is the `h-card` (name, hidden `u-photo`/`p-locality`/`p-country-name`), a `⁂`, then About, Articles, Weeknotes; the second is the trace sections — Stream, Posts, Photos, Check-ins, Books, Films, Music, Work. On the homepage the name renders as an `h1`; elsewhere it's a link back to `/`. Every link has two states only: **bold, not a link** on the page you're on, plain underlined link everywhere else — no section highlighting, so `/articles/atmospheric` bolds nothing. `isCurrentPage()` in `src/lib/nav.ts` does the match: exact, plus a trailing all-digits segment so paginated listings (`/books/2`) still bold their own item. Travelblog has no nav entry; it is reached from links in the About and Colophon pages (and a couple of weeknotes), the `/travelblog/{month}` heading, and the sitemap.
 - `SectionHeading.astro` — shared page-heading row used by `Feed.astro` and every standalone section host (`music`, `blogroll`, `work`, `[...slug]`). Renders the `<h1>` (default slot appends e.g. the `(Page N)` suffix) inside a wrapper whose margin the caller sets via `class`.
 - `SectionIcon.astro` — maps a Stream section slug to its service icon (Posts→Bluesky, Photos→Grain, Check-ins→CheckIn, Books→BookHive, Films→Popfeed, Music→Rocksky, Blogroll→StandardSite); used only by the homepage Stream directory.
-- `Feed.astro` — shared feed layout used by all list/paginated pages. Renders the `h-feed` wrapper, hidden `h-card p-author` MF2 author block, heading (with `(Page N)` suffix), optional named `description` slot, default slot for item content, and `<Pagination>` (suppressed via `paginate={false}` on the unpaginated `/stream`). Props: `title`, `currentPage?`, `totalPages`, `basePath`, `paginate?`, `showDescription?` (set false on pages 2+ to hide the intro slot, since slots can't be conditionally passed).
+- `Feed.astro` — shared feed layout used by all list/paginated pages. Renders the `h-feed` wrapper, hidden `h-card p-author` MF2 author block, heading (with `(Page N)` suffix), optional named `description` slot, default slot for item content, and `<Pagination>` (suppressed via `paginate={false}` on the unpaginated `/stream`). Props: `title`, `description?` (plain-text `<head>` description), `currentPage?`, `totalPages`, `basePath`, `pageBasePath?` (prefix for pages 2+, used by `/posts`), `paginate?`, `showDescription?` (set false on pages 2+ to hide the intro slot, since slots can't be conditionally passed), `standardPublication?` (set on a publication's root page only — emits the `site.standard.publication` link).
 - `FilmFeed.astro` — extends `Feed.astro` for `/films` and `/films/by-rating`: adds date/rating sort toggle and renders `FilmCard` in a responsive grid (`grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4`)
-- `Post.astro` — individual article/weeknote with prose styles; "Posted in [Section] on [relative date]" (or "Posted on [relative date]") footer, followed by `Syndication` links when the post has `syndication` or `standardRkey` frontmatter. Optional `navAside` prop (set by weeknotes) moves the named `nav` slot into a right-hand column at `lg` and above; below that the columns collapse and the slot stacks under the body in source order. The columns align on `items-start` so the aside pins to the top of the body whatever it opens with — `items-baseline` took the main column's baseline from a leading image's bottom edge and pushed the aside down the full height of the image. The aside column carries `lg:pt-1`, half the leading difference between the prose body and the `text-sm` aside, which keeps their first baselines together on text-led posts
+- `Post.astro` — individual article/weeknote with prose styles; "Posted in [Section] [date]" (or "Posted [date]") footer — "on" is inserted only before an absolute date ("Posted on 22 Apr 2026"), not a relative one ("Posted 3 days ago") — followed by `Syndication` links when the post has `syndication` or `standardRkey` frontmatter. Optional `navAside` prop (set by weeknotes) moves the named `nav` slot into a right-hand column at `lg` and above; below that the columns collapse and the slot stacks under the body in source order. The columns align on `items-start` so the aside pins to the top of the body whatever it opens with — `items-baseline` took the main column's baseline from a leading image's bottom edge and pushed the aside down the full height of the image. The aside column carries `lg:pt-1`, half the leading difference between the prose body and the `text-sm` aside, which keeps their first baselines together on text-led posts
 - `Syndication.astro` — renders a post's syndication URLs as icon + label links (`u-syndication`, `rel="syndication"`), prefixed with "and also on", after the timestamp in `Post.astro`. The list comes from `resolveSyndication()` (`src/lib/syndication.ts`) — `syndication` frontmatter plus the Bluesky card post recorded on the document record, see below. `serviceFor(url)` maps a URL's host to a known service (Bluesky, Mastodon, X/Twitter, Medium, LinkedIn, IndieNews) and its icon; an unrecognised host falls back to a bare hostname label with no icon. A post with a `standardRkey` also leads the list with a "Standard Site" link to its Standard Reader page (`standardReaderUrl()`); the clause renders for a `standardRkey` alone, with no other syndication targets. That link is deliberately **not** `u-syndication` — Standard Reader is a viewer for the record, not the syndicated copy itself, which the head's `<link rel="site.standard.document">` already advertises as an `at://` URI
 - `Divider.astro` — `⁂` separator; `my-8 text-xl`
+- `AuthorCard.astro` — hidden `h-card p-author` (photo, name, URL) dropped into every `h-feed` and `h-entry` so each parses with an author.
+- `Pagination.astro` — zero-padded page-number links (`01`, `02`, …) in monospace; takes `basePath` and an optional `pageBasePath` for pages 2+.
+- `FollowCard.astro` — avatar + name + handle/description link card; used by `/blogroll`.
+- `CheckInMap.astro` — the `/check-ins` Leaflet cluster map and its fullscreen toggle (see Key Conventions).
 - `SiteFooter.astro` — `Divider`, then a wrapping row holding the search form (submits to `/search`) and the secondary links — Colophon, Blogroll, Follow, Contact — followed by a copyright/licence line (CC BY 4.0) with a link to the GitHub source repo; rendered on every page. Links use the same two states as the header, via the same `isCurrentPage()`
 Icon components in `src/components/icons/`:
 - `ArticleIcon.astro`, `WeeknoteIcon.astro`, `CheckInIcon.astro` — document-text, calendar and map-pin glyphs (Heroicons 16/solid) used as `/stream` timeline node icons and, for check-ins, in `SectionIcon`; the content types with no service logo of their own
@@ -174,8 +178,9 @@ Icon components in `src/components/icons/`:
 - `BookHiveIcon.astro` — bookhive.buzz logo; used in the `/books` feed description, `SectionIcon`, and homepage Stream directory
 - `PopfeedIcon.astro` — popfeed.social logo; used in the `/films` feed description, `SectionIcon`, and homepage Stream directory
 - `RockskyIcon.astro` — rocksky music note icon; used in `SectionIcon` and the homepage Stream directory
-- `RSSIcon.astro`, `JSONFeedIcon.astro`, `MF2Icon.astro`, `StandardSiteIcon.astro` — feed format icons; used on `/follow`. `StandardSiteIcon` doubles as the `SectionIcon`/Stream mark for subscriptions and as the Standard Reader link's icon in `Syndication.astro`
-- `SifaIcon.astro` — sifa.id logo; used on `/follow` for the work profile link
+- `RSSIcon.astro`, `JSONFeedIcon.astro`, `MF2Icon.astro`, `StandardSiteIcon.astro` — feed format icons; used on `/follow`, and the first three in the `/stream` intro's feed links. `StandardSiteIcon` doubles as the `SectionIcon`/Stream mark for subscriptions and as the Standard Reader link's icon in `Syndication.astro`
+- `SifaIcon.astro` — sifa.id logo; used on `/follow` and `/work` for the Sifa profile link
+- `StarIcon.astro` — solid star (`STAR_PATH`, see below) marking featured articles in `ArticleCard` and the `/articles` intro
 - `MastodonIcon.astro`, `XIcon.astro`, `MediumIcon.astro`, `LinkedInIcon.astro`, `IndieNewsIcon.astro` — syndication-target logos used by `Syndication.astro` (Bluesky reuses `BlueskyIcon.astro`)
 
 All icons accept an optional `class` prop to override the default sizing/alignment.
@@ -250,7 +255,7 @@ Static search via [Pagefind](https://pagefind.app). After `astro build`, `pagefi
 
 **Scope:** Only pages with `data-pagefind-body`. Indexed content types:
 - Articles (`/articles/{slug}`) — individual pages via `Post.astro`
-- Weeknotes (`/weeknotes/{N}`) — individual pages via `Post.astro`
+- Weeknotes (`/weeknotes/week-{N}`) — individual pages via `Post.astro`
 - Travelblog months (`/travelblog/{YYYY-MM}`) — one indexed page per month
 - Slash pages (about, colophon, etc.) via `[...slug].astro`
 - Static pages: `/work`, `/music`
@@ -271,18 +276,18 @@ The search bundle is not present during `npm run dev`. Test with `npm run build 
 Applied as static classes directly in Astro templates. No runtime JS required.
 
 - **Feed pages**: `h-feed` + `p-name` + hidden `h-card p-author` containing `u-photo`, `p-name`, `u-url`
-- **All cards**: `h-entry` with `dt-published`, `u-url`
+- **All cards**: `h-entry` (`h-review` for `FilmCard`) with `dt-published`, `u-url`, and a hidden `AuthorCard`
 - **Article/weeknote pages** (`Post.astro`): `h-entry` with a hidden `u-url` anchor carrying the
   canonical URL. That anchor is deliberately **empty** — `u-url` reads the `href`, and it sits
   inside `data-pagefind-body`, so any text would be indexed and show up in the search excerpt of
   every post. Its href goes through `cleanPathname()` so it matches `rel=canonical` exactly
 - **Stream page** (`/stream`): a vertical-line timeline grouped into Europe/London calendar days (continuous line via an absolutely-positioned rule). Day headings show a capitalised relative date (`formatDateRelative` — "Today"/"Yesterday"/"N days ago"; absolute short date beyond the 14-day cutoff); grouping stays keyed on the absolute calendar day so the relative label can't split a day. Each item is an `h-entry` (`<li>`) whose node on the line is a circular badge holding the type's icon (`ring` matched to the page background so it masks the line); the text label is replaced by that icon. An optional non-link `titlePrefix` renders before the `u-url` link — the weeknote emoji (kept out of `p-name`) and `"Replied: "` on reply posts. MF2: hidden `p-author` `AuthorCard`, `u-url` on the canonical link, `dt-published` (visible clock time for timestamped items, `sr-only` for all-day), a `p-name` (titled items) or `p-summary` (posts) lead plus an optional detail line — `p-rating` stars via `StarRating` for items carrying a `rating`, otherwise the plain-text `p-summary` — and, on articles and weeknotes, one `hidden` `u-syndication` anchor per syndicated copy. Those are hidden rather than rendered: the timeline already links each canonical copy, and a per-entry list of syndicated copies is noise for someone scanning fifty items — parsers read the markup, not what's painted, the same trick `AuthorCard` already uses in the same `<li>`. Type→icon: article→`ArticleIcon`, weeknote→`WeeknoteIcon`, post→`BlueskyIcon`, checkin→`CheckInIcon`, film→`PopfeedIcon`, book→`BookHiveIcon`, photo→`GrainIcon`, subscription→`StandardSiteIcon`
-- **ArticleCard**: `p-name`, `p-summary`; tags as `p-category`
+- **ArticleCard**: `p-name u-url` on the title link (no summary or categories)
 - **BlueskyCard**: `e-content` for rich text, `u-in-reply-to` on reply link, `u-photo` on embedded images
-- **CheckInCard**: nested `p-checkin h-card` with `p-name`, `p-latitude`, `p-longitude`, `p-street-address`; `p-rating` (hidden) when present
-- **FilmCard**: nested `p-item h-cite` with `u-photo` (poster) and hidden `p-name u-url`; numeric `p-rating` via `<data value=...>` wrapping the `StarRating` stars
-- **BookCard**: nested `p-read-of h-cite` with `u-photo` (cover), hidden `p-name u-url`, `p-author`
-- **PhotoCard**: `u-photo` on each thumbnail, `p-name u-url` on title
+- **CheckInCard**: nested `p-checkin h-card` with `p-name` (+ `u-url` to OpenStreetMap when located), a `p-adr h-adr` holding `p-street-address`/`p-locality`/`p-region`/`p-postal-code`, and `p-latitude`/`p-longitude`; the record's `comment` as `e-content`; `u-photo` on photos
+- **FilmCard**: `h-review` with a nested `p-item h-cite` holding `u-photo` (poster, wrapped in a `u-url` link) and a hidden `p-name`; the visible title is the review's `p-name u-url`; numeric `p-rating` via `<data value=...>` wrapping the `StarRating` stars
+- **BookCard**: `u-photo` (cover) and `p-name u-url` title on the entry, plus a hidden nested `p-read-of h-cite` with `p-name`, `u-url`, `p-author`
+- **PhotoCard**: `u-photo` on each thumbnail, `p-name u-url` on title, gallery description as `e-content`
 
 `BaseHead.astro` also emits IndieWeb discovery `<link>` tags in `<head>`: `rel="me"` (GitHub, Mastodon), `rel="me atproto"`, plus `webmention`, `microsub`, `authorization_endpoint` and `token_endpoint` for IndieAuth.
 
@@ -317,7 +322,7 @@ Separate from the blog feed above: a broader **activity log** spanning every col
 | `/stream.xml` | RSS — same items, summaries only |
 | `/stream.json` | JSON Feed v1.1 — same items, summaries only |
 
-`src/lib/timeline.ts` (`getTimelineItems(site)`) is the shared source of truth for all three: it merges `articles`, `weeknotes`, `blueskyPosts` (replies included), `check-ins`, `films`, `books`, `photos` and `standardSubscriptions`, filters `visibility: unlisted` (articles/weeknotes), normalises each to a `TimelineItem` (type, label, title, summary, canonical `url`, `local` flag, `date`, plus `syndication` on articles/weeknotes via `resolveSyndication()`), sorts by date descending and takes the latest 50. Canonical URLs reuse the per-type patterns from the card components (articles/weeknotes local and absolutised against `site`; posts→Bluesky, check-ins→OSM, films→Popfeed, books→BookHive, photos→Grain, subscriptions→the publication's site). Items carry **summaries, not full content** — readers click through to the canonical copy. Feed titles come from `timelineFeedTitle()` and mirror the page, which labels an item with its `titlePrefix` rather than its `typeLabel`: `Watched: Casino Royale`, `Checked in at: The Goat Inn`, the weeknote emoji joined without a colon (`🚣 Week 258 - Rowboat`), and a bare title where the page shows no prefix (articles, photos, non-reply posts). Music (`scrobbles`) is deliberately excluded as too noisy. The page/feeds live at `/stream*` (the header labels it "Stream"); the route slug stays distinct from the frozen `/feed.*` blog feeds, and `/log*` 301-redirect here (renamed from the earlier "Log"). Advertised via a second pair of `<link rel="alternate">` tags in `BaseHead.astro`.
+`src/lib/timeline.ts` (`getTimelineItems(site)`) is the shared source of truth for all three: it merges `articles`, `weeknotes`, `blueskyPosts` (replies included), `check-ins`, `films`, `books`, `photos` and `standardSubscriptions`, filters `visibility: unlisted` (articles/weeknotes), normalises each to a `TimelineItem` (type, label, title, summary, canonical `url`, `local` flag, `date`, plus `syndication` on articles/weeknotes via `resolveSyndication()`), sorts by date descending and takes the latest 50. Canonical URLs reuse the per-type patterns from the card components (articles/weeknotes local and absolutised against `site`; posts→Bluesky, check-ins→OSM, films→Popfeed, books→BookHive, photos→Grain, subscriptions→the publication's site). Items carry **summaries, not full content** — readers click through to the canonical copy. Feed titles come from `timelineFeedTitle()` and mirror the page, which labels an item with its `titlePrefix` rather than its `typeLabel`: `Watched: Casino Royale`, `Checked in at: The Goat Inn`, the weeknote emoji joined without a colon (`🚣 Week 258 - Rowboat`), and a bare title where the page shows no prefix (articles, photos, non-reply posts). Music (`scrobbles`) is deliberately excluded as too noisy. The page/feeds live at `/stream*` (the header labels it "Stream"); the route slug stays distinct from the frozen `/feed.*` blog feeds. (It was briefly called "Log"; no `/log*` redirects exist in `public/_redirects`.) Advertised via a second pair of `<link rel="alternate">` tags in `BaseHead.astro`.
 
 > Subscriptions have no date in their own schema; the `site.standard.graph.subscription` record's `createdAt` is surfaced through `subscriptions.ts` + `standardSubscriptions` schema so they can be timeline-ordered (any lacking it are skipped).
 
@@ -377,11 +382,11 @@ Build command: `npm run build` (`astro build` + `pagefind`). Deploy command: `np
 
 `wrangler` is a pinned devDependency so `npx wrangler` resolves it from the restored dependencies cache rather than downloading it (~12s) on every build, and the version stays fixed rather than silently tracking the latest `4.x`.
 
-`release.ts` runs `wrangler deploy`, then (gated behind `PUBLISH_STANDARD_SITE`) syndicates articles/weeknotes to Standard.site, then pulls a content summary from the pds-poller Worker and only sends a Pushover notification if there is one — so hourly-cron and code-push rebuilds with no content changes stay silent. On any failure it always notifies (high priority) and exits non-zero so Cloudflare marks the build failed.
+`release.ts` runs `wrangler deploy`, then (gated behind `PUBLISH_STANDARD_SITE`) syndicates articles/weeknotes to Standard.site, then pulls a content summary from the pds-poller Worker and only sends a Pushover notification if there is one — so hourly-cron and code-push rebuilds with no content changes stay silent. On a build/deploy failure it always notifies (high priority) and exits non-zero so Cloudflare marks the build failed. A Standard.site publish failure is the exception: it sends its own high-priority notification but leaves the deploy successful, since the site is already live and the publisher is idempotent.
 
 `wrangler.toml` also declares `[build] command = "npm run build"`. wrangler runs this before both `deploy` and `versions upload`, so **PR-preview builds** (whose deploy command is a bare `npx wrangler versions upload`) produce `./dist` too — without it the preview upload fails with "assets.directory … does not exist". This `[build]` hook is the single source of the build for both paths: `release.ts` does *not* build explicitly before `wrangler deploy` (doing so built the whole site twice, ~2x deploy time), it relies on the hook firing during deploy just as previews do.
 
-Required build env vars (set in CF Workers Builds): `PUSHOVER_TOKEN`, `PUSHOVER_USER`, `NOTIFY_SECRET`, `R2_ACCOUNT_ID`, `R2_BUCKET`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `IMAGES_BASE_URL`, `PUBLIC_CARTO_BASEMAP_KEY`
+Required build env vars (set in CF Workers Builds): `PUSHOVER_TOKEN`, `PUSHOVER_USER`, `NOTIFY_SECRET`, `R2_ACCOUNT_ID`, `R2_BUCKET`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `IMAGES_BASE_URL`, `PUBLIC_CARTO_BASEMAP_KEY`, plus `PUBLISH_STANDARD_SITE=1` on production only (see Standard.site Publishing)
 
 `PUBLIC_CARTO_BASEMAP_KEY` is the odd one out: the `PUBLIC_` prefix is what makes Astro inline it into the `/check-ins` client bundle, so unlike the others it is *not* a secret — the browser fetches the tiles, so the key ships in the JS by necessity. It is domain-scoped by CARTO and free (5M tile requests/month). Builds without it still succeed and still render a map; the tiles just come back watermarked.
 
@@ -404,7 +409,7 @@ A Cloudflare Worker that detects PDS changes by polling every 60 seconds, driven
 
 **Load.** Most minutes: one `getLatestCommit` call (~1.4k/day). On the minutes the rev has moved, a full paginated scan of the eight watched collections — the two largest (`app.bsky.feed.post`, `com.barryfrost.checkin`) are ~1,300–1,400 records each, so a scan is ~30 `listRecords` calls total. Rev-changing writes are infrequent for a personal site, and even a scan every few minutes stays well under `bsky.social`'s per-IP limit of 3,000 requests per 5 minutes.
 
-Watched collections (`WATCHED_COLLECTIONS`): `app.bsky.feed.post`, `com.barryfrost.checkin`, `social.popfeed.feed.review`, `buzz.bookhive.book`, `site.standard.graph.subscription`, `social.grain.gallery`, `social.grain.gallery.item`, `social.grain.photo`. `site.standard.document` is deliberately **not** watched — the build writes those records itself (`scripts/publish-standard-site.ts`), so watching them would loop. It doesn't need to be: the build *reads* that collection for `bskyPostRef` (`standard-documents.ts`), and the ref lands in the same run that creates the `app.bsky.feed.post` it points at, so the watched post is what triggers the rebuild that picks it up.
+Watched collections (`WATCHED_COLLECTIONS`): `app.bsky.feed.post`, `com.barryfrost.checkin`, `social.popfeed.feed.review`, `buzz.bookhive.book`, `site.standard.graph.subscription`, `social.grain.gallery`, `social.grain.gallery.item`, `social.grain.photo`. `site.standard.document` is deliberately **not** watched — the build writes those records itself (`scripts/publish-standard-site.ts`), so watching them would loop. `app.rocksky.scrobble` is not watched either, so `/music` only refreshes when something else triggers a build or on the hourly fallback. `site.standard.document` doesn't need to be watched: the build *reads* that collection for `bskyPostRef` (`standard-documents.ts`), and the ref lands in the same run that creates the `app.bsky.feed.post` it points at, so the watched post is what triggers the rebuild that picks it up.
 
 Required secrets: `DEPLOY_HOOK` (same Workers Builds deploy-hook URL as before), `NOTIFY_SECRET` (gates `/pending-notification`).
 
@@ -439,7 +444,7 @@ R2 bucket `barryfrost-images` with custom domain `images.barryfrost.com`. `sharp
 #### Build-time concurrency
 
 Every loader processes its records with bounded concurrency instead of a sequential `for await` loop, so `image-store.ts`'s R2/sharp work and per-record PDS/AppView lookups actually run in parallel:
-- `src/lib/concurrency.ts` — `mapLimit(items, limit, fn)` helper and the shared `RECORD_CONCURRENCY` (32) constant, used by every loader in `src/lib/loaders/`
+- `src/lib/concurrency.ts` — `mapLimit(items, limit, fn)` helper and the shared `RECORD_CONCURRENCY` (32) constant, used by every loader in `src/lib/loaders/` except `standard-documents.ts` (no images or per-record lookups)
 - the shared R2 concurrency limiter (`CONCURRENCY` 24, in `src/lib/r2.ts`) separately bounds the R2/sharp work specifically, regardless of how many records are in flight above it
 
 This took "Syncing content" from 90s+ down to ~7s. The pattern for a loader: collect records from `fetchAllRecords` into an array first (cheap, no images involved), then `mapLimit(records, RECORD_CONCURRENCY, async (record) => {...})` over the per-record body (image fetch + any other network calls + `store.set`) — decoupling PDS pagination from per-record work.
@@ -512,7 +517,7 @@ Both commands: verify working tree is clean on `main`, create a `content/...` br
 
 | Module | Responsibility |
 |---|---|
-| `scripts/lib/scaffold.ts` | Pure helpers: `slugify`, `escapeYaml`, `nextWeekNumber`, frontmatter renderers, `writeStub` |
+| `scripts/lib/scaffold.ts` | Pure helpers: `slugify`, `escapeYaml`, `todayISO`, `nextWeekNumber`, `genTid`/`genUniqueTid`/`usedRkeys` (`standardRkey` minting), frontmatter renderers, `writeStub` |
 | `scripts/new-article.ts` | Article CLI — slug from title, writes `src/content/articles/{slug}.md` |
 | `scripts/new-weeknote.ts` | Weeknote CLI — week = `max(existing) + 1`, writes `src/content/weeknotes/{N}.md` |
 
@@ -524,7 +529,7 @@ Both CLIs accept `--no-git` (or `CI=true`) to skip git/gh operations — used by
 - Filename: `{N}.md` — e.g. `244.md`; URL is `/weeknotes/week-{N}` (no title slug; the `week-` prefix keeps numeric IDs distinct from `/{type}/{n}` pagination URLs)
 - Required frontmatter: `title`, `date`, `week` (unquoted integer). `emoji` optional but conventional
 - Title format: `"Week {N} - {Topic}"` (hyphen with surrounding spaces), always quoted. Weeks
-  1–46 originally used a colon (`"Week 25: Hibernation"`); all 257 now follow the hyphen form
+  1–46 originally used a colon (`"Week 25: Hibernation"`); every weeknote now follows the hyphen form
 - Bodies are a mix of CRLF and LF line endings. Anything rewriting these files in bulk must
   preserve them byte-for-byte (in Python, open with `newline=""`) or it will produce a diff
   touching every line of 227 files instead of the lines it meant to change
@@ -543,7 +548,7 @@ Both CLIs accept `--no-git` (or `CI=true`) to skip git/gh operations — used by
 | Script | Purpose |
 |---|---|
 | `scripts/backfill.ts` | Convert v6 JSON posts (articles/weeknotes) → local Markdown |
-| `scripts/import-grain-photos.ts` | Import v6 photo posts to grain.social as PDS records |
+| `scripts/import-grain-photos.ts` | Import v6 photo posts to grain.social as PDS records (`npm run import:grain`) |
 | `scripts/export-notes-csv.ts` | Export all v6 `post-type: note` records to CSV for review before Bluesky import |
 | `scripts/import-notes-bsky.ts` | Import approved notes from CSV to PDS as `app.bsky.feed.post` records |
 | `scripts/delete-imported-notes-bsky.ts` | Delete all records previously imported by `import-notes-bsky.ts` |
@@ -551,6 +556,9 @@ Both CLIs accept `--no-git` (or `CI=true`) to skip git/gh operations — used by
 | `scripts/assign-standard-rkeys.ts` | One-time: write unique `standardRkey` TIDs into article/weeknote frontmatter (`npm run standard:rkeys`) |
 | `scripts/publish-standard-site.ts` | Upsert `site.standard.document` records + weeknote Bluesky card posts (articles are posted by hand); refuses to run while two posts share a `standardRkey`; `--sync-syndication` reconciles `bskyPostRef` with `syndication` frontmatter (`npm run publish:standard`) |
 | `scripts/publish-lexicon.ts` | Upsert the canonical `com.barryfrost.checkin` lexicon doc to the PDS (`npm run publish:lexicon`) |
+| `scripts/preview-standard-descriptions.ts` | Read-only: print the `description`/`textContent` a `site.standard.document` would carry, for checking plaintext extraction (`npx tsx scripts/preview-standard-descriptions.ts [collection/slug…]`) |
+| `scripts/generate-icons.ts` | Regenerate the favicon/PWA/avatar set in `public/` from `src/assets/me.jpg` (see Favicon & Icons) |
+| `scripts/update-imports.py` | One-time: rewrite relative `../` imports in `src/` to the `@/` alias |
 | `scripts/normalise-weeknote-titles.py` | One-time: rewrite `Week {N}: {Topic}` frontmatter titles to the `Week {N} - {Topic}` convention (weeks 1–46). Dry-run by default, `--apply` to write |
 
 ## Standard.site Publishing
@@ -662,10 +670,13 @@ targets.
 - **CI**: `scripts/release.ts` runs the publisher after a successful deploy, gated behind the
   `PUBLISH_STANDARD_SITE` env var (unset on staging → no-op).
 
-### Launch (Standard.site) — run once, in order, after v7 replaces v6 at `barryfrost.com`
+### Launch (Standard.site) — done; kept for reference
 
-Publications intentionally use canonical `barryfrost.com` URLs, and verification only
-resolves once v7 serves that domain — so do **not** start this on staging.
+This has been run: v7 serves `barryfrost.com`, both publication AT-URIs are set in
+`src/lib/standard-site.ts`, every publishable post carries a `standardRkey`, and new
+weeknotes publish (and get their Bluesky card post) automatically on deploy. The steps below
+are what a re-launch would need. Publications intentionally use canonical `barryfrost.com`
+URLs, and verification only resolves on that domain — so never run this against staging.
 
 1. `npm run standard:pubs` — creates the two publication records. Paste the printed AT-URIs
    into `PUBLICATIONS.articles.uri` / `PUBLICATIONS.weeknotes.uri` in `src/lib/standard-site.ts`.

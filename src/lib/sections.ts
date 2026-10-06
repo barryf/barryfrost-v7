@@ -1,9 +1,10 @@
 /**
  * Title and meta description for each paginated feed section.
  *
- * Shared so that a section's index page and its `page/[page].astro` sibling can't drift
- * apart. The `description` here is the plain-text <head> one — the richer intro copy shown
- * on the page itself lives in each index page's `slot="description"`.
+ * Shared so that a section's `[...page].astro` route and the homepage directory
+ * (`STREAM_SECTIONS`) can't drift apart. The `description` here is the plain-text <head>
+ * one — the richer intro copy shown on the page itself lives in each route's
+ * `slot="description"`.
  */
 
 export interface Section {
