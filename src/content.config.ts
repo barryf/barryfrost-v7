@@ -46,6 +46,8 @@ const pages = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string().optional(),
+    // One-line bio for aboutspec.org's /.well-known/about.md (about.md only).
+    summary: z.string().optional(),
   }),
 });
 
@@ -164,6 +166,7 @@ const blogroll = defineCollection({
     url: z.string(),
     hostname: z.string(),
     avatarUrl: z.string().optional(),
+    feed: z.string().optional(),
   }),
 });
 

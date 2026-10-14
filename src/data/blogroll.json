@@ -2,104 +2,129 @@
   {
     "name": "Aaron Parecki",
     "url": "https://aaronparecki.com",
-    "avatar": "https://aaronparecki.com/images/profile.jpg"
+    "avatar": "https://aaronparecki.com/images/profile.jpg",
+    "feed": "https://aaronparecki.com/feed.xml"
   },
   {
     "name": "Alice Bartlett",
-    "url": "https://alicebartlett.co.uk"
+    "url": "https://alicebartlett.co.uk",
+    "feed": "https://alicebartlett.co.uk/feed.xml"
   },
   {
     "name": "Anna Shipman",
-    "url": "https://www.annashipman.co.uk"
+    "url": "https://www.annashipman.co.uk",
+    "feed": "https://www.annashipman.co.uk/atom.xml"
   },
   {
     "name": "Ben Balter",
-    "url": "https://ben.balter.com"
+    "url": "https://ben.balter.com",
+    "feed": "https://ben.balter.com/feed.xml"
   },
   {
     "name": "Ben Werdmuller",
-    "url": "https://werd.io/"
+    "url": "https://werd.io/",
+    "feed": "https://werd.io/rss/"
   },
   {
     "name": "Calum Ryan",
-    "url": "https://www.calumryan.com"
+    "url": "https://www.calumryan.com",
+    "feed": "https://www.calumryan.com/feeds/notes/rss"
   },
   {
     "name": "Gergely Orosz",
-    "url": "https://blog.pragmaticengineer.com"
+    "url": "https://blog.pragmaticengineer.com",
+    "feed": "https://blog.pragmaticengineer.com/rss/"
   },
   {
     "name": "Giles Turnbull",
-    "url": "https://gilest.org"
+    "url": "https://gilest.org",
+    "feed": "https://gilest.org/feed/index.xml"
   },
   {
     "name": "Henrique Dias",
-    "url": "https://hacdias.com/"
+    "url": "https://hacdias.com/",
+    "feed": "https://hacdias.com/feed.xml"
   },
   {
     "name": "James Stanier",
-    "url": "https://theengineeringmanager.substack.com"
+    "url": "https://theengineeringmanager.substack.com",
+    "feed": "https://theengineeringmanager.substack.com/feed"
   },
   {
     "name": "Jamie Tanna",
-    "url": "https://www.jvt.me/"
+    "url": "https://www.jvt.me/",
+    "feed": "https://www.jvt.me/feed.xml"
   },
   {
     "name": "Jan-Lukas Else",
     "url": "https://janlukas.blog",
-    "avatar": "https://janlukas.blog/profile.jpg?s=192"
+    "avatar": "https://janlukas.blog/profile.jpg?s=192",
+    "feed": "https://janlukas.blog/.rss"
   },
   {
     "name": "Jim Nielsen",
-    "url": "https://jim-nielsen.com/"
+    "url": "https://jim-nielsen.com/",
+    "feed": "https://blog.jim-nielsen.com/feed.xml"
   },
   {
     "name": "Joel Chippindale",
-    "url": "https://monkeysthumb.co.uk"
+    "url": "https://monkeysthumb.co.uk",
+    "feed": "https://blog.mocoso.co.uk/feed.xml"
   },
   {
     "name": "John Gruber",
-    "url": "https://daringfireball.net"
+    "url": "https://daringfireball.net",
+    "feed": "https://daringfireball.net/feeds/main"
   },
   {
     "name": "Jon Hicks",
-    "url": "https://hicks.design/journal/"
+    "url": "https://hicks.design/journal/",
+    "feed": "https://hicks.design/feeds/journal/"
   },
   {
     "name": "Julian Lehr",
-    "url": "https://julian.digital"
+    "url": "https://julian.digital",
+    "feed": "http://www.julian.digital/feed"
   },
   {
     "name": "Manton Reece",
     "url": "https://www.manton.org",
-    "avatar": "https://avatars.micro.blog/avatars/2025/22/3.jpg"
+    "avatar": "https://avatars.micro.blog/avatars/2025/22/3.jpg",
+    "feed": "https://www.manton.org/feed.xml"
   },
   {
     "name": "Matt Webb",
-    "url": "https://interconnected.org/home"
+    "url": "https://interconnected.org/home",
+    "feed": "https://interconnected.org/home/feed"
   },
   {
     "name": "Paul Robert Lloyd",
-    "url": "https://paulrobertlloyd.com/"
+    "url": "https://paulrobertlloyd.com/",
+    "feed": "https://paulrobertlloyd.com/feed.xml"
   },
   {
     "name": "Rowan Manning",
-    "url": "https://rowanmanning.com"
+    "url": "https://rowanmanning.com",
+    "feed": "https://rowanmanning.com/feed.xml"
   },
   {
     "name": "Simon Willison",
-    "url": "https://simonwillison.net"
+    "url": "https://simonwillison.net",
+    "feed": "https://simonwillison.net/atom/everything/"
   },
   {
     "name": "Tantek Çelik",
-    "url": "https://tantek.com"
+    "url": "https://tantek.com",
+    "feed": "https://tantek.com/updates.atom"
   },
   {
     "name": "Tom MacWright",
-    "url": "https://macwright.com/"
+    "url": "https://macwright.com/",
+    "feed": "https://macwright.com/rss.xml"
   },
   {
     "name": "Tom Stuart",
-    "url": "https://tomstu.art"
+    "url": "https://tomstu.art",
+    "feed": "https://tomstu.art/feed.atom"
   }
 ]
