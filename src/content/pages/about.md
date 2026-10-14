@@ -1,12 +1,9 @@
 ---
 title: About
 description: About Barry Frost.
+summary: Part-time software engineer and full-time technology leader, based in the UK. I build teams, websites and apps.
 ---
-import Divider from '@/components/Divider.astro';
-import { Image } from 'astro:assets';
-import me from '@/assets/me.jpg';
-
-<Image src={me} alt="A smiling man with grey beard in a blue shirt and jacket" width={120} height={120} densities={[2, 3]} quality={90} class="w-30 rounded float-left mr-4 mb-2" />Hello, I'm Barry, and you're reading my personal website.
+<img src="/barryfrost.jpg" alt="A smiling man with grey beard in a blue shirt and jacket" width="120" height="120" class="w-30 rounded float-left mr-4 mb-2">Hello, I'm Barry, and you're reading my personal website.
 
 I've been [working](/work) with product and technology teams for over 25&nbsp;years. I started as a software engineer, and I still tinker with side projects for fun. These days I lead engineering, as CTO or VP&nbsp;Engineering, in companies large and small. I enjoy helping teams that need process and structure, and getting them back to shipping.
 
@@ -40,6 +37,6 @@ I've travelled a fair bit over the years. In alphabetical order, I've visited: �
 
 Some of those countries I visited as part of a year travelling around the world after I left university, during which I posted to my [Travelblog](/travelblog). I lived and worked in New Zealand for almost a year, and still have very fond memories of my time in Auckland and Wellington.
 
-<Divider />
+<div class="my-8 text-xl">⁂</div>
 
-<div><p>I’d love to hear from you: [get in touch](/contact) or [follow me](/follow) via feeds and social web services.</p></div>
+I’d love to hear from you: [get in touch](/contact) or [follow me](/follow) via feeds and social web services.
