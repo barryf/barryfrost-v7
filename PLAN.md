@@ -72,7 +72,7 @@ a PDS blip should cost the links, not the build.
 >
 > This repo is the canonical home of the `com.barryfrost.checkin` lexicon doc: `lexicons/com/barryfrost/checkin.json`, published to the PDS as a `com.atproto.lexicon.schema` record via `npm run publish:lexicon` (the fsq2pds importer repo no longer keeps a copy). Records carry an optional `comment` field (the Swarm "shout" user comment); `check-ins.ts` exposes it in loader data, `CheckInCard` renders it as an italic `e-content` line, and `/stream` uses it as the check-in's summary in place of the address.
 
-Blogroll blogs come from `src/data/blogroll.json` (static JSON), passed through `blogrollLoader()`. Only entries with an explicit `avatar` (currently 3 of 25) have it materialised into R2 via `remoteImage()`; every other blog hot-links `www.google.com/s2/favicons?domain={host}&sz=96` directly.
+Blogroll blogs come from `src/data/blogroll.json` (static JSON), passed through `blogrollLoader()`. Only entries with an explicit `avatar` (currently 3 of 25) have it materialised into R2 via `remoteImage()`; every other blog hot-links `www.google.com/s2/favicons?domain={host}&sz=96` directly. An optional `feed` field per entry holds the blog's feed URL for `/.well-known/following.opml` (see SocialSpec); fill missing ones with `npx tsx scripts/discover-blogroll-feeds.ts` (reads each site's `<link rel="alternate">`; `--force` rediscovers all) and review the diff.
 
 `/work` is the exception to the table: it reads `id.sifa.profile.{self,position,education,certification,project,skill,language}` records straight from the PDS via `src/lib/sifa.ts` (same `fetchAllRecords` helper) at page render, with no content collection and no loader. The `self` record supplies both the headline and the longer `about` text (plain text with blank-line paragraph breaks) rendered as the page's About section; `certification` records render as Credentials, linked to `credentialUrl` where one is set.
 
@@ -326,6 +326,18 @@ Separate from the blog feed above: a broader **activity log** spanning every col
 
 > Subscriptions have no date in their own schema; the `site.standard.graph.subscription` record's `createdAt` is surfaced through `subscriptions.ts` + `standardSubscriptions` schema so they can be timeline-ordered (any lacking it are skipped).
 
+## SocialSpec (`/.well-known/`)
+
+[SocialSpec](https://socialspec.org) layers three single-file, single-request APIs on top of a site's feeds (which `/feed.xml` / `/feed.json` already cover). All three are static Astro endpoints in `src/pages/.well-known/`, generated from content that already exists so nothing is kept in sync by hand:
+
+| URL | Spec | Source |
+|---|---|---|
+| `/.well-known/following.opml` | [FollowSpec](https://followspec.org) — OPML 2.0 subscription list | `blogroll` collection (`src/data/blogroll.json`); one `<outline type="rss">` per blog with a `feed`, sorted by name. Entries without a `feed` are skipped with a build warning. Standard.site subscriptions are left out — they're AT Protocol publications, many without an RSS feed. |
+| `/.well-known/about.md` | [AboutSpec](https://aboutspec.org) — Markdown with `summary:` front matter | `src/content/pages/about.mdx`, transformed by `src/lib/about-markdown.ts`: imports dropped, `<Image>` → `![alt](/barryfrost.jpg)` absolute, `<Divider />` removed, the closing `<div><p>` unwrapped, `&nbsp;` → U+00A0, site-relative links made absolute. Any other leftover component/HTML tag **throws**, so a new MDX component on `/about` fails the build until it's mapped. |
+| `/.well-known/contact.vcf` | [ContactSpec](https://contactspec.org) — vCard 4.0 | `src/lib/profile.ts` (`PROFILE`): FN, N, preferred EMAIL, URL, PHOTO, NOTE, RFC 9554 `SOCIALPROFILE` for Mastodon and Bluesky, SOURCE. CRLF line endings, 75-octet folding, RFC 6350 escaping. iMessage is deliberately omitted (`/contact` offers it only to people who already know Barry). |
+
+The specs require CORS and give specific Content-Types. The endpoints' `Response` headers only apply under `astro dev` — the static build writes plain files — so `public/_headers` sets `Content-Type`, `Access-Control-Allow-Origin: *` and a 1-hour `Cache-Control` for each path (Wrangler's extension-based MIME guess doesn't know `.opml`). `/follow` links all three files.
+
 ## Favicon & Icons
 
 All icon files in `public/` are derived from `src/assets/me.jpg` (512×512 portrait) by `scripts/generate-icons.ts` — run `npx tsx scripts/generate-icons.ts` after changing the source photo:
@@ -356,7 +368,8 @@ Bridgy and IndieNews all key off `u-url`, the two must agree.
 `public/_headers` is served by Cloudflare Workers static assets (`astro preview` ignores it —
 use the "Workers Preview" entry in `.claude/launch.json`, which runs `wrangler dev`, to see it
 applied). It sets `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, HSTS, a
-long immutable `Cache-Control` for `/_astro/*`, and a Content-Security-Policy.
+long immutable `Cache-Control` for `/_astro/*`, Content-Type/CORS for the SocialSpec
+`/.well-known/` files, and a Content-Security-Policy.
 
 The CSP is `default-src 'none'` with four deliberate loosenings, each documented in the file
 itself: `'unsafe-inline'` for scripts (`/search` and `/check-ins` ship inline scripts, and
