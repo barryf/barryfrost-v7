@@ -3,9 +3,9 @@ title: About
 description: About Barry Frost.
 summary: Part-time software engineer and full-time technology leader, based in the UK. I build teams, websites and apps.
 ---
-<img src="/barryfrost.jpg" alt="A smiling man with grey beard in a blue shirt and jacket" width="120" height="120" class="w-30 rounded float-left mr-4 mb-2">Hello, I'm Barry, and you're reading my personal website.
+<img src="https://barryfrost.com/barryfrost.jpg" alt="A smiling man with grey beard in a blue shirt and jacket" width="120" height="120" class="w-30 rounded float-left mr-4 mb-2">Hello, I'm Barry, and you're reading my personal website.
 
-I've been [working](/work) with product and technology teams for over 25&nbsp;years. I started as a software engineer, and I still tinker with side projects for fun. These days I lead engineering, as CTO or VP&nbsp;Engineering, in companies large and small. I enjoy helping teams that need process and structure, and getting them back to shipping.
+I've been [working](https://barryfrost.com/work) with product and technology teams for over 25&nbsp;years. I started as a software engineer, and I still tinker with side projects for fun. These days I lead engineering, as CTO or VP&nbsp;Engineering, in companies large and small. I enjoy helping teams that need process and structure, and getting them back to shipping.
 
 I currently live in a village in Hertfordshire, UK, but I grew up in Chelmsford. After university at [Warwick](https://warwick.ac.uk/) in the West Midlands, I've lived in Auckland, Wellington, Battersea, Wimbledon, Winchmore Hill, Twickenham, Windsor, and Virginia Water.
 
@@ -15,7 +15,7 @@ Computers, obvs. My first was an [Acorn Electron](https://en.wikipedia.org/wiki/
 
 I love the web. I've made a living from building websites, and I've been learning in my spare time ever since I first used a web browser in the mid-90s. While still at school, I stumbled upon [ColdFusion](https://en.wikipedia.org/wiki/Adobe_ColdFusion) as a way of building dynamic websites using a database. This knowledge helped gain me my first jobs as a graduate, and although I've long since moved on to newer technologies, I still have a soft spot for CF.
 
-I've been following the [IndieWeb](https://indieweb.org/) movement for over a decade, implementing open standards like [Micropub](https://micropub.spec.indieweb.org/) and [Webmention](https://www.w3.org/TR/webmention/) into my personal websites, attending an [IndieWebCamp](https://indieweb.org/2015/Cambridge) and co-organising a meet-up. Lately I've been diving into the [AT Protocol](https://atproto.com/), on which I've [built](/colophon) this iteration of my personal website. My philosophy is that you should own your data, and always strive to build fast, unfussy, accessible websites.
+I've been following the [IndieWeb](https://indieweb.org/) movement for over a decade, implementing open standards like [Micropub](https://micropub.spec.indieweb.org/) and [Webmention](https://www.w3.org/TR/webmention/) into my personal websites, attending an [IndieWebCamp](https://indieweb.org/2015/Cambridge) and co-organising a meet-up. Lately I've been diving into the [AT Protocol](https://atproto.com/), on which I've [built](https://barryfrost.com/colophon) this iteration of my personal website. My philosophy is that you should own your data, and always strive to build fast, unfussy, accessible websites.
 
 I'm optimistic about AI. I use [Claude Code](https://claude.com/product/claude-code) every day now, and it's changed how I build. The models are better programmers than me, although I can still spot when they're confidently wrong. I want my teams to be augmented by these superpowers, not replaced by them.
 
@@ -23,11 +23,11 @@ I'm optimistic about AI. I use [Claude Code](https://claude.com/product/claude-c
 
 I'm an [Arsenal](https://www.arsenal.com/) fan. I get down to The Emirates as often as the Red ticket ballot allows, otherwise I'm a tormented armchair supporter. My very first season going to Highbury as a Junior Gunner was 1988-89, the year Arsenal famously [won the League at Anfield](https://en.wikipedia.org/wiki/Liverpool_0%E2%80%932_Arsenal_(1989)) in the dying seconds of the last match. I was hooked for life.
 
-I love a sunny day at the Oval or Lord's watching cricket, even if England stumble once again. I've been to [dramatic Ashes wins](https://www.cricinfo.com/series/australia-tour-of-england-and-scotland-2005-139019/england-vs-australia-5th-test-218383/live-cricket-score) and [farcical ODI defeats](/weeknotes/week-47). Live cricket is the best. I've also seen a fair few Six Nations tests at Twickenham and rugby matches around the world. And I've been to Ally Pally to watch the [Masters snooker](https://www.wst.tv/themasters/) for several years now.
+I love a sunny day at the Oval or Lord's watching cricket, even if England stumble once again. I've been to [dramatic Ashes wins](https://www.cricinfo.com/series/australia-tour-of-england-and-scotland-2005-139019/england-vs-australia-5th-test-218383/live-cricket-score) and [farcical ODI defeats](https://barryfrost.com/weeknotes/week-47). Live cricket is the best. I've also seen a fair few Six Nations tests at Twickenham and rugby matches around the world. And I've been to Ally Pally to watch the [Masters snooker](https://www.wst.tv/themasters/) for several years now.
 
 ## Music
 
-I'm picky about music. Like many people, my [listening](/music) [habits](https://www.last.fm/user/barryf) are focused on bands I loved in my teenage years and early twenties, like Blur, Suede, Radiohead, Teenage Fanclub, Gene, The Bluetones, Super Furry Animals, and all the way back to Pearl Jam.
+I'm picky about music. Like many people, my [listening](https://barryfrost.com/music) [habits](https://www.last.fm/user/barryf) are focused on bands I loved in my teenage years and early twenties, like Blur, Suede, Radiohead, Teenage Fanclub, Gene, The Bluetones, Super Furry Animals, and all the way back to Pearl Jam.
 
 I don't go to as many [gigs](https://www.last.fm/user/barryf/events) as I used to, but I make the effort to travel into London, often to see those nineties bands that are still touring years later, or have reformed to cater to middle-aged [6music dads](https://www.theguardian.com/music/2023/aug/08/bbc-6-music-radio-station) like me. It's hard to beat a festival afternoon with a beer, watching a band you like as the sun sets.
 
@@ -35,8 +35,8 @@ I don't go to as many [gigs](https://www.last.fm/user/barryf/events) as I used t
 
 I've travelled a fair bit over the years. In alphabetical order, I've visited: 🇦🇺&nbsp;Australia, 🇧🇪&nbsp;Belgium, 🇫🇯&nbsp;Fiji, 🇫🇷&nbsp;France, 🇩🇪&nbsp;Germany, 🇬🇷&nbsp;Greece, 🇮🇪&nbsp;Ireland, 🇮🇹&nbsp;Italy, 🇲🇻&nbsp;Maldives, 🇳🇱&nbsp;Netherlands, 🇳🇿&nbsp;New&nbsp;Zealand, 🇵🇹&nbsp;Portugal, 🇷🇸&nbsp;Serbia, 🇸🇬&nbsp;Singapore, 🇿🇦&nbsp;South Africa, 🇪🇸&nbsp;Spain, 🇹🇭&nbsp;Thailand, 🇦🇪&nbsp;UAE, and 🇺🇸&nbsp;United States.
 
-Some of those countries I visited as part of a year travelling around the world after I left university, during which I posted to my [Travelblog](/travelblog). I lived and worked in New Zealand for almost a year, and still have very fond memories of my time in Auckland and Wellington.
+Some of those countries I visited as part of a year travelling around the world after I left university, during which I posted to my [Travelblog](https://barryfrost.com/travelblog). I lived and worked in New Zealand for almost a year, and still have very fond memories of my time in Auckland and Wellington.
 
 <div class="my-8 text-xl">⁂</div>
 
-I’d love to hear from you: [get in touch](/contact) or [follow me](/follow) via feeds and social web services.
+I’d love to hear from you: [get in touch](https://barryfrost.com/contact) or [follow me](https://barryfrost.com/follow) via feeds and social web services.
