@@ -164,6 +164,7 @@ const blogroll = defineCollection({
     url: z.string(),
     hostname: z.string(),
     avatarUrl: z.string().optional(),
+    feed: z.string().optional(),
   }),
 });
 

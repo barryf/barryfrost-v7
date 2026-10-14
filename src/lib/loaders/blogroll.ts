@@ -16,10 +16,12 @@ export function blogrollLoader(): Loader {
           ? await remoteImage(blog.avatar, { width: 96, height: 96, fit: 'cover' })
           : `https://www.google.com/s2/favicons?domain=${hostname}&sz=96`;
 
+        const feed = 'feed' in blog && typeof blog.feed === 'string' ? blog.feed : undefined;
+
         store.set({
           id: hostname,
-          data: { name: blog.name, url: blog.url, hostname, avatarUrl },
-          digest: generateDigest(blog.url),
+          data: { name: blog.name, url: blog.url, hostname, avatarUrl, feed },
+          digest: generateDigest(`${blog.url} ${feed ?? ''}`),
         });
       });
     },
