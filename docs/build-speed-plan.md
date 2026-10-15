@@ -1,155 +1,90 @@
 # Build speed plan
 
-The Cloudflare Workers Build of 2026-10-15 19:37 took **2m19s**. This plan breaks that down
-from the build log and lists the fixes in order of payoff.
+The Cloudflare Workers Build took **2m16s** from clone to finish on 2026-10-15 (19:37). After
+the fixes below it takes **41s** (20:12 build). This file records where the time went, what
+changed, and what's left.
 
-## Where the time goes
+Cloudflare's own "Initializing build environment" step comes before the clone and isn't
+counted here. It varies between 2s and 38s, and nothing in the repo affects it.
 
-| Phase | Time | Share | Log evidence |
+## Results
+
+| Phase | Before | After | Change |
 |---|---:|---:|---|
-| Init + clone | 8s | 6% | 19:37:43 → 19:37:51 |
-| Restore dependency + output caches | 19s | 14% | 19:37:51 → 19:38:10 |
-| `npm clean-install` | 13s | 9% | 19:38:10 → 19:38:23 |
-| wrangler / tsx start-up | 3s | 2% | 19:38:24 → 19:38:27 |
-| Astro config + **content sync** | 15s | 11% | 19:38:27 → 19:38:42 ("Synced content", "Generated 13.62s") |
-| Vite bundles | 3s | 2% | 19:38:42 → 19:38:45 |
-| Render 476 pages | 10s | 7% | "Completed in 10.19s" |
-| Images (all cache hits), sitemap, Pagefind | 2s | 1% | |
-| Asset upload + deploy | 8s | 6% | 19:38:57 → 19:39:05 |
-| **Standard.site publish** | **54s** | **39%** | 19:39:05 → 19:39:59 |
-| Pending summary + cache upload | 3s | 2% | |
+| Dependencies (cache restore + `npm ci`) | 32s | 11s | None. This step varies by itself (see below) |
+| Content sync | 13s | 4s | Fix 2 |
+| Rest of the Astro build | 14s | 7s | Fix 4, plus run-to-run variation |
+| Pagefind + deploy | 10s | 8s | — |
+| Standard.site publish | 54s | 3s | Fixes 1 and 1b |
+| **Clone → done** | **2m16s** | **41s** | |
 
-The biggest cost is the Standard.site publish step (54s). The PDS reads are not the main
-problem: listing every watched collection in parallel took about 1.5s when measured from the
-sandbox (table below). Most of the 13s content sync is work done for each image.
+## Done
 
-### PDS listing, measured
+### 1. Standard.site publish: one listing instead of 291 lookups
 
-`listRecords` for each collection, all fetched in parallel from bsky.social:
+`scripts/publish-standard-site.ts` called `getRecord` for each of the 291 posts in turn,
+about 170ms each. It now lists the collection once (`listRecordsByRkey`, 4 requests) and
+looks records up by rkey.
 
-| Collection | Records | Pages | Time |
-|---|---:|---:|---:|
-| com.barryfrost.checkin | 1,381 | 15 | 1.47s |
-| app.bsky.feed.post | 1,442 | 16 | 1.41s |
-| app.rocksky.scrobble | 519 | 7 | 1.26s |
-| site.standard.document | 291 | 4 | 0.92s |
-| social.popfeed.feed.review | 222 | 4 | 0.80s |
-| everything else | <110 each | 2–3 | <0.7s |
+### 1b. Standard.site publish: two cover-image bugs
 
-Caching the PDS content between builds would save about 1.5s at most.
+Fix 1 alone left the step at about 80s. Two bugs in the cover-image handling were the cause:
 
-## Fixes, in order of payoff
+- Every post without a `coverImage` fetched its live page on each run to look for an
+  `og:image`. 284 posts have no body image and never get a cover. `mayHaveBodyImage` now
+  rules those out from the Markdown source.
+- The check for a newly attached cover also fired when a cover was already on the record,
+  so the 7 posts with covers were re-written on every build. Now only a cover gained in
+  this run counts as a change.
 
-### 1. Standard.site publish: 54s → ~3s
+### 2. Content sync: list R2 once instead of a HEAD per image
 
-`scripts/publish-standard-site.ts` runs a sequential `getRecord` for each of the 291 posts,
-at about 170ms per post. 284 of the 291 posts are skipped anyway.
+`materialise` sent a signed HEAD to R2 for every image before returning its URL: thousands
+of requests per build across all the loaders. `r2KnownKeys` lists the `blob/` and `ext/`
+prefixes once per build and checks keys against that list. If the listing fails, the code
+goes back to a HEAD per image, so a listing problem makes the build slower but doesn't
+break it. Listing the PDS itself was never the bottleneck: all collections together take
+about 1.5s.
 
-- Fetch the existing records once with `fetchAllRecords(DOCUMENT_COLLECTION)` and look them
-  up by rkey in a `Map`. That's 4 requests (about 0.9s measured) instead of 291.
-- **Done:** `listRecordsByRkey` in `scripts/lib/standard-site.ts`. The loop stays
-  sequential: with the map, a skipped entry makes no network call. Only the 5 posts with
-  relative images still fetch their live page, so running in parallel isn't worth
-  interleaved logs or the extra risk around Bluesky posting.
+### 4. "standardDocuments … was not found" warnings
 
-This build also re-wrote 7 records: 4 articles and weeknotes 166, 261 and 266. The articles
-with known body images (eyes-lasered, witness-the-fitness, remote-working, bbc-radio) are
-ones whose body images resolve to `/_astro/*` hashes, and today's Astro upgrade probably
-changed those hashes. Check that the next build skips them. If they're re-written on every
-build, the content signature isn't stable and each one costs a `putRecord`.
+About 720 warnings per build came from `getEntry` being called for posts with no
+`bskyPostRef`. `src/lib/syndication.ts` now reads the collection into a map once per build.
+The built HTML is unchanged.
 
-### 2. Images in the content sync: ~13s → ~2–3s (estimate, to be confirmed)
+## Not worth doing
 
-In production, every `pdsImage`/`remoteImage` call runs `r2Exists`, a signed `HEAD` request
-to R2, before it can return a URL. The concurrency limit is 24 (`src/lib/r2.ts`). On a
-typical build these images are all already in R2, yet each still costs a round trip. Call
-sites:
+### Dependency install (was fix 3)
 
-- check-ins: 2 images per photo
-- Bluesky posts: 2 per image, plus external thumbnails
-- Grain photos: 2 per photo
-- scrobbles: 519 records
-- films: 222 records
-- books, blogroll, subscriptions
+The original premise was wrong. Cloudflare's dependency cache holds npm's download cache
+(`~/.npm`), not `node_modules`, so `npm ci` isn't throwing a restored `node_modules` away.
+It builds a fresh one from cached downloads in about 7s. `SKIP_DEPENDENCY_INSTALL` exists,
+but with no previous `node_modules` to reuse, an install would still have to run.
 
-That adds up to thousands of HEAD requests per build.
+Install timings, measured locally with a warm cache:
 
-- At the start of the build, list the bucket once with `ListObjectsV2` for the `blob/` and
-  `ext/` prefixes (1,000 keys per page) and keep the keys in a `Set`. `materialise` then
-  checks the set and only falls back to fetch/resize/`PUT` for keys that are missing. The
-  keys are content-addressed, so a key in the list is always valid.
-- Add new keys to the set after each `PUT`, so the same image requested twice in one build
-  doesn't get uploaded twice.
+| Install | Time |
+|---|---:|
+| `npm ci` | 9.1s |
+| `npm ci --no-audit --no-fund` | 8.7s |
+| Without the type-checking tools (`--omit=dev`, after moving wrangler, tsx and pagefind to `dependencies`) | 7.9s |
 
-I couldn't measure this from the sandbox because it has no R2 credentials. To confirm, add
-`--timings` to the build script (see 6) and compare `content sync` before and after.
+Most of the 545MB `node_modules` is wrangler, workerd and miniflare (about 160MB), and
+pagefind and sharp's image libraries add about 90MB more. The build needs all of them. The
+rest of this step is Cloudflare restoring its cache, which took between 2s and 19s across
+builds and isn't under our control.
 
-### 3. Dependency install: 32s → ~10–15s (needs a Cloudflare experiment)
+### PDS snapshot via the pds-poller Worker
 
-Cloudflare spends 19s restoring the cached `node_modules`. `npm clean-install` then deletes
-`node_modules` and reinstalls all 347 packages (13s). Only the npm cache in that restore is
-any use. Options, best first:
+Snapshotting the PDS content would save at most the ~1.5s of PDS listing. Not worth a
+second source of truth.
 
-- **Keep the restored `node_modules`.** Check the Workers Builds docs for a way to skip the
-  automatic install (Pages has `SKIP_DEPENDENCY_INSTALL`). If it exists, run
-  `npm install --prefer-offline --no-audit --no-fund` at the start of `npm run deploy`. When
-  the lockfile hasn't changed, that's close to a no-op.
-- **Or turn off the dependency cache** and let `npm ci` download fresh. This saves the 19s
-  restore but makes the install slower. Time it before committing to it.
-- Either way, approve the three postinstall scripts the log warns about (`esbuild`, `sharp`,
-  `workerd`) with `npm approve-scripts`. If those scripts are being blocked, a future npm
-  version will turn the warnings into a failed build.
+## Remaining options
 
-### 4. Log noise: about 1,000 "Entry standardDocuments → … was not found" warnings
-
-`src/lib/syndication.ts` calls `getEntry('standardDocuments', rkey)` for every post. The
-loader only stores records that have a `bskyPostRef`, so Astro logs a warning for each post
-without one. Every page that lists posts repeats that warning for each post it lists:
-`/stream`, `/stream.json` and `/stream.xml` each print the whole set. **Done:** the map is
-built once with `getCollection('standardDocuments')`. The local build went from 720
-warnings to 0, with byte-identical HTML. This mostly cleans up the
-log, though writing a thousand log lines through Cloudflare's logger isn't free either.
-
-### 5. Page rendering: 10s, smaller wins
-
-- `/work` takes 479ms here (905ms locally), about 100 times the median page. Profile it.
-- The 70 `/check-ins/N` pages take 20–70ms each, about 2.5s in total. Each probably filters
-  or sorts the whole collection. Do that once at module level and slice it for each page.
-- The Bluesky loader makes one AppView `getPosts` call per quoted post, and the reply-handle
-  cache misses when several records share the same parent DID at the same time. Batch the
-  quote lookups (25 URIs per call) and store the in-flight promise in the cache so concurrent
-  lookups share it. This takes calls out of the content sync rather than out of rendering.
-
-### 6. Measure in CI
-
-Change the build script to `astro build --timings` for a few weeks. The report adds about
-30 lines and shows each change's effect on Cloudflare's machines, not just locally.
-
-## Not recommended (yet)
-
-**PDS snapshot via the pds-poller Worker.** The poller already diffs the watched collections
-every minute. It could also write the raw records to R2, and the loaders would then read one
-object instead of listing the PDS. The measured saving is about 1.5s, and it would add a
-second source of truth to keep consistent. Revisit only if `content sync` is still slow
-after fix 2.
-
-**Incremental loaders.** Use the persisted content-layer store to skip records whose `cid`
-digest hasn't changed, instead of calling `store.clear()` and rebuilding. This only helps if
-Cloudflare's output cache reliably keeps Astro's cache directory between builds. Fix 2 gets
-most of the same benefit without depending on that.
-
-## Also worth deciding
-
-The hourly safety-net cron in the pds-poller runs a full 2m19s build 24 times a day, on top
-of the builds triggered by content changes. Fixes 1–3 make each one cheaper. Running it every
-6 hours instead of hourly would still recover from a failed on-demand build within the day.
-
-## Expected result
-
-| | Before | After 1–3 |
-|---|---:|---:|
-| Standard.site publish | 54s | ~3s |
-| Content sync | 13s | ~3s |
-| Dependencies | 32s | ~15s |
-| Everything else | 40s | ~40s |
-| **Total** | **2m19s** | **~1m** |
+- **`/work`** takes about 1.1s to render, far longer than any other page (the median is
+  about 2ms). It's the largest single item left in the Astro build.
+- **The hourly safety-net rebuild** in pds-poller runs the full build 24 times a day. Each
+  build is now cheap, but running every 6 hours would still recover from a failed build
+  within the day. This is about cost, not speed.
+- **`astro build --timings`** gives a per-phase breakdown when the build needs looking at
+  again.
