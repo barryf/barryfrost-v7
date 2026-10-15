@@ -526,6 +526,30 @@ export async function getRecord(
   return await res.json() as { uri: string; cid: string; value: Record<string, unknown> };
 }
 
+/** Every record in a collection keyed by rkey — one paginated listRecords instead of a
+ *  getRecord per post. */
+export async function listRecordsByRkey(
+  session: Session, collection: string,
+): Promise<Map<string, { uri: string; cid: string; value: Record<string, unknown> }>> {
+  const records = new Map<string, { uri: string; cid: string; value: Record<string, unknown> }>();
+  let cursor: string | undefined;
+  do {
+    const params = new URLSearchParams({ repo: session.did, collection, limit: '100' });
+    if (cursor) params.set('cursor', cursor);
+    const res = await fetchWithRetry(`${session.pds}/xrpc/com.atproto.repo.listRecords?${params}`, {
+      headers: { Authorization: `Bearer ${session.jwt}` },
+    });
+    if (!res.ok) throw new Error(`listRecords(${collection}) failed: ${res.status} ${await res.text()}`);
+    const data = await res.json() as {
+      records: { uri: string; cid: string; value: Record<string, unknown> }[];
+      cursor?: string;
+    };
+    for (const record of data.records) records.set(record.uri.split('/').pop()!, record);
+    cursor = data.cursor;
+  } while (cursor);
+  return records;
+}
+
 export async function putRecord(
   session: Session, collection: string, rkey: string, record: Record<string, unknown>,
 ): Promise<StrongRef> {

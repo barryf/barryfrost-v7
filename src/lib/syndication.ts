@@ -1,8 +1,23 @@
-import { getEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
 
 /** Matches a Bluesky post permalink. Mirrors the test publish-standard-site.ts applies to
  *  frontmatter when it decides whether an authored URL should override `bskyPostRef`. */
 const BSKY_POST = /bsky\.app\/.+\/post\//;
+
+/**
+ * rkey → Bluesky URL, read once per build. The loader only stores records that carry a
+ * `bskyPostRef`, so a per-post `getEntry` logged a "not found" warning for every other post
+ * — on every page that lists it. Dev re-reads each call so edits to the store show up.
+ */
+let bskyUrls: Promise<Map<string, string>> | undefined;
+function bskyUrlsByRkey(): Promise<Map<string, string>> {
+  if (!bskyUrls || import.meta.env.DEV) {
+    bskyUrls = getCollection('standardDocuments').then(
+      (docs) => new Map(docs.map((doc) => [doc.id, doc.data.bskyUrl])),
+    );
+  }
+  return bskyUrls;
+}
 
 /**
  * A post's syndication URLs: whatever the frontmatter lists, plus the Bluesky card post
@@ -21,8 +36,8 @@ export async function resolveSyndication(
 ): Promise<string[] | undefined> {
   if (!standardRkey || urls?.some((url) => BSKY_POST.test(url))) return urls;
 
-  const doc = await getEntry('standardDocuments', standardRkey);
-  if (!doc) return urls;
+  const bskyUrl = (await bskyUrlsByRkey()).get(standardRkey);
+  if (!bskyUrl) return urls;
 
-  return [...(urls ?? []), doc.data.bskyUrl];
+  return [...(urls ?? []), bskyUrl];
 }

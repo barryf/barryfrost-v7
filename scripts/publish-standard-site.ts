@@ -1,7 +1,7 @@
 // Publish articles/weeknotes as site.standard.document records (idempotent upsert).
 //
-// The PDS record is the source of truth: for each post we getRecord by its frontmatter
-// `standardRkey`, and only putRecord when the content changed. A companion Bluesky post
+// The PDS record is the source of truth: each post is matched to its record (listed once per
+// run) by frontmatter `standardRkey`, and only putRecord when the content changed. A companion Bluesky post
 // (rich link card) is created once, on a weeknote's first publish in incremental mode, and
 // its strong-ref is stored in `bskyPostRef` — the presence of that ref prevents any second
 // post. Articles are never auto-posted: they get a hand-written post instead, whose URL goes
@@ -25,7 +25,7 @@ import { readFileSync, writeFileSync } from 'fs';
 import {
   readEntries, isPublishable, buildDocumentRecord, buildBlueskyPost, buildWeeknotePostText,
   documentContentSignature, canonicalUrl, DOCUMENT_COLLECTION, PUBLICATIONS, documentUri,
-  createSession, getRecord, putRecord, createRecord, resolveBskyPostRef, getPublicationRef,
+  createSession, listRecordsByRkey, putRecord, createRecord, resolveBskyPostRef, getPublicationRef,
   resolveCoverImage, fetchOgImageUrl, withResolvedImages, addSyndicationUrl, setBskyPostFalse,
   bskyUrlFromRef, bskyRkeyFromUrl, resolveDidForHandle, WEEKNOTES_BOT_HANDLE,
   type CollectionName, type Entry, type Session, type StrongRef, type BlobRef,
@@ -68,12 +68,16 @@ async function weeknotesBotDid(): Promise<string | null> {
 
 type Action = 'create' | 'update' | 'skip';
 
-async function processEntry(source: Entry, args: Args, session: Session | null): Promise<Action> {
+type DocumentRecord = { uri: string; cid: string; value: Record<string, unknown> };
+
+async function processEntry(
+  source: Entry, args: Args, session: Session | null, existingRecords: Map<string, DocumentRecord>,
+): Promise<Action> {
   // Build-time-only image paths are resolved against the live page before anything reads the
   // body, so the record, its signature and the Bluesky post all agree on absolute URLs.
   const entry = await withResolvedImages(source);
   const rkey = entry.data.standardRkey!;
-  const existing = session ? await getRecord(session, DOCUMENT_COLLECTION, rkey) : null;
+  const existing = existingRecords.get(rkey) ?? null;
   const existingRef = existing?.value.bskyPostRef as StrongRef | undefined;
   const existingCover = existing?.value.coverImage as BlobRef | undefined;
 
@@ -247,6 +251,12 @@ async function main() {
     console.log(`(offline dry-run — ${(err as Error).message})\n`);
   }
 
+  // Read every existing document up front: a getRecord per post cost ~170ms each, sequentially,
+  // for ~290 posts that are almost all skipped. With the map, a skip makes no network call.
+  const existingRecords = session
+    ? await listRecordsByRkey(session, DOCUMENT_COLLECTION)
+    : new Map<string, DocumentRecord>();
+
   const counts: Record<Action, number> = { create: 0, update: 0, skip: 0 };
   for (const c of collections) {
     const publishable = readEntries(c).filter(isPublishable);
@@ -261,7 +271,7 @@ async function main() {
       .filter((e) => !args.only || e.slug === args.only)
       .sort((a, b) => new Date(a.data.date ?? 0).getTime() - new Date(b.data.date ?? 0).getTime());
 
-    for (const entry of entries) counts[await processEntry(entry, args, session)] += 1;
+    for (const entry of entries) counts[await processEntry(entry, args, session, existingRecords)] += 1;
   }
 
   console.log(`\nDone. created=${counts.create} updated=${counts.update} skipped=${counts.skip}${args.dryRun ? ' (dry-run)' : ''}`);
