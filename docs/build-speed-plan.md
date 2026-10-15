@@ -47,11 +47,10 @@ at about 170ms per post. 284 of the 291 posts are skipped anyway.
 
 - Fetch the existing records once with `fetchAllRecords(DOCUMENT_COLLECTION)` and look them
   up by rkey in a `Map`. That's 4 requests (about 0.9s measured) instead of 291.
-- Run the remaining per-entry work through `mapLimit` (around 8 at a time). Most entries
-  skip without any network call. The few with relative images still fetch their live page
-  in `withResolvedImages`.
-- Keep `assertNoDuplicateRkeys` and the sequential Bluesky `createRecord` for new weeknotes
-  unchanged. Only the reads and `putRecord` writes need to run in parallel.
+- **Done:** `listRecordsByRkey` in `scripts/lib/standard-site.ts`. The loop stays
+  sequential: with the map, a skipped entry makes no network call. Only the 5 posts with
+  relative images still fetch their live page, so running in parallel isn't worth
+  interleaved logs or the extra risk around Bluesky posting.
 
 This build also re-wrote 7 records: 4 articles and weeknotes 166, 261 and 266. The articles
 with known body images (eyes-lasered, witness-the-fitness, remote-working, bbc-radio) are
@@ -106,8 +105,9 @@ any use. Options, best first:
 `src/lib/syndication.ts` calls `getEntry('standardDocuments', rkey)` for every post. The
 loader only stores records that have a `bskyPostRef`, so Astro logs a warning for each post
 without one. Every page that lists posts repeats that warning for each post it lists:
-`/stream`, `/stream.json` and `/stream.xml` each print the whole set. Build the map once with
-`getCollection('standardDocuments')` and look entries up in it. This mostly cleans up the
+`/stream`, `/stream.json` and `/stream.xml` each print the whole set. **Done:** the map is
+built once with `getCollection('standardDocuments')`. The local build went from 720
+warnings to 0, with byte-identical HTML. This mostly cleans up the
 log, though writing a thousand log lines through Cloudflare's logger isn't free either.
 
 ### 5. Page rendering: 10s, smaller wins
