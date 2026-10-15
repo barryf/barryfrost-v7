@@ -26,7 +26,7 @@ import {
   readEntries, isPublishable, buildDocumentRecord, buildBlueskyPost, buildWeeknotePostText,
   documentContentSignature, canonicalUrl, DOCUMENT_COLLECTION, PUBLICATIONS, documentUri,
   createSession, listRecordsByRkey, putRecord, createRecord, resolveBskyPostRef, getPublicationRef,
-  resolveCoverImage, fetchOgImageUrl, withResolvedImages, addSyndicationUrl, setBskyPostFalse,
+  resolveCoverImage, fetchOgImageUrl, mayHaveBodyImage, withResolvedImages, addSyndicationUrl, setBskyPostFalse,
   bskyUrlFromRef, bskyRkeyFromUrl, resolveDidForHandle, WEEKNOTES_BOT_HANDLE,
   type CollectionName, type Entry, type Session, type StrongRef, type BlobRef,
 } from './lib/standard-site.js';
@@ -108,11 +108,14 @@ async function processEntry(
   // read-only peek at what would be attached.
   let coverImage: BlobRef | undefined = existingCover;
   let coverPreviewUrl: string | undefined;
-  if (!existingCover && session) {
+  // The og:image is the post's first rendered <img>, so a post whose source can't produce one
+  // is ruled out locally — otherwise every image-less post fetched its live page each run.
+  if (!existingCover && session && mayHaveBodyImage(entry)) {
     if (args.dryRun) coverPreviewUrl = await fetchOgImageUrl(entry);
     else coverImage = (await resolveCoverImage(session, entry)) ?? undefined;
   }
-  const willAttachCover = !!coverImage || !!coverPreviewUrl;
+  // Only a cover gained this run counts: one already on the record is sticky, not a change.
+  const willAttachCover = !existingCover && (!!coverImage || !!coverPreviewUrl);
 
   // The reverse direction: a record ref the frontmatter doesn't know about. Runs before the
   // skip below, since the steady state for these is a record that needs no write at all.

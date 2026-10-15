@@ -711,6 +711,12 @@ export function extractOgImage(html: string): string | undefined {
   return m?.[1] ?? m?.[2];
 }
 
+/** Whether a post's source could render an <img>: a Markdown image, raw <img>, or an MDX
+ *  component (e.g. <Image>). False means the page has no og:image, so no fetch is needed. */
+export function mayHaveBodyImage(entry: Entry): boolean {
+  return /!\[|<img\b|<[A-Z][A-Za-z]*/.test(entry.body);
+}
+
 /** Read-only peek at a post's live page for its og:image URL (absolute), or undefined if the
  *  page isn't up yet or the post has no body image. Safe to call in --dry-run: no writes. */
 export async function fetchOgImageUrl(entry: Entry): Promise<string | undefined> {
