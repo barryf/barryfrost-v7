@@ -20,8 +20,11 @@ import { createHash } from 'node:crypto';
 import { DID, PDS_HOST } from '@/lib/pds';
 import {
   IMAGES_BASE_URL, IS_PROD, R2_CONFIGURED,
-  getAwsClient, r2Exists, r2Put, acquireSlot, releaseSlot,
+  getAwsClient, r2Exists, r2KnownKeys, r2Put, acquireSlot, releaseSlot,
 } from '@/lib/r2';
+
+/** Bucket prefixes the key scheme above writes to; listed once per build. */
+const KEY_PREFIXES = ['blob/', 'ext/'];
 
 type Fit = 'cover' | 'contain' | 'scale-down' | 'crop' | 'pad';
 
@@ -68,10 +71,14 @@ function sharpFit(fit: Fit): SharpFit {
 // ── core materialise function ────────────────────────────────────────────────
 
 async function materialise(key: string, sourceUrl: string, opts: ImageOpts): Promise<string> {
+  const aws = await getAwsClient();
+  // Awaited outside the slot so the first callers don't hold slots while the listing runs.
+  const known = await r2KnownKeys(aws, KEY_PREFIXES);
+  if (known?.has(key)) return `${IMAGES_BASE_URL}/${key}`;
+
   await acquireSlot();
   try {
-    const aws = await getAwsClient();
-    if (await r2Exists(aws, key)) {
+    if (!known && await r2Exists(aws, key)) {
       return `${IMAGES_BASE_URL}/${key}`;
     }
 
@@ -97,6 +104,7 @@ async function materialise(key: string, sourceUrl: string, opts: ImageOpts): Pro
       .toBuffer();
 
     await r2Put(aws, key, webpBuf, 'image/webp');
+    known?.add(key);
     return `${IMAGES_BASE_URL}/${key}`;
   } catch (err) {
     console.warn(`[image-store] materialise error for ${key}, falling back to source URL:`, err);

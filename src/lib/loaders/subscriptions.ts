@@ -46,49 +46,54 @@ export function subscriptionsLoader(): Loader {
           const rkey = rkeyFromUri(record.uri);
           const publicationUri = value.publication as string;
 
-          const subjectDid = didFromUri(publicationUri);
-          const uriParts = publicationUri.replace('at://', '').split('/');
-          const collection = uriParts[1];
-          const pubRkey = uriParts[2];
+          // Publications live on third-party PDSs; one being unreachable shouldn't drop the rest.
+          try {
+            const subjectDid = didFromUri(publicationUri);
+            const uriParts = publicationUri.replace('at://', '').split('/');
+            const collection = uriParts[1];
+            const pubRkey = uriParts[2];
 
-          const pdsHost = await resolvePdsHost(subjectDid);
+            const pdsHost = await resolvePdsHost(subjectDid);
 
-          const getRecordUrl = `https://${pdsHost}/xrpc/com.atproto.repo.getRecord?repo=${encodeURIComponent(subjectDid)}&collection=${encodeURIComponent(collection)}&rkey=${encodeURIComponent(pubRkey)}`;
-          const pubRes = await fetchWithRetry(getRecordUrl);
-          if (!pubRes.ok) {
-            logger.warn(`Could not fetch publication record for ${publicationUri}`);
-            return;
+            const getRecordUrl = `https://${pdsHost}/xrpc/com.atproto.repo.getRecord?repo=${encodeURIComponent(subjectDid)}&collection=${encodeURIComponent(collection)}&rkey=${encodeURIComponent(pubRkey)}`;
+            const pubRes = await fetchWithRetry(getRecordUrl);
+            if (!pubRes.ok) {
+              logger.warn(`Could not fetch publication record for ${publicationUri}`);
+              return;
+            }
+            const pubData = await pubRes.json() as { value: PublicationRecord; cid: string };
+            const pub = pubData.value;
+
+            const siteUrl = pub.url ?? (pub.base_path ? `https://${pub.base_path}` : undefined);
+            if (!siteUrl) {
+              logger.warn(`No URL in publication record ${publicationUri}`);
+              return;
+            }
+
+            const rawIconUrl = pub.icon?.ref?.$link
+              ? `https://${pdsHost}/xrpc/com.atproto.sync.getBlob?did=${encodeURIComponent(subjectDid)}&cid=${pub.icon.ref.$link}`
+              : undefined;
+            const iconUrl = rawIconUrl
+              ? await remoteImage(rawIconUrl, { width: 96, height: 96, fit: 'cover' })
+              : undefined;
+
+            const handle = await resolveHandle(subjectDid);
+
+            store.set({
+              id: rkey,
+              data: {
+                name: pub.name ?? handle,
+                description: pub.description,
+                siteUrl,
+                iconUrl,
+                handle,
+                createdAt: value.createdAt as string | undefined,
+              },
+              digest: generateDigest(record.cid),
+            });
+          } catch (err) {
+            logger.warn(`Could not reach publication ${publicationUri}, skipping: ${err}`);
           }
-          const pubData = await pubRes.json() as { value: PublicationRecord; cid: string };
-          const pub = pubData.value;
-
-          const siteUrl = pub.url ?? (pub.base_path ? `https://${pub.base_path}` : undefined);
-          if (!siteUrl) {
-            logger.warn(`No URL in publication record ${publicationUri}`);
-            return;
-          }
-
-          const rawIconUrl = pub.icon?.ref?.$link
-            ? `https://${pdsHost}/xrpc/com.atproto.sync.getBlob?did=${encodeURIComponent(subjectDid)}&cid=${pub.icon.ref.$link}`
-            : undefined;
-          const iconUrl = rawIconUrl
-            ? await remoteImage(rawIconUrl, { width: 96, height: 96, fit: 'cover' })
-            : undefined;
-
-          const handle = await resolveHandle(subjectDid);
-
-          store.set({
-            id: rkey,
-            data: {
-              name: pub.name ?? handle,
-              description: pub.description,
-              siteUrl,
-              iconUrl,
-              handle,
-              createdAt: value.createdAt as string | undefined,
-            },
-            digest: generateDigest(record.cid),
-          });
         });
       } catch (err) {
         logger.warn(`Subscriptions fetch failed, skipping: ${err}`);

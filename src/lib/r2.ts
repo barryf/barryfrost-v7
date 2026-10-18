@@ -67,6 +67,45 @@ export async function r2Exists(aws: Aws, key: string): Promise<boolean> {
   }
 }
 
+/** Every key under `prefix`, via paginated ListObjectsV2 (1,000 keys per request). */
+async function r2ListKeys(aws: Aws, prefix: string): Promise<string[]> {
+  const keys: string[] = [];
+  let token: string | undefined;
+  do {
+    const params = new URLSearchParams({ 'list-type': '2', prefix, 'max-keys': '1000' });
+    if (token) params.set('continuation-token', token);
+    const res = await aws.fetch(`https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com/${R2_BUCKET}?${params}`);
+    if (!res.ok) throw new Error(`ListObjectsV2 ${prefix} failed: ${res.status}`);
+    const xml = await res.text();
+    for (const [, key] of xml.matchAll(/<Key>([^<]*)<\/Key>/g)) keys.push(decodeXml(key));
+    const next = xml.match(/<NextContinuationToken>([^<]*)<\/NextContinuationToken>/)?.[1];
+    token = /<IsTruncated>true<\/IsTruncated>/.test(xml) && next ? decodeXml(next) : undefined;
+  } while (token);
+  return keys;
+}
+
+function decodeXml(s: string): string {
+  return s.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&amp;/g, '&');
+}
+
+let _knownKeys: Promise<Set<string> | null> | undefined;
+
+/**
+ * Keys already in the bucket under `prefixes`, listed once per build and shared by every
+ * caller. Image keys are content-addressed, so a listed key is always the right object —
+ * which turns thousands of per-image HEADs into a handful of list requests. Resolves to
+ * null if listing fails, so callers fall back to r2Exists rather than failing the build.
+ */
+export function r2KnownKeys(aws: Aws, prefixes: string[]): Promise<Set<string> | null> {
+  _knownKeys ??= Promise.all(prefixes.map((p) => r2ListKeys(aws, p)))
+    .then((lists) => new Set(lists.flat()))
+    .catch((err) => {
+      console.warn('[r2] key listing failed, falling back to per-image HEAD:', err);
+      return null;
+    });
+  return _knownKeys;
+}
+
 export async function r2Put(aws: Aws, key: string, body: Buffer, contentType: string): Promise<void> {
   await aws.fetch(r2Endpoint(key), {
     method: 'PUT',
